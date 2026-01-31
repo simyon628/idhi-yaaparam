@@ -9,13 +9,14 @@ import {
     doc,
     updateDoc,
     getDocs,
-    where
+    where,
+    orderBy
 } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ShieldAlert, UserX, UserCheck, Loader2, IndianRupee } from "lucide-react";
+import { ShieldAlert, UserX, UserCheck, Loader2 } from "lucide-react";
 
 export default function AdminPanel() {
     const [reports, setReports] = useState<any[]>([]);
