@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ export default function RentalDetailPage() {
 
     useEffect(() => {
         async function fetchRental() {
-            if (!id) return;
+            if (!id || !db) return;
             try {
                 const docRef = doc(db, "rentals", id as string);
                 const docSnap = await getDoc(docRef);

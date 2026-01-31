@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+export const dynamic = "force-dynamic";
 import { db, storage, auth } from "@/lib/firebase";
 import { doc, getDoc, setDoc, query, collection, where, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";

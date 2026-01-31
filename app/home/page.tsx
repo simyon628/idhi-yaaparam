@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+export const dynamic = "force-dynamic";
 import { ContextBar } from "@/components/layout/ContextBar";
 import { UrgencySection } from "@/components/rental/UrgencySection";
 import { BlockBrowser } from "@/components/rental/BlockBrowser";

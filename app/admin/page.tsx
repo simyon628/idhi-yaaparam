@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import {
     collection,
@@ -26,6 +27,7 @@ export default function AdminPanel() {
     // In a real app, we would check if the current user has "isAdmin: true"
 
     useEffect(() => {
+        if (!db) return;
         // Listen for Reports
         const qReports = query(collection(db, "reports"), orderBy("timestamp", "desc"));
         const unsubscribeReports = onSnapshot(qReports, (snapshot) => {

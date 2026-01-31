@@ -14,18 +14,31 @@ const firebaseConfig = {
   measurementId: "G-C6FVQBN1F0"
 };
 
-// Initialize Firebase only if the API key is available (prevents build-time crashes)
-const app = (typeof window !== "undefined" || process.env.NEXT_PUBLIC_FIREBASE_API_KEY) && getApps().length === 0
-  ? initializeApp(firebaseConfig)
-  : (getApps().length > 0 ? getApp() : null);
+// Safe initialization function
+const initializeFirebase = () => {
+  if (typeof window === "undefined" && !process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+    return { app: null, auth: null, db: null, storage: null };
+  }
 
-const auth = app ? getAuth(app) : null as any;
-const db = app ? getFirestore(app) : null as any;
-const storage = app ? getStorage(app) : null as any;
+  try {
+    const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    return {
+      app,
+      auth: getAuth(app),
+      db: getFirestore(app),
+      storage: getStorage(app),
+    };
+  } catch (error) {
+    console.error("Firebase initialization failed:", error);
+    return { app: null, auth: null, db: null, storage: null };
+  }
+};
+
+const { app, auth, db, storage } = initializeFirebase();
 
 // Initialize Analytics safely on client side
 let analytics;
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && app) {
   isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);

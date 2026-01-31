@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import { collection, query, where, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ export default function MyRentalsPage() {
     const userId = auth.currentUser?.uid;
 
     useEffect(() => {
-        if (!userId) return;
+        if (!userId || !db) return;
 
         // Listen for Incoming Requests (Items I own)
         const incomingQuery = query(
