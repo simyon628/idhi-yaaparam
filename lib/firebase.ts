@@ -14,11 +14,14 @@ const firebaseConfig = {
   measurementId: "G-C6FVQBN1F0"
 };
 
-// Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+// Initialize Firebase only if the API key is available (prevents build-time crashes)
+const app = (typeof window !== "undefined" || process.env.NEXT_PUBLIC_FIREBASE_API_KEY) && getApps().length === 0
+  ? initializeApp(firebaseConfig)
+  : (getApps().length > 0 ? getApp() : null);
+
+const auth = app ? getAuth(app) : null as any;
+const db = app ? getFirestore(app) : null as any;
+const storage = app ? getStorage(app) : null as any;
 
 // Initialize Analytics safely on client side
 let analytics;
