@@ -53,8 +53,8 @@ export default function NewRentalPage() {
 
         setLoading(true);
         try {
-            const userId = auth.currentUser?.uid;
-            if (!userId) throw new Error("Not authenticated");
+            const userId = auth?.currentUser?.uid;
+            if (!userId || !storage || !db) throw new Error("Initialization error");
 
             // 1. Upload Image
             const storageRef = ref(storage, `rentals/${Date.now()}_${userId}.jpg`);

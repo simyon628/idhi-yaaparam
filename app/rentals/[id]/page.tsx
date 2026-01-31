@@ -18,7 +18,7 @@ export default function RentalDetailPage() {
     const [requesting, setRequesting] = useState(false);
 
     const router = useRouter();
-    const userId = auth.currentUser?.uid;
+    const userId = auth?.currentUser?.uid;
 
     useEffect(() => {
         async function fetchRental() {

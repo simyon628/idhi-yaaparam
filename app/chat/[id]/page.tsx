@@ -27,7 +27,7 @@ export default function ChatPage() {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
-    const userId = auth.currentUser?.uid;
+    const userId = auth?.currentUser?.uid;
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -35,6 +35,7 @@ export default function ChatPage() {
 
         // Fetch chat info
         const fetchChat = async () => {
+            if (!db) return;
             const chatSnap = await getDoc(doc(db, "chats", chatId as string));
             if (chatSnap.exists()) {
                 setChatInfo(chatSnap.data());
@@ -42,6 +43,7 @@ export default function ChatPage() {
         };
         fetchChat();
 
+        if (!db) return;
         // Listen for messages
         const q = query(
             collection(db, "chats", chatId as string, "messages"),

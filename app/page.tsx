@@ -12,6 +12,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     // Basic auth check for initial redirect
+    if (!auth) return;
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // If logged in, check if verified (mock check for now)

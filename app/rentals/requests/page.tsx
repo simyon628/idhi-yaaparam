@@ -15,7 +15,7 @@ export default function MyRentalsPage() {
     const [myBorrows, setMyBorrows] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const userId = auth.currentUser?.uid;
+    const userId = auth?.currentUser?.uid;
 
     useEffect(() => {
         if (!userId || !db) return;

@@ -75,6 +75,7 @@ export default function VerifyPage() {
 
         setLoading(true);
         try {
+            if (!db) throw new Error("Database not initialized");
             // Check for uniqueness
             const usersRef = collection(db, "users");
             const q = query(usersRef, where("rollNumber", "==", rollNumber));
@@ -104,8 +105,8 @@ export default function VerifyPage() {
 
             if (result.success) {
                 // Upload to Storage
-                const userId = auth.currentUser?.uid;
-                if (!userId) throw new Error("Not authenticated");
+                const userId = auth?.currentUser?.uid;
+                if (!userId || !storage || !db) throw new Error("Initialization error");
 
                 const storageRef = ref(storage, `id_verification/${userId}.jpg`);
                 await uploadBytes(storageRef, file);
@@ -113,7 +114,7 @@ export default function VerifyPage() {
 
                 // Update User Doc
                 await setDoc(doc(db, "users", userId), {
-                    phoneNumber: auth.currentUser?.phoneNumber,
+                    phoneNumber: auth?.currentUser?.phoneNumber,
                     rollNumber: rollNumber,
                     isVerified: true,
                     idPhotoUrl: photoUrl,
