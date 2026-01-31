@@ -48,6 +48,7 @@ export default function AdminPanel() {
     }, []);
 
     const handleUnblock = async (userId: string) => {
+        if (!db) return;
         try {
             await updateDoc(doc(db, "users", userId), {
                 isBlocked: false,

@@ -66,7 +66,7 @@ export default function ChatPage() {
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newMessage.trim() || !userId || !chatId) return;
+        if (!newMessage.trim() || !userId || !chatId || !db) return;
 
         const messageContent = newMessage.trim();
         setNewMessage("");

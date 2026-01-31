@@ -51,6 +51,7 @@ export default function MyRentalsPage() {
     }, [userId]);
 
     const handleAction = async (rentalId: string, status: string) => {
+        if (!db) return;
         try {
             const rentalRef = doc(db, "rentals", rentalId);
             if (status === "available") {
@@ -68,7 +69,7 @@ export default function MyRentalsPage() {
     };
 
     const handleReport = async (item: any) => {
-        if (!item.renterId) return;
+        if (!item.renterId || !db || !userId) return;
 
         const confirmReport = window.confirm("Are you sure you want to report this user? This will add 1 strike.");
         if (!confirmReport) return;

@@ -42,7 +42,7 @@ export default function RentalDetailPage() {
     }, [id, router]);
 
     const handleRequest = async () => {
-        if (!userId) {
+        if (!userId || !db) {
             toast.error("Please login to request items");
             return;
         }
