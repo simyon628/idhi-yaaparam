@@ -27,7 +27,7 @@ export default function LoginPage() {
     const recaptchaVerifier = useRef<RecaptchaVerifier | null>(null);
 
     useEffect(() => {
-        if (!recaptchaVerifier.current && recaptchaRef.current) {
+        if (!recaptchaVerifier.current && recaptchaRef.current && auth) {
             try {
                 recaptchaVerifier.current = new RecaptchaVerifier(auth, recaptchaRef.current, {
                     size: "invisible",
@@ -53,8 +53,8 @@ export default function LoginPage() {
             const formattedPhone = phone.startsWith("+") ? phone : `+91${phone}`;
             const appVerifier = recaptchaVerifier.current;
 
-            if (!appVerifier) {
-                throw new Error("Recaptcha not initialized");
+            if (!appVerifier || !auth) {
+                throw new Error("Initialization error");
             }
 
             const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
