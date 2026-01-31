@@ -11,11 +11,17 @@ export default function LandingPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Basic auth check for initial redirect
-    if (!auth) return;
+    if (!auth) {
+      // If Firebase isn't configured, we might be in a build or missing env vars
+      // Redirect to login anyway or show an error after some time
+      const timer = setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // If logged in, check if verified (mock check for now)
         router.push("/home");
       } else {
         router.push("/login");
