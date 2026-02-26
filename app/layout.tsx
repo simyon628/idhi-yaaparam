@@ -1,22 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "Idhi Yaaparam",
-  description: "Campus Lab Tool Rental PWA",
+  title: "Idhi Yaaparam — Campus Rental Network",
+  description: "Verified peer-to-peer lab tool rental for college students. OTP login · Roll-number verified · 2-strike trust system.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Yaaparam",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#10b981",
+  themeColor: "#4F46E5",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -25,6 +22,7 @@ export const viewport: Viewport = {
 
 import { PWAProvider } from "@/components/providers/pwa-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { CollegeProvider } from "@/contexts/CollegeContext";
 
 export default function RootLayout({
   children,
@@ -33,13 +31,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-background antialiased`}>
-        <PWAProvider>
-          <main className="mx-auto max-w-md min-h-screen flex flex-col shadow-xl bg-white dark:bg-zinc-950">
-            {children}
-          </main>
-          <Toaster position="top-center" />
-        </PWAProvider>
+      <body className="min-h-screen bg-background antialiased">
+        <CollegeProvider>
+          <PWAProvider>
+            <main className="mx-auto max-w-md min-h-screen flex flex-col shadow-2xl bg-[hsl(222,47%,9%)] relative overflow-x-hidden">
+              {children}
+            </main>
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: "hsl(222, 44%, 15%)",
+                  border: "1px solid hsl(217, 32%, 24%)",
+                  color: "hsl(210, 40%, 96%)",
+                },
+              }}
+            />
+          </PWAProvider>
+        </CollegeProvider>
       </body>
     </html>
   );

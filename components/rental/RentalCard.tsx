@@ -1,36 +1,49 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Listing } from "@/lib/types";
+import { IndianRupee, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface RentalCardProps {
-    item: {
-        id: string;
-        name: string;
-        price: number;
-        icon: string;
-        block: string;
-    };
+    item: Listing;
 }
 
 export function RentalCard({ item }: RentalCardProps) {
+    const router = useRouter();
+
     return (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-[1.5rem] p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all active:scale-[0.98]">
-            <div className="aspect-square bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center relative overflow-hidden">
-                <span className="text-4xl">{item.icon}</span>
-                <div className="absolute top-2 right-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm px-2 py-0.5 rounded-lg border border-black/5">
-                    <span className="text-[10px] font-black text-primary">₹{item.price}/hr</span>
+        <button
+            onClick={() => router.push(`/rentals/${item.id}`)}
+            className="glass rounded-2xl overflow-hidden flex flex-col border border-slate-700/60 hover:border-indigo-500/40 active:scale-[0.97] transition-all text-left group shadow-premium"
+        >
+            {/* Image / Icon area */}
+            <div className="aspect-square bg-[hsl(217,32%,16%)] flex items-center justify-center relative overflow-hidden">
+                {item.photoUrl ? (
+                    <img src={item.photoUrl} alt={item.itemName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                ) : (
+                    <div className="flex flex-col items-center gap-2">
+                        <span className="text-4xl">{item.icon}</span>
+                    </div>
+                )}
+                {/* Price badge */}
+                <div className="absolute top-2 right-2 flex items-center gap-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-400 backdrop-blur-sm px-2 py-1 rounded-lg">
+                    <IndianRupee className="w-2.5 h-2.5" />
+                    <span className="text-[11px] font-black">{item.pricePerHour}/hr</span>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-1 px-1">
-                <h3 className="font-black text-zinc-900 dark:text-zinc-100 text-sm truncate">{item.name}</h3>
-                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{item.block}</p>
+            {/* Details */}
+            <div className="p-3 space-y-2">
+                <h3 className="font-bold text-white text-sm truncate leading-tight">{item.itemName}</h3>
+                <div className="flex items-center gap-1 text-slate-500">
+                    <MapPin className="w-3 h-3" />
+                    <span className="text-[10px] font-semibold uppercase tracking-wider">{item.block}</span>
+                </div>
+                <div className="w-full py-2 rounded-lg gradient-indigo text-center">
+                    <span className="text-white text-[11px] font-black uppercase tracking-wider">Rent Now</span>
+                </div>
             </div>
-
-            <Button size="sm" className="w-full h-9 rounded-xl font-bold text-xs bg-zinc-900 hover:bg-zinc-800 text-white shadow-md">
-                RENT NOW
-            </Button>
-        </div>
+        </button>
     );
 }

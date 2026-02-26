@@ -22,9 +22,18 @@ const initializeFirebase = () => {
 
   try {
     const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Explicitly enforce local persistence for PWAs to survive app restarts
+    if (typeof window !== "undefined") {
+      import("firebase/auth").then(({ setPersistence, browserLocalPersistence }) => {
+        setPersistence(auth, browserLocalPersistence).catch(console.error);
+      });
+    }
+
     return {
       app,
-      auth: getAuth(app),
+      auth,
       db: getFirestore(app),
       storage: getStorage(app),
     };
