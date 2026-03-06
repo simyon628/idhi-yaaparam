@@ -19,7 +19,11 @@ export function TopBar() {
                     <div className="w-8 h-8 rounded-lg gradient-indigo flex items-center justify-center shadow-indigo shrink-0">
                         <span className="text-base text-white">🚀</span>
                     </div>
-                    <span className="text-base font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
+                    <span
+                        className="text-base font-black text-slate-800 cursor-pointer"
+                        style={{ fontFamily: "Outfit, sans-serif" }}
+                        onClick={() => window.location.href = '/import-colleges'}
+                    >
                         Idhi Yaaparam
                     </span>
                 </div>
