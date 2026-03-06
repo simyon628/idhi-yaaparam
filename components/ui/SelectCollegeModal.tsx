@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { Search, MapPin, X, Navigation, Loader2, AlertCircle } from "lucide-react";
-import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { College } from "@/lib/types";
 import { useDetectCollegeByLocation } from "@/lib/hooks/useDetectCollegeByLocation";
@@ -16,11 +16,12 @@ interface SelectCollegeModalProps {
 
 export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectCollegeModalProps) {
     const { setSelectedCollege } = useCollege();
-    const { detectLocation, isLocating, isTakingLong, detectedCollege, distanceMeters, error, resetDetection } = useDetectCollegeByLocation();
+    const { detectLocation, isLocating, isTakingLong, detectedCollege, error, resetDetection } = useDetectCollegeByLocation();
 
+    // Client-Side Search State
+    const [allColleges, setAllColleges] = useState<College[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [fetchedColleges, setFetchedColleges] = useState<College[]>([]);
-    const [isSearching, setIsSearching] = useState(false);
+    const [isFetchingInitial, setIsFetchingInitial] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Prompt the user if GPS found a college
@@ -32,49 +33,43 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
         }
     }, [detectedCollege]);
 
-    // Firestore Search
+    // Fetch all colleges exactly once on mount if modal is open
     useEffect(() => {
-        const fetchColleges = async () => {
-            if (!searchQuery.trim()) {
-                setFetchedColleges([]);
-                return;
-            }
+        if (!isOpen) return;
+
+        const fetchAllColleges = async () => {
+            if (allColleges.length > 0) return; // already fetched
             if (!db) return;
-            setIsSearching(true);
+
+            setIsFetchingInitial(true);
             try {
-                const q = query(
-                    collection(db, "colleges"),
-                    orderBy("name"),
-                    where("name", ">=", searchQuery),
-                    where("name", "<=", searchQuery + '\uf8ff'),
-                    limit(10)
-                );
+                // Fetch master list once to filter exactly on client
+                const q = query(collection(db, "colleges"), orderBy("name"));
                 const snapshot = await getDocs(q);
                 const colList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as College));
-                setFetchedColleges(colList);
+                setAllColleges(colList);
             } catch (err) {
-                console.error("Failed to search colleges", err);
+                console.error("Failed to load colleges master list", err);
+            } finally {
+                setIsFetchingInitial(false);
             }
-            setIsSearching(false);
         };
 
-        const timer = setTimeout(() => {
-            if (searchQuery.trim().length >= 2) {
-                fetchColleges();
-            } else {
-                setFetchedColleges([]);
-            }
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
+        fetchAllColleges();
+    }, [isOpen, allColleges.length]);
 
     if (!isOpen) return null;
+
+    // Fast, explicit substring client-side matching. No prefixes limits. No DB calls.
+    const filteredColleges = searchQuery.trim() === ""
+        ? []
+        : allColleges.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase().trim())).slice(0, 15);
 
     const handleSelect = (college: College) => {
         setSelectedCollege(college);
         resetDetection();
         setShowConfirm(false);
+        setSearchQuery("");
         if (onClose) onClose();
     };
 
@@ -110,7 +105,7 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                     )}
                 </div>
 
-                <div className="p-5 flex flex-col gap-4">
+                <div className="p-5 flex flex-col gap-4 shrink-0">
                     {/* Location Button */}
                     {!showConfirm ? (
                         <>
@@ -124,10 +119,10 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                                 ) : (
                                     <Navigation className="w-5 h-5" />
                                 )}
-                                {isLocating ? "Detecting location..." : "Use my location to detect college"}
+                                {isLocating ? "Detecting your college using location..." : "Use my location (recommended)"}
                             </button>
                             <p className="text-xs text-center font-medium text-slate-500">
-                                We only use your location once to match you to your campus. You can change it any time.
+                                We use your location only to detect your college and show nearby rentals.
                             </p>
                         </>
                     ) : (
@@ -136,16 +131,18 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                                 <MapPin className="text-green-600 w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-slate-800">
-                                    We detected {detectedCollege?.name}, about {distanceMeters} meters away. Use this college?
-                                </h3>
+                                <h3 className="text-sm font-bold text-slate-500 mb-1 tracking-wider uppercase">Detected college near you</h3>
+                                <h2 className="text-xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
+                                    {detectedCollege?.name}
+                                </h2>
+                                {detectedCollege?.city && <p className="text-slate-500 mt-0.5 font-medium">{detectedCollege.city}</p>}
                             </div>
-                            <div className="flex flex-col sm:flex-row gap-3 w-full mt-2">
-                                <button onClick={handleConfirmDetected} className="flex-1 py-3 bg-green-600 text-white font-bold rounded-xl shadow-sm hover:bg-green-700 transition">
+                            <div className="flex flex-col gap-2 w-full mt-2">
+                                <button onClick={handleConfirmDetected} className="flex-1 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-indigo hover:bg-indigo-700 transition active:scale-95">
                                     Use this college
                                 </button>
-                                <button onClick={handleRejectDetected} className="flex-1 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl transition hover:bg-slate-50">
-                                    Select another college
+                                <button onClick={handleRejectDetected} className="flex-1 py-2 text-slate-500 font-bold rounded-xl transition hover:text-indigo-600 active:scale-95">
+                                    Choose a different college
                                 </button>
                             </div>
                         </div>
@@ -159,14 +156,15 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                     )}
 
                     {error && (
-                        <div className="text-center text-rose-500 text-sm font-medium bg-rose-50 py-3 px-2 rounded-xl border border-rose-100 animate-in fade-in">
+                        <div className="text-center text-rose-500 mb-2 mt-2 text-sm font-bold bg-rose-50 py-3 px-3 rounded-xl border border-rose-100 animate-in fade-in flex items-center justify-center gap-2">
+                            <AlertCircle className="w-4 h-4" />
                             {error}
                         </div>
                     )}
 
                     <div className="relative flex items-center py-2">
                         <div className="flex-grow border-t border-slate-100"></div>
-                        <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">or</span>
+                        <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">Or enter your college manually</span>
                         <div className="flex-grow border-t border-slate-100"></div>
                     </div>
 
@@ -176,9 +174,10 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                         <input
                             ref={searchInputRef}
                             type="text"
-                            placeholder="Search your college"
+                            placeholder="Enter college manually..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
+                            disabled={isFetchingInitial}
                             className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all outline-none"
                         />
                     </div>
@@ -186,30 +185,30 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
 
                 {/* List */}
                 <div className="flex-1 overflow-y-auto px-5 pb-10">
-                    {isSearching ? (
+                    {isFetchingInitial ? (
                         <div className="flex justify-center mt-8">
                             <Loader2 className="w-6 h-6 animate-spin text-indigo-300" />
                         </div>
-                    ) : searchQuery.trim().length >= 2 && fetchedColleges.length === 0 ? (
-                        <p className="text-center text-slate-500 mt-10 text-sm font-medium">No colleges found matching "{searchQuery}"</p>
+                    ) : searchQuery.trim() !== "" && filteredColleges.length === 0 ? (
+                        <p className="text-center text-slate-500 mt-10 text-sm font-medium">No colleges found. Check the spelling or try a nearby campus.</p>
                     ) : (
                         <div className="space-y-2">
-                            {fetchedColleges.map((college) => (
+                            {filteredColleges.map((college) => (
                                 <button
                                     key={college.id}
                                     onClick={() => handleSelect(college)}
-                                    className="w-full text-left p-4 rounded-xl border bg-white border-transparent hover:border-indigo-100 hover:bg-slate-50 transition-all flex items-center gap-3"
+                                    className="w-full text-left p-4 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-indigo-400 hover:shadow-indigo transition-all flex items-center gap-3 active:scale-95 group"
                                 >
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-indigo-50 border border-indigo-100">
-                                        <span className="text-lg">🎓</span>
+                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-indigo-50 text-indigo-600 font-black group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                        <span className="text-base">{college.name.charAt(0)}</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-slate-700">{college.name}</p>
+                                        <p className="font-bold text-slate-700 group-hover:text-indigo-900 transition-colors">{college.name}</p>
                                         <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
                                             <span>{college.city || "City"}</span>
                                             {college.state && (
                                                 <>
-                                                    <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                                    <span className="w-1 h-1 rounded-full bg-slate-200" />
                                                     <span>{college.state}</span>
                                                 </>
                                             )}
