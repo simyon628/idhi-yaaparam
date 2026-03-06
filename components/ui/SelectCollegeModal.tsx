@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { Search, MapPin, X, Navigation, Loader2, AlertCircle } from "lucide-react";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getLocalColleges } from "@/lib/utils/colleges";
 import { College } from "@/lib/types";
 import { useDetectCollegeByLocation } from "@/lib/hooks/useDetectCollegeByLocation";
 
@@ -29,16 +28,12 @@ export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps)
 
         const fetchAllColleges = async () => {
             if (allColleges.length > 0) return; // already fetched
-            if (!db) return;
 
             setIsFetchingInitial(true);
             try {
-                // Fetch master list once to filter exactly on client. Removed orderBy to prevent index errors.
-                const q = query(collection(db, "colleges"));
-                const snapshot = await getDocs(q);
-                const colList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as College));
-                colList.sort((a, b) => a.name.localeCompare(b.name));
-                console.log("🏫 Fetched all colleges for manual search:", colList.length);
+                // Fetch master list directly from local CSV without hitting Firebase!
+                const colList = await getLocalColleges();
+                console.log("🏫 Fetched all colleges from local CSV:", colList.length);
                 setAllColleges(colList);
             } catch (err) {
                 console.error("Failed to load colleges master list", err);

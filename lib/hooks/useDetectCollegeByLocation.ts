@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { College } from "@/lib/types";
+import { getLocalColleges } from "@/lib/utils/colleges";
 
 interface LocationHookState {
     isLocating: boolean;
@@ -91,19 +90,13 @@ export function useDetectCollegeByLocation() {
                 return;
             }
 
-            // 2. Fetch all our curated colleges to find a match (since it's a small controlled dataset)
-            if (!db) throw new Error("Firestore not initialized");
+            // 2. Fetch all our curated colleges to find a match
+            const allColleges = await getLocalColleges();
 
-            const collegesSnap = await getDocs(collection(db, "colleges"));
-            if (collegesSnap.empty) {
-                setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: "Our college database is currently empty." });
+            if (allColleges.length === 0) {
+                setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: "Our college database is currently unavailable." });
                 return;
             }
-
-            const allColleges = collegesSnap.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            } as College));
 
             // 3. Match reverse-geocoded place names against our Firestore list
             const matchedCollege = allColleges.find(col => {
