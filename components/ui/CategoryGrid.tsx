@@ -13,23 +13,23 @@ export const CATEGORIES = [
 
 export function CategoryGrid() {
     return (
-        <div className="py-6 px-1">
-            <h3 className="text-slate-800 font-black mb-4 text-lg px-1" style={{ fontFamily: "Outfit, sans-serif" }}>
-                Browse Categories
-            </h3>
-            <div className="grid grid-cols-3 gap-3">
+        <div className="py-4 px-2">
+            <div className="grid grid-cols-2 gap-3">
                 {CATEGORIES.map((cat) => (
                     <Link
                         key={cat.id}
                         href={`/category/${cat.id}`}
-                        className="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 bg-white hover:border-indigo-100 hover:shadow-sm transition-all group"
+                        className="flex flex-col p-4 rounded-2xl border border-slate-100 bg-white hover:border-indigo-100 hover:shadow-sm transition-all group"
                     >
-                        <div className={`w-12 h-12 rounded-full ${cat.bg} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                        <div className={`w-12 h-12 rounded-xl ${cat.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                             <cat.icon className={`w-6 h-6 ${cat.color}`} />
                         </div>
-                        <span className="text-xs font-bold text-slate-700 text-center leading-tight">
+                        <span className="font-black text-slate-800 text-lg leading-tight mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
                             {cat.name}
                         </span>
+                        <p className="text-[10px] font-bold text-slate-400 leading-tight pr-2">
+                            See all {cat.name.toLowerCase()} available to rent in your college.
+                        </p>
                     </Link>
                 ))}
             </div>

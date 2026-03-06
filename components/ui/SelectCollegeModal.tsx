@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
-import { Search, MapPin, X, Navigation, Loader2 } from "lucide-react";
+import { Search, MapPin, X, Navigation, Loader2, AlertCircle } from "lucide-react";
 import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { College } from "@/lib/types";
@@ -16,11 +16,12 @@ interface SelectCollegeModalProps {
 
 export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectCollegeModalProps) {
     const { setSelectedCollege } = useCollege();
-    const { detectLocation, isLocating, detectedCollege, error, resetDetection } = useDetectCollegeByLocation();
+    const { detectLocation, isLocating, isTakingLong, detectedCollege, distanceMeters, error, resetDetection } = useDetectCollegeByLocation();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [fetchedColleges, setFetchedColleges] = useState<College[]>([]);
     const [isSearching, setIsSearching] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Prompt the user if GPS found a college
     const [showConfirm, setShowConfirm] = useState(false);
@@ -31,8 +32,7 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
         }
     }, [detectedCollege]);
 
-    // Firestore Search fallback, assuming 'name' search. 
-    // In production, we'd use Algolia or client-side filter with pre-fetched list.
+    // Firestore Search
     useEffect(() => {
         const fetchColleges = async () => {
             if (!searchQuery.trim()) {
@@ -42,7 +42,6 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
             if (!db) return;
             setIsSearching(true);
             try {
-                // simple startAt endAt query for prefixes
                 const q = query(
                     collection(db, "colleges"),
                     orderBy("name"),
@@ -65,7 +64,7 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
             } else {
                 setFetchedColleges([]);
             }
-        }, 300); // 300ms debounce
+        }, 300);
 
         return () => clearTimeout(timer);
     }, [searchQuery]);
@@ -88,10 +87,13 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
     const handleRejectDetected = () => {
         resetDetection();
         setShowConfirm(false);
+        if (searchInputRef.current) {
+            searchInputRef.current.focus();
+        }
     };
 
     return (
-        <div className={`fixed inset-0 z-50 flex flex-col justify-end bg-slate-900/40 backdrop-blur-sm max-w-md mx-auto ${forceFullScreen ? 'h-screen' : ''}`}>
+        <div className={`fixed inset-0 z-50 flex flex-col justify-end bg-slate-900/40 backdrop-blur-sm mx-auto ${forceFullScreen ? 'h-screen w-full' : 'max-w-md'}`}>
             <div className={`bg-white rounded-t-3xl w-full flex flex-col animate-in slide-in-from-bottom-full duration-300 shadow-2xl ${forceFullScreen ? 'h-full rounded-none' : 'h-[85vh] border-t border-indigo-100'}`}>
 
                 {/* Header */}
@@ -100,9 +102,6 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                         <h2 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
                             Select your campus
                         </h2>
-                        <p className="text-sm font-semibold text-slate-500 mt-1">
-                            Find your college to see items near you.
-                        </p>
                     </div>
                     {!forceFullScreen && onClose && (
                         <button onClick={onClose} className="p-2 bg-slate-100 lg:hover:bg-slate-200 rounded-full text-slate-500 transition-colors">
@@ -114,47 +113,60 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                 <div className="p-5 flex flex-col gap-4">
                     {/* Location Button */}
                     {!showConfirm ? (
-                        <button
-                            onClick={detectLocation}
-                            disabled={isLocating}
-                            className="w-full flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-3.5 px-4 rounded-2xl transition-all"
-                        >
-                            {isLocating ? (
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                                <Navigation className="w-5 h-5" />
-                            )}
-                            {isLocating ? "Detecting location..." : "Use my location to detect college"}
-                        </button>
+                        <>
+                            <button
+                                onClick={detectLocation}
+                                disabled={isLocating}
+                                className="w-full flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-3.5 px-4 rounded-2xl transition-all"
+                            >
+                                {isLocating ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    <Navigation className="w-5 h-5" />
+                                )}
+                                {isLocating ? "Detecting location..." : "Use my location to detect college"}
+                            </button>
+                            <p className="text-xs text-center font-medium text-slate-500">
+                                We only use your location once to match you to your campus. You can change it any time.
+                            </p>
+                        </>
                     ) : (
-                        <div className="bg-green-50 border border-green-200 rounded-2xl p-4 flex flex-col items-center text-center gap-3">
+                        <div className="bg-green-50 border border-green-200 rounded-2xl p-4 flex flex-col items-center text-center gap-3 animate-in fade-in slide-in-from-top-4">
                             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                                 <MapPin className="text-green-600 w-6 h-6" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-slate-800">We detected {detectedCollege?.name}</h3>
-                                <p className="text-sm text-slate-600">Use this college?</p>
+                                <h3 className="font-bold text-slate-800">
+                                    We detected {detectedCollege?.name}, about {distanceMeters} meters away. Use this college?
+                                </h3>
                             </div>
-                            <div className="flex gap-3 w-full mt-2">
-                                <button onClick={handleRejectDetected} className="flex-1 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl">
-                                    No, thanks
+                            <div className="flex flex-col sm:flex-row gap-3 w-full mt-2">
+                                <button onClick={handleConfirmDetected} className="flex-1 py-3 bg-green-600 text-white font-bold rounded-xl shadow-sm hover:bg-green-700 transition">
+                                    Use this college
                                 </button>
-                                <button onClick={handleConfirmDetected} className="flex-1 py-2.5 bg-green-600 text-white font-bold rounded-xl shadow-sm hover:bg-green-700 transition">
-                                    Yes, use this
+                                <button onClick={handleRejectDetected} className="flex-1 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl transition hover:bg-slate-50">
+                                    Select another college
                                 </button>
                             </div>
                         </div>
                     )}
 
+                    {isTakingLong && isLocating && (
+                        <div className="flex items-start gap-2 text-amber-600 text-xs font-medium bg-amber-50 p-3 rounded-xl border border-amber-100 animate-in fade-in">
+                            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                            <p>Location is taking longer than expected. You can select your college manually below.</p>
+                        </div>
+                    )}
+
                     {error && (
-                        <div className="text-center text-red-500 text-sm font-medium bg-red-50 py-2 rounded-xl">
+                        <div className="text-center text-rose-500 text-sm font-medium bg-rose-50 py-3 px-2 rounded-xl border border-rose-100 animate-in fade-in">
                             {error}
                         </div>
                     )}
 
                     <div className="relative flex items-center py-2">
                         <div className="flex-grow border-t border-slate-100"></div>
-                        <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">or search manually</span>
+                        <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">or</span>
                         <div className="flex-grow border-t border-slate-100"></div>
                     </div>
 
@@ -162,8 +174,9 @@ export function SelectCollegeModal({ isOpen, onClose, forceFullScreen }: SelectC
                     <div className="relative">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-300" />
                         <input
+                            ref={searchInputRef}
                             type="text"
-                            placeholder="Search your college (e.g., SRK...)"
+                            placeholder="Search your college"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all outline-none"

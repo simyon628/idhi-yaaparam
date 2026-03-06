@@ -3,10 +3,10 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
+import { collection, query, where, onSnapshot, getDocs } from "firebase/firestore";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useNearestBlock } from "@/lib/hooks/useNearestBlock";
-import { Listing } from "@/lib/types";
+import { Listing, Block } from "@/lib/types";
 import { CATEGORIES } from "@/components/ui/CategoryGrid";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { TopBar } from "@/components/layout/TopBar";
@@ -20,27 +20,38 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     const { nearestBlock, isLoading: nearestLoading } = useNearestBlock(selectedCollege);
 
     const [rentals, setRentals] = useState<Listing[]>([]);
+    const [blocks, setBlocks] = useState<Block[]>([]);
     const [loading, setLoading] = useState(true);
 
     const category = CATEGORIES.find(c => c.id === categoryId);
+    const categoryName = category?.name || "Category";
+    const pluralCategoryName = categoryName.endsWith("s") ? categoryName : `${categoryName}s`;
 
     // Filter states
     const [selectedBranch, setSelectedBranch] = useState("All");
     const [selectedYear, setSelectedYear] = useState("All");
+    const [selectedBlock, setSelectedBlock] = useState("All");
     const [sortOrder, setSortOrder] = useState<"nearest" | "lowest_price" | "newest">("nearest");
 
     useEffect(() => {
         if (!selectedCollege) {
-            router.push("/home");
+            router.push("/");
             return;
         }
 
         if (!db) return;
         setLoading(true);
 
+        // Fetch Blocks
+        getDocs(query(collection(db, "blocks"), where("collegeId", "==", selectedCollege.id)))
+            .then(snap => {
+                setBlocks(snap.docs.map(d => ({ id: d.id, ...d.data() } as Block)));
+            })
+            .catch(err => console.error("Error fetching blocks:", err));
+
+        // Listen for rentals
         const q = query(
             collection(db, "rentals"),
-            where("status", "==", "available"),
             where("collegeId", "==", selectedCollege.id),
             where("categoryId", "==", categoryId)
         );
@@ -60,6 +71,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     let filteredRentals = rentals.filter(r => {
         if (selectedBranch !== "All" && r.branch !== selectedBranch) return false;
         if (selectedYear !== "All" && r.yearSection !== selectedYear) return false;
+        if (selectedBlock !== "All" && r.blockId !== selectedBlock) return false;
         return true;
     });
 
@@ -105,10 +117,10 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                     )}
                     <div>
                         <h1 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
-                            {category?.name || "Category"}
+                            {pluralCategoryName} in {selectedCollege.name}
                         </h1>
                         <p className="text-xs font-bold text-slate-500">
-                            {rentals.length} items available
+                            Sorted by {sortOrder === 'nearest' ? 'nearest first' : sortOrder === 'lowest_price' ? 'price' : 'newest'}
                         </p>
                     </div>
                 </div>
@@ -127,13 +139,25 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                     </div>
 
                     <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                        Year:
+                        Year / Section:
                         <select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(e.target.value)}
                             className="bg-transparent outline-none ml-1 text-indigo-700"
                         >
                             {years.map(y => <option key={y} value={y}>{y}</option>)}
+                        </select>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
+                        Block / Area:
+                        <select
+                            value={selectedBlock}
+                            onChange={(e) => setSelectedBlock(e.target.value)}
+                            className="bg-transparent outline-none ml-1 text-indigo-700"
+                        >
+                            <option value="All">All Blocks</option>
+                            {blocks.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
                         </select>
                     </div>
 
@@ -159,9 +183,9 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                 ) : filteredRentals.length === 0 ? (
                     <div className="mt-10">
                         <EmptyState
-                            title="No items found"
-                            description={`No ${category?.name || 'items'} listed yet in ${selectedCollege.name}.`}
-                            actionLabel="Be the first to list"
+                            title={`No ${categoryName} listed yet in ${selectedCollege.name}.`}
+                            description={`Be the first to list your ${categoryName} and earn for every lab or exam.`}
+                            actionLabel="List your item"
                             actionHref="/rentals/new"
                         />
                     </div>
@@ -169,6 +193,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                     <div className="grid grid-cols-2 gap-3 pb-10">
                         {filteredRentals.map((rental) => {
                             const isNear = sortOrder === "nearest" && nearestBlock && rental.blockId === nearestBlock.id;
+                            const blockName = blocks.find(b => b.id === rental.blockId)?.name;
                             return (
                                 <div key={rental.id} className="relative">
                                     {isNear && (
