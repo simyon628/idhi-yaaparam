@@ -16,7 +16,8 @@ const firebaseConfig = {
 
 // Safe initialization function
 const initializeFirebase = () => {
-  if (typeof window === "undefined" && !process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+  if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+    console.warn("Firebase API key is missing. Firebase features will be disabled safely.");
     return { app: null, auth: null, db: null, storage: null };
   }
 
