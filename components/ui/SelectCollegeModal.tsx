@@ -14,7 +14,7 @@ interface SelectCollegeModalProps {
 
 export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps) {
     const { setSelectedCollege } = useCollege();
-    const { detectLocation, isLocating, isTakingLong, detectedCollege, error, resetDetection } = useDetectCollegeByLocation();
+    const { detectLocation, isLocating, isTakingLong, detectedCollege, nearbyColleges, error, resetDetection } = useDetectCollegeByLocation();
 
     // Client-Side Search State
     const [allColleges, setAllColleges] = useState<College[]>([]);
@@ -119,6 +119,32 @@ export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps)
                                     Choose a different college
                                 </button>
                             </div>
+                        </div>
+                    ) : nearbyColleges.length > 0 ? (
+                        // Multiple colleges are near the user — let them pick (Rapido gate-style)
+                        <div className="flex flex-col gap-2 animate-in fade-in">
+                            <div className="flex items-center gap-2 px-1 mb-1">
+                                <MapPin className="w-4 h-4 text-indigo-500 shrink-0" />
+                                <p className="text-sm font-bold text-slate-600">{nearbyColleges.length} colleges detected near you</p>
+                            </div>
+                            {nearbyColleges.map((college) => (
+                                <button
+                                    key={college.id}
+                                    onClick={() => handleSelect(college)}
+                                    className="w-full text-left p-4 rounded-2xl bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 hover:border-indigo-400 transition-all flex items-center gap-3 active:scale-95 group"
+                                >
+                                    <div className="w-10 h-10 rounded-xl bg-indigo-100 group-hover:bg-indigo-600 transition-colors flex items-center justify-center shrink-0">
+                                        <MapPin className="w-5 h-5 text-indigo-600 group-hover:text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-slate-800 group-hover:text-indigo-900">{college.name}</p>
+                                        {college.city && <p className="text-xs text-slate-500 font-medium mt-0.5">{college.city}</p>}
+                                    </div>
+                                </button>
+                            ))}
+                            <button onClick={handleRejectDetected} className="text-slate-400 text-xs font-bold text-center py-2 hover:text-indigo-500 transition-colors">
+                                None of these? Enter manually ↓
+                            </button>
                         </div>
                     ) : (
                         <>

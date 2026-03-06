@@ -6,7 +6,20 @@ interface LocationHookState {
     isLocating: boolean;
     isTakingLong: boolean;
     detectedCollege: College | null;
+    nearbyColleges: College[]; // Multiple colleges nearby (user picks one)
     error: string | null;
+}
+
+// Haversine formula to find distance between two lat/lon points in meters
+function getDistanceMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371000;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 export function useDetectCollegeByLocation() {
@@ -14,133 +27,165 @@ export function useDetectCollegeByLocation() {
         isLocating: false,
         isTakingLong: false,
         detectedCollege: null,
+        nearbyColleges: [],
         error: null,
     });
 
     const detectLocation = async () => {
-        setState({ isLocating: true, isTakingLong: false, detectedCollege: null, error: null });
+        setState({ isLocating: true, isTakingLong: false, detectedCollege: null, nearbyColleges: [], error: null });
 
         if (!navigator.geolocation) {
-            setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: "Geolocation is not supported by your browser" });
+            setState({ isLocating: false, isTakingLong: false, detectedCollege: null, nearbyColleges: [], error: "Geolocation is not supported by your browser." });
             return;
         }
 
-        let isTakingLongTimeout = setTimeout(() => {
+        const takingLongTimeout = setTimeout(() => {
             setState(s => ({ ...s, isTakingLong: true }));
-        }, 3000);
+        }, 4000);
 
-        const getLocationPromise = () => new Promise<GeolocationPosition>((resolve, reject) => {
+        const getPositionPromise = () => new Promise<GeolocationPosition>((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject, {
                 enableHighAccuracy: true,
                 timeout: 15000,
-                maximumAge: 0
+                maximumAge: 0,
             });
         });
 
         try {
-            const position = await getLocationPromise();
-            clearTimeout(isTakingLongTimeout);
+            const position = await getPositionPromise();
+            clearTimeout(takingLongTimeout);
 
-            const { latitude, longitude, accuracy } = position.coords;
-            console.log("📍 GPS Coordinates detected:", { latitude, longitude, accuracy });
+            const { latitude, longitude } = position.coords;
+            console.log("📍 GPS got coordinates:", { latitude, longitude });
 
-            // Optional: warn on very low accuracy but don't strictly block yet if Nominatim can still resolve it broadly
-            if (accuracy > 5000) {
-                console.warn("Location accuracy is low:", accuracy);
+            // ============================================================
+            // STEP 1: Overpass API — "give me all universities and colleges
+            //         within a 2km radius of this GPS point"
+            //         This is how Rapido/Uber detect nearby places.
+            // ============================================================
+            const RADIUS_METERS = 2000; // 2km radius
+            const overpassQuery = `
+                [out:json][timeout:15];
+                (
+                  node["amenity"~"university|college"]["name"](around:${RADIUS_METERS},${latitude},${longitude});
+                  way["amenity"~"university|college"]["name"](around:${RADIUS_METERS},${latitude},${longitude});
+                  relation["amenity"~"university|college"]["name"](around:${RADIUS_METERS},${latitude},${longitude});
+                );
+                out center tags;
+            `;
+
+            const overpassUrl = "https://overpass-api.de/api/interpreter";
+            const overpassResponse = await fetch(overpassUrl, {
+                method: "POST",
+                body: overpassQuery,
+                headers: { "Content-Type": "text/plain" },
+            });
+
+            if (!overpassResponse.ok) {
+                throw new Error(`Overpass API failed: ${overpassResponse.status}`);
             }
 
-            // 1. Reverse Geocode via Nominatim
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`;
-            const response = await fetch(url, {
-                headers: {
-                    'Accept-Language': 'en',
-                    'User-Agent': 'IdhiYaaparam/1.0 (Student Project)' // Nominatim requires a User-Agent
+            const overpassData = await overpassResponse.json();
+            console.log("🗺️ Overpass found nearby elements:", overpassData.elements?.length ?? 0);
+
+            // Extract names and coordinates from Overpass results
+            const nearbyFromMap: { name: string; lat: number; lon: number; distanceM: number }[] = [];
+
+            for (const el of overpassData.elements ?? []) {
+                const name = el.tags?.name;
+                if (!name) continue;
+                const elLat = el.lat ?? el.center?.lat ?? 0;
+                const elLon = el.lon ?? el.center?.lon ?? 0;
+                const distanceM = getDistanceMeters(latitude, longitude, elLat, elLon);
+                nearbyFromMap.push({ name, lat: elLat, lon: elLon, distanceM });
+            }
+
+            // Sort by closest first
+            nearbyFromMap.sort((a, b) => a.distanceM - b.distanceM);
+            console.log("🎯 Sorted nearby colleges from Overpass:", nearbyFromMap.map(n => `${n.name} (${Math.round(n.distanceM)}m)`));
+
+            if (nearbyFromMap.length === 0) {
+                setState({
+                    isLocating: false, isTakingLong: false, detectedCollege: null, nearbyColleges: [],
+                    error: "No colleges detected nearby. Please enter your college manually.",
+                });
+                return;
+            }
+
+            // ============================================================
+            // STEP 2: Match the map results to our local CSV college list
+            //         using bidirectional substring matching.
+            // ============================================================
+            const allLocalColleges = await getLocalColleges();
+
+            const matchedAndRanked: College[] = [];
+            const seenIds = new Set<string>();
+
+            for (const nearby of nearbyFromMap) {
+                const normalizedMapName = nearby.name.toLowerCase();
+
+                // Try to find this map result in our curated CSV
+                const csvMatch = allLocalColleges.find(col => {
+                    const normalizedCsvName = col.name.toLowerCase();
+                    return normalizedMapName.includes(normalizedCsvName) || normalizedCsvName.includes(normalizedMapName);
+                });
+
+                if (csvMatch && !seenIds.has(csvMatch.id)) {
+                    // CSV match found — use the clean curated name
+                    matchedAndRanked.push(csvMatch);
+                    seenIds.add(csvMatch.id);
+                } else if (!csvMatch) {
+                    // College is near the user but not in our CSV — create a synthetic entry
+                    // This ensures the user can still select it (we show the map name directly)
+                    const syntheticId = `map-${nearby.name.toLowerCase().replace(/\s+/g, "-")}`;
+                    if (!seenIds.has(syntheticId)) {
+                        matchedAndRanked.push({
+                            id: syntheticId,
+                            name: nearby.name,
+                            state: "",
+                            city: "",
+                            lat: nearby.lat,
+                            lng: nearby.lon,
+                        } as College);
+                        seenIds.add(syntheticId);
+                    }
                 }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Reverse geocoding failed with status ${response.status}`);
             }
 
-            const data = await response.json();
-            console.log("🗺️ Nominatim Response Data:", data);
+            console.log("✅ Final matched colleges:", matchedAndRanked.map(c => c.name));
 
-            // Extract potential institution names from Nominatim response
-            // Nominatim might put it in different keys depending on the POI type
-            const address = data.address || {};
-            const possibleNames = [
-                address.university,
-                address.college,
-                address.school,
-                address.amenity,
-                data.name,
-                address.village,
-                address.suburb,
-                address.city,
-                address.town,
-                address.neighbourhood,
-                address.road
-            ].filter(Boolean);
-            console.log("🔍 Possible Names from Nominatim:", possibleNames);
-
-            const placeName = address.university || address.college || address.school || address.amenity || data.name;
-
-            if (!placeName) {
-                setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: "We couldn't detect your college automatically." });
-                return;
-            }
-
-            // 2. Fetch all our curated colleges to find a match
-            const allColleges = await getLocalColleges();
-
-            if (allColleges.length === 0) {
-                setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: "Our college database is currently unavailable." });
-                return;
-            }
-
-            // 3. Match reverse-geocoded place names against our Firestore list
-            const matchedCollege = allColleges.find(col => {
-                const normalizedDbName = col.name.toLowerCase();
-                // Check if ANY of the possible names from Nominatim contain our DB name, or vice versa
-                return possibleNames.some(nameFromMap => {
-                    const normalizedMapName = nameFromMap.toLowerCase();
-                    return normalizedMapName.includes(normalizedDbName) || normalizedDbName.includes(normalizedMapName);
-                });
-            });
-
-            if (matchedCollege) {
-                console.log("✅ Matched Nominatim place to Firestore College:", matchedCollege.name);
-                // We found a direct programmatic match in our system!
-                setState({
-                    isLocating: false,
-                    isTakingLong: false,
-                    detectedCollege: matchedCollege,
-                    error: null
-                });
+            if (matchedAndRanked.length === 1) {
+                // Only one college nearby — confirm it automatically like Rapido
+                setState({ isLocating: false, isTakingLong: false, detectedCollege: matchedAndRanked[0], nearbyColleges: [], error: null });
+            } else if (matchedAndRanked.length > 1) {
+                // Multiple colleges nearby — show a picker (like when you're near campus gates area)
+                setState({ isLocating: false, isTakingLong: false, detectedCollege: null, nearbyColleges: matchedAndRanked, error: null });
             } else {
-                console.warn("⚠️ No match found in database for detected places:", possibleNames);
-                // The map found *a* place, but it isn't in our Firestore system. 
                 setState({
-                    isLocating: false,
-                    isTakingLong: false,
-                    detectedCollege: null,
-                    error: `We detected "${possibleNames[0]}" near you, but it isn't in our active marketplace yet.`
+                    isLocating: false, isTakingLong: false, detectedCollege: null, nearbyColleges: [],
+                    error: "We couldn't match a college at your location. Please enter manually.",
                 });
             }
 
-        } catch (err: any) {
-            console.error("Geolocation error:", err);
-            let errorMessage = "Failed to detect location.";
-            if (err.code === 1) errorMessage = "Location permission denied.";
-            if (err.code === 2) errorMessage = "Location unavailable.";
-            if (err.code === 3) errorMessage = "Location request timed out. Please select manually.";
-            setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: errorMessage });
+        } catch (err: unknown) {
+            clearTimeout(takingLongTimeout);
+            console.error("Location detection error:", err);
+
+            let errorMessage = "Failed to detect location. Please select manually.";
+            if (err && typeof err === "object" && "code" in err) {
+                const code = (err as GeolocationPositionError).code;
+                if (code === 1) errorMessage = "Location permission denied. Please enable location access and try again.";
+                if (code === 2) errorMessage = "Location unavailable. Please select manually.";
+                if (code === 3) errorMessage = "Location request timed out. Please select manually.";
+            }
+
+            setState({ isLocating: false, isTakingLong: false, detectedCollege: null, nearbyColleges: [], error: errorMessage });
         }
     };
 
     const resetDetection = () => {
-        setState({ isLocating: false, isTakingLong: false, detectedCollege: null, error: null });
-    }
+        setState({ isLocating: false, isTakingLong: false, detectedCollege: null, nearbyColleges: [], error: null });
+    };
 
     return { ...state, detectLocation, resetDetection };
 }
