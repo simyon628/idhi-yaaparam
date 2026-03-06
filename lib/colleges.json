@@ -1,0 +1,4394 @@
+[
+  {
+    "id": "1",
+    "name": "Indian Institute of Technology Madras",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "2",
+    "name": "College of Engineering, Anna University",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "3",
+    "name": "NIT Trichy, Tiruchirappalli",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "4",
+    "name": "Vellore Institute of Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "5",
+    "name": "SRM Engineering College, Kanchipuram",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "6",
+    "name": "SSN College of Engineering",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "7",
+    "name": "SASTRA University, Thanjavur",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "8",
+    "name": "P.S.G College of Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "9",
+    "name": "Thiagarajar College of Engineering",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "10",
+    "name": "Coimbatore Institute of Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "11",
+    "name": "Karunya Institute of Technology and Sciences",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "12",
+    "name": "Kumaraguru College of Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "13",
+    "name": "VEL Tech, Chennai",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "14",
+    "name": "Mepco Schlenk Engineering College, Sivakasi",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "15",
+    "name": "Government College of Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "16",
+    "name": "Hindustan Institute of Technology and Science",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "17",
+    "name": "Sri Krishna College of Engineering and Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "18",
+    "name": "Kongu Engineering College",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "19",
+    "name": "Bannari Amman Institute of Technology",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "20",
+    "name": "Sona College of Technology, Salem",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "21",
+    "name": "Tamil Nadu Veterinary and Animal Sciences University",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "22",
+    "name": "St. Joseph College Of Engineering, Kanchipuram",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "23",
+    "name": "Saveetha Engineering College",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "24",
+    "name": "Sri Sairam Engineering College, Chennai",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "25",
+    "name": "B.S. Abdur Rahman Crescent Institute of Science",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "26",
+    "name": "Sri Ramakrishna Engineering College",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "27",
+    "name": "Rajalakshmi Engineering College",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "28",
+    "name": "Sri Venkateswara College of Engineering",
+    "district": "India",
+    "state": "Tamil nadu"
+  },
+  {
+    "id": "29",
+    "name": "IIT Bombay",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "30",
+    "name": "Institute of Chemical Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "31",
+    "name": "Visvesvaraya National Institute of Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "32",
+    "name": "College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "33",
+    "name": "Defence Institute of Advanced Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "34",
+    "name": "National Institute of Industrial Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "35",
+    "name": "Army Institute of Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "36",
+    "name": "Bharati Vidyapeeth Deemed University",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "37",
+    "name": "Veermata Jijabai Technological Institute",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "38",
+    "name": "GH Raisoni College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "39",
+    "name": "Mukesh Patel School of Technology Management and",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "40",
+    "name": "Sardar Patel Institute of Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "41",
+    "name": "Shri Ramdeobaba College of Engineering and Management",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "42",
+    "name": "Rashtrasant Tukadoji Maharaj Nagpur University",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "43",
+    "name": "Yeshwantrao Chavan College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "44",
+    "name": "Walchand College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "45",
+    "name": "MIT World Peace University",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "46",
+    "name": "Vishwakarma Institute of Information Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "47",
+    "name": "Ramrao Adik Institute of Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "48",
+    "name": "Sardar Patel College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "49",
+    "name": "K. J. Somaiya College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "50",
+    "name": "Pimpri Chinchwad College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "51",
+    "name": "MKSSS's Cummins College of Engineering for Women,",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "52",
+    "name": "Dwarkadas J Sanghvi College of Engineering",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "53",
+    "name": "Thakur College of Engineering and Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "54",
+    "name": "SVKM's Narsee Monjee Institute of Management Studies",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "55",
+    "name": "Amity University, Mumbai",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "56",
+    "name": "Vishwakarma Institute of Technology, Pune",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "57",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "58",
+    "name": "Tata Institute of Social Sciences",
+    "district": "India",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "59",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "60",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "61",
+    "name": "Amity University, Noida",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "62",
+    "name": "Aligarh Muslim University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "63",
+    "name": "MNNIT Allahabad",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "64",
+    "name": "Jaypee Institute of Information Technology University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "65",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "66",
+    "name": "Dayalbagh Educational Institute Faculty of Engineering, Agra",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "67",
+    "name": "Sharda University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "68",
+    "name": "Galgotias University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "69",
+    "name": "Bennett University, Greater Noida",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "70",
+    "name": "Shiv Nadar University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "71",
+    "name": "Integral University, Lucknow",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "72",
+    "name": "J.S. University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "73",
+    "name": "GLA University, Mathura",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "74",
+    "name": "Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "75",
+    "name": "Sanskriti University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "76",
+    "name": "Monad University, Hapur",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "77",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "78",
+    "name": "IFTM University, Moradabad",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "79",
+    "name": "Shobhit University, Meerut",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "80",
+    "name": "Glocal University, Saharanpur",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "81",
+    "name": "Rama University, Kanpur",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "82",
+    "name": "Noida Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "83",
+    "name": "ABES Engineering College, Ghaziabad",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "84",
+    "name": "Bundelkhand Institute of Engineering & Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "85",
+    "name": "Harcourt Butler Technological University",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "86",
+    "name": "Rajiv Gandhi Institute of Petroleum Technology",
+    "district": "India",
+    "state": "Uttar pradesh"
+  },
+  {
+    "id": "87",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "88",
+    "name": "Jamia Millia Islamia University-[JMI], New Delhi",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "89",
+    "name": "Delhi Technological University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "90",
+    "name": "Amity University, Noida",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "91",
+    "name": "Indraprastha Institute of Information Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "92",
+    "name": "Guru Gobind Singh Indraprastha University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "93",
+    "name": "Jaypee Institute of Information Technology University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "94",
+    "name": "National Institute of Food Technology Entrepreneurship and",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "95",
+    "name": "School of Engineering and Technology, NCU",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "96",
+    "name": "J.C. Bose University Of Science And Technology,",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "97",
+    "name": "Indira Gandhi Delhi Technical University For Women",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "98",
+    "name": "Manav Rachna International Institute Of Research And",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "99",
+    "name": "Sharda University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "100",
+    "name": "Galgotias University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "101",
+    "name": "Netaji Subhas University of Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "102",
+    "name": "Shiv Nadar University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "103",
+    "name": "Manav Rachna International Institute of Research and",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "104",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "105",
+    "name": "Gurugram University, Gurgaon",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "106",
+    "name": "Chhotu Ram Rural Institute Of Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "107",
+    "name": "SunRise University",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "108",
+    "name": "Monad University, Hapur",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "109",
+    "name": "Amity University, Gurgaon",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "110",
+    "name": "Shobhit University, Meerut",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "111",
+    "name": "Indraprastha Institute of Technology and Management",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "112",
+    "name": "Maharaja Agrasen Institute of Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "113",
+    "name": "Maharaja Surajmal Institute of Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "114",
+    "name": "Noida Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Delhi ncr"
+  },
+  {
+    "id": "115",
+    "name": "K L University",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "116",
+    "name": "Andhra University, College of Engineering",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "117",
+    "name": "Sri Venkateswara University College of Engineering, Tirupati",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "118",
+    "name": "Vignan’s Foundation for Science, Technology, and Research,",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "119",
+    "name": "JNTUK University College of Engineering, Kakinada, East",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "120",
+    "name": "Sree Vidyanikethan Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "121",
+    "name": "G. Pulla Reddy Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "122",
+    "name": "Sri Venkateswara College of Engineering and Technology",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "123",
+    "name": "Velagapudi Ramakrishna Siddhartha Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "124",
+    "name": "Shri Vishnu Engineering College for Women",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "125",
+    "name": "JNTUA College of Engineering, Ananthapur",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "126",
+    "name": "Sagi Ramakrishnam Raju Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "127",
+    "name": "Gayatri Vidya Parishad College of Engineering",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "128",
+    "name": "Jawaharlal Nehru Technological University",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "129",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "130",
+    "name": "Prasad V. Potluri Siddhartha Institute of Technology",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "131",
+    "name": "Centurion University of Technology and Management",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "132",
+    "name": "Aditya Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "133",
+    "name": "Bapatla Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "134",
+    "name": "Gudlavalleru Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "135",
+    "name": "Sri Venkateswara College of Engineering",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "136",
+    "name": "Sri Vasavi Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "137",
+    "name": "Indian Institute of Information Technology Sri City",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "138",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "139",
+    "name": "Rajiv Gandhi University of Knowledge Technologies -[RGUKT],",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "140",
+    "name": "Raghu Engineering College",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "141",
+    "name": "Indian Institute of Information Technology Design and",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "142",
+    "name": "Rajeev Gandhi Memorial College of Engineering and",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "143",
+    "name": "VIT University",
+    "district": "India",
+    "state": "Andhra pradesh"
+  },
+  {
+    "id": "144",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "145",
+    "name": "Manipal Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "146",
+    "name": "R V College of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "147",
+    "name": "Ramaiah Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "148",
+    "name": "International Institute of Information Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "149",
+    "name": "BMS College of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "150",
+    "name": "Siddaganga Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "151",
+    "name": "New Horizon College of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "152",
+    "name": "Faculty of Engineering and Technology, Jain University",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "153",
+    "name": "Sri Jayachamarajendra College of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "154",
+    "name": "Dayananda Sagar College of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "155",
+    "name": "NMAM Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "156",
+    "name": "Nitte Meenakshi Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "157",
+    "name": "PES University",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "158",
+    "name": "BMS Institute of Technology and Management",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "159",
+    "name": "KLE Technological University, Hubli",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "160",
+    "name": "Dr. Ambedkar Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "161",
+    "name": "PES College of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "162",
+    "name": "CMR Institute of Technology",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "163",
+    "name": "The National Institute of Engineering",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "164",
+    "name": "Alliance College of Engineering and Design, Bangalore",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "165",
+    "name": "Basaveshwar Engineering College",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "166",
+    "name": "Christ University, Bangalore",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "167",
+    "name": "Manipal Academy of Higher Education",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "168",
+    "name": "Indian Institute of Science",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "169",
+    "name": "REVA University, Bangalore",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "170",
+    "name": "Alliance University, Bangalore",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "171",
+    "name": "Presidency University, Bangalore",
+    "district": "India",
+    "state": "Karnataka"
+  },
+  {
+    "id": "172",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "173",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "174",
+    "name": "International Institute of Information Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "175",
+    "name": "Jawaharlal Nehru Technological University",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "176",
+    "name": "University College of Engineering, Osmania University",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "177",
+    "name": "Chaitanya Bharathi Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "178",
+    "name": "Vallurupalli Nageswara Rao Vignana Jyothi Institute of",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "179",
+    "name": "CVR College of Engineering, Ibrahimpatnam, Rangareddi",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "180",
+    "name": "Institute of Aeronautical Engineering",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "181",
+    "name": "BV Raju Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "182",
+    "name": "Vardhaman College of Engineering",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "183",
+    "name": "Anurag University, Hyderabad",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "184",
+    "name": "Vasavi College of Engineering",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "185",
+    "name": "Gokaraju Rangaraju Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "186",
+    "name": "Kakatiya Institute of Technology & Science",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "187",
+    "name": "K L University",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "188",
+    "name": "Birla Institute of Technology and Science",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "189",
+    "name": "Mahatma Gandhi Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "190",
+    "name": "Malla Reddy Engineering College",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "191",
+    "name": "Malla Reddy College of Engineering",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "192",
+    "name": "Indian Institute of Chemical Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "193",
+    "name": "Sreenidhi Institute of Science and Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "194",
+    "name": "Mahindra University, Hyderabad",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "195",
+    "name": "St Martin's Engineering College, Secunderabad",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "196",
+    "name": "MLR Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "197",
+    "name": "Keshav Memorial Institute of Technology",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "198",
+    "name": "Vaagdevi College of Engineering",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "199",
+    "name": "CMR Engineering College",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "200",
+    "name": "Matrusri Engineering College, Hyderabad",
+    "district": "India",
+    "state": "Telangana"
+  },
+  {
+    "id": "201",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "202",
+    "name": "Maulana Azad National Institute of Technology",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "203",
+    "name": "Indian Institute of Information Technology Design and",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "204",
+    "name": "Atal Bihari Vajpayee Indian Institute of Information",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "205",
+    "name": "VIT Bhopal University, Bhopal",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "206",
+    "name": "RKDF University, Bhopal",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "207",
+    "name": "Awadhesh Pratap Singh University",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "208",
+    "name": "University Institute of Technology, Rajiv Gandhi Proudyogiki",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "209",
+    "name": "Institute of Information Technology & Management",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "210",
+    "name": "Institute of Engineering and Technology, Devi Ahilya",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "211",
+    "name": "Acropolis Institute of Technology & Research",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "212",
+    "name": "Indian Institute of Information Technology -[IIIT], Bhopal",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "213",
+    "name": "Jaypee University of Engineering and Technology",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "214",
+    "name": "Oriental University",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "215",
+    "name": "Amity University, Gwalior",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "216",
+    "name": "AKS University",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "217",
+    "name": "Jagran Lakecity University",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "218",
+    "name": "Jabalpur Engineering College",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "219",
+    "name": "Swami Vivekanand University, Sagar",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "220",
+    "name": "Acropolis Group of Institutions, Indore",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "221",
+    "name": "LNCT University",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "222",
+    "name": "Avantika University, Ujjain",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "223",
+    "name": "Ujjain Engineering College",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "224",
+    "name": "Shri Govindram Seksaria Institute of Technology and",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "225",
+    "name": "Lakshmi Narain College of Technology",
+    "district": "India",
+    "state": "Madhya pradesh"
+  },
+  {
+    "id": "226",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "227",
+    "name": "Indian Institute of Space Science and Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "228",
+    "name": "College of Engineering, Trivandrum",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "229",
+    "name": "Cochin University of Science and Technology, School",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "230",
+    "name": "Baselios Thomas I Catholicose College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "231",
+    "name": "Cochin University of Science and Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "232",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "233",
+    "name": "APJ Abdul Kalam Technological University",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "234",
+    "name": "Federal Institute of Science and Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "235",
+    "name": "Indian Institute of Information Technology [IIIT], Kottayam",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "236",
+    "name": "Government Engineering College",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "237",
+    "name": "National Institute of Electronics & Information Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "238",
+    "name": "TKM College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "239",
+    "name": "Amal Jyothi College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "240",
+    "name": "Hindustan College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "241",
+    "name": "Marian Engineering College",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "242",
+    "name": "Saintgits College of Engineering, Kottayam",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "243",
+    "name": "Rajiv Gandhi Institute of Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "244",
+    "name": "Mangalam College of Engineering Ettumanoor",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "245",
+    "name": "NSS College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "246",
+    "name": "Sree Chitra Thirunal College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "247",
+    "name": "Thejus Engineering College, Thrissur",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "248",
+    "name": "Mar Athanasius College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "249",
+    "name": "St. Thomas College of Engineering and Technology-",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "250",
+    "name": "College of Engineering Thalassery, Kannur",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "251",
+    "name": "KMCT College of Engineering, Kozhikode",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "252",
+    "name": "MEA Engineering College- [MEAEC], Malappuram",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "253",
+    "name": "Rajagiri School of Engineering & Technology",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "254",
+    "name": "Sahrdaya College of Engineering",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "255",
+    "name": "Trinity College of Engineering, Trivendrum",
+    "district": "India",
+    "state": "Kerala"
+  },
+  {
+    "id": "256",
+    "name": "Birla Institute of Technology and Science",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "257",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "258",
+    "name": "Malaviya National Institute of Technology",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "259",
+    "name": "Singhania University, Jhunjhunu",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "260",
+    "name": "Jaipur National University",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "261",
+    "name": "Manipal University",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "262",
+    "name": "JECRC University",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "263",
+    "name": "SunRise University",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "264",
+    "name": "OPJS University, Churu",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "265",
+    "name": "Banasthali Vidyapith, Jaipur",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "266",
+    "name": "Amity University, Jaipur",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "267",
+    "name": "Suresh Gyan Vihar University",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "268",
+    "name": "IIS (Deemed to be University)",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "269",
+    "name": "Madhav University",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "270",
+    "name": "Jagannath University, Jaipur",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "271",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "272",
+    "name": "Tantia University, Sriganganagar",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "273",
+    "name": "Pacific University, Udaipur",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "274",
+    "name": "Swami Keshvanand Institute of Technology, Management and",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "275",
+    "name": "Maharana Pratap University of Agriculture and Technology",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "276",
+    "name": "Poornima College of Engineering, Jaipur",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "277",
+    "name": "Shridhar University, Pilani",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "278",
+    "name": "Jaipur Engineering College and Research Centre, Jaipur",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "279",
+    "name": "Birla Institute of Technology",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "280",
+    "name": "Institute of Advanced Studies in Education",
+    "district": "India",
+    "state": "Rajasthan"
+  },
+  {
+    "id": "281",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "282",
+    "name": "Panjab University",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "283",
+    "name": "Punjab Engineering College University of Technology",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "284",
+    "name": "National Institute of Food Technology Entrepreneurship and",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "285",
+    "name": "University Institute of Engineering, Chandigarh University",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "286",
+    "name": "School of Engineering and Technology, NCU",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "287",
+    "name": "J.C. Bose University Of Science And Technology,",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "288",
+    "name": "Manav Rachna International Institute Of Research And",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "289",
+    "name": "Manav Rachna International Institute of Research and",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "290",
+    "name": "Gurugram University, Gurgaon",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "291",
+    "name": "PDM University, Bahadurgarh, Bahadurgarh",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "292",
+    "name": "Amity University, Gurgaon",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "293",
+    "name": "National Institute of Technical Teachers Training and",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "294",
+    "name": "IILM University, Gurgaon",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "295",
+    "name": "University Institute of Engineering and Technology -[UIET],",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "296",
+    "name": "Starex University, Gurgaon",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "297",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "298",
+    "name": "SRM University Delhi NCR, Sonepat",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "299",
+    "name": "Lingaya's Vidyapeeth, Faridabad",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "300",
+    "name": "Modern Vidya Niketan",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "301",
+    "name": "Delhi Technical Campus",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "302",
+    "name": "Chandigarh College of Engineering and Technology",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "303",
+    "name": "Manav Rachna University",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "304",
+    "name": "Seth Jai Parkash Mukand Lal Institute of",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "305",
+    "name": "Sushant University / Ansal University, Gurgaon",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "306",
+    "name": "University Institute of Engineering and Technology, Maharshi",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "307",
+    "name": "St. Andrews Institute of Technology and Management",
+    "district": "India",
+    "state": "Haryana"
+  },
+  {
+    "id": "308",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "309",
+    "name": "Sardar Vallabhbhai National Institute of Technology",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "310",
+    "name": "Dhirubhai Ambani Institute of Information and Communication",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "311",
+    "name": "Institute of Technology, Nirma University, Ahmedabad",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "312",
+    "name": "Faculty of Technology and Engineering, Maharaja Sayajirao",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "313",
+    "name": "Nirma University",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "314",
+    "name": "Pandit Deendayal Petroleum University [PDPU] / (Energy",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "315",
+    "name": "Pandit Deendayal Petroleum University, School of Technology",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "316",
+    "name": "Central Institute of plastics engineering & Technology-",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "317",
+    "name": "Sardar Patel University",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "318",
+    "name": "CEPT University, Ahmedabad",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "319",
+    "name": "Ganpat University",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "320",
+    "name": "Indus University, Ahmedabad",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "321",
+    "name": "Navrachana University",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "322",
+    "name": "Indian Institute of Information Technology Vadodara",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "323",
+    "name": "Uka Tarsadia University, Bardoli",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "324",
+    "name": "GSFC University, Vadodara",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "325",
+    "name": "Auro University, Surat",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "326",
+    "name": "L.D. College of Engineering",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "327",
+    "name": "RK University",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "328",
+    "name": "Institute of Infrastructure Technology Research and Management",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "329",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "330",
+    "name": "C. U. Shah University, Wadhwan",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "331",
+    "name": "P.P. Savani University, Surat",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "332",
+    "name": "Vishwakarma Government Engineering College",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "333",
+    "name": "Dharmsinh Desai University",
+    "district": "India",
+    "state": "Gujarat"
+  },
+  {
+    "id": "334",
+    "name": "Thapar Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "335",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "336",
+    "name": "Panjab University",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "337",
+    "name": "Punjab Engineering College University of Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "338",
+    "name": "I.K. Gujral Punjab Technical University",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "339",
+    "name": "Dr BR Ambedkar National Institute of Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "340",
+    "name": "University Institute of Engineering, Chandigarh University",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "341",
+    "name": "Sant Longowal Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "342",
+    "name": "Chitkara University",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "343",
+    "name": "Chandigarh Group of Colleges",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "344",
+    "name": "RIMT University, Gobindgarh",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "345",
+    "name": "National Institute of Technical Teachers Training and",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "346",
+    "name": "Guru Kashi University, Bathinda",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "347",
+    "name": "University Institute of Engineering and Technology -[UIET],",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "348",
+    "name": "Rayat Bahra University, Mohali",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "349",
+    "name": "DAV University, Jalandhar",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "350",
+    "name": "Plaksha, Mohali",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "351",
+    "name": "Chandigarh Engineering College",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "352",
+    "name": "Sant Baba Bhag Singh University",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "353",
+    "name": "Chandigarh College of Engineering and Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "354",
+    "name": "Global Institute, Amritsar",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "355",
+    "name": "Maharaja Ranjit Singh Punjab Technical University, Bathinda",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "356",
+    "name": "Amritsar College of Engineering and Technology",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "357",
+    "name": "Guru Nanak Dev Engineering College",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "358",
+    "name": "Sri Guru Granth Sahib World University",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "359",
+    "name": "Baba Banda Singh Bahadur Engineering College",
+    "district": "India",
+    "state": "Punjab"
+  },
+  {
+    "id": "360",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "361",
+    "name": "Jadavpur University",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "362",
+    "name": "Indian Institute of Engineering Science and Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "363",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "364",
+    "name": "Institute of Engineering and Management",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "365",
+    "name": "Heritage Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "366",
+    "name": "Maulana Abul Kalam Azad University of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "367",
+    "name": "Narula Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "368",
+    "name": "Haldia Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "369",
+    "name": "Amity University, Kolkata",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "370",
+    "name": "Techno India University, Kolkata",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "371",
+    "name": "Adamas University, Kolkata",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "372",
+    "name": "Sister Nivedita University",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "373",
+    "name": "Asansol Engineering College",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "374",
+    "name": "University of Engineering and Management",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "375",
+    "name": "JIS College of Engineering",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "376",
+    "name": "Kalyani Government Engineering College",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "377",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "378",
+    "name": "The Neotia University",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "379",
+    "name": "Bengal Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "380",
+    "name": "Siliguri Institute of Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "381",
+    "name": "University Institute of Technology, University Of Burdwan",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "382",
+    "name": "Jalpaiguri Government Engineering College",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "383",
+    "name": "Techno India Salt Lake, Kolkata",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "384",
+    "name": "Bengal College of Engineering and Technology",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "385",
+    "name": "Dr. B.C. Roy Engineering College",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "386",
+    "name": "Bengal College of Engineering",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "387",
+    "name": "Seacom Skills University",
+    "district": "India",
+    "state": "West bengal"
+  },
+  {
+    "id": "388",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "389",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "390",
+    "name": "Institute of Technical Education and Research",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "391",
+    "name": "C. V. Raman Global University, Bhubaneswar",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "392",
+    "name": "Veer Surendra Sai University of Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "393",
+    "name": "Biju Patnaik University of Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "394",
+    "name": "Centurion University of Technology and Management",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "395",
+    "name": "International Institute of Information Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "396",
+    "name": "Indira Gandhi Institute of Technology- [IGIT], Dhenkanal",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "397",
+    "name": "Silicon Institute of Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "398",
+    "name": "Silicon Institute of Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "399",
+    "name": "Xavier University",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "400",
+    "name": "Bhubaneswar Engineering College",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "401",
+    "name": "College of Engineering",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "402",
+    "name": "National Institute of Science and Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "403",
+    "name": "College of Engineering and Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "404",
+    "name": "Gandhi Institute for Technology",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "405",
+    "name": "Orissa Engineering College",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "406",
+    "name": "Parala Maharaja Engineering College",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "407",
+    "name": "CSIR-Institute of Minerals and Materials Technology -[CSIR-IMMT],",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "408",
+    "name": "GITA Autonomous College",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "409",
+    "name": "Seemanta Engineering College, Mayurbhanj",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "410",
+    "name": "Trident Academy of Technology, Bhubaneswar",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "411",
+    "name": "Government College of Engineering, Kendujhar",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "412",
+    "name": "CIPET: Centre for Skilling and Technical Support",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "413",
+    "name": "Vignan Institute of Technology And Management, Berhampur",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "414",
+    "name": "Krupajal Engineering College",
+    "district": "India",
+    "state": "Orissa"
+  },
+  {
+    "id": "415",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "416",
+    "name": "Graphic Era University, School of Engineering and",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "417",
+    "name": "College of Technology, GB Pant University of",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "418",
+    "name": "University of Petroleum and Energy Studies",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "419",
+    "name": "Doon University, Dehradun",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "420",
+    "name": "DIT University",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "421",
+    "name": "Graphic Era University",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "422",
+    "name": "Graphic Era Hill University",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "423",
+    "name": "ICFAI University, Dehradun",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "424",
+    "name": "MotherHood University, Roorkee",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "425",
+    "name": "Himgiri Zee University",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "426",
+    "name": "Swami Rama Himalayan University",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "427",
+    "name": "Tula's Institute, Dehradun",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "428",
+    "name": "THDC Institute of Hydro Power Engineering and",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "429",
+    "name": "College of Engineering",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "430",
+    "name": "Shivalik College of Engineering",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "431",
+    "name": "Women Institute of Technology",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "432",
+    "name": "Indian Institute of Aeronautical Engineering",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "433",
+    "name": "Indira Gandhi National Forest Academy",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "434",
+    "name": "Bipin Tripathi Kumaon Institute of Technology, Almora",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "435",
+    "name": "Govind Ballabh Pant Engineering College",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "436",
+    "name": "BFIT Group of Institutions",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "437",
+    "name": "Dev Bhoomi Institute of Technology",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "438",
+    "name": "Graphic Era Hill University Bhimtal Campus",
+    "district": "India",
+    "state": "Uttarakhand"
+  },
+  {
+    "id": "439",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "440",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "441",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "442",
+    "name": "Central Institute of Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "443",
+    "name": "Assam Don Bosco University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "444",
+    "name": "Assam Engineering College",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "445",
+    "name": "Jorhat Engineering College",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "446",
+    "name": "Assam Science and Technology University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "447",
+    "name": "Assam Down Town University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "448",
+    "name": "Girijananda Chowdhury Institute of Management & Technology,",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "449",
+    "name": "Assam Engineering Institute",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "450",
+    "name": "Bineswar Brahma Engineering College- [BBEC], Kokrajhar",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "451",
+    "name": "Jorhat Institute of Science and Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "452",
+    "name": "NETES Institute of Technology and Science",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "453",
+    "name": "Don Bosco College of Engineering and Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "454",
+    "name": "Tezpur University, School of Engineering Tezpur, Sonitpur",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "455",
+    "name": "Barak Valley Engineering College",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "456",
+    "name": "Assam Institute of Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "457",
+    "name": "Royal Global University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "458",
+    "name": "Royal School of Engineering and Technology",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "459",
+    "name": "Scholar's Institute of Technology and Management",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "460",
+    "name": "Dibrugarh University, Dibrugarh",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "461",
+    "name": "Tezpur University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "462",
+    "name": "B. Borooah College, Guwahati",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "463",
+    "name": "Gauhati University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "464",
+    "name": "Pragjyotish College, Guwahati",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "465",
+    "name": "Duliajan College, Dibrugarh",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "466",
+    "name": "Assam University, Silchar",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "467",
+    "name": "Kaziranga University",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "468",
+    "name": "Dibrugarh Polytechnic",
+    "district": "India",
+    "state": "Assam"
+  },
+  {
+    "id": "469",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "470",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "471",
+    "name": "Sandip University, Madhuban",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "472",
+    "name": "Government Engineering College",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "473",
+    "name": "Amity University, Patna",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "474",
+    "name": "Aryabhatta Knowledge University",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "475",
+    "name": "Bhagalpur College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "476",
+    "name": "Birla Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "477",
+    "name": "Gaya College of Engineering, Gaya",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "478",
+    "name": "Netaji Subhas Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "479",
+    "name": "Muzaffarpur Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "480",
+    "name": "Nalanda College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "481",
+    "name": "Bakhtiyarpur College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "482",
+    "name": "Darbhanga College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "483",
+    "name": "Motihari College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "484",
+    "name": "Central Institute of Plastics Engineering and Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "485",
+    "name": "Loknayak Jai Prakash Institute Of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "486",
+    "name": "Purnea College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "487",
+    "name": "Katihar Engineering College",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "488",
+    "name": "Saharsa College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "489",
+    "name": "Supaul College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "490",
+    "name": "Millia Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "491",
+    "name": "Sityog Institute of Technology, Aurangabad",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "492",
+    "name": "Vidya Vihar Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "493",
+    "name": "Shershah College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "494",
+    "name": "RP Sharma Institute of Technology, Patna",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "495",
+    "name": "Sitamarhi Institute of Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "496",
+    "name": "Government Engineering College",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "497",
+    "name": "Maulana Azad College of Engineering and Technology",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "498",
+    "name": "Rashtrakavi Ramdhari Singh Dinkar College of Engineering",
+    "district": "India",
+    "state": "Bihar"
+  },
+  {
+    "id": "499",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "500",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "501",
+    "name": "Amity University, Raipur",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "502",
+    "name": "International Institute of Information Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "503",
+    "name": "ITM University, Raipur",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "504",
+    "name": "Bhilai Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "505",
+    "name": "Bhilai Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "506",
+    "name": "Govt Engineering College, Bilaspur",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "507",
+    "name": "OP Jindal University",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "508",
+    "name": "Lakhmi Chand Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "509",
+    "name": "ICFAI University, Raipur",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "510",
+    "name": "Raipur Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "511",
+    "name": "Shri Shankaracharya Institute of Professional Management and",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "512",
+    "name": "Chhatrapati Shivaji Institute of Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "513",
+    "name": "Shri Rawatpura Sarkar University",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "514",
+    "name": "Government Engineering College",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "515",
+    "name": "Columbia Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "516",
+    "name": "AAFT University of Media and Arts",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "517",
+    "name": "Chouksey Engineering College",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "518",
+    "name": "Christian College of Engineering and Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "519",
+    "name": "Chhattisgarh Engineering College",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "520",
+    "name": "Disha Institute of Management and Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "521",
+    "name": "Rungta College of Engineering and Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "522",
+    "name": "Kirodimal Institute of Technology, Raigarh",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "523",
+    "name": "Krishna Engineering College",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "524",
+    "name": "RSR Rungta College of Engineering and Technology",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "525",
+    "name": "Shri Shankaracharya Group of Institutions",
+    "district": "India",
+    "state": "Chhattisgarh"
+  },
+  {
+    "id": "526",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "527",
+    "name": "Birla Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "528",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "529",
+    "name": "Birsa Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "530",
+    "name": "RKDF University, Ranchi",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "531",
+    "name": "YBN University",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "532",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "533",
+    "name": "Sai Nath University, Ranchi",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "534",
+    "name": "National Institute of Foundry & Forge Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "535",
+    "name": "Arka Jain University, Jamshedpur",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "536",
+    "name": "Amity University, Ranchi",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "537",
+    "name": "Jharkhand Rai University",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "538",
+    "name": "Netaji Subhas University",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "539",
+    "name": "Radha Govind University",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "540",
+    "name": "Cambridge Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "541",
+    "name": "Sarala Birla University",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "542",
+    "name": "Birla Institute of Technology Extension Centre",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "543",
+    "name": "Chaibasa Engineering College, Techno India Group, Chaibasa",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "544",
+    "name": "Ramgarh Engineering College",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "545",
+    "name": "Capital University",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "546",
+    "name": "RTC Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "547",
+    "name": "University College of Engineering and Technology, Vinoba",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "548",
+    "name": "RVS College of Engineering and Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "549",
+    "name": "KK College of Engineering and Management, Dhanbad",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "550",
+    "name": "Ramgovind Institute of Technology, Kodarma",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "551",
+    "name": "Nilai Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "552",
+    "name": "Maryland Institute of Technology And Management, Jamshedpur",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "553",
+    "name": "Ramchandra Chandarvansi Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "554",
+    "name": "Vidya Memorial Institute of Technology",
+    "district": "India",
+    "state": "Jharkhand"
+  },
+  {
+    "id": "555",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "556",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "557",
+    "name": "Jaypee University of Information Technology",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "558",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "559",
+    "name": "Baddi University of Emerging Sciences and Technologies",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "560",
+    "name": "Maharishi Markandeshwar",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "561",
+    "name": "Arni University, Kangra",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "562",
+    "name": "Bahra University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "563",
+    "name": "Eternal University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "564",
+    "name": "Abhilashi University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "565",
+    "name": "IEC University Baddi",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "566",
+    "name": "University Institute of Information Technology, Himachal Pradesh",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "567",
+    "name": "Career Point University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "568",
+    "name": "Sri Sai University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "569",
+    "name": "Green Hills Engineering College, Solan",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "570",
+    "name": "Rajiv Gandhi govt. Engineering college -[RGGEC], Kangra",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "571",
+    "name": "Indus International University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "572",
+    "name": "Jawaharlal Nehru Government Engineering College",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "573",
+    "name": "Maharaja Agrasen University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "574",
+    "name": "ICFAI University, Baddi",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "575",
+    "name": "Himachal Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "576",
+    "name": "LR Institute of Engineering and Technology, Solan",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "577",
+    "name": "Himalayan Group of Professional Institutions, Sirmaur",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "578",
+    "name": "Manav Bharti University",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "579",
+    "name": "Chitkara University, Solan",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "580",
+    "name": "Bells Institute of Management & Technology, Shimla",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "581",
+    "name": "Shiva Group of Institutions, Bilaspur",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "582",
+    "name": "Mahatma Gandhi Government Engineering College",
+    "district": "India",
+    "state": "Himachal pradesh"
+  },
+  {
+    "id": "583",
+    "name": "Shri Mata Vaishno Devi University",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "584",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "585",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "586",
+    "name": "Government College of Engineering and Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "587",
+    "name": "Islamic University of Science and Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "588",
+    "name": "SSM College of Engineering and Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "589",
+    "name": "Yogananda College of Engineering & Technology -[YCET],",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "590",
+    "name": "MBS College of Engineering and Technology, Jammu",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "591",
+    "name": "Sher-e-Kashmir University of Agricultural Sciences and Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "592",
+    "name": "Government Degree College for Boys, Udhampur",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "593",
+    "name": "Baba Ghulam Shah Badshah University",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "594",
+    "name": "Central University of Jammu, Jammu",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "595",
+    "name": "Central University of Kashmir",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "596",
+    "name": "University of Kashmir",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "597",
+    "name": "Govt. Gandhi Memorial Science College, Jammu",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "598",
+    "name": "Kashmir Government Polytechnic",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "599",
+    "name": "Cluster University of Srinagar",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "600",
+    "name": "Bhargava College of Engineering & Technology",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "601",
+    "name": "Government Polytechnic College -[GPC], Anantnag",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "602",
+    "name": "Masterpro Institute of Technology, Srinagar",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "603",
+    "name": "Kite Polytechnic College, Budgam",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "604",
+    "name": "Government Polytechnic Kargil, Kargil",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "605",
+    "name": "Government Polytechnic College, Baramulla",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "606",
+    "name": "Government Polytechnic College",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "607",
+    "name": "Government Polytechnic For Women-[GPW], Jammu",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "608",
+    "name": "Government Polytechnic College, Bandipora",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "609",
+    "name": "Government Polytechnic, Kulgam",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "610",
+    "name": "Government Polytechnic College, Budgam",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "611",
+    "name": "Government Polytechnic College, Sopore",
+    "district": "India",
+    "state": "Jammu"
+  },
+  {
+    "id": "612",
+    "name": "Panjab University",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "613",
+    "name": "Punjab Engineering College University of Technology",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "614",
+    "name": "University Institute of Engineering, Chandigarh University",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "615",
+    "name": "National Institute of Technical Teachers Training and",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "616",
+    "name": "University Institute of Engineering and Technology -[UIET],",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "617",
+    "name": "Chandigarh College of Engineering and Technology",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "618",
+    "name": "Apex Institute of Technology",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "619",
+    "name": "IITT Institutions, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "620",
+    "name": "Dr. S. S. Bhatnagar University Institute of",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "621",
+    "name": "Swami Vivekanand Institute of Engineering & Technology",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "622",
+    "name": "Gurukul Vidyapeeth, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "623",
+    "name": "Morph Academy, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "624",
+    "name": "Indo Swiss Training Centre",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "625",
+    "name": "Artex Informatic Solutions, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "626",
+    "name": "Swami Vivekanand Polytechnic College",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "627",
+    "name": "PG Government College for Girls, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "628",
+    "name": "Government Industrial Training Institute",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "629",
+    "name": "Government Polytechnic for Women",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "630",
+    "name": "Longowal Polytechnic College, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "631",
+    "name": "Universal Polytechnic College, Chandigarh",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "632",
+    "name": "Swami Vivekanand Industrial Training Centre",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "633",
+    "name": "Swami Vivekanand Group Of Institutes",
+    "district": "India",
+    "state": "Chandigarh"
+  },
+  {
+    "id": "634",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "635",
+    "name": "Indian Institute of Technology",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "636",
+    "name": "Birla Institute of Technology and Science",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "637",
+    "name": "Goa College of Engineering",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "638",
+    "name": "Padre Conceicao College of Engineering, Salcete",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "639",
+    "name": "National Centre for Antarctic and Ocean Research",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "640",
+    "name": "Shree Rayeshwar Institute of Engineering and Information Technology, North Goa",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "641",
+    "name": "National Institute of Oceanography",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "642",
+    "name": "Goa University, North Goa",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "643",
+    "name": "International Institute of Hotel Management",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "644",
+    "name": "Government Polytechnic, Bicholim",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "645",
+    "name": "Agnel Polytechnic, South Goa",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "646",
+    "name": "Government Polytechnic, Curchorem",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "647",
+    "name": "Government Polytechnic",
+    "district": "India",
+    "state": "Goa"
+  },
+  {
+    "id": "648",
+    "name": "North Eastern Regional Institute of Science and Technology",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "649",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "650",
+    "name": "Arunodaya University, Itanagar",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "651",
+    "name": "Himalayan University",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "652",
+    "name": "Apex Professional University",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "653",
+    "name": "Rajiv Gandhi University",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "654",
+    "name": "Arunachal University of Studies",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "655",
+    "name": "North East Frontier Technical University",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "656",
+    "name": "Venkateshwara Open University",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "657",
+    "name": "Tomi Polytechnic College, Basar",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "658",
+    "name": "Government Polytechnic Laying, Itanagar",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "659",
+    "name": "Government Polytechnic Roing, Roing",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "660",
+    "name": "Government Polytechnic",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "661",
+    "name": "Rajiv Gandhi Government Polytechnic",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "662",
+    "name": "The Global University, Itanagar",
+    "district": "India",
+    "state": "Arunachal pradesh"
+  },
+  {
+    "id": "663",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "664",
+    "name": "CMJ University, Ri-Bhoi",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "665",
+    "name": "North-Eastern Hill University",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "666",
+    "name": "William Carey University",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "667",
+    "name": "Mahatma Gandhi University",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "668",
+    "name": "MIT University, Shillong",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "669",
+    "name": "Regional Institute of Science and Technolog",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "670",
+    "name": "Tura Polytechnic College, Tura",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "671",
+    "name": "Shillong Polytechnic, Mawlai",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "672",
+    "name": "Jowai Polytechnic, Jowai",
+    "district": "India",
+    "state": "Meghalaya"
+  },
+  {
+    "id": "673",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "674",
+    "name": "St.Joseph University, Dimapur",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "675",
+    "name": "Nagaland University, Zunhebotto",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "676",
+    "name": "The Global Open University",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "677",
+    "name": "Government Polytechnic, Kohima",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "678",
+    "name": "Khelhoshe Polytechnic Atoizu[KPA], Kohima",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "679",
+    "name": "Government Polytechnic Seithekema C, Dimapur",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "680",
+    "name": "Government Polytechnic Tsunazho",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "681",
+    "name": "Government Polytechnic Sedem, Tuensang",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "682",
+    "name": "Institute of Communication and Information Technology, Kohima",
+    "district": "India",
+    "state": "Nagaland"
+  },
+  {
+    "id": "683",
+    "name": "Pondicherry Engineering College",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "684",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "685",
+    "name": "Manakula Vinayagar Institute of Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "686",
+    "name": "Sri Manakula Vinayagar Engineering College, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "687",
+    "name": "Rajiv Gandhi College of Engineering and Technology, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "688",
+    "name": "Christ College of Engineering and Technology, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "689",
+    "name": "Perunthalaivar Kamarajar Institute of Engineering and Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "690",
+    "name": "Achariya College of Engineering Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "691",
+    "name": "Regency Institute of Technology, Yanam",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "692",
+    "name": "Bharathiyar College of Engineering and Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "693",
+    "name": "PSV College of Engineering and Technology, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "694",
+    "name": "Christ Institute of Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "695",
+    "name": "R V S College of Engineering and Technology",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "696",
+    "name": "Alpha College of Engineering & Technology, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "697",
+    "name": "Pondicherry University",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "698",
+    "name": "Sri Chakra Maritime College, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "699",
+    "name": "Motilal Nehru Government Polytechnic College, Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "700",
+    "name": "Karaikal Polytechnic College",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "701",
+    "name": "Dr. B. R. Ambedkar Polytechnic College",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "702",
+    "name": "Indira Gandhi Polytechnic College",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "703",
+    "name": "Sri Manakula Vinayagar Polytechnic College-[SMVPC], Pondicherry",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "704",
+    "name": "Women’s Polytechnic College",
+    "district": "India",
+    "state": "Puducherry"
+  },
+  {
+    "id": "705",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "706",
+    "name": "ICFAI University, West Tripura",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "707",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "708",
+    "name": "Tripura Institute of Technology, Agartala",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "709",
+    "name": "Techno College of Engineering Agartala",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "710",
+    "name": "Tripura University, West Tripura",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "711",
+    "name": "TTAADC Polytechnic Institute, West Tripura",
+    "district": "India",
+    "state": "Tripura"
+  },
+  {
+    "id": "712",
+    "name": "Sikkim Manipal University",
+    "district": "India",
+    "state": "Sikkim"
+  },
+  {
+    "id": "713",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Sikkim"
+  },
+  {
+    "id": "714",
+    "name": "SRM University Sikkim, Gangtok",
+    "district": "India",
+    "state": "Sikkim"
+  },
+  {
+    "id": "715",
+    "name": "Vinayaka Missions Sikkim University",
+    "district": "India",
+    "state": "Sikkim"
+  },
+  {
+    "id": "716",
+    "name": "College of Agricultural Engineering and Post Harvest Technology",
+    "district": "India",
+    "state": "Sikkim"
+  },
+  {
+    "id": "717",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "718",
+    "name": "Indian Institute of Information Technology",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "719",
+    "name": "Manipur Institute of Technology",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "720",
+    "name": "Manipur Technical University",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "721",
+    "name": "Central Agricultural University",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "722",
+    "name": "Manipur University",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "723",
+    "name": "Government Polytechnic, Imphal",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "724",
+    "name": "Bir Tikendrajit University, Imphal",
+    "district": "India",
+    "state": "Manipur"
+  },
+  {
+    "id": "725",
+    "name": "National Institute of Technology",
+    "district": "India",
+    "state": "Mizoram"
+  },
+  {
+    "id": "726",
+    "name": "Mizoram University, School of Engineering and Technology",
+    "district": "India",
+    "state": "Mizoram"
+  },
+  {
+    "id": "727",
+    "name": "Mizoram Polytechnic, Lunglei",
+    "district": "India",
+    "state": "Mizoram"
+  },
+  {
+    "id": "728",
+    "name": "Mizoram University",
+    "district": "India",
+    "state": "Mizoram"
+  },
+  {
+    "id": "729",
+    "name": "National Institute of Electronics & Information Technology",
+    "district": "India",
+    "state": "Mizoram"
+  },
+  {
+    "id": "730",
+    "name": "Dr. B R Ambedkar Institute of Technology, Port Blair",
+    "district": "India",
+    "state": "Andaman"
+  },
+  {
+    "id": "731",
+    "name": "Plastindia International University, Dadra & Nagar Haveli",
+    "district": "India",
+    "state": "Dadra"
+  },
+  {
+    "id": "732",
+    "name": "Government Polytechnic, Daman",
+    "district": "India",
+    "state": "Daman"
+  }
+]

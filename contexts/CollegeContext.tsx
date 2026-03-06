@@ -1,31 +1,43 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { College } from "@/lib/types";
 
 interface CollegeContextType {
-    selectedCollege: string | null;
-    setSelectedCollege: (college: string) => void;
+    selectedCollege: College | null;
+    setSelectedCollege: (college: College | null) => void;
     isReady: boolean;
 }
 
 const CollegeContext = createContext<CollegeContextType | undefined>(undefined);
 
 export function CollegeProvider({ children }: { children: React.ReactNode }) {
-    const [selectedCollege, setSelectedCollegeState] = useState<string | null>(null);
+    const [selectedCollege, setSelectedCollegeState] = useState<College | null>(null);
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
         // Load from local storage on mount
-        const saved = localStorage.getItem("iy_selected_college");
-        if (saved) {
-            setSelectedCollegeState(saved);
+        try {
+            const saved = localStorage.getItem("iy_selected_college_obj");
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed && typeof parsed === "object" && parsed.id) {
+                    setSelectedCollegeState(parsed as College);
+                }
+            }
+        } catch (e) {
+            console.error("Failed to parse college from local storage", e);
         }
         setIsReady(true);
     }, []);
 
-    const setSelectedCollege = (college: string) => {
+    const setSelectedCollege = (college: College | null) => {
         setSelectedCollegeState(college);
-        localStorage.setItem("iy_selected_college", college);
+        if (college) {
+            localStorage.setItem("iy_selected_college_obj", JSON.stringify(college));
+        } else {
+            localStorage.removeItem("iy_selected_college_obj");
+        }
     };
 
     return (

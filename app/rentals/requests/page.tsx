@@ -110,91 +110,116 @@ export default function MyRentalsPage() {
         }
     };
 
-    if (loading) return <div className="flex-1 flex items-center justify-center"><Loader2 className="animate-spin" /></div>;
+    if (loading) return (
+        <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 text-indigo-600">
+            <Loader2 className="w-10 h-10 animate-spin mb-4" />
+            <p className="font-bold font-outfit text-xl">Loading Dashboard...</p>
+        </div>
+    );
 
     return (
-        <div className="flex-1 flex flex-col bg-zinc-50 dark:bg-zinc-950 pb-32">
-            <header className="px-8 py-8">
-                <h1 className="text-3xl font-black text-zinc-900 leading-none">Dashboard</h1>
-                <p className="text-zinc-500 mt-2 font-medium">Manage your active rentals.</p>
-            </header>
+        <div className="flex-1 flex flex-col bg-slate-50 relative min-h-screen pb-32 overflow-y-auto">
+            {/* Ambient Background Blobs */}
+            <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/40 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "0s" }} />
+            <div className="fixed top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "2s" }} />
+            <div className="fixed bottom-[-10%] left-[20%] w-[60%] h-[40%] bg-purple-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "4s" }} />
 
-            <Tabs defaultValue="incoming" className="px-6">
-                <TabsList className="w-full bg-white border border-zinc-100 p-1 h-14 rounded-2xl mb-8">
-                    <TabsTrigger value="incoming" className="flex-1 rounded-xl font-bold text-xs uppercase tracking-widest">Incoming</TabsTrigger>
-                    <TabsTrigger value="borrows" className="flex-1 rounded-xl font-bold text-xs uppercase tracking-widest">My Borrows</TabsTrigger>
-                </TabsList>
+            <div className="relative z-10 w-full max-w-md mx-auto">
+                <header className="px-6 py-10 sticky top-0 bg-slate-50/80 backdrop-blur-xl z-20 border-b border-indigo-50/50">
+                    <h1 className="text-3xl font-black text-slate-800 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Dashboard</h1>
+                    <p className="text-sm font-semibold text-slate-500 mt-2">Manage your active rentals.</p>
+                </header>
 
-                <TabsContent value="incoming" className="space-y-4">
-                    {incoming.length === 0 ? (
-                        <div className="text-center py-20 bg-white rounded-[2rem] border border-zinc-100">
-                            <div className="bg-zinc-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <ArrowRightLeft className="text-zinc-300 w-8 h-8" />
-                            </div>
-                            <p className="text-zinc-400 font-bold">No active requests</p>
-                        </div>
-                    ) : (
-                        incoming.map((item) => (
-                            <div key={item.id} className="bg-white p-5 rounded-[2rem] border border-zinc-100 shadow-sm flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <span className="text-3xl">{item.icon}</span>
-                                    <div>
-                                        <h3 className="font-black text-sm">{item.itemName}</h3>
-                                        <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Status: {item.status}</p>
-                                    </div>
+                <Tabs defaultValue="incoming" className="px-5 mt-6">
+                    <TabsList className="w-full bg-white/60 backdrop-blur-md border border-indigo-50 p-1.5 h-16 rounded-[2rem] mb-8 shadow-sm">
+                        <TabsTrigger value="incoming" className="flex-1 rounded-[1.5rem] font-bold text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm text-slate-500 transition-all">Incoming</TabsTrigger>
+                        <TabsTrigger value="borrows" className="flex-1 rounded-[1.5rem] font-bold text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm text-slate-500 transition-all">My Borrows</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="incoming" className="space-y-5 outline-none">
+                        {incoming.length === 0 ? (
+                            <div className="text-center py-20 bg-white/70 backdrop-blur-xl rounded-[2.5rem] border border-indigo-50 shadow-sm">
+                                <div className="bg-indigo-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-100/50 shadow-inner">
+                                    <ArrowRightLeft className="text-indigo-300 w-10 h-10" />
                                 </div>
-                                {item.status === "requested" ? (
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => handleAction(item.id, "approved")}
-                                            className="bg-primary text-white p-2.5 rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-all"
-                                        >
-                                            <Check className="w-5 h-5" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleAction(item.id, "available")}
-                                            className="bg-zinc-100 text-zinc-500 p-2.5 rounded-xl active:scale-95 transition-all"
-                                        >
-                                            <X className="w-5 h-5" />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            onClick={() => handleReport(item)}
-                                            className="text-[10px] font-bold text-red-400 uppercase tracking-widest hover:text-red-600"
-                                        >
-                                            Report
-                                        </button>
-                                        <div className="bg-zinc-50 px-3 py-1.5 rounded-xl flex items-center gap-2">
-                                            <Clock className="w-3 h-3 text-zinc-400" />
-                                            <span className="text-[10px] font-black uppercase text-zinc-500 tracking-tight">Active</span>
+                                <p className="text-slate-400 font-bold text-lg">No active requests</p>
+                            </div>
+                        ) : (
+                            incoming.map((item) => (
+                                <div key={item.id} className="bg-white/70 backdrop-blur-xl p-6 rounded-[2rem] border border-indigo-50 shadow-sm flex items-center justify-between hover:shadow-md transition-all hover:-translate-y-0.5 group">
+                                    <div className="flex items-center gap-5">
+                                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-3xl shadow-inner shrink-0 group-hover:scale-105 transition-transform">
+                                            {item.icon}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-black text-lg text-slate-800">{item.itemName}</h3>
+                                            <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1">Status: {item.status}</p>
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                        ))
-                    )}
-                </TabsContent>
-
-                <TabsContent value="borrows" className="space-y-4">
-                    {myBorrows.map((item) => (
-                        <div key={item.id} className="bg-white p-5 rounded-[2rem] border border-zinc-100 shadow-sm flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <span className="text-3xl">{item.icon}</span>
-                                <div>
-                                    <h3 className="font-black text-sm">{item.itemName}</h3>
-                                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{item.block}</p>
+                                    {item.status === "requested" ? (
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleAction(item.id, "approved")}
+                                                className="gradient-indigo text-white p-3 rounded-2xl shadow-indigo active:scale-95 hover:-translate-y-0.5 transition-all w-12 h-12 flex items-center justify-center"
+                                            >
+                                                <Check className="w-6 h-6" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleAction(item.id, "available")}
+                                                className="bg-white border border-rose-100 text-rose-500 p-3 rounded-2xl active:scale-95 hover:-translate-y-0.5 hover:bg-rose-50 hover:border-rose-200 transition-all w-12 h-12 flex items-center justify-center shadow-sm"
+                                            >
+                                                <X className="w-6 h-6" />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-4">
+                                            <button
+                                                onClick={() => handleReport(item)}
+                                                className="text-[11px] font-black text-rose-400/80 uppercase tracking-widest hover:text-rose-500 transition-colors"
+                                            >
+                                                Report
+                                            </button>
+                                            <div className="bg-emerald-50 border border-emerald-100 px-4 py-2 rounded-2xl flex items-center gap-2 shadow-inner">
+                                                <Clock className="w-3.5 h-3.5 text-emerald-500" />
+                                                <span className="text-[10px] font-black uppercase text-emerald-600 tracking-widest pt-[1px]">Active</span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+                            ))
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="borrows" className="space-y-5 outline-none">
+                        {myBorrows.length === 0 ? (
+                            <div className="text-center py-20 bg-white/70 backdrop-blur-xl rounded-[2.5rem] border border-indigo-50 shadow-sm">
+                                <div className="bg-indigo-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-100/50 shadow-inner">
+                                    <PackageCheck className="text-indigo-300 w-10 h-10" />
+                                </div>
+                                <p className="text-slate-400 font-bold text-lg">No active borrows</p>
                             </div>
-                            <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${item.status === 'approved' ? 'bg-emerald-100 text-emerald-600' : 'bg-zinc-100 text-zinc-400'
-                                }`}>
-                                {item.status}
-                            </div>
-                        </div>
-                    ))}
-                </TabsContent>
-            </Tabs>
+                        ) : (
+                            myBorrows.map((item) => (
+                                <div key={item.id} className="bg-white/70 backdrop-blur-xl p-6 rounded-[2rem] border border-indigo-50 shadow-sm flex items-center justify-between hover:shadow-md transition-all hover:-translate-y-0.5 group">
+                                    <div className="flex items-center gap-5">
+                                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-3xl shadow-inner shrink-0 group-hover:scale-105 transition-transform">
+                                            {item.icon}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-black text-lg text-slate-800">{item.itemName}</h3>
+                                            <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mt-1">{item.block}</p>
+                                        </div>
+                                    </div>
+                                    <div className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-inner ${item.status === 'approved' ? 'bg-emerald-50 border border-emerald-100 text-emerald-600' : 'bg-slate-100 border border-slate-200 text-slate-500'
+                                        }`}>
+                                        {item.status}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </TabsContent>
+                </Tabs>
+            </div>
 
             <BottomNav />
         </div>

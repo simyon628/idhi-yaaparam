@@ -34,16 +34,22 @@ export default function RootLayout({
       <body className="min-h-screen bg-background antialiased">
         <CollegeProvider>
           <PWAProvider>
-            <main className="mx-auto max-w-md min-h-screen flex flex-col shadow-2xl bg-[hsl(222,47%,9%)] relative overflow-x-hidden">
+            <main className="mx-auto max-w-md min-h-screen flex flex-col shadow-2xl bg-slate-50 relative overflow-x-hidden">
               {children}
             </main>
             <Toaster
               position="top-center"
               toastOptions={{
                 style: {
-                  background: "hsl(222, 44%, 15%)",
-                  border: "1px solid hsl(217, 32%, 24%)",
-                  color: "hsl(210, 40%, 96%)",
+                  marginTop: '80px',
+                  background: "rgba(255, 255, 255, 0.8)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  border: "1px solid rgba(224, 231, 255, 0.6)",
+                  color: "#1e293b",
+                  boxShadow: "0 10px 40px -10px rgba(79, 70, 229, 0.15)",
+                  borderRadius: "1rem",
+                  fontWeight: "600",
                 },
               }}
             />

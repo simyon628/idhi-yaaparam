@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -34,76 +34,73 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* Custom design tokens */
+  /* Custom design tokens matching the reference UI */
   --color-trust: hsl(var(--trust));
   --color-trust-foreground: hsl(var(--trust-foreground));
 }
 
 @layer base {
   :root {
-    /* Slate-900 base – deep navy */
-    --background: 222 47% 9%;
-    --foreground: 210 40% 96%;
+    /* Base Background - Very light pastel purple/blue */
+    --background: 250 100% 98%;
+    --foreground: 230 40% 25%;
 
-    /* Elevated slate card */
-    --card: 222 44% 13%;
-    --card-foreground: 210 40% 96%;
+    /* Glass Cards - White with slight transparency */
+    --card: 0 0% 100%;
+    --card-foreground: 230 40% 25%;
 
-    --popover: 222 44% 13%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 40% 25%;
 
-    /* Indigo primary — enterprise CTA */
-    --primary: 239 84% 67%;
+    /* Primary CTA - Royal Blue/Periwinkle from ref image "Get Started" */
+    --primary: 228 80% 64%;
     --primary-foreground: 0 0% 100%;
 
-    /* Slate secondary */
-    --secondary: 217 32% 20%;
-    --secondary-foreground: 210 40% 96%;
+    /* Secondary Elements */
+    --secondary: 250 50% 94%;
+    --secondary-foreground: 230 40% 25%;
 
-    --muted: 217 32% 18%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 220 20% 95%;
+    --muted-foreground: 220 15% 55%;
 
-    /* Amber accent — trust, price, verified */
-    --accent: 43 96% 56%;
-    --accent-foreground: 220 47% 9%;
+    /* Accent colors based on image buttons (Buy/Rent) */
+    --accent: 195 90% 60%;
+    /* Cyan/Blue */
+    --accent-foreground: 0 0% 100%;
 
-    /* Rose destructive — reports, danger */
-    --destructive: 350 89% 60%;
+    --destructive: 345 80% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 32% 22%;
-    --input: 217 32% 20%;
-    --ring: 239 84% 67%;
-    --radius: 0.875rem;
+    --border: 220 20% 90%;
+    --input: 220 20% 94%;
+    --ring: 228 80% 64%;
+    --radius: 1.25rem;
+    /* Larger, softer radii */
 
-    /* Emerald trust badge */
-    --trust: 158 64% 52%;
-    --trust-foreground: 220 47% 9%;
+    --trust: 160 60% 50%;
+    --trust-foreground: 0 0% 100%;
   }
 
-  /* Light mode override (minimal – app is primarily dark) */
-  .light {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+  /* Force light mode variables everywhere since this is a pure light theme */
+  .dark {
+    --background: 250 100% 98%;
+    --foreground: 230 40% 25%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 230 40% 25%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 239 84% 60%;
+    --popover-foreground: 230 40% 25%;
+    --primary: 228 80% 64%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 215 20% 93%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 215 20% 93%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 43 96% 50%;
-    --accent-foreground: 222 47% 11%;
-    --destructive: 350 84% 54%;
+    --secondary: 250 50% 94%;
+    --secondary-foreground: 230 40% 25%;
+    --muted: 220 20% 95%;
+    --muted-foreground: 220 15% 55%;
+    --accent: 195 90% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 345 80% 65%;
     --destructive-foreground: 0 0% 100%;
-    --border: 215 20% 87%;
-    --input: 215 20% 87%;
-    --ring: 239 84% 60%;
-    --trust: 158 64% 40%;
-    --trust-foreground: 0 0% 100%;
+    --border: 220 20% 90%;
+    --input: 220 20% 94%;
   }
 }
 
@@ -126,55 +123,75 @@
   h6 {
     font-family: "Outfit", sans-serif;
     font-weight: 700;
+    color: hsl(230 40% 20%);
+    /* Deep navy blue for headings like in ref image */
   }
 }
 
 /* ─── Glass morphism ─────────────────────────────────────────────────────── */
+/* Primary glass card matching the transparent white cards in ref image */
 .glass {
-  background: hsl(222 44% 13% / 0.85);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid hsl(217 32% 28% / 0.5);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 40px -10px rgba(110, 115, 200, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .glass-light {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 /* ─── Gradients ──────────────────────────────────────────────────────────── */
-.gradient-indigo {
-  background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(258, 90%, 66%) 100%);
+/* Reference Image Background Vibe */
+.gradient-hero {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(220, 230, 255, 0.6) 0%, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(255, 210, 230, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(200, 240, 255, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 20% 70%, rgba(240, 220, 255, 0.6) 0%, transparent 40%),
+    hsl(250, 100%, 98%);
+  background-attachment: fixed;
 }
 
-.gradient-navy {
-  background: linear-gradient(180deg, hsl(222, 47%, 11%) 0%, hsl(232, 44%, 7%) 100%);
+/* Specific button gradients from reference image */
+.gradient-indigo {
+  /* The "Sell" button / "Get Started" button (Purple/Blue) */
+  background: linear-gradient(135deg, hsl(255, 85%, 70%) 0%, hsl(228, 80%, 64%) 100%);
+}
+
+.gradient-cyan {
+  /* The "Buy" button (Cyan/Light Blue) */
+  background: linear-gradient(135deg, hsl(190, 95%, 65%) 0%, hsl(205, 90%, 65%) 100%);
 }
 
 .gradient-amber {
-  background: linear-gradient(135deg, hsl(43, 96%, 56%) 0%, hsl(30, 95%, 55%) 100%);
+  /* The "Rent" button (Peach/Orange) */
+  background: linear-gradient(135deg, hsl(15, 95%, 75%) 0%, hsl(35, 95%, 70%) 100%);
 }
 
-.gradient-hero {
-  background: radial-gradient(ellipse 80% 50% at 50% -10%,
-      hsl(239, 84%, 40% / 0.35) 0%,
-      transparent 70%),
-    linear-gradient(180deg, hsl(222, 47%, 9%) 40%, hsl(232, 44%, 7%) 100%);
+.gradient-navy {
+  background: linear-gradient(180deg, hsl(230, 40%, 25%) 0%, hsl(230, 40%, 15%) 100%);
 }
 
 /* ─── Shadows ────────────────────────────────────────────────────────────── */
 .shadow-indigo {
-  box-shadow: 0 8px 32px -4px hsl(239, 84%, 67% / 0.3), 0 4px 12px -2px hsl(239, 84%, 67% / 0.2);
+  box-shadow: 0 8px 24px -6px rgba(110, 115, 200, 0.5);
+}
+
+.shadow-cyan {
+  box-shadow: 0 8px 24px -6px rgba(70, 190, 230, 0.5);
 }
 
 .shadow-amber {
-  box-shadow: 0 8px 24px -4px hsl(43, 96%, 56% / 0.3);
+  box-shadow: 0 8px 24px -6px rgba(250, 160, 110, 0.5);
 }
 
 .shadow-premium {
-  box-shadow: 0 20px 40px -8px rgb(0 0 0 / 0.5), 0 8px 16px -4px rgb(0 0 0 / 0.3);
+  box-shadow: 0 20px 50px -10px rgba(100, 110, 150, 0.15), 0 10px 20px -5px rgba(100, 110, 150, 0.1);
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
@@ -200,47 +217,52 @@
 
 .skeleton {
   background: linear-gradient(90deg,
-      hsl(217 32% 18%) 25%,
-      hsl(217 32% 24%) 50%,
-      hsl(217 32% 18%) 75%);
+      rgba(220, 225, 240, 0.5) 25%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(220, 225, 240, 0.5) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 2s infinite;
 }
 
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.4;
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
   }
 
   50% {
-    transform: scale(1.08);
-    opacity: 0.15;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 0.4;
+    transform: translateY(-10px);
   }
 }
 
-.pulse-ring {
-  animation: pulse-ring 2s ease-in-out infinite;
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }
 
-/* ─── Trust badge ────────────────────────────────────────────────────────── */
+/* ─── Decorative Blobs (Inspired by Reference) ────────────────────────────── */
+.blob {
+  position: absolute;
+  filter: blur(20px);
+  z-index: 0;
+  opacity: 0.6;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ─── Badges ────────────────────────────────────────────────────────── */
 .badge-trust {
-  @apply bg-emerald-500/15 text-emerald-400 border border-emerald-500/25;
+  @apply bg-emerald-100 text-emerald-700 border border-emerald-200;
 }
 
 .badge-amber {
-  @apply bg-amber-500/15 text-amber-400 border border-amber-500/25;
+  @apply bg-orange-100 text-orange-700 border border-orange-200;
 }
 
 .badge-indigo {
-  @apply bg-indigo-500/15 text-indigo-400 border border-indigo-500/25;
+  @apply bg-blue-100 text-blue-700 border border-blue-200;
 }
 
 .badge-rose {
-  @apply bg-rose-500/15 text-rose-400 border border-rose-500/25;
+  @apply bg-rose-100 text-rose-700 border border-rose-200;
 }

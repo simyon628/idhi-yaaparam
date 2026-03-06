@@ -15,6 +15,31 @@ export interface User {
     isAdmin?: boolean;
 }
 
+// ─── Location & College ──────────────────────────────────────────────────────
+export interface College {
+    id: string;
+    name: string;
+    city?: string;
+    state?: string;
+    lat: number;
+    lng: number;
+    radiusMeters: number;
+}
+
+export interface Block {
+    id: string;
+    collegeId: string;
+    name: string;
+    lat: number;
+    lng: number;
+}
+
+export interface Category {
+    id: string;
+    name: string;
+    icon?: string;
+}
+
 // ─── Listing (stored in Firestore "rentals" collection) ─────────────────────
 export type ListingStatus =
     | "available"
@@ -30,6 +55,11 @@ export interface Listing {
     pricePerHour: number;
     block: string;
     college?: string;
+    collegeId?: string; // New field for robust querying
+    blockId?: string;   // New field for robust querying
+    categoryId?: string; // New field for categorization
+    branch?: string;     // Generic search/filter field
+    yearSection?: string; // Generic search/filter field
     department?: string;
     icon: string;
     photoUrl?: string;

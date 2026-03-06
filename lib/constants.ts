@@ -1,12 +1,6 @@
-export const COLLEGES = [
-    "SRK Institute of Technology",
-    "VR Siddhartha Engineering College",
-    "KITS Guntur",
-    "Bapatla Engineering College",
-    "VIT-AP University",
-    "SRM University AP",
-    "KL University"
-];
+import collegesData from './colleges.json';
+
+export const COLLEGES = collegesData;
 
 export const DEPARTMENTS = [
     "CSE-A", "CSE-B", "CSE-C",

@@ -17,41 +17,44 @@ export function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-slate-700/50 px-4 py-3 flex items-center justify-between max-w-md mx-auto">
+        <nav className="fixed mb-6 bottom-0 left-4 right-4 z-50 bg-white/80 backdrop-blur-xl border border-indigo-100 px-6 py-4 flex items-center justify-between mx-auto max-w-sm rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(110,115,200,0.3)]">
             {NAV_ITEMS.map((item) => {
                 const isActive = pathname === item.href;
 
+                // For the central Plus button, if needed
                 if (item.primary) {
-                    return (
-                        <Link key={item.label} href={item.href} className="relative -top-4">
-                            <div className="w-14 h-14 rounded-2xl gradient-indigo flex items-center justify-center shadow-indigo active:scale-95 transition-all">
-                                <item.icon className="w-6 h-6 text-white" strokeWidth={2.5} />
-                            </div>
-                        </Link>
-                    );
+                    return null; // I moved the central CTA to a floating FAB on the page
                 }
 
                 return (
                     <Link
                         key={item.label}
                         href={item.href}
-                        className="flex flex-col items-center gap-1 group relative py-1 px-2"
+                        className="flex flex-col items-center gap-1.5 group relative px-2"
                     >
-                        <item.icon
-                            className={cn(
-                                "w-5 h-5 transition-all duration-200",
-                                isActive ? "text-indigo-400 scale-110" : "text-slate-600 group-hover:text-slate-400"
+                        <div className={cn(
+                            "p-2 rounded-2xl transition-all duration-300 relative",
+                            isActive ? "bg-indigo-50 text-indigo-600 shadow-sm" : "text-slate-400 group-hover:text-indigo-400 group-hover:bg-slate-50"
+                        )}>
+                            <item.icon
+                                className={cn(
+                                    "w-5 h-5 transition-transform duration-300",
+                                    isActive && "scale-110"
+                                )}
+                                strokeWidth={isActive ? 2.5 : 2}
+                            />
+                            {isActive && (
+                                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-indigo-500 rounded-full" />
                             )}
-                        />
+                        </div>
+                        {/* 
                         <span className={cn(
-                            "text-[9px] font-bold uppercase tracking-widest transition-all",
-                            isActive ? "text-indigo-400" : "text-slate-600 group-hover:text-slate-400"
+                            "text-[10px] font-bold tracking-wide transition-all",
+                            isActive ? "text-indigo-600" : "text-slate-400 group-hover:text-indigo-400"
                         )}>
                             {item.label}
                         </span>
-                        {isActive && (
-                            <div className="absolute -bottom-0.5 w-1 h-1 bg-indigo-400 rounded-full" />
-                        )}
+                        */}
                     </Link>
                 );
             })}
