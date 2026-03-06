@@ -37,11 +37,9 @@ export function TopBar() {
                 </button>
             </div>
 
-            {/* Shared Modal via UI component */}
             <SelectCollegeModal
                 isOpen={isSelecting}
                 onClose={() => setIsSelecting(false)}
-                forceFullScreen={false}
             />
         </>
     );

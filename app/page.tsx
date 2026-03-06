@@ -61,7 +61,6 @@ export default function UniversalLandingPage() {
         <SelectCollegeModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          forceFullScreen={typeof window !== 'undefined' && window.innerWidth < 768}
         />
       </div>
     );
