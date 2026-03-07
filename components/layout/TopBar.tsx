@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { MapPin, ChevronDown } from "lucide-react";
 import { SelectCollegeModal } from "@/components/ui/SelectCollegeModal";
+import { useBackgroundCollegeDetection } from "@/lib/hooks/useBackgroundCollegeDetection";
 
 export function TopBar() {
     const { selectedCollege, isReady } = useCollege();
     const [isSelecting, setIsSelecting] = useState(false);
+    const { status: detectionStatus, college: autoDetectedCollege } = useBackgroundCollegeDetection();
 
     if (!isReady) return null; // Avoid hydration mismatch
 
@@ -22,7 +24,6 @@ export function TopBar() {
                     <span
                         className="text-base font-black text-slate-800 cursor-pointer"
                         style={{ fontFamily: "Outfit, sans-serif" }}
-                        onClick={() => window.location.href = '/import-colleges'}
                     >
                         Idhi Yaaparam
                     </span>
@@ -44,6 +45,8 @@ export function TopBar() {
             <SelectCollegeModal
                 isOpen={isSelecting}
                 onClose={() => setIsSelecting(false)}
+                detectionStatus={detectionStatus}
+                autoDetectedCollege={autoDetectedCollege}
             />
         </>
     );

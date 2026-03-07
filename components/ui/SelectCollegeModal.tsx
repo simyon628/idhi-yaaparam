@@ -2,84 +2,69 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
-import { Search, MapPin, X, Navigation, Loader2, AlertCircle } from "lucide-react";
+import { Search, MapPin, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { getLocalColleges } from "@/lib/utils/colleges";
 import { College } from "@/lib/types";
-import { useDetectCollegeByLocation, NearbyCandidate } from "@/lib/hooks/useDetectCollegeByLocation";
+import { AutoDetectedCollege } from "@/lib/hooks/useBackgroundCollegeDetection";
 
 interface SelectCollegeModalProps {
     isOpen: boolean;
     onClose?: () => void;
+    /** Injected from background detection running on the landing page */
+    detectionStatus: "idle" | "detecting" | "ready" | "failed";
+    autoDetectedCollege: AutoDetectedCollege | null;
 }
 
-// Format metres as a human-readable string e.g. "120 m" or "1.4 km"
 function formatDistance(m: number): string {
-    if (m < 1000) return `${Math.round(m)} m away`;
-    return `${(m / 1000).toFixed(1)} km away`;
+    if (m < 1000) return `about ${Math.round(m)} m away`;
+    return `about ${(m / 1000).toFixed(1)} km away`;
 }
 
-export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps) {
+export function SelectCollegeModal({
+    isOpen,
+    onClose,
+    detectionStatus,
+    autoDetectedCollege,
+}: SelectCollegeModalProps) {
     const { setSelectedCollege } = useCollege();
-    const { detectLocation, isLocating, isTakingLong, candidates, error, reset } = useDetectCollegeByLocation();
 
     // Manual search state
     const [allColleges, setAllColleges] = useState<College[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isFetchingList, setIsFetchingList] = useState(false);
     const [showManual, setShowManual] = useState(false);
+
+    // If still detecting when modal opens, wait up to 5s then fall through to manual
+    const [waitExpired, setWaitExpired] = useState(false);
+    const waitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
-    // Load the local CSV list once when the modal opens
+    // Start the 5-second fallback timer when modal opens while detecting
     useEffect(() => {
-        if (!isOpen) return;
-        if (allColleges.length > 0) return;
+        if (!isOpen) {
+            setWaitExpired(false);
+            if (waitTimer.current) clearTimeout(waitTimer.current);
+            return;
+        }
+
+        if (detectionStatus === "detecting") {
+            waitTimer.current = setTimeout(() => setWaitExpired(true), 5_000);
+        }
+
+        return () => {
+            if (waitTimer.current) clearTimeout(waitTimer.current);
+        };
+    }, [isOpen, detectionStatus]);
+
+    // Load full CSV list for manual search (once)
+    useEffect(() => {
+        if (!isOpen || allColleges.length > 0) return;
         setIsFetchingList(true);
         getLocalColleges()
             .then(list => setAllColleges(list))
             .catch(err => console.error("Failed to load colleges list", err))
             .finally(() => setIsFetchingList(false));
     }, [isOpen, allColleges.length]);
-
-    // Auto-open manual search if user clicked "None of these / Enter manually"
-    const openManual = () => {
-        setShowManual(true);
-        setTimeout(() => searchInputRef.current?.focus(), 100);
-    };
-
-    const closeAndReset = () => {
-        reset();
-        setSearchQuery("");
-        setShowManual(false);
-        if (onClose) onClose();
-    };
-
-    // When user taps a candidate from Overpass list
-    const handleCandidateSelect = (c: NearbyCandidate) => {
-        // Try to find a match in our curated local CSV for a cleaner name
-        const lower = c.name.toLowerCase();
-        const csvMatch = allColleges.find(col => {
-            const colLower = col.name.toLowerCase();
-            return lower.includes(colLower) || colLower.includes(lower);
-        });
-
-        const college: College = csvMatch ?? {
-            id: c.id,
-            name: c.name,
-            state: "",
-            city: "",
-            lat: c.lat,
-            lng: c.lon,
-        } as College;
-
-        setSelectedCollege(college);
-        closeAndReset();
-    };
-
-    // When user picks from manual search list
-    const handleManualSelect = (college: College) => {
-        setSelectedCollege(college);
-        closeAndReset();
-    };
 
     if (!isOpen) return null;
 
@@ -89,20 +74,55 @@ export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps)
             .filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))
             .slice(0, 15);
 
-    // Are we in a state where Overpass returned results?
-    const showCandidates = !isLocating && candidates.length > 0 && !showManual;
-    // Are we in the zero-state (nothing happened yet)?
-    const showZeroState = !isLocating && candidates.length === 0 && !error && !showManual;
-    // Are we showing the error state (after detection failed)?
-    const showError = !isLocating && !!error && !showManual;
-    // Manual search is shown when: user explicitly clicked "Enter manually", or after an error
-    const isManualVisible = showManual || showError;
+    const closeAndReset = () => {
+        setSearchQuery("");
+        setShowManual(false);
+        setWaitExpired(false);
+        if (onClose) onClose();
+    };
+
+    const confirmAutoDetected = () => {
+        if (!autoDetectedCollege) return;
+        // Try to find a match in our curated local CSV for a cleaner name
+        const lower = autoDetectedCollege.name.toLowerCase();
+        const csvMatch = allColleges.find(col => {
+            const colLower = col.name.toLowerCase();
+            return lower.includes(colLower) || colLower.includes(lower);
+        });
+
+        const college: College = csvMatch ?? {
+            id: autoDetectedCollege.id,
+            name: autoDetectedCollege.name,
+            state: "",
+            city: "",
+            lat: autoDetectedCollege.lat,
+            lng: autoDetectedCollege.lon,
+        } as College;
+
+        setSelectedCollege(college);
+        closeAndReset();
+    };
+
+    const handleManualSelect = (college: College) => {
+        setSelectedCollege(college);
+        closeAndReset();
+    };
+
+    const openManualSearch = () => {
+        setShowManual(true);
+        setTimeout(() => searchInputRef.current?.focus(), 80);
+    };
+
+    // ── Derive which content section to show ─────────────────────────────────
+    const isStillDetecting = detectionStatus === "detecting" && !waitExpired;
+    const showConfirmation = detectionStatus === "ready" && !!autoDetectedCollege && !showManual;
+    const showManualSearch = showManual || detectionStatus === "failed" || (detectionStatus === "detecting" && waitExpired) || detectionStatus === "idle";
 
     return (
         <div className="fixed inset-0 z-50 flex flex-col justify-end bg-slate-900/40 backdrop-blur-sm mx-auto w-full md:max-w-md">
             <div className="bg-white w-full flex flex-col animate-in slide-in-from-bottom-full duration-300 shadow-2xl h-full rounded-none md:h-[85vh] md:rounded-t-3xl md:border-t md:border-indigo-100">
 
-                {/* ── Header ── */}
+                {/* Header */}
                 <div className="flex items-center justify-between px-6 py-5 border-b border-indigo-50 mt-8 md:mt-0 shrink-0">
                     <h2 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
                         Select your campus
@@ -114,105 +134,86 @@ export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps)
                     )}
                 </div>
 
-                {/* ── Top section (detection UI) ── */}
-                <div className="px-5 pt-5 pb-3 flex flex-col gap-3 shrink-0">
+                {/* Content */}
+                <div className="px-5 pt-5 pb-3 flex flex-col gap-4 shrink-0">
 
-                    {/* 1. Detecting spinner */}
-                    {isLocating && (
+                    {/* ── State 1: Still detecting in background ── */}
+                    {isStillDetecting && (
                         <div className="flex flex-col items-center justify-center py-8 gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl animate-in fade-in">
                             <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
-                            <p className="text-indigo-800 font-bold text-center px-4">Looking for colleges near you…</p>
-                            {isTakingLong && (
-                                <p className="text-indigo-500 text-xs font-medium px-6 text-center">This is taking a moment — please wait…</p>
-                            )}
+                            <p className="text-indigo-800 font-bold text-center px-4">Detecting your college…</p>
+                            <p className="text-indigo-400 text-xs font-medium px-6 text-center">Just a moment</p>
                         </div>
                     )}
 
-                    {/* 2. Overpass candidate list */}
-                    {showCandidates && (
-                        <div className="flex flex-col gap-2 animate-in fade-in">
-                            <div className="flex items-center gap-2 px-1">
-                                <MapPin className="w-4 h-4 text-indigo-500 shrink-0" />
-                                <p className="text-sm font-bold text-slate-600">
-                                    Detected colleges near you
-                                </p>
+                    {/* ── State 2: Confirmation (single nearest detected) ── */}
+                    {showConfirmation && (
+                        <div className="bg-green-50 border border-green-200 rounded-2xl p-5 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">We detected your college</p>
+                                    <p className="text-xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
+                                        {autoDetectedCollege!.name}
+                                    </p>
+                                    <p className="text-xs text-green-600 font-semibold mt-0.5">
+                                        <MapPin className="inline w-3 h-3 mr-0.5" />
+                                        {formatDistance(autoDetectedCollege!.distanceM)}
+                                    </p>
+                                </div>
                             </div>
-                            {candidates.map(c => (
+                            <div className="flex flex-col gap-2">
                                 <button
-                                    key={c.id}
-                                    onClick={() => handleCandidateSelect(c)}
-                                    className="w-full text-left px-4 py-3.5 rounded-2xl bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 hover:border-indigo-400 transition-all flex items-center gap-3 active:scale-95 group"
+                                    onClick={confirmAutoDetected}
+                                    className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition-all active:scale-95"
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-white border border-indigo-100 group-hover:bg-indigo-600 transition-colors flex items-center justify-center shrink-0">
-                                        <MapPin className="w-5 h-5 text-indigo-500 group-hover:text-white" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-bold text-slate-800 group-hover:text-indigo-900 truncate">{c.name}</p>
-                                        <p className="text-xs text-indigo-500 font-semibold mt-0.5">{formatDistance(c.distanceM)}</p>
-                                    </div>
+                                    ✓ Yes, this is my college
                                 </button>
-                            ))}
-                            <button
-                                onClick={openManual}
-                                className="text-slate-400 text-xs font-bold text-center py-2 hover:text-indigo-500 transition-colors"
-                            >
-                                None of these? Enter college manually ↓
-                            </button>
-                        </div>
-                    )}
-
-                    {/* 3. Error banner (location denied / timed out / no results) */}
-                    {showError && (
-                        <div className="bg-rose-50 border border-rose-100 rounded-xl px-4 py-3 flex items-start gap-2 animate-in fade-in">
-                            <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-                            <p className="text-rose-700 text-sm font-semibold">{error}</p>
-                        </div>
-                    )}
-
-                    {/* 4. Zero state — "Use my location" button + OR divider */}
-                    {showZeroState && (
-                        <>
-                            <button
-                                onClick={detectLocation}
-                                className="w-full flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-3.5 px-4 rounded-2xl transition-all active:scale-95"
-                            >
-                                <Navigation className="w-5 h-5" />
-                                Use my location (recommended)
-                            </button>
-                            <p className="text-xs text-center font-medium text-slate-400">
-                                We use your location only to detect your college.
-                            </p>
-                            <div className="relative flex items-center py-1">
-                                <div className="flex-grow border-t border-slate-100" />
-                                <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">Or</span>
-                                <div className="flex-grow border-t border-slate-100" />
+                                <button
+                                    onClick={openManualSearch}
+                                    className="w-full py-2 text-slate-500 text-sm font-bold rounded-xl hover:text-indigo-600 transition-colors"
+                                >
+                                    This is not my college →
+                                </button>
                             </div>
-                        </>
+                        </div>
                     )}
 
-                    {/* 5. Manual search input — always visible except during locating / candidate list */}
-                    {(isManualVisible || showZeroState) && (
-                        <div className="flex flex-col gap-1.5">
-                            {isManualVisible && (
-                                <label className="text-slate-700 font-bold text-sm ml-1">Enter your college manually</label>
+                    {/* ── State 3: Manual search (failed / expired / user chose it) ── */}
+                    {showManualSearch && (
+                        <div className="flex flex-col gap-3">
+                            {(detectionStatus === "failed" || waitExpired) && (
+                                <div className="bg-rose-50 border border-rose-100 rounded-xl px-4 py-3 flex items-start gap-2 animate-in fade-in">
+                                    <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
+                                    <p className="text-rose-700 text-sm font-semibold">
+                                        We couldn&apos;t detect your college automatically. Please search manually.
+                                    </p>
+                                </div>
                             )}
-                            <div className="relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-300" />
-                                <input
-                                    ref={searchInputRef}
-                                    type="text"
-                                    placeholder="Search college name…"
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    disabled={isFetchingList}
-                                    className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all outline-none"
-                                />
+                            <div>
+                                {showManual && (
+                                    <label className="text-slate-700 font-bold text-sm ml-1 block mb-1.5">Enter your college manually</label>
+                                )}
+                                <div className="relative">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-300" />
+                                    <input
+                                        ref={searchInputRef}
+                                        type="text"
+                                        placeholder="Search college name…"
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value)}
+                                        disabled={isFetchingList}
+                                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all outline-none"
+                                    />
+                                </div>
                             </div>
                         </div>
                     )}
                 </div>
 
-                {/* ── Scrollable manual results ── */}
+                {/* Scrollable manual search results */}
                 <div className="flex-1 overflow-y-auto px-5 pb-10">
                     {isFetchingList ? (
                         <div className="flex justify-center mt-8">
@@ -220,7 +221,7 @@ export function SelectCollegeModal({ isOpen, onClose }: SelectCollegeModalProps)
                         </div>
                     ) : searchQuery.trim() !== "" && filteredColleges.length === 0 ? (
                         <p className="text-center text-slate-500 mt-10 text-sm font-medium">
-                            No colleges found. Check the spelling or try a shorter keyword.
+                            No colleges found. Try a shorter keyword.
                         </p>
                     ) : (
                         <div className="space-y-2">

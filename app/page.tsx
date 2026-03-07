@@ -7,13 +7,18 @@ import { SelectCollegeModal } from "@/components/ui/SelectCollegeModal";
 import { CategoryGrid } from "@/components/ui/CategoryGrid";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
-import { MapPin, Navigation, Info, Plus } from "lucide-react";
+import { MapPin, Info, Plus } from "lucide-react";
 import { auth } from "@/lib/firebase";
+import { useBackgroundCollegeDetection } from "@/lib/hooks/useBackgroundCollegeDetection";
 
 export default function UniversalLandingPage() {
   const router = useRouter();
   const { selectedCollege, isReady } = useCollege();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 🔇 Silently starts GPS + Overpass detection in the background on mount.
+  // By the time the user taps "Select your college", result is already ready.
+  const { status: detectionStatus, college: autoDetectedCollege } = useBackgroundCollegeDetection();
 
   if (!isReady) return null;
 
@@ -61,6 +66,8 @@ export default function UniversalLandingPage() {
         <SelectCollegeModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          detectionStatus={detectionStatus}
+          autoDetectedCollege={autoDetectedCollege}
         />
       </div>
     );
@@ -99,6 +106,8 @@ export default function UniversalLandingPage() {
       <SelectCollegeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        detectionStatus={detectionStatus}
+        autoDetectedCollege={autoDetectedCollege}
       />
 
       <BottomNav />
