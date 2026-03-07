@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { Search, MapPin, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
-import { getLocalColleges } from "@/lib/utils/colleges";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { College } from "@/lib/types";
 import { AutoDetectedCollege } from "@/lib/hooks/useBackgroundCollegeDetection";
 
@@ -56,22 +57,39 @@ export function SelectCollegeModal({
         };
     }, [isOpen, detectionStatus]);
 
-    // Load full CSV list for manual search (once)
+    // Load full Firestore list for manual search (once)
     useEffect(() => {
         if (!isOpen || allColleges.length > 0) return;
-        setIsFetchingList(true);
-        getLocalColleges()
-            .then(list => setAllColleges(list))
-            .catch(err => console.error("Failed to load colleges list", err))
-            .finally(() => setIsFetchingList(false));
+
+        const fetchColleges = async () => {
+            if (!db) return;
+            setIsFetchingList(true);
+            try {
+                const q = query(collection(db, "colleges"), orderBy("name", "asc"));
+                const querySnapshot = await getDocs(q);
+
+                const fetchedColleges: College[] = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedColleges.push({ id: doc.id, ...doc.data() } as College);
+                });
+
+                setAllColleges(fetchedColleges);
+            } catch (err) {
+                console.error("Failed to load colleges list from Firestore:", err);
+            } finally {
+                setIsFetchingList(false);
+            }
+        };
+
+        fetchColleges();
     }, [isOpen, allColleges.length]);
 
     if (!isOpen) return null;
 
-    const filteredColleges = searchQuery.trim() === ""
+    const filteredColleges: College[] = searchQuery.trim() === ""
         ? []
         : allColleges
-            .filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))
+            .filter((c: College) => c.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))
             .slice(0, 15);
 
     const closeAndReset = () => {
@@ -85,7 +103,7 @@ export function SelectCollegeModal({
         if (!autoDetectedCollege) return;
         // Try to find a match in our curated local CSV for a cleaner name
         const lower = autoDetectedCollege.name.toLowerCase();
-        const csvMatch = allColleges.find(col => {
+        const csvMatch = allColleges.find((col: College) => {
             const colLower = col.name.toLowerCase();
             return lower.includes(colLower) || colLower.includes(lower);
         });
