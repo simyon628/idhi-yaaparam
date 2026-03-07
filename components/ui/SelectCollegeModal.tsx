@@ -89,7 +89,19 @@ export function SelectCollegeModal({
     const filteredColleges: College[] = searchQuery.trim() === ""
         ? []
         : allColleges
-            .filter((c: College) => c.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))
+            .filter((c: College) => {
+                const searchLower = searchQuery.toLowerCase().trim();
+                const nameLower = c.name.toLowerCase();
+
+                // Exact substring match
+                if (nameLower.includes(searchLower)) return true;
+
+                // Acronym match (e.g., "SRKR" for "Sagi Rama Krishnam Raju Engineering College")
+                const acronym = nameLower.split(/[\s-]+/).map(word => word[0]).join('');
+                if (acronym.includes(searchLower)) return true;
+
+                return false;
+            })
             .slice(0, 15);
 
     const closeAndReset = () => {
