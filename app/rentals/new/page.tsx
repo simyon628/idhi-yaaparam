@@ -159,35 +159,16 @@ export default function NewRentalPage() {
                 return;
             }
 
-            // Upload with 30-second timeout to prevent infinite hang
-            const uploadWithTimeout = (uploadPromise: Promise<any>, timeoutMs = 30000) => {
-                const timeout = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error("Upload timed out. Check your internet connection and try again.")), timeoutMs)
-                );
-                return Promise.race([uploadPromise, timeout]);
-            };
-
-            const storageRef = ref(storage, `rentals/${Date.now()}_${userId}.jpg`);
-            const uploadResult = await uploadWithTimeout(uploadBytes(storageRef, image)) as any;
-            const photoUrl = await getDownloadURL(uploadResult.ref);
-
             const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Others": "📦" };
             const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
-
-            // Upload extra images
-            const extraPhotoUrls: string[] = [];
-            for (const extraImg of extraImages) {
-                const extraRef = ref(storage as any, `rental_photos/${Date.now()}_extra_${userId}`);
-                const extraUpload = await uploadBytes(extraRef, extraImg);
-                const extraUrl = await getDownloadURL(extraUpload.ref);
-                extraPhotoUrls.push(extraUrl);
-            }
 
             // Feature 2: Compute expiry timestamp
             const expiresAt = new Date();
             expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
-            await addDoc(collection(db, "rentals"), {
+            // ⚡ OPTIMISTIC UI: Create Firestore doc immediately (no image yet)
+            // Item appears in marketplace in ~300ms
+            const docRef = await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
                 itemName: name,
                 pricePerHour: parseInt(price),
@@ -197,26 +178,52 @@ export default function NewRentalPage() {
                 department,
                 categoryId: selectedCat?.id || "others",
                 icon: iconMap[category] || "📦",
-                photoUrl,
-                extraPhotoUrls,
+                photoUrl: null,          // placeholder — marketplace shows emoji until image loads
+                extraPhotoUrls: [],
                 status: "available",
                 renterId: null,
                 createdAt: serverTimestamp(),
                 expiresAt: expiresAt.toISOString(),
             });
-            toast.success("Item listed successfully! 🎉");
+
+            // ⚡ INSTANTLY navigate — listing is live in the marketplace NOW
+            toast.success("✅ Item listed! Image uploading in background...", { duration: 4000 });
+            setLoading(false);
             router.push("/home");
+
+            // 🔄 Background: upload image and update doc (user is already on home page)
+            const imageRef = ref(storage, `rentals/${docRef.id}_${userId}.jpg`);
+            (async () => {
+                try {
+                    const uploaded = await uploadBytes(imageRef, image);
+                    const photoUrl = await getDownloadURL(uploaded.ref);
+                    const { updateDoc: updDoc, doc: fDoc } = await import("firebase/firestore");
+                    await updDoc(fDoc(db!, "rentals", docRef.id), { photoUrl });
+
+                    // Upload extra images too
+                    const extraUrls: string[] = [];
+                    for (const extraImg of extraImages) {
+                        const eRef = ref(storage, `rental_photos/${docRef.id}_extra_${extraUrls.length}_${userId}.jpg`);
+                        const eUp = await uploadBytes(eRef, extraImg);
+                        extraUrls.push(await getDownloadURL(eUp.ref));
+                    }
+                    if (extraUrls.length > 0) {
+                        const { updateDoc: updDoc2, doc: fDoc2 } = await import("firebase/firestore");
+                        await updDoc2(fDoc2(db!, "rentals", docRef.id), { extraPhotoUrls: extraUrls });
+                    }
+                } catch (bgErr) {
+                    console.error("Background image upload failed:", bgErr);
+                    // Item is still listed, just without photo
+                }
+            })();
+
         } catch (error: any) {
             console.error("Publish error:", error);
             const msg = error?.message || "Unknown error";
-            if (msg.includes("timed out")) {
-                toast.error("⏱️ Upload timed out. Check internet and try again.");
-            } else if (msg.includes("storage/unauthorized")) {
-                toast.error("🔒 You don't have permission to upload. Please re-login.");
-            } else if (msg.includes("permission-denied")) {
+            if (msg.includes("permission-denied") || msg.includes("unauthorized")) {
                 toast.error("🔒 Permission denied. Please re-login and try again.");
             } else {
-                toast.error(`Failed: ${msg}`);
+                toast.error(`Failed to list item: ${msg}`);
             }
         } finally {
             setLoading(false);
