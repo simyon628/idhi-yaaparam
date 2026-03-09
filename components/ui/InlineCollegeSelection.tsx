@@ -6,7 +6,7 @@ import { Search, MapPin, Loader2, AlertCircle, CheckCircle2 } from "lucide-react
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { College } from "@/lib/types";
-import { useBackgroundCollegeDetection } from "@/lib/hooks/useBackgroundCollegeDetection";
+import { useBackgroundCollegeDetection, AutoDetectedCollege } from "@/lib/hooks/useBackgroundCollegeDetection";
 
 function formatDistance(m: number): string {
     if (m < 1000) return `about ${Math.round(m)} m away`;
@@ -15,7 +15,7 @@ function formatDistance(m: number): string {
 
 export function InlineCollegeSelection() {
     const { setSelectedCollege } = useCollege();
-    const { status: detectionStatus, college: autoDetectedCollege, startDetection } = useBackgroundCollegeDetection();
+    const { status: detectionStatus, decision, startDetection } = useBackgroundCollegeDetection();
 
     // Trigger explicit location prompt strictly 1-time when user clicks the button mounting this component
     useEffect(() => {
@@ -98,21 +98,21 @@ export function InlineCollegeSelection() {
             })
             .slice(0, 5); // Limit max inline results
 
-    const confirmAutoDetected = () => {
-        if (!autoDetectedCollege) return;
-        const lower = autoDetectedCollege.name.toLowerCase();
+    const confirmAutoDetected = (detectedItem: AutoDetectedCollege) => {
+        if (!detectedItem) return;
+        const lower = detectedItem.name.toLowerCase();
         const csvMatch = allColleges.find((col: College) => {
             const colLower = col.name.toLowerCase();
             return lower.includes(colLower) || colLower.includes(lower);
         });
 
         const college: College = csvMatch ?? {
-            id: autoDetectedCollege.id,
-            name: autoDetectedCollege.name,
+            id: detectedItem.id,
+            name: detectedItem.name,
             state: "",
             city: "",
-            lat: autoDetectedCollege.lat,
-            lng: autoDetectedCollege.lon,
+            lat: detectedItem.lat,
+            lng: detectedItem.lon,
         } as College;
 
         setSelectedCollege(college);
@@ -128,8 +128,12 @@ export function InlineCollegeSelection() {
     };
 
     const isStillDetecting = detectionStatus === "detecting" && !waitExpired;
-    const showConfirmation = detectionStatus === "ready" && !!autoDetectedCollege && !showManual;
-    const showManualSearchUI = showManual || detectionStatus === "failed" || (detectionStatus === "detecting" && waitExpired) || detectionStatus === "idle";
+    const isReady = detectionStatus === "ready" && !!decision && !showManual;
+
+    const showSingleConfirmation = isReady && decision?.mode === "single";
+    const showMultipleConfirmation = isReady && decision?.mode === "multiple";
+
+    const showManualSearchUI = showManual || detectionStatus === "failed" || (detectionStatus === "detecting" && waitExpired) || detectionStatus === "idle" || (isReady && decision?.mode === "none");
 
     return (
         <div className="w-full text-left animate-in fade-in slide-in-from-top-4 duration-500">
@@ -141,8 +145,8 @@ export function InlineCollegeSelection() {
                 </div>
             )}
 
-            {/* ── State 2: Confirmation ── */}
-            {showConfirmation && (
+            {/* ── State 2: Single Confirmation ── */}
+            {showSingleConfirmation && decision?.mode === "single" && (
                 <div className="bg-white border-2 border-indigo-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-indigo-500/10 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
                     <div className="flex flex-col gap-3 relative z-10">
@@ -152,24 +156,62 @@ export function InlineCollegeSelection() {
                             </div>
                             <div>
                                 <p className="text-sm font-bold text-slate-800 leading-tight mb-2">
-                                    We detected your college: <span className="text-indigo-600">{autoDetectedCollege!.name}</span> ({formatDistance(autoDetectedCollege!.distanceM)}).
+                                    We found a college near you:<br />
+                                    <span className="text-indigo-600 font-black">{decision.college.name}</span> <br />
+                                    <span className="text-xs text-slate-500">{formatDistance(decision.college.distanceM)}</span>
                                 </p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 mt-2">
                             <button
-                                onClick={confirmAutoDetected}
+                                onClick={() => confirmAutoDetected(decision.college)}
                                 className="w-full py-4 gradient-indigo text-white font-black text-base rounded-2xl shadow-indigo transition-all active:scale-95"
                             >
-                                Yes, this is my college
+                                Confirm this is my college
                             </button>
                             <button
                                 onClick={openManualSearch}
                                 className="w-full py-2.5 text-slate-400 text-xs font-black uppercase tracking-widest rounded-xl hover:text-slate-600 hover:bg-slate-50 transition-all"
                             >
-                                This is not my college
+                                Choose a different college
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── State 3: Multiple Confirmation ── */}
+            {showMultipleConfirmation && decision?.mode === "multiple" && (
+                <div className="bg-white border-2 border-indigo-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-indigo-500/10 relative overflow-hidden">
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <div className="flex items-center gap-2 mb-2">
+                            <MapPin className="w-5 h-5 text-indigo-600" />
+                            <h3 className="font-bold text-slate-800">Colleges near you</h3>
+                        </div>
+
+                        <div className="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
+                            {decision.colleges.map((col) => (
+                                <button
+                                    key={col.id}
+                                    onClick={() => confirmAutoDetected(col)}
+                                    className="text-left w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all group flex flex-col gap-1 active:scale-95"
+                                >
+                                    <span className="font-bold text-slate-800 group-hover:text-indigo-700 leading-snug">{col.name}</span>
+                                    <span className="text-xs font-semibold text-slate-500">{formatDistance(col.distanceM)}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        <p className="text-[11px] text-slate-400 font-medium text-center mt-2 px-2 leading-relaxed">
+                            Select your exact college to see the correct marketplace feed.
+                        </p>
+
+                        <button
+                            onClick={openManualSearch}
+                            className="w-full mt-2 py-2.5 text-slate-400 text-xs font-black uppercase tracking-widest rounded-xl hover:text-slate-600 hover:bg-slate-50 transition-all"
+                        >
+                            Or search manually
+                        </button>
                     </div>
                 </div>
             )}

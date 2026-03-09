@@ -10,9 +10,37 @@ export interface AutoDetectedCollege {
 
 type Status = "idle" | "detecting" | "ready" | "failed";
 
+export type DetectionDecision =
+    | { mode: 'none' }
+    | { mode: 'single'; college: AutoDetectedCollege }
+    | { mode: 'multiple'; colleges: AutoDetectedCollege[] };
+
+export function decideCollegeSelectionMode(
+    colleges: AutoDetectedCollege[],
+    distanceThresholdMeters: number = 300
+): DetectionDecision {
+    if (!colleges || colleges.length === 0) {
+        return { mode: 'none' };
+    }
+
+    if (colleges.length === 1) {
+        return { mode: 'single', college: colleges[0] };
+    }
+
+    const closeColleges = colleges.filter(
+        (c) => c.distanceM <= distanceThresholdMeters
+    );
+
+    if (closeColleges.length <= 1) {
+        return { mode: 'single', college: colleges[0] };
+    }
+
+    return { mode: 'multiple', colleges: closeColleges };
+}
+
 interface State {
     status: Status;
-    college: AutoDetectedCollege | null;
+    decision: DetectionDecision | null;
 }
 
 // ── Haversine ────────────────────────────────────────────────────────────────
@@ -94,19 +122,22 @@ out center;
  * Exposes { status, college } for the modal to use.
  */
 export function useBackgroundCollegeDetection() {
-    const [state, setState] = useState<State>({ status: "idle", college: null });
+    const [state, setState] = useState<State>({
+        status: "idle",
+        decision: null,
+    });
     const hasRun = useRef(false); // ensures we never run more than once
 
     const startDetection = useCallback(() => {
         if (hasRun.current) return;
         if (typeof window === "undefined") return;
         if (!navigator.geolocation) {
-            setState({ status: "failed", college: null });
+            setState({ status: "failed", decision: null });
             return;
         }
 
         hasRun.current = true;
-        setState({ status: "detecting", college: null });
+        setState({ status: "detecting", decision: null });
 
         const controller = new AbortController();
 
@@ -159,21 +190,30 @@ export function useBackgroundCollegeDetection() {
                     clearTimeout(overpassTimer);
 
                     if (colleges.length > 0) {
-                        // Pick the single nearest college
-                        console.log("✅ Background detected:", colleges[0].name, `(${Math.round(colleges[0].distanceM)}m)`);
-                        setState({ status: "ready", college: colleges[0] });
+                        const decision = decideCollegeSelectionMode(colleges, 300);
+                        if (decision.mode === "none") {
+                            console.log("⚠️ No colleges found near user location");
+                            setState({ status: "failed", decision: null });
+                        } else {
+                            if (decision.mode === "single") {
+                                console.log("✅ Background detected (single):", decision.college.name, `(${Math.round(decision.college.distanceM)}m)`);
+                            } else {
+                                console.log("✅ Background detected (multiple):", decision.colleges.length, "colleges within 300m");
+                            }
+                            setState({ status: "ready", decision });
+                        }
                     } else {
                         console.log("⚠️ No colleges found near user location");
-                        setState({ status: "failed", college: null });
+                        setState({ status: "failed", decision: null });
                     }
                 } catch {
                     clearTimeout(overpassTimer);
-                    setState({ status: "failed", college: null });
+                    setState({ status: "failed", decision: null });
                 }
             } catch (err: unknown) {
                 // Location denied, unavailable, or timed out — silent fail
                 console.log("📍 Background detection failed silently:", err);
-                setState({ status: "failed", college: null });
+                setState({ status: "failed", decision: null });
             }
         };
 
