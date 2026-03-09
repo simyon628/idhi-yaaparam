@@ -113,6 +113,8 @@
     font-family: "Inter", sans-serif;
     @apply bg-background text-foreground antialiased;
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    overflow-y: auto;
   }
 
   h1,

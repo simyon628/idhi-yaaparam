@@ -166,7 +166,7 @@ export default function NewRentalPage() {
     }
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative overflow-y-auto">
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
             {/* Ambient Background Blobs */}
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/40 blob rounded-full mix-blend-multiply filter blur-3xl animate-float" style={{ animationDelay: "0s" }} />
             <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float" style={{ animationDelay: "2s" }} />

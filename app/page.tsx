@@ -16,14 +16,14 @@ export default function MultiServiceHomepage() {
   // If a user selects a college while the detector is open, forward them immediately.
   useEffect(() => {
     if (isReady && showDetector && selectedCollege) {
-      router.push("/login");
+      router.push("/rentals");
     }
   }, [selectedCollege, isReady, showDetector, router]);
 
   if (!isReady) return null;
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FDFDFD] relative overflow-y-auto font-sans pb-12">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FDFDFD] relative font-sans pb-12">
       {/* 1. Header (App name) */}
       <header className="w-full px-6 pt-10 pb-4 flex justify-between items-start shrink-0 relative z-10">
         <div className="flex flex-col">

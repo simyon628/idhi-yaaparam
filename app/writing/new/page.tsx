@@ -78,7 +78,7 @@ export default function NewWritingJobPage() {
     const today = new Date().toISOString().split('T')[0];
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative overflow-y-auto">
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
             <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-indigo-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
                 <button
                     onClick={() => router.back()}

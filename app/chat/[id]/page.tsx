@@ -118,7 +118,7 @@ export default function ChatPage() {
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto pt-[100px] pb-[90px] px-5 flex flex-col gap-3">
+            <main className="flex-1 pt-[100px] pb-[90px] px-5 flex flex-col gap-3">
 
                 <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-2xl flex items-start gap-3 mb-4 shadow-sm">
                     <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />

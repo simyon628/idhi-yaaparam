@@ -118,7 +118,7 @@ export default function MyRentalsPage() {
     );
 
     return (
-        <div className="flex-1 flex flex-col bg-slate-50 relative min-h-screen pb-32 overflow-y-auto">
+        <div className="flex-1 flex flex-col bg-slate-50 relative min-h-screen pb-32">
             {/* Ambient Background Blobs */}
             <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/40 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "0s" }} />
             <div className="fixed top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "2s" }} />

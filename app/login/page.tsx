@@ -25,7 +25,8 @@ function LoginContent() {
     const [name, setName] = useState("");
     const [roll, setRoll] = useState("");
     const [college, setCollege] = useState<string>("");
-    const [department, setDepartment] = useState(DEPARTMENTS[0]);
+    const [department, setDepartment] = useState("");
+    const [showDeptDropdown, setShowDeptDropdown] = useState(false);
 
     // Step 2: OTP
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -266,7 +267,7 @@ function LoginContent() {
     };
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative overflow-y-auto">
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
             {/* Ambient Background Blobs matching reference image */}
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/40 blob rounded-full mix-blend-multiply filter blur-3xl animate-float" style={{ animationDelay: "0s" }} />
             <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float" style={{ animationDelay: "2s" }} />
@@ -320,12 +321,54 @@ function LoginContent() {
                         <input readOnly type="text" value={college} className="w-full bg-slate-100/50 border border-slate-200 rounded-2xl h-14 px-4 text-sm font-bold text-slate-600 outline-none cursor-not-allowed shadow-inner" />
                     </div>
 
-                    {/* Department - Keeping it since it's required by data model */}
-                    <div className="space-y-2">
+                    {/* Department - Searchable Input */}
+                    <div className="space-y-2 relative">
                         <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500 pl-1">Department</label>
-                        <select value={department} onChange={e => setDepartment(e.target.value)} className="w-full bg-white/50 border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-sm font-bold text-slate-800 outline-none appearance-none transition-all shadow-inner">
-                            {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-                        </select>
+                        <div className="relative">
+                            <input
+                                required
+                                type="text"
+                                value={department}
+                                onChange={e => setDepartment(e.target.value)}
+                                onFocus={() => setShowDeptDropdown(true)}
+                                onBlur={() => setTimeout(() => setShowDeptDropdown(false), 200)}
+                                placeholder="CSE, MBA, Library..."
+                                className="w-full bg-white/50 border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-sm font-bold text-slate-800 outline-none transition-all shadow-inner placeholder-slate-400"
+                            />
+                            {showDeptDropdown && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl shadow-slate-200/50 max-h-56 overflow-y-auto z-50 p-2 flex flex-col gap-1">
+                                    <p className="text-[10px] font-bold tracking-widest uppercase text-slate-400 px-2 pt-1 pb-1">Suggestions</p>
+
+                                    {DEPARTMENTS.filter(d => d.toLowerCase().includes(department.toLowerCase())).map(d => (
+                                        <button
+                                            key={d}
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setDepartment(d);
+                                                setShowDeptDropdown(false);
+                                            }}
+                                            className="text-left w-full px-3 py-2.5 rounded-xl hover:bg-slate-50 text-sm font-bold text-slate-700 transition-colors"
+                                        >
+                                            {d}
+                                        </button>
+                                    ))}
+
+                                    {department && !DEPARTMENTS.some(d => d.toLowerCase() === department.toLowerCase()) && (
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setShowDeptDropdown(false);
+                                            }}
+                                            className="text-left w-full px-3 py-2.5 rounded-xl bg-indigo-50/50 hover:bg-indigo-50 text-sm font-bold text-indigo-700 transition-colors"
+                                        >
+                                            Use "{department}"
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {/* 4. Mobile Number + Send OTP */}

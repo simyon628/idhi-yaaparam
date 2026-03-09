@@ -189,7 +189,7 @@ export default function VerifyPage() {
 
             {/* Step: College */}
             {step === "college" && (
-                <div className="flex-1 px-6 pb-10 overflow-y-auto">
+                <div className="flex-1 px-6 pb-10">
                     <div className="grid grid-cols-1 gap-2">
                         {COLLEGES.map((c) => (
                             <button
