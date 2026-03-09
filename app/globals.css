@@ -109,6 +109,12 @@
     border-color: hsl(var(--border));
   }
 
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
+
   body {
     font-family: "Inter", sans-serif;
     @apply bg-background text-foreground antialiased;

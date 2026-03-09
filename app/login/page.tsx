@@ -10,6 +10,7 @@ import { Phone, ArrowRight, ShieldCheck, Loader2, Lock, Camera, School, FileText
 import { verifyIdCardWithOcr } from "@/lib/ocr/verifyIdCard";
 import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS, COLLEGES } from "@/lib/constants";
+import { compressImageFile } from "@/lib/image/compressImage";
 
 function LoginContent() {
     const { selectedCollege, isReady } = useCollege();
@@ -436,13 +437,28 @@ function LoginContent() {
                                     <Camera className="w-6 h-6 text-indigo-400 group-hover:text-indigo-600 group-hover:scale-110 transition-transform" />
                                     Open Camera
                                 </button>
-                                <input id="ocr-input" type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => e.target.files && setIdImage(e.target.files[0])} />
+                                <input id="ocr-input" type="file" accept="image/*" capture="environment" className="hidden" onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        try {
+                                            const compressedBlob = await compressImageFile(file, { maxWidth: 1280, quality: 0.8 });
+                                            if (compressedBlob.size > 400 * 1024) {
+                                                console.warn('Compressed ID image still larger than 400KB:', compressedBlob.size);
+                                            }
+                                            const compressedFile = new File([compressedBlob], file.name, { type: 'image/jpeg' });
+                                            setIdImage(compressedFile);
+                                        } catch (error) {
+                                            console.error("ID Compression error:", error);
+                                            toast.error("Failed to process ID photo.");
+                                        }
+                                    }
+                                }} />
                                 <p className="text-[11px] text-center font-medium text-slate-400">Tip: Use good lighting and keep the ID in focus so we can read the text.</p>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-indigo-100 bg-slate-50 shadow-sm max-w-[280px] mx-auto">
-                                    <img src={URL.createObjectURL(idImage)} alt="ID Preview" className={`w-full max-h-[200px] object-contain transition-all ${loading && ocrProgress > 0 ? "opacity-30 grayscale blur-md scale-105" : ""}`} />
+                                    <img src={URL.createObjectURL(idImage)} alt="ID Preview" style={{ touchAction: 'pan-y' }} className={`w-full max-h-[200px] object-contain transition-all ${loading && ocrProgress > 0 ? "opacity-30 grayscale blur-md scale-105" : ""}`} />
                                     {loading && ocrProgress > 0 && (
                                         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white/40 backdrop-blur-sm">
                                             <div className="relative">

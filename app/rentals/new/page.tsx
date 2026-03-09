@@ -13,6 +13,7 @@ import { DEPARTMENTS } from "@/lib/constants";
 import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
 
 import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
+import { compressImageFile } from "@/lib/image/compressImage";
 
 const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
@@ -54,60 +55,21 @@ export default function NewRentalPage() {
         });
     }, []);
 
-    const compressImage = (file: File): Promise<Blob> => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target?.result as string;
-                img.onload = () => {
-                    const canvas = document.createElement("canvas");
-                    const MAX_SIZE = 800;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height && width > MAX_SIZE) {
-                        height *= MAX_SIZE / width;
-                        width = MAX_SIZE;
-                    } else if (height > MAX_SIZE) {
-                        width *= MAX_SIZE / height;
-                        height = MAX_SIZE;
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext("2d");
-                    ctx?.drawImage(img, 0, 0, width, height);
-
-                    // Compress to JPEG with 0.7 quality
-                    canvas.toBlob((blob) => {
-                        if (blob) resolve(blob);
-                        else reject(new Error("Canvas toBlob failed"));
-                    }, "image/jpeg", 0.7);
-                };
-                img.onerror = (err) => reject(err);
-            };
-            reader.onerror = (err) => reject(err);
-        });
-    };
-
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            if (file.size > 5 * 1024 * 1024) {
-                toast.error("Image too large. Please upload a photo under 5MB.");
-                e.target.value = "";
-                return;
-            }
             try {
                 // Show immediate preview using raw file
                 const previewReader = new FileReader();
                 previewReader.onloadend = () => setPreview(previewReader.result as string);
                 previewReader.readAsDataURL(file);
 
-                // Compress heavily for upload
-                const compressedBlob = await compressImage(file);
+                // Compress heavily for upload with max-width 1280px and 0.7 quality
+                const compressedBlob = await compressImageFile(file, { maxWidth: 1280, quality: 0.7 });
+                if (compressedBlob.size > 300 * 1024) {
+                    console.warn('Compressed product image still larger than 300KB:', compressedBlob.size);
+                }
+
                 // Creating a File object from blob so upload logic stays untouched
                 const compressedFile = new File([compressedBlob], `compressed_${file.name}.jpg`, { type: "image/jpeg" });
                 setImage(compressedFile);
