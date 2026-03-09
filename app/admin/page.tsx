@@ -5,12 +5,12 @@ export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import {
     collection, query, onSnapshot, doc, updateDoc,
-    where, orderBy
+    where, orderBy, addDoc, serverTimestamp
 } from "firebase/firestore";
 import { toast } from "sonner";
 import {
     ShieldAlert, UserX, UserCheck, Loader2,
-    Package, AlertTriangle, BarChart3, Users, Lock
+    Package, AlertTriangle, BarChart3, Users, Lock, Zap
 } from "lucide-react";
 import { Report, User } from "@/lib/types";
 
@@ -20,6 +20,7 @@ export default function AdminPanel() {
     const [totalRentals, setTotalRentals] = useState(0);
     const [loading, setLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [allUsers, setAllUsers] = useState<User[]>([]); // Feature 10
 
     useEffect(() => {
         if (!db || !auth?.currentUser) return;
@@ -44,7 +45,12 @@ export default function AdminPanel() {
         const qRentals = query(collection(db, "rentals"));
         const unsub3 = onSnapshot(qRentals, (snap) => setTotalRentals(snap.size));
 
-        return () => { unsub0(); unsub1(); unsub2(); unsub3(); };
+        // Feature 10: Load all users to detect auto-flag candidates
+        const unsub4 = onSnapshot(collection(db, "users"), (snap) => {
+            setAllUsers(snap.docs.map(d => ({ uid: d.id, ...d.data() } as User)));
+        });
+
+        return () => { unsub0(); unsub1(); unsub2(); unsub3(); unsub4(); };
     }, []);
 
     const handleUnblock = async (userId: string) => {
@@ -56,6 +62,44 @@ export default function AdminPanel() {
             toast.error("Failed to unblock user.");
         }
     };
+
+    // Feature 10: Auto-Strike Offenders
+    const handleAutoStrike = async (userId: string) => {
+        if (!db || !isAdmin) return;
+        const targetUser = allUsers.find(u => u.uid === userId);
+        if (!targetUser) return;
+        const newCount = (targetUser.strikeCount || 0) + 1;
+        const shouldBlock = newCount >= 2;
+        try {
+            await updateDoc(doc(db, "users", userId), {
+                strikeCount: newCount,
+                isBlocked: shouldBlock
+            });
+            // Write notification to user
+            await addDoc(collection(db, "notifications"), {
+                userId,
+                title: shouldBlock ? "Account Suspended" : `Strike ${newCount}/2 Warning`,
+                message: shouldBlock
+                    ? "Your account has been suspended due to multiple reports. Contact admin to appeal."
+                    : `You have received a strike due to reported behavior. ${2 - newCount} strikes remaining.`,
+                type: "warning",
+                isRead: false,
+                createdAt: serverTimestamp()
+            });
+            toast.success(shouldBlock ? "User blocked." : `Strike ${newCount} applied.`);
+        } catch {
+            toast.error("Failed to apply strike.");
+        }
+    };
+
+    // Feature 10: Compute auto-flagged users (5+ reports aggregated by reportedUserId)
+    const reportCountByUser = reports.reduce<Record<string, number>>((acc, r) => {
+        if (r.reportedUserId) acc[r.reportedUserId] = (acc[r.reportedUserId] || 0) + 1;
+        return acc;
+    }, {});
+    const autoFlagCandidates = Object.entries(reportCountByUser)
+        .filter(([, count]) => count >= 3)
+        .map(([uid, count]) => ({ uid, count, user: allUsers.find(u => u.uid === uid) }));
 
     if (loading) return (
         <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50">
@@ -152,6 +196,33 @@ export default function AdminPanel() {
                             </div>
                         )}
                     </section>
+
+                    {/* Feature 10: Auto-Flag Section */}
+                    {autoFlagCandidates.length > 0 && (
+                        <section className="space-y-4">
+                            <div className="flex items-center gap-2 pl-2">
+                                <Zap className="w-5 h-5 text-rose-500" />
+                                <h2 className="text-xs font-black text-slate-500 uppercase tracking-widest">Auto-Flagged (3+ Reports)</h2>
+                            </div>
+                            <div className="space-y-3">
+                                {autoFlagCandidates.map(({ uid, count, user }) => (
+                                    <div key={uid} className="bg-rose-50/80 backdrop-blur-xl rounded-[1.5rem] border border-rose-100 p-5 flex items-center justify-between shadow-sm">
+                                        <div>
+                                            <p className="font-black text-slate-800 text-sm">{user?.rollNumber || uid.slice(0, 10)}</p>
+                                            <p className="text-[11px] font-bold text-rose-600 mt-0.5">{count} reports filed</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleAutoStrike(uid)}
+                                            disabled={!isAdmin}
+                                            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-rose-500 text-white text-[11px] font-black uppercase tracking-widest disabled:opacity-50 active:scale-95 transition-all"
+                                        >
+                                            <AlertTriangle className="w-3.5 h-3.5" /> Apply Strike
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Blocked Users */}
                     <section className="space-y-4 pb-8">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Plus, User, PenTool } from "lucide-react";
+import { Home, Search, Plus, User, PenTool, Bookmark, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function BottomNav() {
@@ -14,8 +14,10 @@ export function BottomNav() {
         { icon: PenTool, label: "Writing", href: "/writing" },
         { icon: User, label: "Profile", href: "/profile" },
     ] : [
-        { icon: Home, label: "Home", href: "/rentals" },
-        { icon: Search, label: "Browse", href: "/rentals" },
+        { icon: Home, label: "Home", href: "/home" },
+        { icon: Search, label: "Search", href: "/search" },
+        { icon: Bookmark, label: "Saved", href: "/wishlist" },
+        { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
         { icon: User, label: "Profile", href: "/profile" },
     ];
 

@@ -99,6 +99,15 @@ export default function ChatPage() {
 
     const QUICK_ACTIONS = ["I'm at the location!", "Can't find you", "On my way!"];
 
+    // Feature 5: Safety Check-In
+    const [checkedIn, setCheckedIn] = useState(false);
+    const handleCheckIn = async () => {
+        if (checkedIn) return;
+        await sendMessage(undefined, `✅ ${userId === rental?.ownerId ? "Owner" : "Renter"} confirmed the meetup & handoff!`);
+        setCheckedIn(true);
+        toast.success("Check-in confirmed!");
+    };
+
     if (loading) {
         return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
     }
@@ -129,6 +138,23 @@ export default function ChatPage() {
                         Coordinate the meetup on campus. Never pay via unverified external links. Stay within {rental?.college}.
                     </p>
                 </div>
+
+                {/* Feature 5: Safety Check-In */}
+                {rental?.status === "active" && (
+                    <div className="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-2xl p-3 mb-3">
+                        <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
+                            {checkedIn ? "✅ You confirmed the meetup" : "Mark this handoff as complete"}
+                        </div>
+                        {!checkedIn && (
+                            <button
+                                onClick={handleCheckIn}
+                                className="px-3 py-1.5 bg-emerald-500 text-white text-xs font-black rounded-xl"
+                            >
+                                Check In
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 <div className="flex flex-col gap-3">
                     {messages.map((msg) => {

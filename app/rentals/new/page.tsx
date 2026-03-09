@@ -7,7 +7,7 @@ import { db, auth, storage } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp, getDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
-import { Camera, ChevronLeft, Loader2, IndianRupee, MapPin, School, GraduationCap } from "lucide-react";
+import { Camera, ChevronLeft, Loader2, IndianRupee, MapPin, School, GraduationCap, Plus, X, Lightbulb, Calendar } from "lucide-react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS } from "@/lib/constants";
 import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
@@ -26,8 +26,12 @@ export default function NewRentalPage() {
     const [block, setBlock] = useState("");
     const [department, setDepartment] = useState(DEPARTMENTS[0]);
     const [image, setImage] = useState<File | null>(null);
+    const [extraImages, setExtraImages] = useState<File[]>([]); // Multi-image
     const [preview, setPreview] = useState<string | null>(null);
+    const [extraPreviews, setExtraPreviews] = useState<string[]>([]);
     const [userDept, setUserDept] = useState("");
+    const [expiresInDays, setExpiresInDays] = useState(7); // Feature 2: Expiry
+    const [suggestedPrice, setSuggestedPrice] = useState<number | null>(null); // Feature 9
 
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
@@ -39,6 +43,26 @@ export default function NewRentalPage() {
             setBlock(dynamicBlocks[0]);
         }
     }, [dynamicBlocks, block]);
+
+    // Feature 9: Smart Pricing - fetch avg price for this category at this college
+    useEffect(() => {
+        if (!selectedCollege || !db || !category) return;
+        const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
+        if (!selectedCat) return;
+        import("firebase/firestore").then(({ collection, query, where, getDocs }) => {
+            const q = query(
+                collection(db as any, "rentals"),
+                where("collegeId", "==", selectedCollege.id),
+                where("categoryId", "==", selectedCat.id)
+            );
+            getDocs(q).then(snap => {
+                if (snap.size < 3) { setSuggestedPrice(null); return; }
+                const prices = snap.docs.map(d => d.data().pricePerHour || 0);
+                const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+                setSuggestedPrice(avg);
+            });
+        });
+    }, [category, selectedCollege]);
 
     // Fetch user profile settings if any
     useEffect(() => {
@@ -59,18 +83,10 @@ export default function NewRentalPage() {
         const file = e.target.files?.[0];
         if (file) {
             try {
-                // Show immediate preview using raw file
                 const previewReader = new FileReader();
                 previewReader.onloadend = () => setPreview(previewReader.result as string);
                 previewReader.readAsDataURL(file);
-
-                // Compress heavily for upload with max-width 1280px and 0.7 quality
                 const compressedBlob = await compressImageFile(file, { maxWidth: 1280, quality: 0.7 });
-                if (compressedBlob.size > 300 * 1024) {
-                    console.warn('Compressed product image still larger than 300KB:', compressedBlob.size);
-                }
-
-                // Creating a File object from blob so upload logic stays untouched
                 const compressedFile = new File([compressedBlob], `compressed_${file.name}.jpg`, { type: "image/jpeg" });
                 setImage(compressedFile);
             } catch (error) {
@@ -78,6 +94,27 @@ export default function NewRentalPage() {
                 toast.error("Failed to process image.");
             }
         }
+    };
+
+    // Feature 7: Extra images handler
+    const handleExtraImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        for (const file of files) {
+            if (extraImages.length >= 2) break;
+            try {
+                const blob = await compressImageFile(file, { maxWidth: 1280, quality: 0.7 });
+                const compressed = new File([blob], `extra_${file.name}.jpg`, { type: "image/jpeg" });
+                setExtraImages(prev => [...prev, compressed].slice(0, 2));
+                const reader = new FileReader();
+                reader.onloadend = () => setExtraPreviews(prev => [...prev, reader.result as string].slice(0, 2));
+                reader.readAsDataURL(file);
+            } catch { /* ignore */ }
+        }
+    };
+
+    const removeExtraImage = (idx: number) => {
+        setExtraImages(prev => prev.filter((_, i) => i !== idx));
+        setExtraPreviews(prev => prev.filter((_, i) => i !== idx));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -97,6 +134,19 @@ export default function NewRentalPage() {
             const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Others": "📦" };
             const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
 
+            // Upload extra images
+            const extraPhotoUrls: string[] = [];
+            for (const extraImg of extraImages) {
+                const extraRef = ref(storage as any, `rental_photos/${Date.now()}_extra_${userId}`);
+                const extraUpload = await uploadBytes(extraRef, extraImg);
+                const extraUrl = await getDownloadURL(extraUpload.ref);
+                extraPhotoUrls.push(extraUrl);
+            }
+
+            // Feature 2: Compute expiry timestamp
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+
             await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
                 itemName: name,
@@ -108,9 +158,11 @@ export default function NewRentalPage() {
                 categoryId: selectedCat?.id || "others",
                 icon: iconMap[category] || "📦",
                 photoUrl,
+                extraPhotoUrls,
                 status: "available",
                 renterId: null,
                 createdAt: serverTimestamp(),
+                expiresAt: expiresAt.toISOString(),
             });
             toast.success("Item listed successfully! 🎉");
             router.push("/home");
@@ -227,6 +279,7 @@ export default function NewRentalPage() {
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
+                    {/* Price + Smart Pricing Suggestion */}
                     <div className="space-y-2.5 w-1/2">
                         <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Price / hr *</label>
                         <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
@@ -240,6 +293,15 @@ export default function NewRentalPage() {
                                 onChange={(e) => setPrice(e.target.value)}
                             />
                         </div>
+                        {suggestedPrice && (
+                            <button
+                                type="button"
+                                onClick={() => setPrice(String(suggestedPrice))}
+                                className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-500 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full"
+                            >
+                                <Lightbulb className="w-3 h-3" /> Avg ₹{suggestedPrice}/hr at your campus — tap to use
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -269,6 +331,50 @@ export default function NewRentalPage() {
                         {dynamicBlocks.map(b => <option key={b} value={b}>{b}</option>)}
                     </select>
                 </div>
+
+                {/* Feature 2: Listing Expiry */}
+                <div className="space-y-2.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
+                        <Calendar className="w-3.5 h-3.5" /> Listing Expires In
+                    </label>
+                    <div className="flex gap-2">
+                        {[3, 7, 14, 30].map(days => (
+                            <button
+                                type="button"
+                                key={days}
+                                onClick={() => setExpiresInDays(days)}
+                                className={`flex-1 py-3 rounded-xl border text-xs font-bold transition-all ${expiresInDays === days ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200"}`}
+                            >
+                                {days}d
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Feature 7: Extra Photos */}
+                {preview && extraPreviews.length < 2 && (
+                    <div className="space-y-2.5">
+                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Extra Photos (up to 2 more)</label>
+                        <div className="flex gap-2">
+                            {extraPreviews.map((ep, i) => (
+                                <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-200">
+                                    <img src={ep} alt={`extra ${i}`} className="w-full h-full object-cover" />
+                                    <button type="button" onClick={() => removeExtraImage(i)} className="absolute top-1 right-1 bg-black/50 rounded-full p-0.5">
+                                        <X className="w-3 h-3 text-white" />
+                                    </button>
+                                </div>
+                            ))}
+                            <button
+                                type="button"
+                                onClick={() => document.getElementById("extra-photo-input")?.click()}
+                                className="w-20 h-20 rounded-xl border-2 border-dashed border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-400"
+                            >
+                                <Plus className="w-6 h-6" />
+                            </button>
+                            <input id="extra-photo-input" type="file" accept="image/*" multiple className="hidden" onChange={handleExtraImageChange} />
+                        </div>
+                    </div>
+                )}
 
                 {/* Submit */}
                 <div className="pt-8">

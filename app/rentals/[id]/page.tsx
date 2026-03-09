@@ -8,8 +8,9 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc
 import { toast } from "sonner";
 import {
     ChevronLeft, MapPin, Clock, IndianRupee, ShieldCheck,
-    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare, Star
+    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare, Star, Bookmark
 } from "lucide-react";
+import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { Listing, ReportReason } from "@/lib/types";
 
 const REPORT_REASONS: ReportReason[] = [
@@ -46,6 +47,27 @@ export default function RentalDetailPage() {
 
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
+    const [isSaved, setIsSaved] = useState(false);
+
+    // Check wishlist state
+    useEffect(() => {
+        if (!userId || !id || !db) return;
+        getDoc(doc(db as any, `users/${userId}/saved`, id as string)).then(snap => setIsSaved(snap.exists()));
+    }, [userId, id]);
+
+    const toggleSave = async () => {
+        if (!userId || !id || !db) { toast.error("Sign in to save items"); return; }
+        const ref = doc(db as any, `users/${userId}/saved`, id as string);
+        if (isSaved) {
+            await deleteDoc(ref);
+            setIsSaved(false);
+            toast.success("Removed from wishlist");
+        } else {
+            await setDoc(ref, { savedAt: serverTimestamp() });
+            setIsSaved(true);
+            toast.success("Saved to wishlist! 🔖");
+        }
+    };
 
     // Real-time listener for the rental document
     useEffect(() => {
