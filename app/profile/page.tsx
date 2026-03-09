@@ -8,7 +8,7 @@ import { signOut } from "firebase/auth";
 import { toast } from "sonner";
 import {
     LogOut, ShieldCheck, AlertTriangle, User, Package, Clock, IndianRupee, MapPin,
-    ChevronRight, Loader2, Navigation
+    ChevronRight, Loader2, Navigation, Star
 } from "lucide-react";
 import { Listing } from "@/lib/types";
 import { TopBar } from "@/components/layout/TopBar";
@@ -112,8 +112,16 @@ export default function ProfilePage() {
                             <h1 className="text-xl font-black text-slate-800 leading-tight mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
                                 {userProfile?.name || "Student"}
                             </h1>
-                            <div className="flex items-center gap-1.5 opacity-80">
+                            <div className="flex items-center gap-1.5 opacity-80 mt-1">
                                 <span className="text-xs font-bold bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md uppercase tracking-widest">{userProfile?.department || "N/A"}</span>
+                                {userProfile?.reviewCount && userProfile?.reviewCount > 0 ? (
+                                    <div className="flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-md">
+                                        <Star className="w-3.5 h-3.5 fill-amber-500" />
+                                        {userProfile.overallRating?.toFixed(1)} <span className="text-amber-600/60 font-medium tracking-widest uppercase ml-0.5">({userProfile.reviewCount} Reviews)</span>
+                                    </div>
+                                ) : (
+                                    <div className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md uppercase tracking-widest">No Reviews Yet</div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -139,6 +147,16 @@ export default function ProfilePage() {
                             className="p-3 bg-rose-50 rounded-xl text-rose-500 hover:bg-rose-100 active:scale-95 transition-all shadow-sm"
                         >
                             <LogOut className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* Quick Links */}
+                    <div className="mt-4 flex gap-2">
+                        <button
+                            onClick={() => router.push("/profile/history")}
+                            className="flex-1 flex items-center justify-center gap-2 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-sm transition-colors shadow-sm"
+                        >
+                            <Clock className="w-4 h-4" /> Transaction History
                         </button>
                     </div>
                 </div>

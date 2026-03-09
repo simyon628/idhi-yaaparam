@@ -8,7 +8,7 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc
 import { toast } from "sonner";
 import {
     ChevronLeft, MapPin, Clock, IndianRupee, ShieldCheck,
-    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare
+    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare, Star
 } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
 
@@ -36,7 +36,13 @@ export default function RentalDetailPage() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportReason, setReportReason] = useState<ReportReason | "">("");
     const [reportNotes, setReportNotes] = useState("");
-    const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number } | null>(null);
+
+    // Rating State
+    const [showRatingModal, setShowRatingModal] = useState(false);
+    const [rating, setRating] = useState(5);
+    const [ratingComment, setRatingComment] = useState("");
+
+    const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number, overallRating?: number, reviewCount?: number } | null>(null);
 
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
@@ -126,17 +132,88 @@ export default function RentalDetailPage() {
     const handleRequest = async () => {
         if (!userId) { toast.error("Please sign in first"); return; }
         await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp() });
+
+        // Fire notification to Owner
+        if (rental?.ownerId && rental.ownerId !== userId) {
+            await addDoc(collection(db as any, "notifications"), {
+                userId: rental.ownerId,
+                title: "New Rental Request",
+                message: `Someone wants to borrow your ${rental.itemName}`,
+                type: "request",
+                link: `/rentals/${id}`,
+                isRead: false,
+                createdAt: serverTimestamp()
+            });
+        }
+
         toast.success("Request sent to owner! 🎉");
     };
 
     const handleApprove = async () => {
         await updateStatus("active", { approvedAt: serverTimestamp() });
+
+        // Fire notification to Renter
+        if (rental?.renterId) {
+            await addDoc(collection(db as any, "notifications"), {
+                userId: rental.renterId,
+                title: "Rental Approved!",
+                message: `You can now pick up the ${rental.itemName}. Check your chat for details!`,
+                type: "approval",
+                link: `/chat/${id}`,
+                isRead: false,
+                createdAt: serverTimestamp()
+            });
+        }
+
         toast.success("Rental approved!");
     };
 
     const handleMarkReturned = async () => {
         await updateStatus("completed", { completedAt: serverTimestamp() });
         toast.success("Rental marked as complete!");
+        setShowRatingModal(true);
+    };
+
+    const handleRateUser = async () => {
+        if (!db || !userId || !rental) return;
+        setActionLoading(true);
+
+        const targetUserId = rental.ownerId === userId ? rental.renterId : rental.ownerId;
+        if (!targetUserId) return;
+
+        try {
+            // Write Review
+            await addDoc(collection(db as any, "reviews"), {
+                rentalId: id,
+                reviewerId: userId,
+                reviewedUserId: targetUserId,
+                rating,
+                comment: ratingComment,
+                createdAt: serverTimestamp()
+            });
+
+            // Update user aggregates
+            const userRef = doc(db as any, "users", targetUserId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const currentRating = userSnap.data().overallRating || 0;
+                const currentCount = userSnap.data().reviewCount || 0;
+                const newCount = currentCount + 1;
+                const newRating = ((currentRating * currentCount) + rating) / newCount;
+
+                await updateDoc(userRef, {
+                    overallRating: newRating,
+                    reviewCount: newCount
+                });
+            }
+
+            toast.success("Thanks for your review!");
+            setShowRatingModal(false);
+        } catch {
+            toast.error("Failed to submit review");
+        } finally {
+            setActionLoading(false);
+        }
     };
 
     const handleReport = async () => {
@@ -293,8 +370,18 @@ export default function RentalDetailPage() {
                             )}
                             <div>
                                 <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5">Listed By</p>
-                                <p className="text-[15px] font-bold text-slate-800 leading-tight">{ownerInfo.name}</p>
-                                <p className="text-xs font-semibold text-indigo-500">{ownerInfo.department}</p>
+                                <p className="text-[15px] font-bold text-slate-800 leading-tight flex items-center gap-1.5">
+                                    {ownerInfo.name}
+                                </p>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                    <p className="text-xs font-semibold text-indigo-500">{ownerInfo.department}</p>
+                                    {ownerInfo.reviewCount && ownerInfo.reviewCount > 0 ? (
+                                        <div className="flex items-center gap-0.5 text-xs font-bold text-amber-500 bg-amber-50 border border-amber-100 px-1.5 py-[1px] rounded">
+                                            <Star className="w-3 h-3 fill-amber-500" />
+                                            {ownerInfo.overallRating?.toFixed(1)} <span className="text-amber-600/60 font-medium">({ownerInfo.reviewCount})</span>
+                                        </div>
+                                    ) : null}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -339,12 +426,21 @@ export default function RentalDetailPage() {
                                 <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full text-sm font-bold shadow-sm">
                                     <CheckCircle2 className="w-4 h-4" /> Rental Complete
                                 </div>
-                                <button
-                                    onClick={() => setShowReportModal(true)}
-                                    className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors"
-                                >
-                                    Report an issue
-                                </button>
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => setShowRatingModal(true)}
+                                        className="text-xs font-bold text-amber-500 hover:text-amber-600 flex items-center gap-1"
+                                    >
+                                        <Star className="w-3 h-3 fill-amber-500" /> Rate Transaction
+                                    </button>
+                                    <span className="text-slate-300">|</span>
+                                    <button
+                                        onClick={() => setShowReportModal(true)}
+                                        className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors"
+                                    >
+                                        Report an issue
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <div className="h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
@@ -425,6 +521,53 @@ export default function RentalDetailPage() {
                             className="w-full h-14 rounded-2xl bg-rose-500 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-rose-600 shadow-sm"
                         >
                             {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><Send className="w-4 h-4" /> SUBMIT REPORT</>}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ─── Rating Modal ─── */}
+            {showRatingModal && (
+                <div className="fixed inset-0 z-[100] flex items-end justify-center max-w-md mx-auto">
+                    <div className="absolute inset-0 bg-slate-800/40 backdrop-blur-sm" onClick={() => setShowRatingModal(false)} />
+                    <div className="relative w-full bg-slate-50 border-t border-indigo-100 rounded-t-[2rem] p-6 space-y-5 z-10 shadow-2xl">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Rate Transaction</h3>
+                                <p className="text-xs text-slate-500 mt-0.5 font-medium">How was your experience?</p>
+                            </div>
+                            <button onClick={() => setShowRatingModal(false)} className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
+                                <X className="w-4 h-4 text-slate-400" />
+                            </button>
+                        </div>
+
+                        <div className="flex justify-center gap-2 py-4">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                    key={star}
+                                    onClick={() => setRating(star)}
+                                    className="p-1 active:scale-90 transition-transform"
+                                >
+                                    <Star className={`w-10 h-10 ${star <= rating ? "fill-amber-400 text-amber-400" : "fill-slate-100 text-slate-200"}`} />
+                                </button>
+                            ))}
+                        </div>
+
+                        <div>
+                            <textarea
+                                placeholder="Write a short review (optional)..."
+                                value={ratingComment}
+                                onChange={(e) => setRatingComment(e.target.value)}
+                                className="w-full h-24 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 resize-none shadow-inner transition-all"
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleRateUser}
+                            disabled={actionLoading}
+                            className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-indigo-700 shadow-sm"
+                        >
+                            {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><Star className="w-4 h-4 fill-white" /> SUBMIT REVIEW</>}
                         </button>
                     </div>
                 </div>

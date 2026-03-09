@@ -19,6 +19,10 @@ export interface User {
     verifiedMethod?: 'id_ocr_v1';
     verifiedCollegeId?: string;
     verifiedRollNumber?: string;
+
+    // Social & Trust
+    overallRating?: number;
+    reviewCount?: number;
 }
 
 export interface College {
@@ -112,4 +116,39 @@ export interface WritingJob {
     workerId: string | null;
     status: "open" | "assigned" | "completed" | "cancelled";
     createdAt: any;
+}
+
+// ─── Chat ────────────────────────────────────────────────────────────────────
+export interface ChatMessage {
+    id: string;
+    rentalId: string;
+    senderId: string;
+    text: string;
+    createdAt: Timestamp | Date;
+    isRead: boolean;
+}
+
+// ─── Review ──────────────────────────────────────────────────────────────────
+export interface Review {
+    id: string;
+    rentalId: string;
+    reviewerId: string;
+    reviewedUserId: string;
+    rating: number; // 1-5
+    comment?: string;
+    createdAt: Timestamp | Date;
+}
+
+// ─── Notification ────────────────────────────────────────────────────────────
+export type NotificationType = "request" | "approval" | "message" | "warning" | "system";
+
+export interface AppNotification {
+    id: string;
+    userId: string;
+    title: string;
+    message: string;
+    type: NotificationType;
+    link?: string; // Optional path to navigate to (e.g. /rentals/123)
+    isRead: boolean;
+    createdAt: Timestamp | Date;
 }

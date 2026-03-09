@@ -77,24 +77,27 @@ export default function ChatPage() {
         return () => unsub();
     }, [id]);
 
-    const sendMessage = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!newMessage.trim() || !userId || !db || !id) return;
+    const sendMessage = async (e?: React.FormEvent, directText?: string) => {
+        if (e) e.preventDefault();
+        const text = directText || newMessage;
+        if (!text.trim() || !userId || !db || !id) return;
 
-        const text = newMessage;
-        setNewMessage(""); // Optimistic clear
+        if (!directText) setNewMessage(""); // Optimistic clear
 
         try {
             await addDoc(collection(db as any, `rentals/${id}/messages`), {
                 text,
                 senderId: userId,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                isRead: false
             });
             bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         } catch (err) {
             toast.error("Failed to send message.");
         }
     };
+
+    const QUICK_ACTIONS = ["I'm at the location!", "Can't find you", "On my way!"];
 
     if (loading) {
         return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
@@ -127,18 +130,19 @@ export default function ChatPage() {
                     </p>
                 </div>
 
-                {messages.map((msg) => {
-                    const isMe = msg.senderId === userId;
-                    return (
-                        <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2`}>
-                            <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-[15px] font-medium shadow-sm ${isMe ? "bg-indigo-600 text-white rounded-tr-sm" : "bg-white border border-slate-200 text-slate-800 rounded-tl-sm"
-                                }`}>
-                                {msg.text}
+                <div className="flex flex-col gap-3">
+                    {messages.map((msg) => {
+                        const isMe = msg.senderId === userId;
+                        return (
+                            <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2`}>
+                                <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-[15px] font-medium shadow-sm ${isMe ? "bg-indigo-600 text-white rounded-tr-sm" : "bg-white border border-slate-200 text-slate-800 rounded-tl-sm"}`}>
+                                    {msg.text}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
-                <div ref={bottomRef} />
+                        );
+                    })}
+                </div>
+                <div ref={bottomRef} className="h-4" />
             </main>
 
             {/* Message Input Bar */}
@@ -148,22 +152,35 @@ export default function ChatPage() {
                         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction Ended</span>
                     </div>
                 ) : (
-                    <form onSubmit={sendMessage} className="flex gap-2">
-                        <input
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Message..."
-                            className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-5 h-12 text-sm font-semibold outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all shadow-inner placeholder-slate-400"
-                        />
-                        <button
-                            type="submit"
-                            disabled={!newMessage.trim()}
-                            className="w-12 h-12 rounded-2xl gradient-indigo text-white flex items-center justify-center shadow-md disabled:opacity-50 active:scale-95 transition-all"
-                        >
-                            <Send className="w-5 h-5 -ml-0.5 z-10" />
-                        </button>
-                    </form>
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                            {QUICK_ACTIONS.map(action => (
+                                <button
+                                    key={action}
+                                    onClick={() => sendMessage(undefined, action)}
+                                    className="whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-bold transition-colors border border-slate-200"
+                                >
+                                    {action}
+                                </button>
+                            ))}
+                        </div>
+                        <form onSubmit={(e) => sendMessage(e)} className="flex gap-2">
+                            <input
+                                type="text"
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="Message..."
+                                className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-5 h-12 text-sm font-semibold outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all shadow-inner placeholder-slate-400"
+                            />
+                            <button
+                                type="submit"
+                                disabled={!newMessage.trim()}
+                                className="w-12 h-12 rounded-2xl gradient-indigo text-white flex items-center justify-center shadow-md disabled:opacity-50 active:scale-95 transition-all"
+                            >
+                                <Send className="w-5 h-5 -ml-0.5 z-10" />
+                            </button>
+                        </form>
+                    </div>
                 )}
             </div>
         </div>
