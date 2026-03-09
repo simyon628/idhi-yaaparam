@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
 import { collection, query, where, orderBy, onSnapshot, writeBatch, doc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { ChevronLeft, Loader2, Bell, CheckCircle2, AlertTriangle, ArrowRight, MessageSquare } from "lucide-react";
 import { AppNotification } from "@/lib/types";
 
@@ -11,7 +12,16 @@ export default function NotificationsPage() {
     const router = useRouter();
     const [notifications, setNotifications] = useState<AppNotification[]>([]);
     const [loading, setLoading] = useState(true);
-    const userId = auth?.currentUser?.uid;
+    const [userId, setUserId] = useState<string | null | undefined>(undefined); // undefined = still checking
+
+    useEffect(() => {
+        if (!auth) { setUserId(null); setLoading(false); return; }
+        const unsub = onAuthStateChanged(auth as any, (user) => {
+            setUserId(user?.uid ?? null);
+            if (!user) setLoading(false);
+        });
+        return () => unsub();
+    }, []);
 
     useEffect(() => {
         if (!userId || !db) return;
@@ -24,8 +34,8 @@ export default function NotificationsPage() {
 
         const unsub = onSnapshot(q, (snapshot) => {
             const notifs: AppNotification[] = [];
-            snapshot.forEach(doc => {
-                notifs.push({ id: doc.id, ...doc.data() } as AppNotification);
+            snapshot.forEach(d => {
+                notifs.push({ id: d.id, ...d.data() } as AppNotification);
             });
             setNotifications(notifs);
             setLoading(false);

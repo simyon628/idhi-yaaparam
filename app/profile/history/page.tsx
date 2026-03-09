@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
 import {
     ChevronLeft, Loader2, Package, IndianRupee, Clock,
@@ -16,7 +17,17 @@ export default function HistoryPage() {
     const router = useRouter();
     const [history, setHistory] = useState<Listing[]>([]);
     const [loading, setLoading] = useState(true);
-    const userId = auth?.currentUser?.uid;
+    const [userId, setUserId] = useState<string | null | undefined>(undefined);
+
+    // Async auth state check
+    useEffect(() => {
+        if (!auth) { setUserId(null); setLoading(false); return; }
+        const unsub = onAuthStateChanged(auth as any, (user) => {
+            setUserId(user?.uid ?? null);
+            if (!user) setLoading(false);
+        });
+        return () => unsub();
+    }, []);
 
     useEffect(() => {
         if (!userId || !db) return;

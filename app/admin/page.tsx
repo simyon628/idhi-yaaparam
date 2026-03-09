@@ -7,6 +7,7 @@ import {
     collection, query, onSnapshot, doc, updateDoc,
     where, orderBy, addDoc, serverTimestamp
 } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
 import {
     ShieldAlert, UserX, UserCheck, Loader2,
@@ -21,13 +22,24 @@ export default function AdminPanel() {
     const [loading, setLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     const [allUsers, setAllUsers] = useState<User[]>([]); // Feature 10
+    const [authReady, setAuthReady] = useState(false);
+    const [currentUid, setCurrentUid] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!db || !auth?.currentUser) return;
+        if (!auth) { setAuthReady(true); return; }
+        const unsub = onAuthStateChanged(auth as any, (user) => {
+            setCurrentUid(user?.uid ?? null);
+            setAuthReady(true);
+        });
+        return () => unsub();
+    }, []);
 
-        // Check admin status
-        const userId = auth.currentUser.uid;
-        const unsub0 = onSnapshot(doc(db, "users", userId), (snap) => {
+    useEffect(() => {
+        if (!authReady || !currentUid || !db) {
+            if (authReady && !currentUid) setLoading(false);
+            return;
+        }
+        const unsub0 = onSnapshot(doc(db, "users", currentUid), (snap) => {
             if (snap.exists()) setIsAdmin(snap.data()?.isAdmin === true);
         });
 
