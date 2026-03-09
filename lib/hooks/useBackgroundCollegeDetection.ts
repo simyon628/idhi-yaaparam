@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 
 export interface AutoDetectedCollege {
     id: string;
@@ -97,10 +97,13 @@ export function useBackgroundCollegeDetection() {
     const [state, setState] = useState<State>({ status: "idle", college: null });
     const hasRun = useRef(false); // ensures we never run more than once
 
-    useEffect(() => {
+    const startDetection = useCallback(() => {
         if (hasRun.current) return;
         if (typeof window === "undefined") return;
-        if (!navigator.geolocation) return;
+        if (!navigator.geolocation) {
+            setState({ status: "failed", college: null });
+            return;
+        }
 
         hasRun.current = true;
         setState({ status: "detecting", college: null });
@@ -175,11 +178,7 @@ export function useBackgroundCollegeDetection() {
         };
 
         run();
-
-        return () => {
-            controller.abort(); // clean up on unmount
-        };
     }, []);
 
-    return state;
+    return { ...state, startDetection };
 }

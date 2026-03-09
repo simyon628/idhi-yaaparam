@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCollege } from "@/contexts/CollegeContext";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
-import { useBackgroundCollegeDetection } from "@/lib/hooks/useBackgroundCollegeDetection";
 import { MapPin, PenTool, ArrowRight, ArrowRightCircle } from "lucide-react";
 
 export default function MultiServiceHomepage() {
@@ -14,14 +13,10 @@ export default function MultiServiceHomepage() {
   // Controls when the user presses the 'Detect My College' button
   const [showDetector, setShowDetector] = useState(false);
 
-  // Background GPS runs silently to warm the cache, but Overpass lookup itself
-  // is strictly gated behind this hook.
-  const { status: detectionStatus, college: autoDetectedCollege } = useBackgroundCollegeDetection();
-
   // If a user selects a college while the detector is open, forward them immediately.
   useEffect(() => {
     if (isReady && showDetector && selectedCollege) {
-      router.push("/rentals");
+      router.push("/login");
     }
   }, [selectedCollege, isReady, showDetector, router]);
 
@@ -63,10 +58,7 @@ export default function MultiServiceHomepage() {
 
             {showDetector ? (
               <div className="mt-4 pt-4 border-t border-slate-100">
-                <InlineCollegeSelection
-                  detectionStatus={detectionStatus}
-                  autoDetectedCollege={autoDetectedCollege}
-                />
+                <InlineCollegeSelection />
               </div>
             ) : (
               <button

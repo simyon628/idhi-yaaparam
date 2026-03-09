@@ -6,23 +6,21 @@ import { Search, MapPin, Loader2, AlertCircle, CheckCircle2 } from "lucide-react
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { College } from "@/lib/types";
-import { AutoDetectedCollege } from "@/lib/hooks/useBackgroundCollegeDetection";
-
-interface InlineCollegeSelectionProps {
-    detectionStatus: "idle" | "detecting" | "ready" | "failed";
-    autoDetectedCollege: AutoDetectedCollege | null;
-}
+import { useBackgroundCollegeDetection } from "@/lib/hooks/useBackgroundCollegeDetection";
 
 function formatDistance(m: number): string {
     if (m < 1000) return `about ${Math.round(m)} m away`;
     return `about ${(m / 1000).toFixed(1)} km away`;
 }
 
-export function InlineCollegeSelection({
-    detectionStatus,
-    autoDetectedCollege,
-}: InlineCollegeSelectionProps) {
+export function InlineCollegeSelection() {
     const { setSelectedCollege } = useCollege();
+    const { status: detectionStatus, college: autoDetectedCollege, startDetection } = useBackgroundCollegeDetection();
+
+    // Trigger explicit location prompt strictly 1-time when user clicks the button mounting this component
+    useEffect(() => {
+        startDetection();
+    }, []); // Empty dependency array as explicitly requested
 
     // Manual search state
     const [allColleges, setAllColleges] = useState<College[]>([]);

@@ -13,12 +13,18 @@ export interface User {
     idPhotoUrl?: string;
     createdAt: Timestamp | Date;
     isAdmin?: boolean;
+
+    // OCR Verification
+    verified?: boolean;
+    verifiedMethod?: 'id_ocr_v1';
+    verifiedCollegeId?: string;
+    verifiedRollNumber?: string;
 }
 
-// ─── Location & College ──────────────────────────────────────────────────────
 export interface College {
     id: string;
     name: string;
+    aliases?: string[]; // E.g., ["SRKR", "SRREC"]
     city?: string;
     state?: string;
     lat: number;
