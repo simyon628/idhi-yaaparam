@@ -34,12 +34,14 @@ export default function NewRentalPage() {
     const [expiresInDays, setExpiresInDays] = useState(7); // Feature 2: Expiry
     const [suggestedPrice, setSuggestedPrice] = useState<number | null>(null); // Feature 9
     const [currentUserId, setCurrentUserId] = useState<string | null>(null); // Async auth
+    const [authChecked, setAuthChecked] = useState(false);
 
     // Resolve auth user asynchronously (fixes publish bug)
     useEffect(() => {
-        if (!auth) return;
+        if (!auth) { setAuthChecked(true); return; }
         const unsub = onAuthStateChanged(auth as any, (user) => {
             setCurrentUserId(user?.uid ?? null);
+            setAuthChecked(true);
         });
         return () => unsub();
     }, []);
@@ -134,6 +136,10 @@ export default function NewRentalPage() {
             toast.error("Fill all fields and add a photo");
             return;
         }
+        if (!authChecked) {
+            toast.error("Still checking login status, please wait...");
+            return;
+        }
         if (!currentUserId) {
             toast.error("You must be signed in to list an item.");
             router.push("/login");
@@ -143,9 +149,27 @@ export default function NewRentalPage() {
         try {
             const userId = currentUserId;
             if (!storage || !db) throw new Error("Firebase not initialized");
+
+            // Verify the user has a registered profile (not just anonymous)
+            const userDoc = await getDoc(doc(db, "users", userId));
+            if (!userDoc.exists()) {
+                toast.error("Please complete registration before listing items.");
+                router.push("/login");
+                setLoading(false);
+                return;
+            }
+
+            // Upload with 30-second timeout to prevent infinite hang
+            const uploadWithTimeout = (uploadPromise: Promise<any>, timeoutMs = 30000) => {
+                const timeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error("Upload timed out. Check your internet connection and try again.")), timeoutMs)
+                );
+                return Promise.race([uploadPromise, timeout]);
+            };
+
             const storageRef = ref(storage, `rentals/${Date.now()}_${userId}.jpg`);
-            await uploadBytes(storageRef, image);
-            const photoUrl = await getDownloadURL(storageRef);
+            const uploadResult = await uploadWithTimeout(uploadBytes(storageRef, image)) as any;
+            const photoUrl = await getDownloadURL(uploadResult.ref);
 
             const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Others": "📦" };
             const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
@@ -184,7 +208,16 @@ export default function NewRentalPage() {
             router.push("/home");
         } catch (error: any) {
             console.error("Publish error:", error);
-            toast.error(`Failed to list item: ${error?.message || "Unknown error. Check console."}`);
+            const msg = error?.message || "Unknown error";
+            if (msg.includes("timed out")) {
+                toast.error("⏱️ Upload timed out. Check internet and try again.");
+            } else if (msg.includes("storage/unauthorized")) {
+                toast.error("🔒 You don't have permission to upload. Please re-login.");
+            } else if (msg.includes("permission-denied")) {
+                toast.error("🔒 Permission denied. Please re-login and try again.");
+            } else {
+                toast.error(`Failed: ${msg}`);
+            }
         } finally {
             setLoading(false);
         }
