@@ -22,7 +22,7 @@ const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
 export default function NewRentalPage() {
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState("");
-    const [category, setCategory] = useState(CATEGORIES[0]);
+    const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
     const [block, setBlock] = useState("");
     const [department, setDepartment] = useState(DEPARTMENTS[0]);
@@ -132,8 +132,8 @@ export default function NewRentalPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name || !price || !image || !selectedCollege) {
-            toast.error("Fill all fields and add a photo");
+        if (!name || !price || !image || !selectedCollege || !category) {
+            toast.error("Fill all fields, select a category, and add a photo");
             return;
         }
         if (!authChecked) {
@@ -341,6 +341,7 @@ export default function NewRentalPage() {
                             onChange={e => setCategory(e.target.value)}
                             className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                         >
+                            <option value="" disabled>Select Category</option>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>

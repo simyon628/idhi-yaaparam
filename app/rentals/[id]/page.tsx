@@ -475,7 +475,7 @@ export default function RentalDetailPage() {
                         disabled={actionLoading}
                         className="w-full h-14 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:-translate-y-0.5"
                     >
-                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : "REQUEST NOW →"}
+                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : "BORROW NOW →"}
                     </button>
                 ) : isRenter && rental?.status === "requested" ? (
                     <div className="flex flex-col items-center gap-2 text-center py-2">
