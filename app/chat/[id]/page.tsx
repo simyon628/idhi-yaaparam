@@ -2,165 +2,169 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
-import {
-    collection,
-    query,
-    orderBy,
-    onSnapshot,
-    addDoc,
-    serverTimestamp,
-    doc,
-    getDoc
-} from "firebase/firestore";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ChevronLeft, Send, User, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { doc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc } from "firebase/firestore";
+import { toast } from "sonner";
+import { ChevronLeft, Send, Loader2, Info } from "lucide-react";
+import { Listing } from "@/lib/types";
+
+interface Message {
+    id: string;
+    text: string;
+    senderId: string;
+    createdAt: any;
+}
 
 export default function ChatPage() {
-    const { id: chatId } = useParams();
-    const [messages, setMessages] = useState<any[]>([]);
+    const { id } = useParams();
+    const router = useRouter();
+    const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState("");
-    const [chatInfo, setChatInfo] = useState<any>(null);
+    const [rental, setRental] = useState<Listing | null>(null);
+    const [otherUser, setOtherUser] = useState<{ name: string, department: string } | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const router = useRouter();
+    const bottomRef = useRef<HTMLDivElement>(null);
     const userId = auth?.currentUser?.uid;
-    const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    // 1. Load Rental & Verify Access
     useEffect(() => {
-        if (!chatId || !userId) return;
+        if (!id || !userId || !db) return;
 
-        // Fetch chat info
-        const fetchChat = async () => {
-            if (!db) return;
-            const chatSnap = await getDoc(doc(db, "chats", chatId as string));
-            if (chatSnap.exists()) {
-                setChatInfo(chatSnap.data());
+        const unsub = onSnapshot(doc(db as any, "rentals", id as string), async (docSnap) => {
+            if (docSnap.exists()) {
+                const data = { id: docSnap.id, ...docSnap.data() } as Listing;
+
+                // Security gate: Only owner or assigned renter can access chat
+                if (data.ownerId !== userId && data.renterId !== userId) {
+                    toast.error("Unauthorized to view this transaction.");
+                    router.push("/rentals");
+                    return;
+                }
+
+                setRental(data);
+
+                // Fetch the *other* person's details for the header
+                const targetUserId = data.ownerId === userId ? data.renterId : data.ownerId;
+                if (targetUserId) {
+                    const userSnap = await getDoc(doc(db as any, "users", targetUserId));
+                    if (userSnap.exists()) setOtherUser(userSnap.data() as any);
+                }
+            } else {
+                router.push("/rentals");
             }
-        };
-        fetchChat();
+            setLoading(false);
+        });
+        return () => unsub();
+    }, [id, userId, router]);
 
-        if (!db) return;
-        // Listen for messages
+    // 2. Load Messages subcollection
+    useEffect(() => {
+        if (!id || !db) return;
         const q = query(
-            collection(db, "chats", chatId as string, "messages"),
-            orderBy("timestamp", "asc")
+            collection(db as any, `rentals/${id}/messages`),
+            orderBy("createdAt", "asc")
         );
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const unsub = onSnapshot(q, (snapshot) => {
+            const msgs: Message[] = [];
+            snapshot.forEach(doc => {
+                msgs.push({ id: doc.id, ...doc.data() } as Message);
+            });
             setMessages(msgs);
-            setLoading(false);
-            scrollToBottom();
+            setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
         });
+        return () => unsub();
+    }, [id]);
 
-        return () => unsubscribe();
-    }, [chatId, userId]);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    const handleSendMessage = async (e: React.FormEvent) => {
+    const sendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newMessage.trim() || !userId || !chatId || !db) return;
+        if (!newMessage.trim() || !userId || !db || !id) return;
 
-        const messageContent = newMessage.trim();
-        setNewMessage("");
+        const text = newMessage;
+        setNewMessage(""); // Optimistic clear
 
         try {
-            await addDoc(collection(db, "chats", chatId as string, "messages"), {
+            await addDoc(collection(db as any, `rentals/${id}/messages`), {
+                text,
                 senderId: userId,
-                text: messageContent,
-                timestamp: serverTimestamp(),
+                createdAt: serverTimestamp()
             });
-        } catch (error) {
-            console.error("Failed to send message:", error);
+            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        } catch (err) {
+            toast.error("Failed to send message.");
         }
     };
 
-    if (loading) return (
-        <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 text-indigo-600">
-            <Loader2 className="w-10 h-10 animate-spin mb-4" />
-            <p className="font-bold font-outfit text-xl">Loading Chat...</p>
-        </div>
-    );
+    if (loading) {
+        return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
+    }
+
+    const isCompleted = rental?.status === "completed" || rental?.status === "cancelled";
 
     return (
-        <div className="flex-1 flex flex-col h-screen bg-slate-50 relative overflow-hidden">
-            {/* Ambient Background Blobs */}
-            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/40 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "0s" }} />
-            <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float pointer-events-none" style={{ animationDelay: "2s" }} />
-
-            {/* Header */}
-            <header className="bg-white/60 backdrop-blur-xl border-b border-indigo-50/50 px-6 py-4 flex items-center gap-4 max-w-md mx-auto w-full z-50 sticky top-0 shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
-                <button onClick={() => router.back()} className="p-2.5 bg-white rounded-xl shadow-sm border border-indigo-50 active:scale-95 transition-transform">
-                    <ChevronLeft className="w-5 h-5 text-slate-600" />
-                </button>
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
+            <header className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-indigo-100 px-5 pt-12 pb-4 shadow-sm flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-indigo-50 border border-indigo-100/50 rounded-full flex items-center justify-center shadow-inner">
-                        <User className="w-5 h-5 text-indigo-400" />
-                    </div>
+                    <button onClick={() => router.back()} className="p-2 bg-slate-50 border border-slate-200 rounded-xl active:scale-95 transition-all text-slate-500">
+                        <ChevronLeft className="w-5 h-5" />
+                    </button>
                     <div>
-                        <h2 className="font-black text-[15px] text-slate-800 leading-none pb-0.5">Chat with Owner</h2>
-                        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Online
-                        </p>
+                        <h1 className="text-sm font-black text-slate-800 flex items-center gap-1.5" style={{ fontFamily: "Outfit, sans-serif" }}>
+                            {otherUser?.name || "Loading..."}
+                        </h1>
+                        <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{rental?.itemName}</p>
                     </div>
                 </div>
             </header>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5 no-scrollbar pb-32 relative z-10 max-w-md mx-auto w-full">
+            <main className="flex-1 overflow-y-auto pt-[100px] pb-[90px] px-5 flex flex-col gap-3">
+
+                <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-2xl flex items-start gap-3 mb-4 shadow-sm">
+                    <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                    <p className="text-xs font-semibold text-indigo-800 leading-relaxed">
+                        Coordinate the meetup on campus. Never pay via unverified external links. Stay within {rental?.college}.
+                    </p>
+                </div>
+
                 {messages.map((msg) => {
                     const isMe = msg.senderId === userId;
                     return (
-                        <div key={msg.id} className={cn(
-                            "flex flex-col max-w-[85%] gap-1.5 animate-in fade-in slide-in-from-bottom-2 duration-300",
-                            isMe ? "ml-auto items-end" : "mr-auto items-start"
-                        )}>
-                            <div className={cn(
-                                "px-5 py-3.5 rounded-3xl text-[15px] font-semibold shadow-sm",
-                                isMe
-                                    ? "gradient-indigo text-white rounded-br-sm shadow-indigo"
-                                    : "bg-white/80 backdrop-blur-md text-slate-700 border border-indigo-50 rounded-bl-sm"
-                            )}>
+                        <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2`}>
+                            <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-[15px] font-medium shadow-sm ${isMe ? "bg-indigo-600 text-white rounded-tr-sm" : "bg-white border border-slate-200 text-slate-800 rounded-tl-sm"
+                                }`}>
                                 {msg.text}
                             </div>
-                            <span className={cn(
-                                "text-[9px] font-black uppercase tracking-widest px-1",
-                                isMe ? "text-indigo-400" : "text-slate-400"
-                            )}>
-                                {msg.timestamp?.toDate()?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || 'Just now'}
-                            </span>
                         </div>
                     );
                 })}
-                <div ref={messagesEndRef} />
-            </div>
+                <div ref={bottomRef} />
+            </main>
 
-            {/* Input */}
-            <div className="fixed bottom-0 left-0 right-0 p-5 bg-white/60 backdrop-blur-xl border-t border-indigo-50/50 max-w-md mx-auto z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
-                <form onSubmit={handleSendMessage} className="flex gap-3">
-                    <input
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Type a message..."
-                        className="flex-1 h-14 bg-white/80 backdrop-blur-md border border-indigo-50 rounded-2xl px-5 text-[15px] font-semibold text-slate-700 placeholder-slate-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-300 transition-all"
-                        disabled={loading}
-                    />
-                    <button
-                        type="submit"
-                        disabled={!newMessage.trim() || loading}
-                        className="w-14 h-14 rounded-2xl gradient-indigo text-white shadow-indigo flex items-center justify-center flex-shrink-0 disabled:opacity-50 disabled:scale-100 active:scale-95 hover:-translate-y-0.5 transition-all"
-                    >
-                        <Send className="w-5 h-5 ml-[-2px] mt-[2px]" />
-                    </button>
-                </form>
+            {/* Message Input Bar */}
+            <div className="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-indigo-50 p-4 pb-safe z-40 shadow-[0_-10px_40px_-10px_rgba(110,115,200,0.15)]">
+                {isCompleted ? (
+                    <div className="h-12 bg-slate-100 rounded-xl flex items-center justify-center border border-slate-200">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction Ended</span>
+                    </div>
+                ) : (
+                    <form onSubmit={sendMessage} className="flex gap-2">
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Message..."
+                            className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-5 h-12 text-sm font-semibold outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all shadow-inner placeholder-slate-400"
+                        />
+                        <button
+                            type="submit"
+                            disabled={!newMessage.trim()}
+                            className="w-12 h-12 rounded-2xl gradient-indigo text-white flex items-center justify-center shadow-md disabled:opacity-50 active:scale-95 transition-all"
+                        >
+                            <Send className="w-5 h-5 -ml-0.5 z-10" />
+                        </button>
+                    </form>
+                )}
             </div>
         </div>
     );

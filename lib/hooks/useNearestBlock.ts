@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { Block, College } from "@/lib/types";
+import { College } from "@/lib/types";
 import { calculateDistance } from "@/lib/utils";
+import { useCampusBlocks, CampusBlock } from "./useCampusBlocks";
 
 interface NearestBlockHookState {
-    nearestBlock: Block | null;
+    nearestBlock: CampusBlock | null;
     distanceMeters: number | null;
     isLoading: boolean;
 }
@@ -17,16 +16,27 @@ export function useNearestBlock(selectedCollege: College | null) {
         isLoading: false,
     });
 
+    const { blocks, loading: blocksLoading } = useCampusBlocks(selectedCollege);
+
     useEffect(() => {
         if (!selectedCollege || !navigator.geolocation) {
-            setState(s => ({ ...s, nearestBlock: null, distanceMeters: null }));
+            setState(s => ({ ...s, nearestBlock: null, distanceMeters: null, isLoading: false }));
+            return;
+        }
+
+        if (blocksLoading) {
+            setState(s => ({ ...s, isLoading: true }));
+            return;
+        }
+
+        if (blocks.length === 0) {
+            setState(s => ({ ...s, nearestBlock: null, distanceMeters: null, isLoading: false }));
             return;
         }
 
         let isMounted = true;
 
         const findBlock = async () => {
-            setState(s => ({ ...s, isLoading: true }));
             try {
                 // First get user location
                 const position = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -39,28 +49,11 @@ export function useNearestBlock(selectedCollege: College | null) {
 
                 const { latitude, longitude } = position.coords;
 
-                if (!db) throw new Error("Firestore not initialized");
-
-                // Get blocks for this college
-                const blocksRef = collection(db, "blocks");
-                const q = query(blocksRef, where("collegeId", "==", selectedCollege.id));
-                const snapshot = await getDocs(q);
-
-                const blocks: Block[] = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                } as Block));
-
-                if (blocks.length === 0) {
-                    if (isMounted) setState({ nearestBlock: null, distanceMeters: null, isLoading: false });
-                    return;
-                }
-
-                let closestBlock: Block | null = null;
+                let closestBlock: CampusBlock | null = null;
                 let minDistance = Infinity;
 
                 blocks.forEach(block => {
-                    const distance = calculateDistance(latitude, longitude, block.lat, block.lng);
+                    const distance = calculateDistance(latitude, longitude, block.lat, block.lon);
                     if (distance < minDistance) {
                         minDistance = distance;
                         closestBlock = block;
@@ -80,7 +73,7 @@ export function useNearestBlock(selectedCollege: College | null) {
         findBlock();
 
         return () => { isMounted = false; };
-    }, [selectedCollege]);
+    }, [selectedCollege, blocks, blocksLoading]);
 
     return state;
 }

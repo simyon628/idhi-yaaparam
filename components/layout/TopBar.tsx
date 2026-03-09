@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCollege } from "@/contexts/CollegeContext";
 import { MapPin, ChevronDown } from "lucide-react";
-import { SelectCollegeModal } from "@/components/ui/SelectCollegeModal";
-import { useBackgroundCollegeDetection } from "@/lib/hooks/useBackgroundCollegeDetection";
 
 export function TopBar() {
-    const { selectedCollege, isReady } = useCollege();
-    const [isSelecting, setIsSelecting] = useState(false);
-    const { status: detectionStatus, college: autoDetectedCollege } = useBackgroundCollegeDetection();
+    const { selectedCollege, setSelectedCollege, isReady } = useCollege();
+    const router = useRouter();
 
     if (!isReady) return null; // Avoid hydration mismatch
 
@@ -31,7 +29,10 @@ export function TopBar() {
 
                 {/* Right: Select College */}
                 <button
-                    onClick={() => setIsSelecting(true)}
+                    onClick={() => {
+                        setSelectedCollege(null);
+                        router.push("/");
+                    }}
                     className="flex items-center gap-1.5 bg-white/60 hover:bg-white border border-indigo-100 px-3 py-1.5 rounded-full transition-colors overflow-hidden shadow-sm backdrop-blur-md"
                 >
                     <MapPin className="w-3.5 h-3.5 shrink-0 text-indigo-500" />
@@ -41,13 +42,6 @@ export function TopBar() {
                     <ChevronDown className="w-3.5 h-3.5 shrink-0 text-slate-400" />
                 </button>
             </div>
-
-            <SelectCollegeModal
-                isOpen={isSelecting}
-                onClose={() => setIsSelecting(false)}
-                detectionStatus={detectionStatus}
-                autoDetectedCollege={autoDetectedCollege}
-            />
         </>
     );
 }

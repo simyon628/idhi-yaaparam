@@ -6,7 +6,8 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot, getDocs } from "firebase/firestore";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useNearestBlock } from "@/lib/hooks/useNearestBlock";
-import { Listing, Block } from "@/lib/types";
+import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
+import { Listing } from "@/lib/types";
 import { CATEGORIES } from "@/components/ui/CategoryGrid";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { TopBar } from "@/components/layout/TopBar";
@@ -19,8 +20,9 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     const { selectedCollege, isReady } = useCollege();
     const { nearestBlock, isLoading: nearestLoading } = useNearestBlock(selectedCollege);
 
+    const { formatting: blockNames, loading: blocksLoading } = useCampusBlocks(selectedCollege);
+
     const [rentals, setRentals] = useState<Listing[]>([]);
-    const [blocks, setBlocks] = useState<Block[]>([]);
     const [loading, setLoading] = useState(true);
 
     const category = CATEGORIES.find(c => c.id === categoryId);
@@ -41,13 +43,6 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
 
         if (!db) return;
         setLoading(true);
-
-        // Fetch Blocks
-        getDocs(query(collection(db, "blocks"), where("collegeId", "==", selectedCollege.id)))
-            .then(snap => {
-                setBlocks(snap.docs.map(d => ({ id: d.id, ...d.data() } as Block)));
-            })
-            .catch(err => console.error("Error fetching blocks:", err));
 
         // Listen for rentals
         const q = query(
@@ -71,7 +66,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     let filteredRentals = rentals.filter(r => {
         if (selectedBranch !== "All" && r.branch !== selectedBranch) return false;
         if (selectedYear !== "All" && r.yearSection !== selectedYear) return false;
-        if (selectedBlock !== "All" && r.blockId !== selectedBlock) return false;
+        if (selectedBlock !== "All" && r.block !== selectedBlock) return false;
         return true;
     });
 
@@ -87,8 +82,8 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
         // Nearest block items first
         if (nearestBlock) {
             filteredRentals.sort((a, b) => {
-                const aIsNear = a.blockId === nearestBlock.id ? -1 : 1;
-                const bIsNear = b.blockId === nearestBlock.id ? -1 : 1;
+                const aIsNear = a.block === nearestBlock.name ? -1 : 1;
+                const bIsNear = b.block === nearestBlock.name ? -1 : 1;
                 return aIsNear - bIsNear;
             });
         }
@@ -157,7 +152,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                             className="bg-transparent outline-none ml-1 text-indigo-700"
                         >
                             <option value="All">All Blocks</option>
-                            {blocks.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+                            {blockNames.map(bName => <option key={bName} value={bName}>{bName}</option>)}
                         </select>
                     </div>
 
@@ -192,8 +187,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                 ) : (
                     <div className="grid grid-cols-2 gap-3 pb-10">
                         {filteredRentals.map((rental) => {
-                            const isNear = sortOrder === "nearest" && nearestBlock && rental.blockId === nearestBlock.id;
-                            const blockName = blocks.find(b => b.id === rental.blockId)?.name;
+                            const isNear = sortOrder === "nearest" && nearestBlock && rental.block === nearestBlock.name;
                             return (
                                 <div key={rental.id} className="relative">
                                     {isNear && (

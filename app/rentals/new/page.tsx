@@ -9,17 +9,20 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import { Camera, ChevronLeft, Loader2, IndianRupee, MapPin, School, GraduationCap } from "lucide-react";
 import { useCollege } from "@/contexts/CollegeContext";
-import { BLOCKS, DEPARTMENTS } from "@/lib/constants";
+import { DEPARTMENTS } from "@/lib/constants";
+import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
+
+import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
 
 const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
-const CATEGORIES = ["Calculator", "Drafter", "Stationery", "Books/Manuals", "Electronics", "Other"];
+const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
 
 export default function NewRentalPage() {
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState("");
     const [category, setCategory] = useState(CATEGORIES[0]);
     const [price, setPrice] = useState("");
-    const [block, setBlock] = useState(BLOCKS[0]);
+    const [block, setBlock] = useState("");
     const [department, setDepartment] = useState(DEPARTMENTS[0]);
     const [image, setImage] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -27,6 +30,14 @@ export default function NewRentalPage() {
 
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
+    const { formatting: dynamicBlocks, loading: blocksLoading } = useCampusBlocks(selectedCollege);
+
+    // Auto-select first dynamic block once loaded
+    useEffect(() => {
+        if (dynamicBlocks.length > 0 && (!block || block === "Loading blocks...")) {
+            setBlock(dynamicBlocks[0]);
+        }
+    }, [dynamicBlocks, block]);
 
     // Fetch user profile settings if any
     useEffect(() => {
@@ -43,13 +54,62 @@ export default function NewRentalPage() {
         });
     }, []);
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const compressImage = (file: File): Promise<Blob> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target?.result as string;
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    const MAX_SIZE = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height && width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    } else if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext("2d");
+                    ctx?.drawImage(img, 0, 0, width, height);
+
+                    // Compress to JPEG with 0.7 quality
+                    canvas.toBlob((blob) => {
+                        if (blob) resolve(blob);
+                        else reject(new Error("Canvas toBlob failed"));
+                    }, "image/jpeg", 0.7);
+                };
+                img.onerror = (err) => reject(err);
+            };
+            reader.onerror = (err) => reject(err);
+        });
+    };
+
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => setPreview(reader.result as string);
-            reader.readAsDataURL(file);
+            try {
+                // Show immediate preview using raw file
+                const previewReader = new FileReader();
+                previewReader.onloadend = () => setPreview(previewReader.result as string);
+                previewReader.readAsDataURL(file);
+
+                // Compress heavily for upload
+                const compressedBlob = await compressImage(file);
+                // Creating a File object from blob so upload logic stays untouched
+                const compressedFile = new File([compressedBlob], `compressed_${file.name}.jpg`, { type: "image/jpeg" });
+                setImage(compressedFile);
+            } catch (error) {
+                console.error("Compression failed", error);
+                toast.error("Failed to process image.");
+            }
         }
     };
 
@@ -67,8 +127,8 @@ export default function NewRentalPage() {
             await uploadBytes(storageRef, image);
             const photoUrl = await getDownloadURL(storageRef);
 
-            // basic icon mapper
-            const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Stationery": "📏", "Books/Manuals": "📓", "Electronics": "⚡", "Other": "📦" };
+            const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Others": "📦" };
+            const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
 
             await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
@@ -78,6 +138,7 @@ export default function NewRentalPage() {
                 college: selectedCollege.name,
                 collegeId: selectedCollege.id,
                 department,
+                categoryId: selectedCat?.id || "others",
                 icon: iconMap[category] || "📦",
                 photoUrl,
                 status: "available",
@@ -235,9 +296,10 @@ export default function NewRentalPage() {
                     <select
                         value={block}
                         onChange={e => setBlock(e.target.value)}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                        disabled={blocksLoading}
+                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all disabled:opacity-60"
                     >
-                        {BLOCKS.map(b => <option key={b} value={b}>{b}</option>)}
+                        {dynamicBlocks.map(b => <option key={b} value={b}>{b}</option>)}
                     </select>
                 </div>
 

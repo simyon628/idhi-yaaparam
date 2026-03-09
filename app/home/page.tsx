@@ -7,7 +7,7 @@ export default function HomePageFallback() {
     const router = useRouter();
 
     useEffect(() => {
-        router.push("/");
+        router.push("/rentals");
     }, [router]);
 
     return (

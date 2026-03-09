@@ -69,6 +69,8 @@ export interface Listing {
     requestedAt?: Timestamp | Date;
     approvedAt?: Timestamp | Date;
     completedAt?: Timestamp | Date;
+    ownerLocation?: { lat: number, lng: number };
+    renterLocation?: { lat: number, lng: number };
 }
 
 // ─── Report ──────────────────────────────────────────────────────────────────
@@ -89,4 +91,19 @@ export interface Report {
     notes?: string;
     timestamp: Timestamp | Date;
     status: "pending" | "resolved";
+}
+
+export interface WritingJob {
+    id?: string;
+    title: string;
+    description: string;
+    type: "Assignment" | "Record" | "Project Report" | "Other";
+    price: number;
+    deadline: any; // Firestore Timestamp
+    college: string;
+    department?: string;
+    posterId: string;
+    workerId: string | null;
+    status: "open" | "assigned" | "completed" | "cancelled";
+    createdAt: any;
 }

@@ -2,28 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Plus, MessageCircle, User } from "lucide-react";
+import { Home, Search, Plus, User, PenTool } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const NAV_ITEMS = [
-    { icon: Home, label: "Home", href: "/home" },
-    { icon: Search, label: "Browse", href: "/rentals" },
-    { icon: Plus, label: "List", href: "/rentals/new", primary: true },
-    { icon: MessageCircle, label: "Chat", href: "/chat" },
-    { icon: User, label: "Profile", href: "/profile" },
-];
 
 export function BottomNav() {
     const pathname = usePathname();
+    const isWritingMode = pathname.startsWith('/writing');
+
+    const NAV_ITEMS = isWritingMode ? [
+        { icon: Home, label: "Marketplace", href: "/rentals" },
+        { icon: PenTool, label: "Writing", href: "/writing" },
+        { icon: User, label: "Profile", href: "/profile" },
+    ] : [
+        { icon: Home, label: "Home", href: "/rentals" },
+        { icon: Search, label: "Browse", href: "/rentals" },
+        { icon: User, label: "Profile", href: "/profile" },
+    ];
 
     return (
         <nav className="fixed mb-6 bottom-0 left-4 right-4 z-50 bg-white/80 backdrop-blur-xl border border-indigo-100 px-6 py-4 flex items-center justify-between mx-auto max-w-sm rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(110,115,200,0.3)]">
             {NAV_ITEMS.map((item) => {
                 const isActive = pathname === item.href;
 
-                // For the central Plus button, if needed
-                if (item.primary) {
-                    return null; // I moved the central CTA to a floating FAB on the page
+                if ((item as any).primary) {
+                    return null;
                 }
 
                 return (

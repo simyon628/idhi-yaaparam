@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
-import { doc, getDoc, updateDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc } from "firebase/firestore";
 import { toast } from "sonner";
 import {
     ChevronLeft, MapPin, Clock, IndianRupee, ShieldCheck,
-    Loader2, CheckCircle2, Package, AlertTriangle, X, Send
+    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare
 } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
 
@@ -36,26 +36,79 @@ export default function RentalDetailPage() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportReason, setReportReason] = useState<ReportReason | "">("");
     const [reportNotes, setReportNotes] = useState("");
+    const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number } | null>(null);
 
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
 
+    // Real-time listener for the rental document
     useEffect(() => {
-        async function fetchRental() {
-            if (!id || !db) return;
-            try {
-                const snap = await getDoc(doc(db, "rentals", id as string));
-                if (snap.exists()) {
-                    setRental({ id: snap.id, ...snap.data() } as Listing);
-                } else {
-                    toast.error("Rental not found");
-                    router.push("/home");
+        if (!id || !db) return;
+        const unsub = onSnapshot(doc(db as any, "rentals", id as string), async (docSnap) => {
+            if (docSnap.exists()) {
+                const data = { id: docSnap.id, ...docSnap.data() } as Listing;
+                setRental(data);
+
+                // Fetch owner info
+                if (data.ownerId) {
+                    const ownerSnap = await getDoc(doc(db as any, "users", data.ownerId));
+                    if (ownerSnap.exists()) {
+                        setOwnerInfo(ownerSnap.data() as any);
+                    }
                 }
-            } catch { toast.error("Error loading rental"); }
-            finally { setLoading(false); }
-        }
-        fetchRental();
+            } else {
+                toast.error("Rental not found");
+                router.push("/rentals");
+            }
+            setLoading(false);
+        }, (err) => {
+            toast.error("Error connecting to live update");
+            setLoading(false);
+        });
+        return () => unsub();
     }, [id, router]);
+
+    // Live GPS tracking when active or requested
+    useEffect(() => {
+        // SIMPLIFIED SCOPE: Parking live tracking for now to ensure stable core logic.
+        /*
+        if (!process.browser || !userId || !rental) return;
+        if (rental.status !== "requested" && rental.status !== "active") return;
+
+        const isOwner = rental.ownerId === userId;
+        const watchId = navigator.geolocation.watchPosition(
+            (pos) => {
+                const { latitude, longitude } = pos.coords;
+                const fieldName = isOwner ? "ownerLocation" : "renterLocation";
+                updateDoc(doc(db as any, "rentals", id as string), {
+                    [fieldName]: { lat: latitude, lng: longitude }
+                }).catch(console.error);
+            },
+            (err) => console.warn("GPS tracking error:", err),
+            { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+        );
+
+        return () => navigator.geolocation.clearWatch(watchId);
+        */
+    }, [rental?.status, rental?.ownerId, userId, id]);
+
+    // Haversine distance calculator (meters)
+    const getDistanceInMeters = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const R = 6371e3;
+        const φ1 = lat1 * Math.PI / 180;
+        const φ2 = lat2 * Math.PI / 180;
+        const Δφ = (lat2 - lat1) * Math.PI / 180;
+        const Δλ = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return Math.floor(R * c);
+    };
+
+    let liveDistanceStr = "";
+    if (rental && rental.ownerLocation && rental.renterLocation) {
+        const dist = getDistanceInMeters(rental.ownerLocation.lat, rental.ownerLocation.lng, rental.renterLocation.lat, rental.renterLocation.lng);
+        liveDistanceStr = dist < 50 ? "Very close! Look around 👀" : `${dist}m away`;
+    }
 
     const updateStatus = async (newStatus: string, extraFields: Record<string, any> = {}) => {
         if (!db || !id) return;
@@ -105,7 +158,7 @@ export default function RentalDetailPage() {
 
             // 2. Fetch renter's doc and increment strike
             if (rental.renterId) {
-                const renterRef = doc(db, "users", rental.renterId);
+                const renterRef = doc(db as any, "users", rental.renterId);
                 const renterSnap = await getDoc(renterRef);
                 if (renterSnap.exists()) {
                     const currentStrikes = renterSnap.data().strikeCount || 0;
@@ -206,13 +259,46 @@ export default function RentalDetailPage() {
                     </div>
                 </div>
 
-                {/* Description */}
+                {/* Description & Distance Tracking */}
                 <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm mb-8">
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Details</p>
                     <p className="text-slate-600 text-sm leading-relaxed font-medium">
                         Top condition {rental?.itemName} available in {rental?.block}. Return on time to maintain your trust score.
                     </p>
+
+                    {(rental?.status === "requested" || rental?.status === "active") && (
+                        <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-indigo-600">
+                                <Navigation className="w-4 h-4 animate-pulse" />
+                                <span className="text-xs font-bold uppercase tracking-widest">Live Distance</span>
+                            </div>
+                            <span className="text-sm font-black text-slate-800 bg-indigo-50 px-3 py-1 rounded-full">
+                                {liveDistanceStr || "Tracing radar..."}
+                            </span>
+                        </div>
+                    )}
                 </div>
+
+                {/* Owner Profile Card */}
+                {ownerInfo && (
+                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-indigo-50 shadow-sm flex items-center justify-between group cursor-pointer hover:border-indigo-100 transition-all mb-8">
+                        <div className="flex items-center gap-3 relative">
+                            <div className="w-12 h-12 rounded-full gradient-indigo flex items-center justify-center text-white font-black text-lg shadow-indigo shrink-0">
+                                {ownerInfo.name.charAt(0).toUpperCase()}
+                            </div>
+                            {ownerInfo.strikeCount === 0 && ownerInfo.isVerified && (
+                                <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border-2 border-white shadow-sm">
+                                    <ShieldCheck className="w-3.5 h-3.5" />
+                                </div>
+                            )}
+                            <div>
+                                <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5">Listed By</p>
+                                <p className="text-[15px] font-bold text-slate-800 leading-tight">{ownerInfo.name}</p>
+                                <p className="text-xs font-semibold text-indigo-500">{ownerInfo.department}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* ─── Fixed Action Bar ─── */}
@@ -233,13 +319,21 @@ export default function RentalDetailPage() {
                                 </button>
                             </div>
                         ) : rental?.status === "active" ? (
-                            <button
-                                onClick={handleMarkReturned}
-                                disabled={actionLoading}
-                                className="w-full h-14 rounded-2xl bg-emerald-500 text-white font-black text-base flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:bg-emerald-600 shadow-sm"
-                            >
-                                {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><Package className="w-5 h-5" /> MARK AS RETURNED</>}
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => router.push(`/chat/${id}`)}
+                                    className="h-14 w-14 shrink-0 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 hover:bg-indigo-100 transition-colors shadow-sm"
+                                >
+                                    <MessageSquare className="w-5 h-5 fill-indigo-100" />
+                                </button>
+                                <button
+                                    onClick={handleMarkReturned}
+                                    disabled={actionLoading}
+                                    className="flex-1 h-14 rounded-2xl bg-emerald-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 disabled:opacity-60 active:scale-[0.98] transition-all hover:bg-emerald-600 shadow-sm"
+                                >
+                                    {actionLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <><Package className="w-4 h-4" /> CONFIRM RETURN</>}
+                                </button>
+                            </div>
                         ) : rental?.status === "completed" ? (
                             <div className="flex flex-col items-center gap-2">
                                 <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full text-sm font-bold shadow-sm">
@@ -267,13 +361,17 @@ export default function RentalDetailPage() {
                         {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : "REQUEST NOW →"}
                     </button>
                 ) : isRenter && rental?.status === "requested" ? (
-                    <div className="text-center py-3">
+                    <div className="flex flex-col items-center gap-2 text-center py-2">
                         <span className="bg-amber-100 text-amber-700 border border-amber-200 px-4 py-2 rounded-full text-sm font-bold shadow-sm">Awaiting owner approval...</span>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">You will be notified</p>
                     </div>
                 ) : isRenter && rental?.status === "active" ? (
-                    <div className="text-center py-3">
-                        <span className="bg-indigo-100 text-indigo-700 border border-indigo-200 px-4 py-2 rounded-full text-sm font-bold shadow-sm">Rental is Active — return on time!</span>
-                    </div>
+                    <button
+                        onClick={() => router.push(`/chat/${id}`)}
+                        className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:-translate-y-0.5"
+                    >
+                        <MessageSquare className="w-5 h-5" /> OPEN CHAT
+                    </button>
                 ) : (
                     <div className="h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
                         <span className="text-slate-400 font-black text-sm uppercase tracking-widest">CURRENTLY TAKEN</span>

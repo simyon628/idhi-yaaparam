@@ -7,6 +7,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult, signInAnonymously } from "firebase/auth";
 import { toast } from "sonner";
 import { Phone, ArrowRight, ShieldCheck, Loader2, Lock, Camera, School, FileText, UploadCloud } from "lucide-react";
+import Tesseract from "tesseract.js";
 import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS, COLLEGES } from "@/lib/constants";
 
@@ -66,17 +67,15 @@ function LoginContent() {
         }
         setLoading(true);
 
-        // DEMO OVERRIDE
-        if (phone === "0000000000") {
-            setConfirmationResult({ isDemo: true } as any);
-            setStep("otp");
-            toast.success("Demo Mode: Enter OTP 123456");
-            setTimeout(() => otpRefs.current[0]?.focus(), 200);
-            setLoading(false);
-            return;
-        }
-
         try {
+            const rawPhone = phone.replace(/\D/g, "");
+            if (rawPhone === "9876543210" || rawPhone === "0123456789") {
+                setStep("otp");
+                toast.success("Mock Code sent to your phone");
+                setTimeout(() => otpRefs.current[0]?.focus(), 200);
+                return;
+            }
+
             const formattedPhone = phone.startsWith("+") ? phone : `+91${phone}`;
             const appVerifier = recaptchaVerifier.current;
             if (!appVerifier || !auth) throw new Error("Initialization error");
@@ -116,48 +115,56 @@ function LoginContent() {
         }
         setLoading(true);
 
-        if ((confirmationResult as any)?.isDemo) {
-            if (code !== "123456") {
-                toast.error("Demo OTP is 123456");
-                setLoading(false);
-                return;
-            }
-            try {
-                if (!auth) throw new Error("Auth not initialized");
-                if (!db) throw new Error("Firestore not initialized"); // Added db check
-                const userCredential = await signInAnonymously(auth);
-                const user = userCredential.user;
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().isVerified) {
-                    toast.success("Welcome back!");
-                    router.push(redirectUrl);
+        try {
+            if (!db) throw new Error("Firestore not initialized"); // db check
+            const rawPhone = phone.replace(/\D/g, "");
+            let user;
+
+            if (rawPhone === "9876543210" || rawPhone === "0123456789") {
+                const expectedOtp = rawPhone === "9876543210" ? "654321" : "123456";
+                if (code !== expectedOtp) {
+                    toast.error("Invalid mock code");
+                    setLoading(false);
                     return;
                 }
-                setStep("ocr");
-            } catch (error) {
-                toast.error("Demo login failed");
-            } finally {
-                setLoading(false);
+                const userCredential = await signInAnonymously(auth!);
+                user = userCredential.user;
+            } else {
+                if (!confirmationResult) throw new Error("No confirmation result");
+                const userCredential = await confirmationResult.confirm(code);
+                user = userCredential.user;
             }
-            return;
-        }
-
-        try {
-            if (!confirmationResult) throw new Error("No confirmation result");
-            if (!db) throw new Error("Firestore not initialized"); // Added db check
-            const userCredential = await confirmationResult.confirm(code);
-            const user = userCredential.user;
 
             // Check if user already verified in DB
-            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const userDoc = await getDoc(doc(db!, "users", user.uid));
             if (userDoc.exists() && userDoc.data().isVerified) {
                 toast.success("Welcome back!");
                 router.push(redirectUrl);
                 return;
             }
 
+            // MOCK BYPASS: Auto create DB record and redirect to skip OCR
+            if (rawPhone === "9876543210" || rawPhone === "0123456789") {
+                await setDoc(doc(db!, "users", user.uid), {
+                    uid: user.uid,
+                    name: name,
+                    phoneNumber: "+91" + rawPhone,
+                    rollNumber: roll.toUpperCase(),
+                    college: college,
+                    department: department,
+                    isVerified: true,
+                    isBlocked: false,
+                    strikeCount: 0,
+                    createdAt: new Date(),
+                });
+                toast.success("Mock User Verified!");
+                setTimeout(() => router.push(redirectUrl), 800);
+                return;
+            }
+
             // Otherwise, require OCR step
             setStep("ocr");
+
         } catch (error: any) {
             console.error(error);
             toast.error("Invalid code — please try again");
@@ -174,25 +181,46 @@ function LoginContent() {
 
         setLoading(true);
         setOcrProgress(10);
+        toast.info("Scanning ID Card...");
 
-        // Simulating robust OCR with delays
-        await new Promise(r => setTimeout(r, 600));
-        setOcrProgress(45);
-        await new Promise(r => setTimeout(r, 800));
-        setOcrProgress(80);
-        await new Promise(r => setTimeout(r, 500));
-
-        // Check "Match"
-        // For product demo, we will auto-match and save the user
         try {
+            // Run real OCR using Tesseract.js
+            const { data: { text } } = await Tesseract.recognize(
+                idImage,
+                'eng',
+                {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            setOcrProgress(10 + Math.floor(m.progress * 80));
+                        }
+                    }
+                }
+            );
+
+            console.log("Extracted Text:", text);
+            const extractedText = text.replace(/\s+/g, '').toUpperCase();
+
+            // Check Roll Match
+            const targetRoll = roll.replace(/\s+/g, '').toUpperCase();
+            const rollMatch = extractedText.includes(targetRoll);
+
+            // Check College Match (Full name or Acronym)
+            const collegeUpper = college.replace(/\s+/g, '').toUpperCase();
+            const collegeAcronym = college.split(/[\s-]+/).map(w => w[0]).join('').toUpperCase();
+            const collegeMatch = extractedText.includes(collegeUpper) || extractedText.includes(collegeAcronym);
+
+            if (!rollMatch || !collegeMatch) {
+                throw new Error("We couldn't verify your ID. Please upload a clearer photo or try again.");
+            }
+
             const user = auth?.currentUser;
             if (!user) throw new Error("Lost session");
-            if (!db) throw new Error("Firestore not initialized"); // Added db check
+            if (!db) throw new Error("Firestore not initialized");
 
-            await setDoc(doc(db, "users", user.uid), {
+            await setDoc(doc(db!, "users", user.uid), {
                 uid: user.uid,
                 name: name,
-                phoneNumber: user.phoneNumber || "+910000000000",
+                phoneNumber: user.phoneNumber || "+91" + phone.replace(/\D/g, ""),
                 rollNumber: roll.toUpperCase(),
                 college: college,
                 department: department,
@@ -206,10 +234,11 @@ function LoginContent() {
             toast.success("ID Verified! Welcome to the network.");
             setTimeout(() => router.push(redirectUrl), 800);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            toast.error("Verification failed. Please try again or contact support.");
+            toast.error(error.message || "Verification failed. Please try a clearer photo.");
             setLoading(false);
+            setOcrProgress(0);
         }
     };
 

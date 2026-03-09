@@ -35,14 +35,12 @@ async function fetchNearbyColleges(
 ): Promise<AutoDetectedCollege[]> {
     const RADIUS = 1500;
     const query = `
-[out:json][timeout:10];
+[out:json][timeout:25];
 (
-  node(around:${RADIUS},${lat},${lon})[amenity=college];
-  node(around:${RADIUS},${lat},${lon})[amenity=university];
-  node(around:${RADIUS},${lat},${lon})[amenity=school];
-  way(around:${RADIUS},${lat},${lon})[amenity=college];
-  way(around:${RADIUS},${lat},${lon})[amenity=university];
-  way(around:${RADIUS},${lat},${lon})[amenity=school];
+  node(around:${RADIUS}, ${lat}, ${lon})["amenity"="college"];
+  node(around:${RADIUS}, ${lat}, ${lon})["amenity"="university"];
+  way(around:${RADIUS}, ${lat}, ${lon})["amenity"="college"];
+  way(around:${RADIUS}, ${lat}, ${lon})["amenity"="university"];
 );
 out center;
 `.trim();
@@ -68,7 +66,7 @@ out center;
     const results: AutoDetectedCollege[] = [];
 
     for (const el of data.elements ?? []) {
-        const name = el.tags?.name;
+        const name = el.tags?.name || el.tags?.['name:en'];
         if (!name) continue;
         const elLat = el.lat ?? el.center?.lat;
         const elLon = el.lon ?? el.center?.lon;
@@ -112,20 +110,47 @@ export function useBackgroundCollegeDetection() {
         // GPS + Overpass pipeline
         const run = async () => {
             try {
-                // Step 1 — GPS
-                const position = await new Promise<GeolocationPosition>((resolve, reject) =>
-                    navigator.geolocation.getCurrentPosition(resolve, reject, {
-                        enableHighAccuracy: true,
-                        timeout: 12_000,
-                        maximumAge: 0,
-                    })
-                );
+                const CACHE_KEY = "idhi-yaaparam-location";
+                const cacheStr = localStorage.getItem(CACHE_KEY);
+                let lat, lon;
 
-                const { latitude: lat, longitude: lon } = position.coords;
-                console.log("🌏 Background GPS:", { lat, lon });
+                if (cacheStr) {
+                    try {
+                        const parsed = JSON.parse(cacheStr);
+                        // Check if within 24 hours
+                        if (Date.now() - parsed.timestamp < 86400000) {
+                            lat = parsed.lat;
+                            lon = parsed.lon;
+                            console.log("🌏 Using cached location:", { lat, lon });
+                        }
+                    } catch (e) {
+                        // ignore parse errors
+                    }
+                }
 
-                // Step 2 — Overpass (9 second window)
-                const overpassTimer = setTimeout(() => controller.abort(), 9_000);
+                if (!lat || !lon) {
+                    // Step 1 — GPS
+                    const position = await new Promise<GeolocationPosition>((resolve, reject) =>
+                        navigator.geolocation.getCurrentPosition(resolve, reject, {
+                            enableHighAccuracy: true,
+                            timeout: 10_000,
+                            maximumAge: 0,
+                        })
+                    );
+
+                    lat = position.coords.latitude;
+                    lon = position.coords.longitude;
+                    console.log("🌏 Background GPS:", { lat, lon });
+
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({
+                        lat,
+                        lon,
+                        timestamp: Date.now()
+                    }));
+                }
+
+                // Step 2 — Overpass (10 second window)
+                const overpassTimer = setTimeout(() => controller.abort(), 10_000);
                 try {
                     const colleges = await fetchNearbyColleges(lat, lon, controller.signal);
                     clearTimeout(overpassTimer);
