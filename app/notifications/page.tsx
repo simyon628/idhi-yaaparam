@@ -26,16 +26,22 @@ export default function NotificationsPage() {
     useEffect(() => {
         if (!userId || !db) return;
 
+        // No orderBy to avoid composite index requirement — sort client-side
         const q = query(
             collection(db as any, "notifications"),
-            where("userId", "==", userId),
-            orderBy("createdAt", "desc")
+            where("userId", "==", userId)
         );
 
         const unsub = onSnapshot(q, (snapshot) => {
             const notifs: AppNotification[] = [];
             snapshot.forEach(d => {
                 notifs.push({ id: d.id, ...d.data() } as AppNotification);
+            });
+            // Sort client-side descending by createdAt
+            notifs.sort((a, b) => {
+                const aMs = (a.createdAt as any)?.seconds || 0;
+                const bMs = (b.createdAt as any)?.seconds || 0;
+                return bMs - aMs;
             });
             setNotifications(notifs);
             setLoading(false);
@@ -49,6 +55,9 @@ export default function NotificationsPage() {
                 });
                 batch.commit().catch(console.error);
             }
+        }, (err) => {
+            console.error("Notifications error:", err);
+            setLoading(false); // Stop spinner even on error
         });
 
         return () => unsub();

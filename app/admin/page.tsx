@@ -62,8 +62,7 @@ export default function AdminPanel() {
             setAllUsers(snap.docs.map(d => ({ uid: d.id, ...d.data() } as User)));
         });
 
-        return () => { unsub0(); unsub1(); unsub2(); unsub3(); unsub4(); };
-    }, []);
+    }, [authReady, currentUid]);
 
     const handleUnblock = async (userId: string) => {
         if (!db) return;
