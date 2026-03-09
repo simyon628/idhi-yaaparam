@@ -95,6 +95,11 @@ export default function NewRentalPage() {
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image too large. Please upload a photo under 5MB.");
+                e.target.value = "";
+                return;
+            }
             try {
                 // Show immediate preview using raw file
                 const previewReader = new FileReader();

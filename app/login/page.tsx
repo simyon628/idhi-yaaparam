@@ -59,6 +59,24 @@ function LoginContent() {
         }
     }, [isReady, selectedCollege]);
 
+    // Check for existing verified session to explicitly bypass login flow loops
+    useEffect(() => {
+        if (!auth || !db) return;
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db!, "users", user.uid));
+                    if (userDoc.exists() && userDoc.data().verified === true) {
+                        router.replace(redirectUrl);
+                    }
+                } catch (err) {
+                    console.error("Auth hydration error:", err);
+                }
+            }
+        });
+        return () => unsubscribe();
+    }, [router, redirectUrl]);
+
     if (!isReady) return null;
 
     const handleSendOtp = async (e: React.FormEvent) => {
@@ -424,7 +442,7 @@ function LoginContent() {
                         ) : (
                             <div className="space-y-3">
                                 <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-indigo-100 bg-slate-50 shadow-sm max-w-[280px] mx-auto">
-                                    <img src={URL.createObjectURL(idImage)} alt="ID Preview" className={`w-full h-full object-cover transition-all ${loading && ocrProgress > 0 ? "opacity-30 grayscale blur-md scale-105" : ""}`} />
+                                    <img src={URL.createObjectURL(idImage)} alt="ID Preview" className={`w-full max-h-[200px] object-contain transition-all ${loading && ocrProgress > 0 ? "opacity-30 grayscale blur-md scale-105" : ""}`} />
                                     {loading && ocrProgress > 0 && (
                                         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white/40 backdrop-blur-sm">
                                             <div className="relative">
