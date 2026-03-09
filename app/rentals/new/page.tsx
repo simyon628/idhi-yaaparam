@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 import { db, auth, storage } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp, getDoc, doc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import { Camera, ChevronLeft, Loader2, IndianRupee, MapPin, School, GraduationCap, Plus, X, Lightbulb, Calendar } from "lucide-react";
@@ -32,6 +33,16 @@ export default function NewRentalPage() {
     const [userDept, setUserDept] = useState("");
     const [expiresInDays, setExpiresInDays] = useState(7); // Feature 2: Expiry
     const [suggestedPrice, setSuggestedPrice] = useState<number | null>(null); // Feature 9
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null); // Async auth
+
+    // Resolve auth user asynchronously (fixes publish bug)
+    useEffect(() => {
+        if (!auth) return;
+        const unsub = onAuthStateChanged(auth as any, (user) => {
+            setCurrentUserId(user?.uid ?? null);
+        });
+        return () => unsub();
+    }, []);
 
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
@@ -123,10 +134,15 @@ export default function NewRentalPage() {
             toast.error("Fill all fields and add a photo");
             return;
         }
+        if (!currentUserId) {
+            toast.error("You must be signed in to list an item.");
+            router.push("/login");
+            return;
+        }
         setLoading(true);
         try {
-            const userId = auth?.currentUser?.uid;
-            if (!userId || !storage || !db) throw new Error("Init error");
+            const userId = currentUserId;
+            if (!storage || !db) throw new Error("Firebase not initialized");
             const storageRef = ref(storage, `rentals/${Date.now()}_${userId}.jpg`);
             await uploadBytes(storageRef, image);
             const photoUrl = await getDownloadURL(storageRef);
@@ -166,8 +182,9 @@ export default function NewRentalPage() {
             });
             toast.success("Item listed successfully! 🎉");
             router.push("/home");
-        } catch (error) {
-            toast.error("Failed to list item. Try again.");
+        } catch (error: any) {
+            console.error("Publish error:", error);
+            toast.error(`Failed to list item: ${error?.message || "Unknown error. Check console."}`);
         } finally {
             setLoading(false);
         }
