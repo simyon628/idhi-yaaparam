@@ -166,8 +166,17 @@ export default function NewRentalPage() {
             const expiresAt = new Date();
             expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
-            // ⚡ OPTIMISTIC UI: Create Firestore doc immediately (no image yet)
-            // Item appears in marketplace in ~300ms
+            // ⚡ Step 1: Convert compressed image to Base64 data URL
+            // This runs instantly (no network needed) — image visible from the start
+            const toBase64 = (file: File): Promise<string> => new Promise((res, rej) => {
+                const reader = new FileReader();
+                reader.onloadend = () => res(reader.result as string);
+                reader.onerror = rej;
+                reader.readAsDataURL(file);
+            });
+            const photoDataUrl = await toBase64(image); // ~50-100ms
+
+            // ⚡ Step 2: Create Firestore doc WITH image data — item is fully visible instantly
             const docRef = await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
                 itemName: name,
@@ -178,7 +187,7 @@ export default function NewRentalPage() {
                 department,
                 categoryId: selectedCat?.id || "others",
                 icon: iconMap[category] || "📦",
-                photoUrl: null,          // placeholder — marketplace shows emoji until image loads
+                photoUrl: photoDataUrl,   // base64 — visible immediately, no storage needed
                 extraPhotoUrls: [],
                 status: "available",
                 renterId: null,
@@ -186,45 +195,44 @@ export default function NewRentalPage() {
                 expiresAt: expiresAt.toISOString(),
             });
 
-            // ⚡ INSTANTLY navigate — listing is live in the marketplace NOW
-            toast.success("✅ Item listed! Image uploading in background...", { duration: 4000 });
+            // ⚡ Step 3: Navigate immediately — item is LIVE with image
+            toast.success("🎉 Item listed! Visible now.", { duration: 4000 });
             setLoading(false);
             router.push("/home");
 
-            // 🔄 Background: upload image and update doc (user is already on home page)
-            const imageRef = ref(storage, `rentals/${docRef.id}_${userId}.jpg`);
-            (async () => {
-                try {
-                    const uploaded = await uploadBytes(imageRef, image);
-                    const photoUrl = await getDownloadURL(uploaded.ref);
-                    const { updateDoc: updDoc, doc: fDoc } = await import("firebase/firestore");
-                    await updDoc(fDoc(db!, "rentals", docRef.id), { photoUrl });
+            // 🔄 Step 4: Background — upgrade from base64 to Firebase Storage URL
+            // (reduces Firestore doc size from ~400KB to a small URL string)
+            // This is optional — item works perfectly even if this fails
+            if (storage) {
+                (async () => {
+                    try {
+                        const imageRef = ref(storage!, `rentals/${docRef.id}_${userId}.jpg`);
+                        const uploaded = await uploadBytes(imageRef, image);
+                        const storageUrl = await getDownloadURL(uploaded.ref);
+                        const { updateDoc: updDoc, doc: fDoc } = await import("firebase/firestore");
+                        await updDoc(fDoc(db!, "rentals", docRef.id), { photoUrl: storageUrl });
 
-                    // Upload extra images too
-                    const extraUrls: string[] = [];
-                    for (const extraImg of extraImages) {
-                        const eRef = ref(storage, `rental_photos/${docRef.id}_extra_${extraUrls.length}_${userId}.jpg`);
-                        const eUp = await uploadBytes(eRef, extraImg);
-                        extraUrls.push(await getDownloadURL(eUp.ref));
+                        // Extra images
+                        const extraUrls: string[] = [];
+                        for (const extraImg of extraImages) {
+                            const eRef = ref(storage!, `rental_photos/${docRef.id}_extra${extraUrls.length}_${userId}.jpg`);
+                            const eUp = await uploadBytes(eRef, extraImg);
+                            extraUrls.push(await getDownloadURL(eUp.ref));
+                        }
+                        if (extraUrls.length > 0) {
+                            const { updateDoc: upd, doc: fd } = await import("firebase/firestore");
+                            await upd(fd(db!, "rentals", docRef.id), { extraPhotoUrls: extraUrls });
+                        }
+                    } catch (e) {
+                        console.warn("Storage upgrade failed (item is still listed with base64 image):", e);
                     }
-                    if (extraUrls.length > 0) {
-                        const { updateDoc: updDoc2, doc: fDoc2 } = await import("firebase/firestore");
-                        await updDoc2(fDoc2(db!, "rentals", docRef.id), { extraPhotoUrls: extraUrls });
-                    }
-                } catch (bgErr) {
-                    console.error("Background image upload failed:", bgErr);
-                    // Item is still listed, just without photo
-                }
-            })();
+                })();
+            }
 
         } catch (error: any) {
             console.error("Publish error:", error);
             const msg = error?.message || "Unknown error";
-            if (msg.includes("permission-denied") || msg.includes("unauthorized")) {
-                toast.error("🔒 Permission denied. Please re-login and try again.");
-            } else {
-                toast.error(`Failed to list item: ${msg}`);
-            }
+            toast.error(`Failed to list item: ${msg}`);
         } finally {
             setLoading(false);
         }
