@@ -24,6 +24,7 @@ import { PWAProvider } from "@/components/providers/pwa-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { CollegeProvider } from "@/contexts/CollegeContext";
 import PushNotificationManager from "@/components/notifications/PushNotificationManager";
+import { PageTransition } from "@/components/providers/PageTransition";
 
 export default function RootLayout({
   children,
@@ -37,7 +38,9 @@ export default function RootLayout({
           <PWAProvider>
             <main className="mx-auto max-w-md min-h-screen flex flex-col shadow-2xl bg-slate-50 relative overflow-x-hidden">
               <PushNotificationManager />
-              {children}
+              <PageTransition>
+                {children}
+              </PageTransition>
             </main>
             <Toaster
               position="top-center"
