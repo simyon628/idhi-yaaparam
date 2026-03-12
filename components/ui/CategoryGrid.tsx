@@ -19,9 +19,9 @@ export function CategoryGrid() {
                     <Link
                         key={cat.id}
                         href={`/category/${cat.id}`}
-                        className="flex flex-col p-4 rounded-2xl border border-slate-100 bg-white hover:border-indigo-100 hover:shadow-sm transition-all group"
+                        className="stagger-item flex flex-col p-4 rounded-2xl border border-slate-100 bg-white hover:border-indigo-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
                     >
-                        <div className={`w-12 h-12 rounded-xl ${cat.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                        <div className={`w-12 h-12 rounded-xl ${cat.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}>
                             <cat.icon className={`w-6 h-6 ${cat.color}`} />
                         </div>
                         <span className="font-black text-slate-800 text-lg leading-tight mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>

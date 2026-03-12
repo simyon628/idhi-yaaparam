@@ -214,13 +214,8 @@
 
 /* ─── Animations ─────────────────────────────────────────────────────────── */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .skeleton {
@@ -229,26 +224,95 @@
       rgba(255, 255, 255, 0.8) 50%,
       rgba(220, 225, 240, 0.5) 75%);
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  animation: shimmer 1.6s infinite;
 }
 
 @keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
 
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
+/* Page enter — used on all pages for a smooth reveal */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-page-enter {
+  animation: page-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
+/* Card pop — spring scale for cards appearing */
+@keyframes card-pop {
+  0%   { opacity: 0; transform: scale(0.92) translateY(12px); }
+  60%  { transform: scale(1.02) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-card-pop {
+  animation: card-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* ─── Decorative Blobs (Inspired by Reference) ────────────────────────────── */
+/* Stagger children — add delay via CSS var */
+@keyframes stagger-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stagger-item {
+  animation: stagger-up 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.stagger-item:nth-child(1)  { animation-delay: 0ms; }
+.stagger-item:nth-child(2)  { animation-delay: 50ms; }
+.stagger-item:nth-child(3)  { animation-delay: 100ms; }
+.stagger-item:nth-child(4)  { animation-delay: 150ms; }
+.stagger-item:nth-child(5)  { animation-delay: 200ms; }
+.stagger-item:nth-child(6)  { animation-delay: 250ms; }
+.stagger-item:nth-child(7)  { animation-delay: 300ms; }
+.stagger-item:nth-child(8)  { animation-delay: 350ms; }
+
+/* Slide up — for bottom sheets / modals */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Pulse glow — for CTA buttons */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+/* Gradient text shimmer for hero headings */
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.gradient-text-animated {
+  background: linear-gradient(135deg, hsl(255,85%,65%), hsl(228,80%,60%), hsl(195,90%,55%), hsl(255,85%,65%));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+/* Bounce subtle — for notifications/bell */
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%       { transform: translateY(-3px) rotate(-8deg); }
+  75%       { transform: translateY(-3px) rotate(8deg); }
+}
+.animate-bounce-subtle {
+  animation: bounce-subtle 0.6s ease-in-out;
+}
+
+/* ─── Decorative Blobs ────────────────────────────────────────────────────── */
 .blob {
   position: absolute;
   filter: blur(20px);
@@ -258,19 +322,8 @@
   pointer-events: none;
 }
 
-/* ─── Badges ────────────────────────────────────────────────────────── */
-.badge-trust {
-  @apply bg-emerald-100 text-emerald-700 border border-emerald-200;
-}
-
-.badge-amber {
-  @apply bg-orange-100 text-orange-700 border border-orange-200;
-}
-
-.badge-indigo {
-  @apply bg-blue-100 text-blue-700 border border-blue-200;
-}
-
-.badge-rose {
-  @apply bg-rose-100 text-rose-700 border border-rose-200;
-}
+/* ─── Badges ───────────────────────────────────────────────────────────────── */
+.badge-trust  { @apply bg-emerald-100 text-emerald-700 border border-emerald-200; }
+.badge-amber  { @apply bg-orange-100 text-orange-700 border border-orange-200; }
+.badge-indigo { @apply bg-blue-100 text-blue-700 border border-blue-200; }
+.badge-rose   { @apply bg-rose-100 text-rose-700 border border-rose-200; }
