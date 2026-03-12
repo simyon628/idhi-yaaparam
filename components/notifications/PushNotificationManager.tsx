@@ -4,22 +4,33 @@ import { useEffect, useState } from 'react';
 import { messaging, db, auth } from '@/lib/firebase';
 import { getToken, onMessage } from 'firebase/messaging';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { Bell, BellOff, Info } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function PushNotificationManager() {
-    const [permission, setPermission] = useState<NotificationPermission>('default');
-    const [loading, setLoading] = useState(false);
+    const [permission, setPermission] = useState<NotificationPermission | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
+    const [dismissed, setDismissed] = useState(false);
+
+    // Only show for logged-in users
+    useEffect(() => {
+        if (!auth) return;
+        const unsub = onAuthStateChanged(auth, (user) => {
+            setUserId(user?.uid ?? null);
+        });
+        return () => unsub();
+    }, []);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && 'Notification' in window) {
             setPermission(Notification.permission);
         }
 
-        // Listen for foreground messages
+        // Listen for foreground messages (silent in-app toasts)
         if (messaging) {
             const unsubscribe = onMessage(messaging, (payload) => {
-                console.log('Foreground message received:', payload);
                 toast(payload.notification?.title || 'New Notification', {
                     description: payload.notification?.body,
                     icon: <Bell className="w-4 h-4 text-indigo-500" />,
@@ -30,67 +41,64 @@ export default function PushNotificationManager() {
     }, []);
 
     const requestPermission = async () => {
-        if (!('Notification' in window)) {
-            toast.error("Notifications not supported in this browser");
-            return;
-        }
+        if (!('Notification' in window)) return;
+        const status = await Notification.requestPermission();
+        setPermission(status);
+        setDismissed(true);
 
-        setLoading(true);
-        try {
-            const status = await Notification.requestPermission();
-            setPermission(status);
-
-            if (status === 'granted' && messaging && auth?.currentUser) {
+        if (status === 'granted' && messaging && db && userId) {
+            try {
                 const token = await getToken(messaging, {
-                    vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY // User needs to add this
+                    vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY
                 });
-
                 if (token) {
-                    console.log('FCM Token:', token);
-                    // Save token to user profile
-                    const userRef = doc(db as any, 'users', auth.currentUser.uid);
-                    await updateDoc(userRef, {
-                        pushTokens: arrayUnion(token)
-                    });
-                    toast.success("Push notifications enabled!");
+                    const userRef = doc(db as any, 'users', userId);
+                    await updateDoc(userRef, { pushTokens: arrayUnion(token) });
+                    toast.success("You'll be notified when someone wants to borrow your items!");
                 }
-            } else if (status === 'denied') {
-                toast.error("Notification permission denied");
+            } catch (e) {
+                // Silently fail — notifications are a nice-to-have
+                console.warn('Push token registration failed:', e);
             }
-        } catch (error) {
-            console.error('Notification error:', error);
-            toast.error("Failed to enable notifications");
-        } finally {
-            setLoading(false);
         }
     };
 
-    if (permission === 'granted') return null;
+    // Don't show if: no user, already granted/denied, or user dismissed
+    const shouldShow = userId && permission === 'default' && !dismissed;
 
     return (
-        <div className="fixed top-24 left-4 right-4 z-[60] animate-slide-up">
-            <div className="bg-white/90 backdrop-blur-xl border border-indigo-100 p-4 rounded-3xl shadow-premium flex items-center gap-4">
-                <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center shrink-0">
-                    <Bell className="w-6 h-6 text-indigo-500 animate-bounce-subtle" />
-                </div>
-                <div className="flex-1">
-                    <h4 className="text-sm font-black text-slate-800 leading-tight">Enable Alerts?</h4>
-                    <p className="text-[10px] font-bold text-slate-400 mt-0.5">Get notified when someone wants to borrow your items.</p>
-                </div>
-                <button
-                    onClick={requestPermission}
-                    disabled={loading}
-                    className="px-4 py-2 bg-indigo-600 text-white text-[10px] font-black rounded-xl uppercase tracking-widest shadow-indigo active:scale-95 transition-all disabled:opacity-50"
+        <AnimatePresence>
+            {shouldShow && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 35, delay: 2 }}
+                    className="absolute top-[68px] left-3 right-3 z-30"
                 >
-                    {loading ? "..." : "Enable"}
-                </button>
-                <button 
-                    onClick={() => setPermission('denied')}
-                    className="p-2 text-slate-300 hover:text-slate-500"
-                >
-                    <BellOff className="w-4 h-4" />
-                </button>
-            </div>
-        </div>
+                    <div className="bg-white/95 backdrop-blur-md border border-indigo-100 rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3">
+                        <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
+                            <Bell className="w-4 h-4 text-indigo-500" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-[11px] font-black text-slate-700">Enable borrow alerts?</p>
+                            <p className="text-[10px] text-slate-400 font-medium leading-tight">Get notified when someone wants your items.</p>
+                        </div>
+                        <button
+                            onClick={requestPermission}
+                            className="shrink-0 px-3 py-1.5 bg-indigo-600 text-white text-[10px] font-black rounded-xl uppercase tracking-wider active:scale-95 transition-all shadow-indigo"
+                        >
+                            Enable
+                        </button>
+                        <button
+                            onClick={() => setDismissed(true)}
+                            className="shrink-0 p-1 text-slate-300 hover:text-slate-500 transition-colors"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
