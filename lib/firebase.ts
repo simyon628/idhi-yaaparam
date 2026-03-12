@@ -46,14 +46,24 @@ const initializeFirebase = () => {
 
 const { app, auth, db, storage } = initializeFirebase();
 
-// Initialize Analytics safely on client side
+// Initialize Analytics & Messaging safely on client side
 let analytics;
+let messaging: any = null;
+
 if (typeof window !== "undefined" && app) {
   isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
     }
   });
+
+  // Load messaging
+  const { getMessaging, isSupported: isMsgSupported } = require("firebase/messaging");
+  isMsgSupported().then((supported: boolean) => {
+    if (supported) {
+      messaging = getMessaging(app);
+    }
+  });
 }
 
-export { app, auth, db, storage, analytics };
+export { app, auth, db, storage, analytics, messaging };

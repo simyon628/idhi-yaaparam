@@ -23,6 +23,7 @@ export const viewport: Viewport = {
 import { PWAProvider } from "@/components/providers/pwa-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { CollegeProvider } from "@/contexts/CollegeContext";
+import PushNotificationManager from "@/components/notifications/PushNotificationManager";
 
 export default function RootLayout({
   children,
@@ -35,6 +36,7 @@ export default function RootLayout({
         <CollegeProvider>
           <PWAProvider>
             <main className="mx-auto max-w-md min-h-screen flex flex-col shadow-2xl bg-slate-50 relative overflow-x-hidden">
+              <PushNotificationManager />
               {children}
             </main>
             <Toaster
