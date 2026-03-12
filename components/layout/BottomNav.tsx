@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, User, PenTool, Bookmark, Trophy } from "lucide-react";
+import { Home, Search, User, PenTool, Bookmark, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function BottomNav() {
@@ -15,7 +17,7 @@ export function BottomNav() {
         { icon: Home, label: "Home", href: "/home" },
         { icon: Search, label: "Search", href: "/search" },
         { icon: Bookmark, label: "Saved", href: "/wishlist" },
-        { icon: Trophy, label: "Leaders", href: "/leaderboard" },
+        { icon: Zap, label: "Activity", href: "/activity" },
         { icon: User, label: "Profile", href: "/profile" },
     ];
 

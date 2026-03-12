@@ -11,6 +11,7 @@ import {
     Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare, Star, Bookmark
 } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
+import RentalCalculator from "@/components/rental/RentalCalculator";
 
 const REPORT_REASONS: ReportReason[] = [
     "Item not returned",
@@ -376,6 +377,11 @@ export default function RentalDetailPage() {
                         </div>
                     )}
                 </div>
+
+                {/* Rental Cost Calculator */}
+                {rental?.status === "available" && (
+                    <RentalCalculator pricePerHour={rental.pricePerHour} />
+                )}
 
                 {/* Owner Profile Card */}
                 {ownerInfo && (
