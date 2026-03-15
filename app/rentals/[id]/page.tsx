@@ -8,7 +8,7 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc
 import { toast } from "sonner";
 import {
     ChevronLeft, MapPin, Clock, IndianRupee, ShieldCheck,
-    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, Navigation, MessageSquare, Star, Bookmark
+    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, MessageSquare, Star, Bookmark, Share2
 } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
 import RentalCalculator from "@/components/rental/RentalCalculator";
@@ -310,10 +310,17 @@ export default function RentalDetailPage() {
                     <ChevronLeft className="w-5 h-5 text-slate-700" />
                 </button>
 
-                {/* Status badge */}
-                <div className={`absolute top-5 right-5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${statusConf.color}`}>
-                    {statusConf.label}
-                </div>
+                {/* Share (WhatsApp) button */}
+                <button
+                    onClick={() => {
+                        const url = `https://idhi-yaaparam.vercel.app/rentals/${id}`;
+                        const msg = `Borrow my ${rental?.itemName || "item"} for ₹${rental?.pricePerHour}/hr at ${rental?.block}! → ${url}`;
+                        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+                    }}
+                    className="absolute top-5 right-5 p-2.5 bg-white/60 backdrop-blur-md rounded-xl border border-white/50 active:scale-95 transition-all shadow-sm"
+                >
+                    <Share2 className="w-5 h-5 text-slate-700" />
+                </button>
             </div>
 
             {/* Content sheet */}
@@ -358,21 +365,17 @@ export default function RentalDetailPage() {
                     </div>
                 </div>
 
-                {/* Description & Distance Tracking */}
+                {/* Description */}
                 <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm mb-8">
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Details</p>
                     <p className="text-slate-600 text-sm leading-relaxed font-medium">
-                        Top condition {rental?.itemName} available in {rental?.block}. Return on time to maintain your trust score.
+                        {rental?.itemName} available in {rental?.block}. Return on time to maintain your trust score.
                     </p>
-
                     {(rental?.status === "requested" || rental?.status === "active") && (
-                        <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-indigo-600">
-                                <Navigation className="w-4 h-4 animate-pulse" />
-                                <span className="text-xs font-bold uppercase tracking-widest">Live Distance</span>
-                            </div>
-                            <span className="text-sm font-black text-slate-800 bg-indigo-50 px-3 py-1 rounded-full">
-                                {liveDistanceStr || "Tracing radar..."}
+                        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pickup Block</span>
+                            <span className="text-sm font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                                {rental?.block || "See chat"}
                             </span>
                         </div>
                     )}

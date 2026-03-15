@@ -3,108 +3,203 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCollege } from "@/contexts/CollegeContext";
+import { useAppMode } from "@/contexts/AppModeContext";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
-import { MapPin, PenTool, ArrowRight, ArrowRightCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, PenTool, ArrowRight, ShoppingBag, Star, Zap, BadgeIndianRupee } from "lucide-react";
 
-export default function MultiServiceHomepage() {
-  const router = useRouter();
-  const { selectedCollege, isReady } = useCollege();
+export default function LandingPage() {
+    const router = useRouter();
+    const { selectedCollege, isReady } = useCollege();
+    const { setMode, setHasPicked } = useAppMode();
+    const [showDetector, setShowDetector] = useState(false);
+    const [pendingMode, setPendingMode] = useState<"rentals" | "writing" | null>(null);
 
-  // Controls when the user presses the 'Detect My College' button
-  const [showDetector, setShowDetector] = useState(false);
+    // Once college is selected, navigate to the appropriate section
+    useEffect(() => {
+        if (isReady && showDetector && selectedCollege && pendingMode) {
+            setMode(pendingMode);
+            setHasPicked(true);
+            router.push(pendingMode === "writing" ? "/writing" : "/rentals");
+        }
+    }, [selectedCollege, isReady, showDetector, pendingMode, router, setMode, setHasPicked]);
 
-  // If a user selects a college while the detector is open, forward them immediately.
-  useEffect(() => {
-    if (isReady && showDetector && selectedCollege) {
-      router.push("/rentals");
-    }
-  }, [selectedCollege, isReady, showDetector, router]);
+    const handleMode = (m: "rentals" | "writing") => {
+        setPendingMode(m);
+        setMode(m);
+        setHasPicked(true);
+        if (selectedCollege) {
+            router.push(m === "writing" ? "/writing" : "/rentals");
+        } else {
+            setShowDetector(true);
+        }
+    };
 
-  if (!isReady) return null;
+    if (!isReady) return null;
 
-  return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FDFDFD] relative font-sans pb-12">
-      {/* 1. Header (App name) */}
-      <header className="w-full px-6 pt-10 pb-4 flex justify-between items-start shrink-0 relative z-10">
-        <div className="flex flex-col">
-          <span className="text-2xl font-black tracking-tight text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
-            Idhi Yaaparam
-          </span>
-        </div>
-      </header>
+    return (
+        <div className="flex-1 flex flex-col min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(160deg, #0f172a 0%, #1e1b4b 45%, #312e81 100%)" }}>
+            {/* Soft radial glow blobs */}
+            <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, #818cf8, transparent)" }} />
+            <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full opacity-10 blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, #a78bfa, transparent)" }} />
 
-      <div className="flex-1 flex flex-col px-5 relative z-10 max-w-md mx-auto w-full">
-
-        {/* 2. Hero Section */}
-        <div className="mt-6 mb-10 text-left animate-in fade-in slide-in-from-bottom-2 duration-500">
-          <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] font-black uppercase tracking-widest text-indigo-600 mb-4">
-            For college students
-          </div>
-          <h1 className="text-[40px] leading-[1.1] font-black text-slate-800 tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
-            Save on stuff. <br />
-            <span className="text-indigo-600">Earn with skills.</span>
-          </h1>
-        </div>
-
-        {/* 3. Section 1 – Campus Rentals (PRIMARY) */}
-        <div className="bg-white rounded-3xl p-6 border-2 border-indigo-50 shadow-xl shadow-indigo-500/5 relative overflow-hidden mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mt-10 -mr-10" />
-
-          <div className="relative z-10">
-            <h2 className="text-2xl font-black text-slate-800 mb-2">Save Money on Campus</h2>
-            <p className="text-slate-500 font-medium text-sm mb-6 leading-relaxed pr-4">
-              Rent or borrow items from students in your college.
-            </p>
-
-            {showDetector ? (
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <InlineCollegeSelection />
-              </div>
-            ) : (
-              <button
-                onClick={() => {
-                  if (selectedCollege) {
-                    router.push("/rentals");
-                  } else {
-                    setShowDetector(true);
-                  }
-                }}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base py-4 px-6 rounded-2xl shadow-indigo transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 opacity-90" />
-                  <span>{selectedCollege ? "Go to my Marketplace" : "Detect My College"}</span>
+            {/* Header */}
+            <header className="px-6 pt-14 pb-2 flex items-center justify-between relative z-10">
+                <div>
+                    <span className="text-white font-black text-2xl tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        Idhi Yaaparam
+                    </span>
+                    <p className="text-indigo-300 text-[10px] font-bold uppercase tracking-widest mt-0.5">Student Earning Platform</p>
                 </div>
-                <ArrowRight className="w-5 h-5 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-              </button>
-            )}
-          </div>
+                <div className="flex items-center gap-1.5 bg-white/10 border border-white/20 px-3 py-1.5 rounded-full">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-white text-[10px] font-black uppercase tracking-widest">Live</span>
+                </div>
+            </header>
+
+            {/* Hero text */}
+            <div className="px-6 pt-8 pb-6 relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h1 className="text-4xl font-black text-white leading-tight mb-3" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        Save money.<br />
+                        <span style={{ background: "linear-gradient(90deg, #a5b4fc, #c4b5fd)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                            Earn with skills.
+                        </span>
+                    </h1>
+                    <p className="text-indigo-200 text-sm font-medium leading-relaxed max-w-[280px]">
+                        The only platform built for college students in India. Rent items or earn by writing — your choice.
+                    </p>
+                </motion.div>
+            </div>
+
+            {/* Mode Cards */}
+            <div className="flex-1 px-5 space-y-4 relative z-10 pb-10">
+                <AnimatePresence>
+                    {!showDetector ? (
+                        <>
+                            {/* Rentals Card */}
+                            <motion.button
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1, type: "spring", stiffness: 300, damping: 30 }}
+                                onClick={() => handleMode("rentals")}
+                                className="w-full text-left bg-white rounded-3xl p-5 shadow-2xl overflow-hidden relative group active:scale-[.98] transition-transform"
+                            >
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity" style={{ background: "linear-gradient(135deg, #4f46e5, #7c3aed)" }} />
+                                <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-5" style={{ background: "radial-gradient(circle, #4f46e5, transparent)" }} />
+                                <div className="flex items-start gap-4 relative z-10">
+                                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 text-2xl shadow-md" style={{ background: "linear-gradient(135deg, #4f46e5, #7c3aed)" }}>
+                                        🎒
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-0.5">
+                                            <h2 className="text-[17px] font-black text-slate-800">Campus Rentals</h2>
+                                            <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] font-black rounded-md border border-indigo-100 uppercase tracking-wider">Popular</span>
+                                        </div>
+                                        <p className="text-slate-500 text-xs font-medium leading-relaxed mb-4">
+                                            Borrow Calculators, Drafters, Lab Coats from classmates. Pay per hour.
+                                        </p>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                                                <ShoppingBag className="w-3 h-3" /> Borrow items
+                                            </div>
+                                            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                                                <BadgeIndianRupee className="w-3 h-3" /> ₹10–₹50/hr
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ArrowRight className="w-5 h-5 text-indigo-400 mt-1 shrink-0 group-hover:translate-x-1 transition-transform" />
+                                </div>
+                                <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                                    <div className="flex -space-x-2">
+                                        {["bg-indigo-400", "bg-violet-400", "bg-sky-400"].map((c, i) => (
+                                            <div key={i} className={`w-6 h-6 rounded-full ${c} border-2 border-white flex items-center justify-center text-white text-[9px] font-black`}>
+                                                {["S", "R", "A"][i]}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <span className="text-[10px] font-bold text-slate-400">200+ students active</span>
+                                </div>
+                            </motion.button>
+
+                            {/* Writing Card */}
+                            <motion.button
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 30 }}
+                                onClick={() => handleMode("writing")}
+                                className="w-full text-left bg-white rounded-3xl p-5 shadow-xl overflow-hidden relative group active:scale-[.98] transition-transform"
+                            >
+                                <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-5" style={{ background: "radial-gradient(circle, #10b981, transparent)" }} />
+                                <div className="flex items-start gap-4 relative z-10">
+                                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 text-2xl shadow-md" style={{ background: "linear-gradient(135deg, #059669, #0d9488)" }}>
+                                        ✏️
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-0.5">
+                                            <h2 className="text-[17px] font-black text-slate-800">Writing Work</h2>
+                                            <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-600 text-[9px] font-black rounded-md border border-emerald-100 uppercase tracking-wider">Earn</span>
+                                        </div>
+                                        <p className="text-slate-500 text-xs font-medium leading-relaxed mb-4">
+                                            Write lab records, assignments, and project reports for students. Get paid per job.
+                                        </p>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                                                <PenTool className="w-3 h-3" /> Lab records
+                                            </div>
+                                            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                                                <BadgeIndianRupee className="w-3 h-3" /> ₹200–₹500/job
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ArrowRight className="w-5 h-5 text-emerald-400 mt-1 shrink-0 group-hover:translate-x-1 transition-transform" />
+                                </div>
+                                <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                                    <div className="flex items-center gap-1.5">
+                                        {[1, 2, 3, 4, 5].map(s => <Star key={s} className="w-3 h-3 fill-amber-400 text-amber-400" />)}
+                                    </div>
+                                    <span className="text-[10px] font-bold text-slate-400">Work on holidays too</span>
+                                </div>
+                            </motion.button>
+
+                            {/* Info strip */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.4 }}
+                                className="flex items-center justify-center gap-2 pt-2"
+                            >
+                                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                                <p className="text-indigo-300 text-[11px] font-bold text-center">
+                                    You can switch modes anytime from your Profile
+                                </p>
+                            </motion.div>
+                        </>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                            className="bg-white rounded-3xl p-6 shadow-2xl"
+                        >
+                            <div className="flex items-center gap-3 mb-5">
+                                <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg" style={{ background: pendingMode === "writing" ? "linear-gradient(135deg, #059669, #0d9488)" : "linear-gradient(135deg, #4f46e5, #7c3aed)" }}>
+                                    {pendingMode === "writing" ? "✏️" : "🎒"}
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Step 1 of 1</p>
+                                    <p className="text-sm font-black text-slate-800">Select Your College</p>
+                                </div>
+                            </div>
+                            <InlineCollegeSelection />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
-
-        {/* 4. Section 2 – Writing Work (SECONDARY) */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-lg shadow-slate-200/50 relative overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none -mt-10 -mr-10" />
-
-          <div className="relative z-10">
-            <h2 className="text-xl font-black text-slate-800 mb-2">Earn Money by Writing</h2>
-            <p className="text-slate-500 font-medium text-sm mb-6 leading-relaxed pr-4">
-              Get paid for assignments, records and project writing.
-            </p>
-
-            <button
-              onClick={() => router.push("/writing")}
-              className="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-base py-4 px-6 rounded-2xl transition-all active:scale-95 flex items-center justify-between group"
-            >
-              <div className="flex items-center gap-3">
-                <PenTool className="w-5 h-5 text-slate-500" />
-                <span>Start Writing Work</span>
-              </div>
-              <ArrowRightCircle className="w-5 h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-1 transition-all" />
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
+    );
 }
