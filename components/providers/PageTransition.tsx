@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Transition } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -11,12 +11,12 @@ const variants = {
     exit: { opacity: 0, x: -24, y: 0, scale: 0.98 },
 };
 
-const transition = {
+const pageTransition: Transition = {
     type: "spring",
     stiffness: 380,
     damping: 38,
     mass: 0.8,
-} as const;
+};
 
 export function PageTransition({ children }: { children: ReactNode }) {
     const pathname = usePathname();
@@ -29,7 +29,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={transition}
+                transition={pageTransition}
                 className="flex flex-col flex-1 min-h-screen"
             >
                 {children}
