@@ -8,7 +8,7 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc
 import { toast } from "sonner";
 import {
     ChevronLeft, MapPin, Clock, IndianRupee, ShieldCheck,
-    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, MessageSquare, Star, Bookmark, Share2
+    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, MessageSquare, Star, Bookmark, Share2, AlarmClock
 } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
 import RentalCalculator from "@/components/rental/RentalCalculator";
@@ -28,6 +28,43 @@ const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
     completed: { label: "Completed", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
     cancelled: { label: "Cancelled", color: "bg-rose-100 text-rose-700 border-rose-200" },
 };
+
+// --- Helper Components ---
+function TimeRemaining({ expiry }: { expiry: string | Date | any }) {
+    const [timeLeft, setTimeLeft] = useState<string>("");
+
+    useEffect(() => {
+        if (!expiry) return;
+        const target = new Date(typeof expiry === "string" ? expiry : (expiry?.toDate ? expiry.toDate() : expiry));
+
+        const update = () => {
+            const now = new Date();
+            const diff = target.getTime() - now.getTime();
+            if (diff <= 0) {
+                setTimeLeft("OVERDUE");
+                return;
+            }
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            setTimeLeft(`Return in ${hours}h ${mins}m`);
+        };
+
+        update();
+        const interval = setInterval(update, 60000);
+        return () => clearInterval(interval);
+    }, [expiry]);
+
+    if (!timeLeft) return null;
+
+    return (
+        <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-sm shadow-sm border ${
+            timeLeft === "OVERDUE" ? "bg-rose-50 text-rose-600 border-rose-100 animate-pulse" : "bg-amber-50 text-amber-600 border-amber-100"
+        }`}>
+            <AlarmClock className={`w-4 h-4 ${timeLeft === "OVERDUE" ? "animate-bounce" : ""}`} />
+            {timeLeft}
+        </div>
+    );
+}
 
 export default function RentalDetailPage() {
     const { id } = useParams();
@@ -370,6 +407,13 @@ export default function RentalDetailPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* Return Timer for Active Rentals */}
+                {rental?.status === "active" && rental?.expiresAt && (
+                    <div className="mb-6">
+                        <TimeRemaining expiry={rental.expiresAt} />
+                    </div>
+                )}
 
                 {/* Description */}
                 <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm mb-8">

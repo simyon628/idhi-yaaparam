@@ -83,6 +83,7 @@ export interface Listing {
     renterLocation?: { lat: number, lng: number };
     condition?: "Excellent" | "Good" | "Fair"; // Item physical condition
     returnByTime?: string; // ISO string for return deadline
+    expiresAt?: string; // Expiry or return deadline
 }
 
 // ─── Report ──────────────────────────────────────────────────────────────────
