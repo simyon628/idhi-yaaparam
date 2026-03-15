@@ -16,7 +16,7 @@ const transition = {
     stiffness: 380,
     damping: 38,
     mass: 0.8,
-};
+} as const;
 
 export function PageTransition({ children }: { children: ReactNode }) {
     const pathname = usePathname();
