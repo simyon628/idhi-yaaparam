@@ -7,16 +7,20 @@ import { collection, query, where, getDocs, doc, getDoc, orderBy } from "firebas
 import { signOut } from "firebase/auth";
 import { toast } from "sonner";
 import {
-    LogOut, ShieldCheck, AlertTriangle, User, Package, Clock, IndianRupee, MapPin,
-    ChevronRight, Loader2, Navigation, Star
+    LogOut, ShieldCheck, AlertTriangle, User, Package, Clock,
+    IndianRupee, MapPin, ChevronRight, Loader2, Star,
+    BarChart2, TrendingUp, Eye, PenTool, Settings
 } from "lucide-react";
 import { Listing } from "@/lib/types";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { useCollege } from "@/contexts/CollegeContext";
+import { useAppMode } from "@/contexts/AppModeContext";
+
+type Tab = "overview" | "my-items" | "stats";
 
 export default function ProfilePage() {
-    const [activeTab, setActiveTab] = useState<"listings" | "borrowing">("listings");
+    const [activeTab, setActiveTab] = useState<Tab>("overview");
     const [userProfile, setUserProfile] = useState<any>(null);
     const [myListings, setMyListings] = useState<Listing[]>([]);
     const [myBorrowing, setMyBorrowing] = useState<Listing[]>([]);
@@ -24,21 +28,17 @@ export default function ProfilePage() {
 
     const router = useRouter();
     const { selectedCollege } = useCollege();
+    const { mode, setMode } = useAppMode();
     const userId = auth?.currentUser?.uid;
 
     useEffect(() => {
-        if (!userId || !db) {
-            setLoading(false);
-            return;
-        }
+        if (!userId || !db) { setLoading(false); return; }
 
         const fetchData = async () => {
             try {
-                // Fetch User
                 const userSnap = await getDoc(doc(db as any, "users", userId));
                 if (userSnap.exists()) setUserProfile(userSnap.data());
 
-                // Fetch My Listings (Owner)
                 const listingsQ = query(
                     collection(db as any, "rentals"),
                     where("ownerId", "==", userId),
@@ -47,29 +47,24 @@ export default function ProfilePage() {
                 const lSnap = await getDocs(listingsQ);
                 setMyListings(lSnap.docs.map(d => ({ id: d.id, ...d.data() } as Listing)));
 
-                // Fetch My Borrowing (Renter)
-                const borrowQ = query(
-                    collection(db as any, "rentals"),
-                    where("renterId", "==", userId)
-                );
+                const borrowQ = query(collection(db as any, "rentals"), where("renterId", "==", userId));
                 const bSnap = await getDocs(borrowQ);
                 setMyBorrowing(bSnap.docs.map(d => ({ id: d.id, ...d.data() } as Listing)));
-
             } catch (err) {
                 console.error("Error fetching profile data", err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchData();
     }, [userId]);
 
     const handleLogout = async () => {
         try {
             await signOut(auth as any);
-            // Clear persistent physical location cache on physical logout
             localStorage.removeItem("iy_cached_physical_location");
+            localStorage.removeItem("iy_app_mode");
+            localStorage.removeItem("iy_mode_picked");
             toast.success("Logged out successfully");
             router.push("/");
         } catch {
@@ -77,10 +72,13 @@ export default function ProfilePage() {
         }
     };
 
+    // Not logged in
     if (!userId && !loading) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 px-5 text-center">
-                <User className="w-16 h-16 text-indigo-300 mb-4" />
+                <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mb-5">
+                    <User className="w-10 h-10 text-indigo-300" />
+                </div>
                 <h2 className="text-xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>You are not logged in</h2>
                 <p className="text-sm font-semibold text-slate-500 mt-2 mb-8">Sign in to view your campus profile</p>
                 <button onClick={() => router.push("/login")} className="h-14 px-8 rounded-2xl gradient-indigo text-white font-black shadow-indigo active:scale-95 transition-all">Sign In Now</button>
@@ -88,142 +86,229 @@ export default function ProfilePage() {
         );
     }
 
-    if (loading) {
-        return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
-    }
+    if (loading) return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
 
-    const activeData = activeTab === "listings" ? myListings : myBorrowing;
     const strikes = userProfile?.strikeCount || 0;
 
+    // Stats for the Stats tab (from Dashboard)
+    const totalEarnings = myListings.filter(l => l.status === "completed").reduce((sum, l) => sum + (l.pricePerHour || 0), 0);
+    const activeRentals = myListings.filter(l => l.status === "active").length;
+    const totalRequests = myListings.filter(l => l.status !== "available").length;
+    const completedCount = myListings.filter(l => l.status === "completed").length;
+
+    const TABS: { id: Tab; label: string; icon: any }[] = [
+        { id: "overview", label: "Overview", icon: User },
+        { id: "my-items", label: "My Items", icon: Package },
+        { id: "stats", label: "Stats", icon: BarChart2 },
+    ];
+
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-24">
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-28">
             <TopBar />
 
-            <main className="flex-1 px-5 pt-6 space-y-6">
-                {/* Profile Card */}
-                <div className="bg-white/80 backdrop-blur-xl rounded-[2rem] p-5 shadow-sm border border-indigo-50 relative overflow-hidden">
+            <main className="flex-1 px-5 pt-6 space-y-5">
+                {/* Profile Header Card */}
+                <div className="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 relative z-10">
+                        {/* Avatar */}
                         <div className="w-16 h-16 rounded-full gradient-indigo flex items-center justify-center text-white font-black text-2xl shadow-indigo shrink-0">
-                            {userProfile?.name?.charAt(0)?.toUpperCase()}
+                            {userProfile?.name?.charAt(0)?.toUpperCase() || "?"}
                         </div>
-                        <div>
-                            <h1 className="text-xl font-black text-slate-800 leading-tight mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        <div className="flex-1 min-w-0">
+                            <h1 className="text-xl font-black text-slate-800 leading-tight truncate" style={{ fontFamily: "Outfit, sans-serif" }}>
                                 {userProfile?.name || "Student"}
                             </h1>
-                            <div className="flex items-center gap-1.5 opacity-80 mt-1">
-                                <span className="text-xs font-bold bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md uppercase tracking-widest">{userProfile?.department || "N/A"}</span>
-                                {userProfile?.reviewCount && userProfile?.reviewCount > 0 ? (
-                                    <div className="flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-md">
-                                        <Star className="w-3.5 h-3.5 fill-amber-500" />
-                                        {userProfile.overallRating?.toFixed(1)} <span className="text-amber-600/60 font-medium tracking-widest uppercase ml-0.5">({userProfile.reviewCount} Reviews)</span>
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                                {userProfile?.department && (
+                                    <span className="text-[10px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md uppercase tracking-widest border border-indigo-100">
+                                        {userProfile.department}
+                                    </span>
+                                )}
+                                {userProfile?.reviewCount > 0 ? (
+                                    <div className="flex items-center gap-1 text-[10px] font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-md">
+                                        <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                                        {userProfile.overallRating?.toFixed(1)} ({userProfile.reviewCount})
                                     </div>
                                 ) : (
-                                    <div className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md uppercase tracking-widest">No Reviews Yet</div>
+                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md uppercase tracking-widest">No Reviews</span>
                                 )}
                             </div>
                         </div>
-                    </div>
-
-                    {/* Governance Status */}
-                    <div className="mt-5 pt-5 border-t border-slate-100 flex items-center justify-between">
-                        <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Campus Safety</p>
-                            {strikes === 0 ? (
-                                <div className="flex items-center gap-1.5 text-emerald-600">
-                                    <ShieldCheck className="w-4 h-4" />
-                                    <span className="text-sm font-black">Excellent Standing</span>
-                                </div>
-                            ) : (
-                                <div className="flex items-center gap-1.5 text-rose-500">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    <span className="text-sm font-black text-rose-600">Warning ({strikes}/2 Strikes)</span>
-                                </div>
-                            )}
-                        </div>
-                        <button
-                            onClick={handleLogout}
-                            className="p-3 bg-rose-50 rounded-xl text-rose-500 hover:bg-rose-100 active:scale-95 transition-all shadow-sm"
-                        >
+                        <button onClick={handleLogout} className="p-2.5 bg-rose-50 rounded-xl text-rose-400 hover:bg-rose-100 active:scale-95 transition-all shrink-0">
                             <LogOut className="w-5 h-5" />
                         </button>
                     </div>
 
-                    {/* Quick Links */}
-                    <div className="mt-4 flex gap-2">
-                        <button
-                            onClick={() => router.push("/profile/history")}
-                            className="flex-1 flex items-center justify-center gap-2 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-sm transition-colors shadow-sm"
-                        >
-                            <Clock className="w-4 h-4" /> Transaction History
-                        </button>
+                    {/* Trust / Strike bar */}
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between relative z-10">
+                        {strikes === 0 ? (
+                            <div className="flex items-center gap-2 text-emerald-600">
+                                <ShieldCheck className="w-4 h-4" />
+                                <span className="text-sm font-black">Excellent Standing</span>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-2 text-rose-500">
+                                <AlertTriangle className="w-4 h-4" />
+                                <span className="text-sm font-black">{strikes}/2 Strikes</span>
+                            </div>
+                        )}
+
+                        {/* Mode switcher in profile */}
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Mode:</span>
+                            <button
+                                onClick={() => setMode(mode === "rentals" ? "writing" : "rentals")}
+                                className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border transition-all ${mode === "writing" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-indigo-100 text-indigo-700 border-indigo-200"}`}
+                            >
+                                {mode === "writing" ? "✏️ Writing" : "🎒 Rentals"}
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Tab Switcher */}
-                <div className="flex bg-slate-200/50 p-1.5 rounded-2xl relative shadow-inner">
-                    <button
-                        onClick={() => setActiveTab("listings")}
-                        className={`flex-1 py-3 text-sm font-black rounded-xl transition-all z-10 ${activeTab === "listings" ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                            }`}
-                    >
-                        My Listings
-                    </button>
-                    <button
-                        onClick={() => setActiveTab("borrowing")}
-                        className={`flex-1 py-3 text-sm font-black rounded-xl transition-all z-10 ${activeTab === "borrowing" ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                            }`}
-                    >
-                        Renting
-                    </button>
+                {/* Tab Switcher — 3 tabs */}
+                <div className="flex bg-slate-100 p-1 rounded-2xl gap-1">
+                    {TABS.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-black rounded-xl transition-all ${activeTab === tab.id ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                        >
+                            <tab.icon className="w-3.5 h-3.5" />
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
 
-                {/* List */}
-                <div className="space-y-3">
-                    {activeData.length === 0 ? (
-                        <div className="text-center py-10">
-                            <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                            <p className="text-slate-500 font-semibold text-sm">Nothing to show right now.</p>
-                        </div>
-                    ) : (
-                        activeData.map((item) => (
-                            <div
-                                key={item.id}
-                                onClick={() => router.push(`/rentals/${item.id}`)}
-                                className="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-white shadow-sm hover:shadow-md transition-all active:scale-[0.98] cursor-pointer flex gap-4"
-                            >
-                                <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-100">
-                                    <img src={item.photoUrl} alt={item.itemName} className="w-full h-full object-cover" />
+                {/* ── TAB 1: OVERVIEW ── */}
+                {activeTab === "overview" && (
+                    <div className="space-y-4">
+                        {/* Currently Borrowing */}
+                        <div>
+                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Currently Renting</h2>
+                            {myBorrowing.filter(i => i.status === "active").length === 0 ? (
+                                <div className="bg-white rounded-2xl p-5 border border-slate-100 text-center">
+                                    <Package className="w-8 h-8 text-slate-200 mx-auto mb-2" />
+                                    <p className="text-slate-400 text-sm font-semibold">No active borrows</p>
                                 </div>
-                                <div className="flex-1 flex flex-col justify-center">
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            <h3 className="text-[15px] font-black text-slate-800 leading-tight mb-0.5">{item.itemName}</h3>
-                                            <div className="flex items-center gap-1 text-slate-500">
-                                                <MapPin className="w-3 h-3" />
-                                                <span className="text-[11px] font-bold uppercase tracking-widest">{item.block}</span>
+                            ) : (
+                                <div className="space-y-2">
+                                    {myBorrowing.filter(i => i.status === "active").map(item => (
+                                        <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-all shadow-sm">
+                                            <div className="text-2xl w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">{item.icon}</div>
+                                            <div className="flex-1">
+                                                <p className="font-black text-slate-800 text-sm">{item.itemName}</p>
+                                                <p className="text-xs text-indigo-500 font-bold">{item.block}</p>
                                             </div>
+                                            <span className="text-[9px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md">Active</span>
                                         </div>
-                                        <div className="flex items-center gap-0.5 text-indigo-600 font-black">
-                                            <IndianRupee className="w-3.5 h-3.5" />
-                                            <span>{item.pricePerHour}</span>
-                                        </div>
-                                    </div>
-                                    <div className="mt-3 flex items-center justify-between">
-                                        <span className={`text-[10px] uppercase font-black tracking-widest px-2.5 py-1 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" :
-                                            item.status === "active" ? "bg-indigo-50 text-indigo-600" :
-                                                item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"
-                                            }`}>
-                                            {item.status}
-                                        </span>
-                                        <ChevronRight className="w-4 h-4 text-slate-400" />
-                                    </div>
+                                    ))}
                                 </div>
+                            )}
+                        </div>
+
+                        {/* Quick Actions */}
+                        <div>
+                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Quick Actions</h2>
+                            <div className="grid grid-cols-2 gap-3">
+                                <button onClick={() => router.push("/profile/history")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
+                                    <Clock className="w-5 h-5 text-indigo-500" />
+                                    <span className="text-sm font-black text-slate-800">Transaction History</span>
+                                </button>
+                                <button onClick={() => router.push("/rentals/new")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
+                                    <Package className="w-5 h-5 text-emerald-500" />
+                                    <span className="text-sm font-black text-slate-800">List New Item</span>
+                                </button>
+                                {mode === "writing" && (
+                                    <button onClick={() => router.push("/writing/new")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
+                                        <PenTool className="w-5 h-5 text-amber-500" />
+                                        <span className="text-sm font-black text-slate-800">Post Writing Job</span>
+                                    </button>
+                                )}
+                                <button onClick={() => router.push("/leaderboard")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
+                                    <Star className="w-5 h-5 text-violet-500" />
+                                    <span className="text-sm font-black text-slate-800">Campus Leaderboard</span>
+                                </button>
                             </div>
-                        ))
-                    )}
-                </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* ── TAB 2: MY ITEMS ── */}
+                {activeTab === "my-items" && (
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">My Listings ({myListings.length})</h2>
+                            <button onClick={() => router.push("/rentals/new")} className="text-[10px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-xl">+ List Item</button>
+                        </div>
+                        {myListings.length === 0 ? (
+                            <div className="bg-white rounded-2xl p-8 border border-slate-100 text-center">
+                                <Package className="w-10 h-10 text-slate-200 mx-auto mb-3" />
+                                <p className="text-slate-500 font-semibold text-sm">No listings yet.</p>
+                                <button onClick={() => router.push("/rentals/new")} className="mt-4 px-5 py-2.5 gradient-indigo text-white text-sm font-black rounded-xl shadow-indigo">List Your First Item</button>
+                            </div>
+                        ) : (
+                            myListings.map(item => (
+                                <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-all shadow-sm hover:shadow-md">
+                                    <div className="w-12 h-12 rounded-xl bg-slate-50 overflow-hidden shrink-0 border border-slate-100">
+                                        {item.photoUrl ? <img src={item.photoUrl} alt={item.itemName} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl">{item.icon}</div>}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-black text-slate-800 leading-tight">{item.itemName}</p>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span className="text-xs font-bold text-indigo-600">₹{item.pricePerHour}/hr</span>
+                                            <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" : item.status === "active" ? "bg-indigo-50 text-indigo-600" : item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
+                                                {item.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+
+                {/* ── TAB 3: STATS (was Dashboard) ── */}
+                {activeTab === "stats" && (
+                    <div className="space-y-4">
+                        {/* Earnings banner */}
+                        <div className="gradient-indigo rounded-[2rem] p-6 text-white shadow-indigo relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />
+                            <p className="text-[11px] font-black uppercase tracking-widest opacity-80">Estimated Earnings</p>
+                            <p className="text-4xl font-black mt-1">₹{totalEarnings}</p>
+                            <p className="text-xs opacity-70 mt-2 font-semibold">{completedCount} completed rentals</p>
+                        </div>
+
+                        {/* 4 stat cards */}
+                        <div className="grid grid-cols-2 gap-3">
+                            {[
+                                { label: "Total Listed", value: myListings.length, icon: Package, color: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+                                { label: "Active Now", value: activeRentals, icon: TrendingUp, color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+                                { label: "Requests", value: totalRequests, icon: Eye, color: "bg-amber-50 text-amber-600 border-amber-100" },
+                                { label: "Completed", value: completedCount, icon: Star, color: "bg-violet-50 text-violet-600 border-violet-100" },
+                            ].map(s => (
+                                <div key={s.label} className={`bg-white rounded-[1.5rem] border p-4 shadow-sm space-y-2 ${s.color.split(" ")[2]}`}>
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
+                                        <div className={`p-1.5 rounded-lg border ${s.color}`}><s.icon className="w-3.5 h-3.5" /></div>
+                                    </div>
+                                    <p className="text-3xl font-black text-slate-800">{s.value}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button onClick={() => setActiveTab("my-items")} className="w-full bg-white border border-slate-100 rounded-2xl p-4 flex items-center justify-between text-slate-700 shadow-sm active:scale-[0.98] transition-all">
+                            <div className="flex items-center gap-2 text-sm font-black">
+                                <Package className="w-4 h-4 text-indigo-500" />
+                                View All My Listings
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-slate-400" />
+                        </button>
+                    </div>
+                )}
             </main>
 
             <BottomNav />
