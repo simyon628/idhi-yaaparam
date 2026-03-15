@@ -7,7 +7,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult, signInAnonymously } from "firebase/auth";
 import { toast } from "sonner";
 import { Phone, ArrowRight, ShieldCheck, Loader2, Lock, Camera, School, FileText, UploadCloud } from "lucide-react";
-import { verifyRollNumber } from "@/lib/ocr/verifyIdCard";
+import { verifyRollNumber, isRollNumberInText } from "@/lib/ocr/verifyIdCard";
 import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS, COLLEGES } from "@/lib/constants";
 import { compressImageFile } from "@/lib/image/compressImage";
@@ -266,18 +266,41 @@ function LoginContent() {
             toast.success("Verified! Welcome to Idhi Yaaparam 🎉");
             setTimeout(() => router.push(redirectUrl), 800);
 
-            // 3. Upload ID photo in background for admin review queue (non-blocking)
-            try {
-                const { getStorage, ref, uploadBytes } = await import("firebase/storage");
-                const storage = getStorage();
-                const photoRef = ref(storage, `id_cards/${user.uid}.jpg`);
-                await uploadBytes(photoRef, idImage);
-                // Update Firestore to mark photo as uploaded
-                const { updateDoc } = await import("firebase/firestore");
-                await updateDoc(doc(db!, "users", user.uid), { idPhotoUploading: false, idPhotoUploaded: true });
-            } catch (photoErr) {
-                console.warn("ID photo upload failed (non-critical):", photoErr);
-            }
+            // 3. Upload ID photo & Attempt Background OCR Match (non-blocking)
+            (async () => {
+                try {
+                    const { getStorage, ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
+                    const storage = getStorage();
+                    const photoRef = ref(storage, `id_cards/${user.uid}.jpg`);
+                    await uploadBytes(photoRef, idImage);
+                    
+                    // Mark as uploaded
+                    const { updateDoc: updDoc, doc: fDoc } = await import("firebase/firestore");
+                    await updDoc(fDoc(db!, "users", user.uid), { idPhotoUploading: false, idPhotoUploaded: true });
+
+                    // 4. SMART MATCH: Try to find roll number in the image automatically
+                    // This is the background automation requested to save admin time
+                    const { createWorker } = await import("tesseract.js");
+                    const worker = await createWorker('eng');
+                    const { data: { text } } = await worker.recognize(idImage);
+                    await worker.terminate();
+
+                    if (isRollNumberInText(roll, text)) {
+                        console.log("✅ OCR Auto-Match Found!");
+                        await updDoc(fDoc(db!, "users", user.uid), { 
+                            verifiedMethod: 'ocr_automated_match',
+                            ocrAutomationLogs: 'Success: Substring match found'
+                        });
+                    } else {
+                        console.log("❌ OCR No Match (Manual review needed)");
+                        await updDoc(fDoc(db!, "users", user.uid), { 
+                            ocrAutomationLogs: 'No match found: manual review queued'
+                        });
+                    }
+                } catch (photoErr) {
+                    console.warn("Background verification task failed (non-critical):", photoErr);
+                }
+            })();
 
         } catch (error: any) {
             console.error(error);

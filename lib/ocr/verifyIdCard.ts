@@ -70,3 +70,22 @@ export function parseJntuRoll(roll: string) {
         rollNumber: upper,
     };
 }
+
+/**
+ * Robustly checks if a roll number exists within a larger OCR text block.
+ * Handles common OCR mistakes (e.g. 'O' instead of '0').
+ */
+export function isRollNumberInText(roll: string, text: string): boolean {
+    const normalize = (s: string) => 
+        s.toUpperCase()
+         .replace(/\s+/g, "")
+         .replace(/O/g, "0")
+         .replace(/I/g, "1")
+         .replace(/S/g, "5")
+         .replace(/Z/g, "2");
+
+    const normalizedRoll = normalize(roll);
+    const normalizedText = normalize(text);
+
+    return normalizedText.includes(normalizedRoll);
+}
