@@ -33,6 +33,7 @@ export default function NewRentalPage() {
     const [userDept, setUserDept] = useState("");
     const [expiresInDays, setExpiresInDays] = useState(7); // Feature 2: Expiry
     const [suggestedPrice, setSuggestedPrice] = useState<number | null>(null); // Feature 9
+    const [condition, setCondition] = useState<"Excellent" | "Good" | "Fair">("Good"); // Item condition
     const [currentUserId, setCurrentUserId] = useState<string | null>(null); // Async auth
     const [authChecked, setAuthChecked] = useState(false);
 
@@ -189,6 +190,7 @@ export default function NewRentalPage() {
                 icon: iconMap[category] || "📦",
                 photoUrl: photoDataUrl,   // base64 — visible immediately, no storage needed
                 extraPhotoUrls: [],
+                condition,
                 status: "available",
                 renterId: null,
                 createdAt: serverTimestamp(),
@@ -369,6 +371,34 @@ export default function NewRentalPage() {
                             </button>
                         )}
                     </div>
+                </div>
+
+                {/* Item Condition Chips */}
+                <div className="space-y-2.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Item Condition *</label>
+                    <div className="flex gap-2">
+                        {(["Excellent", "Good", "Fair"] as const).map((c) => (
+                            <button
+                                key={c}
+                                type="button"
+                                onClick={() => setCondition(c)}
+                                className={`flex-1 py-3 rounded-2xl text-sm font-black border transition-all active:scale-95 ${
+                                    condition === c
+                                        ? c === "Excellent" ? "bg-emerald-500 text-white border-emerald-500 shadow-md" :
+                                          c === "Good" ? "bg-indigo-500 text-white border-indigo-500 shadow-md" :
+                                          "bg-amber-500 text-white border-amber-500 shadow-md"
+                                        : "bg-white/70 text-slate-500 border-slate-200 hover:border-slate-300"
+                                }`}
+                            >
+                                {c === "Excellent" ? "✨ Excellent" : c === "Good" ? "👍 Good" : "⚠️ Fair"}
+                            </button>
+                        ))}
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-semibold pl-1">
+                        {condition === "Excellent" ? "Like new — no scratches or defects" :
+                         condition === "Good" ? "Normal wear — works perfectly" :
+                         "Visible marks — still fully functional"}
+                    </p>
                 </div>
 
                 <div className="space-y-2.5 flex-1">

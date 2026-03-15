@@ -357,10 +357,16 @@ export default function RentalDetailPage() {
                         </div>
                     </div>
                     <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm hover:shadow-md transition-shadow">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Availability</p>
-                        <div className="flex items-center gap-1.5 text-slate-700">
-                            <Clock className="w-4 h-4 text-indigo-500" />
-                            <span className="text-sm font-black">Until 5 PM</span>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Condition</p>
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black ${
+                            rental?.condition === "Excellent" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" :
+                            rental?.condition === "Good" ? "bg-indigo-50 text-indigo-700 border border-indigo-200" :
+                            rental?.condition === "Fair" ? "bg-amber-50 text-amber-700 border border-amber-200" :
+                            "bg-slate-100 text-slate-500"
+                        }`}>
+                            {rental?.condition === "Excellent" ? "✨ Excellent" :
+                             rental?.condition === "Good" ? "👍 Good" :
+                             rental?.condition === "Fair" ? "⚠️ Fair" : "Not stated"}
                         </div>
                     </div>
                 </div>

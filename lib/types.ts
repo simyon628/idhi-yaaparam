@@ -81,6 +81,8 @@ export interface Listing {
     completedAt?: Timestamp | Date;
     ownerLocation?: { lat: number, lng: number };
     renterLocation?: { lat: number, lng: number };
+    condition?: "Excellent" | "Good" | "Fair"; // Item physical condition
+    returnByTime?: string; // ISO string for return deadline
 }
 
 // ─── Report ──────────────────────────────────────────────────────────────────
