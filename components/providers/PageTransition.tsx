@@ -11,11 +11,11 @@ const variants = {
     exit: { opacity: 0, x: -24, y: 0, scale: 0.98 },
 };
 
-const pageTransition: Transition = {
+const transition: Transition = {
     type: "spring",
-    stiffness: 380,
-    damping: 38,
-    mass: 0.8,
+    stiffness: 260,
+    damping: 20,
+    mass: 1
 };
 
 export function PageTransition({ children }: { children: ReactNode }) {
@@ -29,7 +29,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={pageTransition}
+                transition={transition}
                 className="flex flex-col flex-1 min-h-screen"
             >
                 {children}
