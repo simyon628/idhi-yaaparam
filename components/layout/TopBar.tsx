@@ -27,14 +27,14 @@ export function TopBar() {
         return () => unsub();
     }, [userId]);
 
-    if (!isReady) return null; // Avoid hydration mismatch
-
     // Close modal when college changes
     useEffect(() => {
         if (selectedCollege) {
             setShowCollegeModal(false);
         }
     }, [selectedCollege]);
+
+    if (!isReady) return null; // Avoid hydration mismatch
 
     return (
         <>
