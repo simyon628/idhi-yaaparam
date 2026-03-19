@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import {
     LogOut, ShieldCheck, AlertTriangle, User, Package, Clock,
     IndianRupee, MapPin, ChevronRight, Loader2, Star,
-    BarChart2, TrendingUp, Eye, PenTool, Settings, X
+    BarChart2, TrendingUp, Eye, PenTool, Settings
 } from "lucide-react";
 import { Listing } from "@/lib/types";
 import { TopBar } from "@/components/layout/TopBar";
@@ -29,21 +29,10 @@ export default function ProfilePage() {
     const router = useRouter();
     const { selectedCollege } = useCollege();
     const { mode, setMode } = useAppMode();
-    const [userId, setUserId] = useState<string | null>(auth?.currentUser?.uid || null);
-    const [showMenu, setShowMenu] = useState(false);
+    const userId = auth?.currentUser?.uid;
 
     useEffect(() => {
-        const unsub = auth?.onAuthStateChanged(user => {
-            setUserId(user?.uid || null);
-        });
-        return () => unsub?.();
-    }, []);
-
-    useEffect(() => {
-        if (!userId || !db) { 
-            if (!loading) setLoading(false); 
-            return; 
-        }
+        if (!userId || !db) { setLoading(false); return; }
 
         const fetchData = async () => {
             try {
@@ -147,44 +136,10 @@ export default function ProfilePage() {
                                 )}
                             </div>
                         </div>
-                        <button onClick={() => setShowMenu(true)} className="p-2.5 bg-slate-50 rounded-xl text-slate-400 hover:bg-slate-100 active:scale-95 transition-all shrink-0">
-                            <Settings className="w-5 h-5" />
+                        <button onClick={handleLogout} className="p-2.5 bg-rose-50 rounded-xl text-rose-400 hover:bg-rose-100 active:scale-95 transition-all shrink-0">
+                            <LogOut className="w-5 h-5" />
                         </button>
                     </div>
-
-                    {/* Settings Sidebar/Menu Overlay */}
-                    {showMenu && (
-                        <div className="fixed inset-0 z-[100] flex justify-end">
-                            <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowMenu(false)} />
-                            <div className="relative w-[280px] h-full bg-white shadow-2xl p-6 flex flex-col animate-in slide-in-from-right duration-300">
-                                <div className="flex items-center justify-between mb-8">
-                                    <h2 className="text-xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Settings</h2>
-                                    <button onClick={() => setShowMenu(false)} className="p-2 text-slate-400 hover:bg-slate-50 rounded-lg">
-                                        <X className="w-5 h-5" />
-                                    </button>
-                                </div>
-
-                                <div className="space-y-2 flex-1">
-                                    <button onClick={() => { setShowMenu(false); router.push("/profile/edit"); }} className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-indigo-50 transition-colors">
-                                        <User className="w-4 h-4 text-indigo-500" /> Edit Profile
-                                    </button>
-                                    <button onClick={() => { setShowMenu(false); router.push("/profile/history"); }} className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-indigo-50 transition-colors">
-                                        <Clock className="w-4 h-4 text-indigo-500" /> Transaction History
-                                    </button>
-                                    <button className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-indigo-50 transition-colors opacity-50">
-                                        <ShieldCheck className="w-4 h-4 text-indigo-500" /> Security
-                                    </button>
-                                </div>
-
-                                <button 
-                                    onClick={handleLogout} 
-                                    className="w-full h-14 rounded-2xl bg-rose-50 text-rose-600 font-bold flex items-center justify-center gap-2 mt-auto"
-                                >
-                                    <LogOut className="w-5 h-5" /> Log Out
-                                </button>
-                            </div>
-                        </div>
-                    )}
 
                     {/* Trust / Strike bar */}
                     <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between relative z-10">
@@ -207,13 +162,13 @@ export default function ProfilePage() {
                                 onClick={() => setMode(mode === "rentals" ? "writing" : "rentals")}
                                 className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border transition-all ${mode === "writing" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-indigo-100 text-indigo-700 border-indigo-200"}`}
                             >
-                                {mode === "writing" ? "✍️ Writing" : "📦 Rentals"}
+                                {mode === "writing" ? "Γ£Å∩╕Å Writing" : "≡ƒÄÆ Rentals"}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Tab Switcher — 3 tabs */}
+                {/* Tab Switcher ΓÇö 3 tabs */}
                 <div className="flex bg-slate-100 p-1 rounded-2xl gap-1">
                     {TABS.map(tab => (
                         <button
@@ -227,7 +182,7 @@ export default function ProfilePage() {
                     ))}
                 </div>
 
-                {/* ── TAB 1: OVERVIEW ── */}
+                {/* ΓöÇΓöÇ TAB 1: OVERVIEW ΓöÇΓöÇ */}
                 {activeTab === "overview" && (
                     <div className="space-y-4">
                         {/* Currently Borrowing */}
@@ -281,7 +236,7 @@ export default function ProfilePage() {
                     </div>
                 )}
 
-                {/* ── TAB 2: MY ITEMS ── */}
+                {/* ΓöÇΓöÇ TAB 2: MY ITEMS ΓöÇΓöÇ */}
                 {activeTab === "my-items" && (
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -303,7 +258,7 @@ export default function ProfilePage() {
                                     <div className="flex-1">
                                         <p className="text-sm font-black text-slate-800 leading-tight">{item.itemName}</p>
                                         <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-xs font-bold text-indigo-600">₹{item.pricePerHour}/hr</span>
+                                            <span className="text-xs font-bold text-indigo-600">Γé╣{item.pricePerHour}/hr</span>
                                             <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" : item.status === "active" ? "bg-indigo-50 text-indigo-600" : item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
                                                 {item.status}
                                             </span>
@@ -316,14 +271,14 @@ export default function ProfilePage() {
                     </div>
                 )}
 
-                {/* ── TAB 3: STATS (was Dashboard) ── */}
+                {/* ΓöÇΓöÇ TAB 3: STATS (was Dashboard) ΓöÇΓöÇ */}
                 {activeTab === "stats" && (
                     <div className="space-y-4">
                         {/* Earnings banner */}
                         <div className="gradient-indigo rounded-[2rem] p-6 text-white shadow-indigo relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />
                             <p className="text-[11px] font-black uppercase tracking-widest opacity-80">Estimated Earnings</p>
-                            <p className="text-4xl font-black mt-1">₹{totalEarnings}</p>
+                            <p className="text-4xl font-black mt-1">Γé╣{totalEarnings}</p>
                             <p className="text-xs opacity-70 mt-2 font-semibold">{completedCount} completed rentals</p>
                         </div>
 

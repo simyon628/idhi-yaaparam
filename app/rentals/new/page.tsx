@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 export const dynamic = "force-dynamic";
 import { db, auth, storage } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp, getDoc, doc } from "firebase/firestore";
@@ -22,7 +22,9 @@ const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
 export default function NewRentalPage() {
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState("");
-    const [category, setCategory] = useState("");
+    const searchParams = useSearchParams();
+    const initialCategory = searchParams.get("category") || "";
+    const [category, setCategory] = useState(initialCategory);
     const [price, setPrice] = useState("");
     const [block, setBlock] = useState("");
     const [department, setDepartment] = useState(DEPARTMENTS[0]);
@@ -50,6 +52,19 @@ export default function NewRentalPage() {
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
     const { formatting: dynamicBlocks, loading: blocksLoading } = useCampusBlocks(selectedCollege);
+
+    useEffect(() => {
+        if (initialCategory) {
+            // Find display name for the category ID
+            const cat = GRID_CATEGORIES.find(c => c.id === initialCategory || c.name === initialCategory);
+            if (cat) {
+                setCategory(cat.name);
+                // Also suggest item name based on category
+                if (cat.id === "drafter") setName("Drafter");
+                if (cat.id === "calculator") setName("Casio fx-991");
+            }
+        }
+    }, [initialCategory]);
 
     // Auto-select first dynamic block once loaded
     useEffect(() => {
@@ -160,7 +175,7 @@ export default function NewRentalPage() {
                 return;
             }
 
-            const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Others": "📦" };
+            const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Electronic Gadgets": "💻", "Others": "📦" };
             const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
 
             // Feature 2: Compute expiry timestamp
@@ -414,18 +429,39 @@ export default function NewRentalPage() {
                     </select>
                 </div>
 
-                <div className="space-y-2.5 flex-1">
+                <div className="space-y-2.5 flex-1 relative">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
-                        <MapPin className="w-3.5 h-3.5" /> Block
+                        <MapPin className="w-3.5 h-3.5" /> Block / Location *
                     </label>
-                    <select
-                        value={block}
-                        onChange={e => setBlock(e.target.value)}
-                        disabled={blocksLoading}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all disabled:opacity-60"
-                    >
-                        {dynamicBlocks.map(b => <option key={b} value={b}>{b}</option>)}
-                    </select>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="e.g. Main Block, Library..."
+                            value={block}
+                            onChange={e => setBlock(e.target.value)}
+                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
+                        />
+                        {block && dynamicBlocks.some(b => b.toLowerCase().includes(block.toLowerCase()) && b.toLowerCase() !== block.toLowerCase()) && (
+                            <div className="absolute top-full left-0 right-0 mt-2 z-30 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-1">
+                                {dynamicBlocks
+                                    .filter(b => b.toLowerCase().includes(block.toLowerCase()))
+                                    .slice(0, 4)
+                                    .map(b => (
+                                        <button
+                                            key={b}
+                                            type="button"
+                                            onClick={() => setBlock(b)}
+                                            className="w-full px-5 py-3 text-left hover:bg-slate-50 font-bold text-slate-700 border-b border-slate-50 last:border-none text-sm"
+                                        >
+                                            {b}
+                                        </button>
+                                    ))}
+                            </div>
+                        )}
+                    </div>
+                    <p className="text-[9px] text-slate-400 font-bold pl-1 uppercase tracking-widest mt-1">
+                        You can type a specific location or pick from suggestions
+                    </p>
                 </div>
 
                 {/* Feature 2: Listing Expiry */}

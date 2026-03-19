@@ -34,13 +34,30 @@ export default function RentalsMarketplace() {
             <TopBar />
 
             <div className="mt-[80px] px-5 flex-1 flex flex-col">
-                <div className="py-4 animate-page-enter">
-                    <h1 className="text-2xl font-black text-slate-800 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
+                <div className="py-2 animate-page-enter">
+                    <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em] mb-1">
+                        Welcome to {selectedCollege?.name}
+                    </p>
+                    <h1 className="text-3xl font-black text-slate-800 leading-tight mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
                         Marketplace
                     </h1>
-                    <p className="text-indigo-500 font-bold text-xs uppercase tracking-wider mt-0.5">
-                        {selectedCollege.name}
+                    <p className="text-xs font-bold text-slate-500">
+                        Rent & borrow campus essentials from your friends
                     </p>
+                </div>
+
+                {/* Quick Search Bar directly above categories */}
+                <div 
+                    onClick={() => router.push("/search")}
+                    className="mb-4 bg-white border border-slate-100 rounded-[1.5rem] p-3 flex items-center gap-3 shadow-sm cursor-text hover:border-indigo-100 transition-colors"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                        <span className="text-lg">🔍</span>
+                    </div>
+                    <div className="flex-1">
+                        <p className="text-sm font-bold text-slate-800">Search items in your college</p>
+                        <p className="text-[10px] font-semibold text-slate-400">(calculator, Casio, books...)</p>
+                    </div>
                 </div>
 
                 <div className="flex-1 bg-white rounded-3xl border border-slate-100 shadow-sm mb-24 overflow-hidden">

@@ -6,11 +6,14 @@ import { useCollege } from "@/contexts/CollegeContext";
 import { MapPin, ChevronDown, Bell } from "lucide-react";
 import { db, auth } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
+import { X } from "lucide-react";
 
 export function TopBar() {
     const { selectedCollege, setSelectedCollege, isReady } = useCollege();
     const router = useRouter();
     const [unreadCount, setUnreadCount] = useState(0);
+    const [showCollegeModal, setShowCollegeModal] = useState(false);
     const userId = auth?.currentUser?.uid;
 
     useEffect(() => {
@@ -25,6 +28,13 @@ export function TopBar() {
     }, [userId]);
 
     if (!isReady) return null; // Avoid hydration mismatch
+
+    // Close modal when college changes
+    useEffect(() => {
+        if (selectedCollege) {
+            setShowCollegeModal(false);
+        }
+    }, [selectedCollege]);
 
     return (
         <>
@@ -42,33 +52,50 @@ export function TopBar() {
                     </span>
                 </div>
 
-                {/* Right: Select College & Notifications */}
+                {/* Right: Notification Bell */}
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => router.push("/notifications")}
-                        className="relative p-2 bg-white/60 hover:bg-white border border-indigo-100 rounded-full transition-colors shadow-sm backdrop-blur-md"
+                        className="relative p-2.5 hover:bg-slate-100 rounded-full transition-colors"
                     >
-                        <Bell className="w-4 h-4 text-slate-600" />
+                        <Bell className="w-5 h-5 text-slate-700" />
                         {unreadCount > 0 && (
-                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full"></span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
                         )}
                     </button>
-
+                    
+                    {/* Minimalist College Picker (Text only) */}
                     <button
-                        onClick={() => {
-                            setSelectedCollege(null);
-                            router.push("/");
-                        }}
-                        className="flex items-center gap-1.5 bg-white/60 hover:bg-white border border-indigo-100 px-3 py-1.5 rounded-full transition-colors overflow-hidden shadow-sm backdrop-blur-md"
+                        onClick={() => setShowCollegeModal(true)}
+                        className="flex items-center gap-1 pl-2 border-l border-slate-200"
                     >
-                        <MapPin className="w-3.5 h-3.5 shrink-0 text-indigo-500" />
-                        <span className="text-[11px] font-bold text-slate-700 truncate max-w-[100px] sm:max-w-[140px]">
-                            {selectedCollege ? selectedCollege.name : "Select College"}
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate max-w-[80px]">
+                            {selectedCollege?.name?.split(' ')[0] || "Campus"}
                         </span>
-                        <ChevronDown className="w-3.5 h-3.5 shrink-0 text-slate-400" />
+                        <ChevronDown className="w-3 h-3 text-slate-300" />
                     </button>
                 </div>
             </div>
+
+            {/* College Selection Modal */}
+            {showCollegeModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-5 animate-in fade-in duration-200">
+                    <div className="w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl relative">
+                        <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50">
+                            <h2 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Change College</h2>
+                            <button 
+                                onClick={() => setShowCollegeModal(false)}
+                                className="p-2 -mr-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-5 max-h-[70vh] overflow-y-auto override-detector-margins">
+                            <InlineCollegeSelection />
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useAppMode } from "@/contexts/AppModeContext";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
-import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, PenTool, ArrowRight, ShoppingBag, Star, Zap, BadgeIndianRupee } from "lucide-react";
 
 export default function LandingPage() {
@@ -14,12 +13,14 @@ export default function LandingPage() {
     const { setMode, setHasPicked } = useAppMode();
     const [showDetector, setShowDetector] = useState(false);
     const [pendingMode, setPendingMode] = useState<"rentals" | "writing" | null>(null);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Once college is selected, navigate to the appropriate section
     useEffect(() => {
         if (isReady && showDetector && selectedCollege && pendingMode) {
             setMode(pendingMode);
             setHasPicked(true);
+            setIsTransitioning(true);
             router.push(pendingMode === "writing" ? "/writing" : "/rentals");
         }
     }, [selectedCollege, isReady, showDetector, pendingMode, router, setMode, setHasPicked]);
@@ -29,13 +30,20 @@ export default function LandingPage() {
         setMode(m);
         setHasPicked(true);
         if (selectedCollege) {
+            setIsTransitioning(true);
             router.push(m === "writing" ? "/writing" : "/rentals");
         } else {
             setShowDetector(true);
         }
     };
 
-    if (!isReady) return null;
+    if (!isReady || isTransitioning) {
+        return (
+            <div className="flex-1 flex items-center justify-center min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(160deg, #0f172a 0%, #1e1b4b 45%, #312e81 100%)" }}>
+                 <div className="w-10 h-10 border-4 border-indigo-500/30 border-t-indigo-400 rounded-full animate-spin shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex-1 flex flex-col min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(160deg, #0f172a 0%, #1e1b4b 45%, #312e81 100%)" }}>
@@ -59,11 +67,7 @@ export default function LandingPage() {
 
             {/* Hero text */}
             <div className="px-6 pt-8 pb-6 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
+                <div>
                     <h1 className="text-4xl font-black text-white leading-tight mb-3" style={{ fontFamily: "Outfit, sans-serif" }}>
                         Save money.<br />
                         <span style={{ background: "linear-gradient(90deg, #a5b4fc, #c4b5fd)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
@@ -73,19 +77,15 @@ export default function LandingPage() {
                     <p className="text-indigo-200 text-sm font-medium leading-relaxed max-w-[280px]">
                         The only platform built for college students in India. Rent items or earn by writing — your choice.
                     </p>
-                </motion.div>
+                </div>
             </div>
 
             {/* Mode Cards */}
             <div className="flex-1 px-5 space-y-4 relative z-10 pb-10">
-                <AnimatePresence>
                     {!showDetector ? (
                         <>
                             {/* Rentals Card */}
-                            <motion.button
-                                initial={{ opacity: 0, y: 24 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1, type: "spring", stiffness: 300, damping: 30 }}
+                            <button
                                 onClick={() => handleMode("rentals")}
                                 className="w-full text-left bg-white rounded-3xl p-5 shadow-2xl overflow-hidden relative group active:scale-[.98] transition-transform"
                             >
@@ -124,13 +124,10 @@ export default function LandingPage() {
                                     </div>
                                     <span className="text-[10px] font-bold text-slate-400">200+ students active</span>
                                 </div>
-                            </motion.button>
+                            </button>
 
                             {/* Writing Card */}
-                            <motion.button
-                                initial={{ opacity: 0, y: 24 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 30 }}
+                            <button
                                 onClick={() => handleMode("writing")}
                                 className="w-full text-left bg-white rounded-3xl p-5 shadow-xl overflow-hidden relative group active:scale-[.98] transition-transform"
                             >
@@ -164,26 +161,20 @@ export default function LandingPage() {
                                     </div>
                                     <span className="text-[10px] font-bold text-slate-400">Work on holidays too</span>
                                 </div>
-                            </motion.button>
+                            </button>
 
                             {/* Info strip */}
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.4 }}
+                            <div
                                 className="flex items-center justify-center gap-2 pt-2"
                             >
                                 <Zap className="w-3.5 h-3.5 text-amber-400" />
                                 <p className="text-indigo-300 text-[11px] font-bold text-center">
                                     You can switch modes anytime from your Profile
                                 </p>
-                            </motion.div>
+                            </div>
                         </>
                     ) : (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                        <div
                             className="bg-white rounded-3xl p-6 shadow-2xl"
                         >
                             <div className="flex items-center gap-3 mb-5">
@@ -196,9 +187,8 @@ export default function LandingPage() {
                                 </div>
                             </div>
                             <InlineCollegeSelection />
-                        </motion.div>
+                        </div>
                     )}
-                </AnimatePresence>
             </div>
         </div>
     );

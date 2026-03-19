@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Home, Search, User, PenTool, Bookmark, Zap, ShoppingBag, ArrowLeftRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Home, Search, User, PenTool, Bookmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAppMode } from "@/contexts/AppModeContext";
 import { motion } from "framer-motion";
 
 const RENTALS_NAV = [
     { icon: Home, label: "Home", href: "/rentals" },
-    { icon: Search, label: "Search", href: "/search" },
     { icon: Bookmark, label: "Saved", href: "/wishlist" },
-    { icon: Zap, label: "Activity", href: "/activity" },
+    { icon: Search, label: "Request", href: "/requests" }, // Placeholder for now
     { icon: User, label: "Profile", href: "/profile" },
 ];
 
@@ -23,39 +22,12 @@ const WRITING_NAV = [
 
 export function BottomNav() {
     const pathname = usePathname();
-    const router = useRouter();
-    const { mode, setMode } = useAppMode();
+    const { mode } = useAppMode();
 
     const items = mode === "writing" ? WRITING_NAV : RENTALS_NAV;
 
     return (
         <nav className="fixed bottom-4 left-3 right-3 z-50 mx-auto max-w-sm">
-            {/* Mode switcher strip at top */}
-            <div className="flex items-center justify-center gap-2 mb-2">
-                <button
-                    onClick={() => { setMode("rentals"); router.push("/rentals"); }}
-                    className={cn(
-                        "flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border transition-all",
-                        mode === "rentals"
-                            ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
-                            : "bg-slate-900/80 text-slate-400 border-slate-700"
-                    )}
-                >
-                    <ShoppingBag className="w-2.5 h-2.5" /> Rentals
-                </button>
-                <button
-                    onClick={() => { setMode("writing"); router.push("/writing"); }}
-                    className={cn(
-                        "flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border transition-all",
-                        mode === "writing"
-                            ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
-                            : "bg-slate-900/80 text-slate-400 border-slate-700"
-                    )}
-                >
-                    <PenTool className="w-2.5 h-2.5" /> Writing
-                </button>
-            </div>
-
             {/* Main nav bar */}
             <div className="bg-slate-900/95 backdrop-blur-2xl border border-slate-700/60 px-3 py-2.5 flex items-center justify-around rounded-[2rem] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.05)]">
                 {items.map((item) => {

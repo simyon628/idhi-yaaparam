@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Listing } from "@/lib/types";
-import { IndianRupee, MapPin, Zap } from "lucide-react";
+import { IndianRupee, MapPin, Zap, Bookmark } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface RentalCardProps {
@@ -60,11 +60,17 @@ export function RentalCard({ item }: RentalCardProps) {
 
             {/* Content */}
             <div className="p-3 flex flex-col flex-1 gap-2">
-                <div>
-                    <h3 className="font-bold text-slate-800 text-xs truncate leading-tight">{item.itemName}</h3>
-                    <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                        <MapPin className="w-2.5 h-2.5" />
-                        <span className="truncate">{item.block || "Campus"}</span>
+                <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-slate-800 text-xs truncate leading-tight group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{item.itemName}</h3>
+                        <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                            <MapPin className="w-2.5 h-2.5" />
+                            <span className="truncate">{item.block || "Campus"}</span>
+                        </div>
+                    </div>
+                    {/* Wishlist Heart Icon (Placeholder button to avoid click bubbling) */}
+                    <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 hover:bg-rose-50 hover:border-rose-100 transition-all group/heart">
+                        <Bookmark className="w-3 h-3 text-slate-300 group-hover/heart:text-rose-400 transition-colors" />
                     </div>
                 </div>
 
@@ -77,8 +83,12 @@ export function RentalCard({ item }: RentalCardProps) {
                 </div>
 
                 {/* CTA */}
-                <div className="w-full py-2 mt-1 rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-200 flex items-center justify-center text-[10px] font-black uppercase tracking-widest">
-                    Borrow Now
+                <div className={`w-full py-2 mt-1 rounded-xl transition-all duration-200 flex items-center justify-center text-[10px] font-black uppercase tracking-widest ${
+                    item.status === "available" 
+                        ? "bg-indigo-50 text-indigo-600 group-hover:bg-indigo-500 group-hover:text-white" 
+                        : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                }`}>
+                    {item.status === "available" ? "Borrow Now" : "Already Booked"}
                 </div>
             </div>
         </button>

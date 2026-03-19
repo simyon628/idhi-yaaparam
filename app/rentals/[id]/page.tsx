@@ -6,12 +6,15 @@ export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "sonner";
-import {
-    ChevronLeft, MapPin, Clock, IndianRupee, ShieldCheck,
-    Loader2, CheckCircle2, Package, AlertTriangle, X, Send, MessageSquare, Star, Bookmark, Share2, AlarmClock
-} from "lucide-react";
+import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
 import RentalCalculator from "@/components/rental/RentalCalculator";
+import dynamic_ from "next/dynamic";
+const MeetupMap = dynamic_(() => import("@/components/map/MeetupMap"), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Map...</div>
+});
+
 
 const REPORT_REASONS: ReportReason[] = [
     "Item not returned",
@@ -66,6 +69,34 @@ function TimeRemaining({ expiry }: { expiry: string | Date | any }) {
     );
 }
 
+function RequesterInfo({ renterId }: { renterId: string }) {
+    const [renter, setRenter] = useState<any>(null);
+    useEffect(() => {
+        if (!renterId || !db) return;
+        getDoc(doc(db as any, "users", renterId)).then(snap => {
+            if (snap.exists()) setRenter(snap.data());
+        });
+    }, [renterId]);
+
+    if (!renter) return null;
+
+    return (
+        <div className="bg-amber-50/50 backdrop-blur-md rounded-2xl p-4 border border-amber-100 shadow-sm flex items-center gap-3 mb-6 animate-in slide-in-from-right duration-500">
+            <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-white font-black text-sm shrink-0">
+                {renter.name?.charAt(0)?.toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-black text-amber-500 uppercase tracking-widest mb-0.5">Borrow Request From</p>
+                <p className="text-sm font-bold text-slate-800 truncate">{renter.name}</p>
+                <p className="text-[10px] font-semibold text-slate-500">ID: {renter.rollNumber || "N/A"}</p>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+                <span className="text-[8px] font-black bg-white text-emerald-600 px-2 py-0.5 rounded border border-emerald-100 uppercase tracking-widest">Requester</span>
+            </div>
+        </div>
+    );
+}
+
 export default function RentalDetailPage() {
     const { id } = useParams();
     const [rental, setRental] = useState<Listing | null>(null);
@@ -81,6 +112,7 @@ export default function RentalDetailPage() {
     const [ratingComment, setRatingComment] = useState("");
 
     const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number, overallRating?: number, reviewCount?: number } | null>(null);
+    const [renterName, setRenterName] = useState<string>("");
 
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
@@ -121,6 +153,14 @@ export default function RentalDetailPage() {
                         setOwnerInfo(ownerSnap.data() as any);
                     }
                 }
+
+                // Fetch renter info if exists
+                if (data.renterId) {
+                    const renterSnap = await getDoc(doc(db as any, "users", data.renterId));
+                    if (renterSnap.exists()) {
+                        setRenterName(renterSnap.data().name);
+                    }
+                }
             } else {
                 toast.error("Rental not found");
                 router.push("/rentals");
@@ -135,27 +175,41 @@ export default function RentalDetailPage() {
 
     // Live GPS tracking when active or requested
     useEffect(() => {
-        // SIMPLIFIED SCOPE: Parking live tracking for now to ensure stable core logic.
-        /*
-        if (!process.browser || !userId || !rental) return;
+        if (typeof window === "undefined" || !userId || !rental) return;
         if (rental.status !== "requested" && rental.status !== "active") return;
 
+        // Only track if user is either owner or renter
         const isOwner = rental.ownerId === userId;
+        const isRenter = rental.renterId === userId;
+        if (!isOwner && !isRenter) return;
+
+        console.log("Starting live location sync for", isOwner ? "Owner" : "Renter");
+
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 const { latitude, longitude } = pos.coords;
                 const fieldName = isOwner ? "ownerLocation" : "renterLocation";
+                
+                // Only update if location changed significantly (> 5 meters) to save Firestore writes
+                // For simplicity here, we update regardless but ideally use a threshold
                 updateDoc(doc(db as any, "rentals", id as string), {
-                    [fieldName]: { lat: latitude, lng: longitude }
-                }).catch(console.error);
+                    [fieldName]: { lat: latitude, lng: longitude },
+                    lastLocationUpdate: serverTimestamp()
+                }).catch(err => console.error("Firestore sync error:", err));
             },
             (err) => console.warn("GPS tracking error:", err),
-            { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+            { 
+                enableHighAccuracy: true, 
+                maximumAge: 5000, // 5 seconds cache
+                timeout: 10000 
+            }
         );
 
-        return () => navigator.geolocation.clearWatch(watchId);
-        */
-    }, [rental?.status, rental?.ownerId, userId, id]);
+        return () => {
+            console.log("Stopping live location sync");
+            navigator.geolocation.clearWatch(watchId);
+        };
+    }, [rental?.status, rental?.ownerId, rental?.renterId, userId, id]);
 
     // Haversine distance calculator (meters)
     const getDistanceInMeters = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -189,7 +243,11 @@ export default function RentalDetailPage() {
     };
 
     const handleRequest = async () => {
-        if (!userId) { toast.error("Please sign in first"); return; }
+        if (!userId) { 
+            toast.error("Please sign in first"); 
+            router.push(`/login?redirect=/rentals/${id}`);
+            return; 
+        }
         await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp() });
 
         // Fire notification to Owner
@@ -416,7 +474,7 @@ export default function RentalDetailPage() {
                 )}
 
                 {/* Description */}
-                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm mb-8">
+                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm mb-4">
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Details</p>
                     <p className="text-slate-600 text-sm leading-relaxed font-medium">
                         {rental?.itemName} available in {rental?.block}. Return on time to maintain your trust score.
@@ -431,6 +489,47 @@ export default function RentalDetailPage() {
                     )}
                 </div>
 
+                {/* Live Meetup Map Integration */}
+                {(rental?.status === "requested" || rental?.status === "active") && (isOwner || isRenter) && (
+                    <div className="mb-8 space-y-3">
+                        <div className="flex items-center justify-between px-1">
+                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Meetup Tracking</h2>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Live Sync</span>
+                            </div>
+                        </div>
+                        <div className="h-[300px] w-full rounded-[2rem] overflow-hidden shadow-lg border-2 border-white relative group">
+                            <MeetupMap 
+                                rental={rental} 
+                                currentUserId={userId!} 
+                                ownerName={ownerInfo?.name}
+                                renterName={renterName}
+                            />
+                            <div className="absolute inset-0 bg-slate-900/10 pointer-events-none group-hover:bg-transparent transition-colors" />
+                        </div>
+                        {liveDistanceStr && (
+                            <div className="bg-indigo-600 text-white rounded-2xl p-4 shadow-indigo flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-white/20 rounded-xl">
+                                        <Navigation className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-indigo-200 uppercase tracking-widest">Meetup Distance</p>
+                                        <p className="text-lg font-black">{liveDistanceStr}</p>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => router.push(`/chat/${id}`)}
+                                    className="bg-white text-indigo-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest active:scale-95 transition-all"
+                                >
+                                    Chat
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* Rental Cost Calculator */}
                 {rental?.status === "available" && (
                     <RentalCalculator pricePerHour={rental.pricePerHour} />
@@ -438,7 +537,7 @@ export default function RentalDetailPage() {
 
                 {/* Owner Profile Card */}
                 {ownerInfo && (
-                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-indigo-50 shadow-sm flex items-center justify-between group cursor-pointer hover:border-indigo-100 transition-all mb-8">
+                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-indigo-50 shadow-sm flex items-center justify-between group cursor-pointer hover:border-indigo-100 transition-all mb-4">
                         <div className="flex items-center gap-3 relative">
                             <div className="w-12 h-12 rounded-full gradient-indigo flex items-center justify-center text-white font-black text-lg shadow-indigo shrink-0">
                                 {ownerInfo.name.charAt(0).toUpperCase()}
@@ -466,6 +565,11 @@ export default function RentalDetailPage() {
                         </div>
                     </div>
                 )}
+
+                {/* Requester Detail Card (Visible to Owner if status is not available) */}
+                {isOwner && rental?.renterId && (
+                    <RequesterInfo renterId={rental.renterId} />
+                )}
             </div>
 
             {/* ─── Fixed Action Bar ─── */}
@@ -486,19 +590,25 @@ export default function RentalDetailPage() {
                                 </button>
                             </div>
                         ) : rental?.status === "active" ? (
-                            <div className="flex gap-2">
+                            <div className="grid grid-cols-2 gap-3">
                                 <button
                                     onClick={() => router.push(`/chat/${id}`)}
-                                    className="h-14 w-14 shrink-0 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 hover:bg-indigo-100 transition-colors shadow-sm"
+                                    className="h-20 rounded-2xl bg-white border-2 border-indigo-50 flex flex-col items-center justify-center gap-1.5 text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all shadow-sm group"
                                 >
-                                    <MessageSquare className="w-5 h-5 fill-indigo-100" />
+                                    <div className="p-2 bg-indigo-50 rounded-xl group-hover:scale-110 transition-transform">
+                                        <MessageSquare className="w-5 h-5 fill-indigo-100" />
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Open Chat</span>
                                 </button>
                                 <button
                                     onClick={handleMarkReturned}
                                     disabled={actionLoading}
-                                    className="flex-1 h-14 rounded-2xl bg-emerald-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 disabled:opacity-60 active:scale-[0.98] transition-all hover:bg-emerald-600 shadow-sm"
+                                    className="h-20 rounded-2xl bg-white border-2 border-emerald-50 flex flex-col items-center justify-center gap-1.5 text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all shadow-sm group"
                                 >
-                                    {actionLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <><Package className="w-4 h-4" /> CONFIRM RETURN</>}
+                                    <div className="p-2 bg-emerald-50 rounded-xl group-hover:scale-110 transition-transform">
+                                        <Package className="w-5 h-5" />
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Item Returned</span>
                                 </button>
                             </div>
                         ) : rental?.status === "completed" ? (
@@ -512,13 +622,6 @@ export default function RentalDetailPage() {
                                         className="text-xs font-bold text-amber-500 hover:text-amber-600 flex items-center gap-1"
                                     >
                                         <Star className="w-3 h-3 fill-amber-500" /> Rate Transaction
-                                    </button>
-                                    <span className="text-slate-300">|</span>
-                                    <button
-                                        onClick={() => setShowReportModal(true)}
-                                        className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors"
-                                    >
-                                        Report an issue
                                     </button>
                                 </div>
                             </div>
@@ -542,15 +645,36 @@ export default function RentalDetailPage() {
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">You will be notified</p>
                     </div>
                 ) : isRenter && rental?.status === "active" ? (
-                    <button
-                        onClick={() => router.push(`/chat/${id}`)}
-                        className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:-translate-y-0.5"
-                    >
-                        <MessageSquare className="w-5 h-5" /> OPEN CHAT
-                    </button>
+                    <div className="grid grid-cols-2 gap-3">
+                         <button
+                            onClick={() => router.push(`/chat/${id}`)}
+                            className="h-20 rounded-2xl bg-white border-2 border-indigo-50 flex flex-col items-center justify-center gap-1.5 text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all shadow-sm group"
+                        >
+                            <div className="p-2 bg-indigo-50 rounded-xl group-hover:scale-110 transition-transform">
+                                <MessageSquare className="w-5 h-5 fill-indigo-100" />
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-widest">Open Chat</span>
+                        </button>
+                        <button
+                            onClick={() => {
+                                // Simulate Razorpay for now
+                                toast.info("Opening Secure Payment (Simulated)...");
+                                setTimeout(() => {
+                                    toast.success("Payment Successful! ₹" + (rental.pricePerHour * 2) + " paid.");
+                                    handleMarkReturned(); // Complete the transaction
+                                }, 1500);
+                            }}
+                            className="h-20 rounded-2xl bg-white border-2 border-emerald-50 flex flex-col items-center justify-center gap-1.5 text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all shadow-sm group"
+                        >
+                            <div className="p-2 bg-emerald-50 rounded-xl group-hover:scale-110 transition-transform">
+                                <CreditCard className="w-5 h-5" />
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-widest">Pay & Return</span>
+                        </button>
+                    </div>
                 ) : (
                     <div className="h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
-                        <span className="text-slate-400 font-black text-sm uppercase tracking-widest">CURRENTLY TAKEN</span>
+                        <span className="text-slate-400 font-black text-sm uppercase tracking-widest text-center">ITEM ALREADY BOOKED</span>
                     </div>
                 )}
             </div>

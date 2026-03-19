@@ -1,35 +1,42 @@
 import React from "react";
 import Link from "next/link";
-import { Calculator, CheckSquare, GraduationCap, PenTool, BookOpen, MoreHorizontal } from "lucide-react";
+import { Calculator, CheckSquare, GraduationCap, PenTool, BookOpen, MoreHorizontal, ChevronRight, Laptop } from "lucide-react";
 
 export const CATEGORIES = [
-    { id: "calculator", name: "Calculator", icon: Calculator, color: "text-blue-500", bg: "bg-blue-50" },
-    { id: "drafter", name: "Drafter", icon: PenTool, color: "text-orange-500", bg: "bg-orange-50" },
-    { id: "lab-coat", name: "Lab Coat", icon: GraduationCap, color: "text-cyan-500", bg: "bg-cyan-50" },
-    { id: "geometry", name: "Geometry Set", icon: CheckSquare, color: "text-purple-500", bg: "bg-purple-50" },
-    { id: "books", name: "Books/Notes", icon: BookOpen, color: "text-emerald-500", bg: "bg-emerald-50" },
-    { id: "others", name: "Others", icon: MoreHorizontal, color: "text-slate-500", bg: "bg-slate-50" },
+    { id: "calculator", name: "Calculator", icon: Calculator, color: "text-blue-600", bg: "bg-blue-50" },
+    { id: "drafter", name: "Drafter", icon: PenTool, color: "text-orange-600", bg: "bg-orange-50" },
+    { id: "lab-coat", name: "Lab Coat", icon: GraduationCap, color: "text-emerald-600", bg: "bg-emerald-50" },
+    { id: "geometry", name: "Geometry Set", icon: CheckSquare, color: "text-purple-600", bg: "bg-purple-50" },
+    { id: "electronics", name: "Electronic Gadgets", icon: Laptop, color: "text-rose-600", bg: "bg-rose-50" },
+    { id: "books", name: "Books/Notes", icon: BookOpen, color: "text-indigo-600", bg: "bg-indigo-50" },
+    { id: "others", name: "Others", icon: MoreHorizontal, color: "text-slate-600", bg: "bg-slate-50" },
 ];
 
 export function CategoryGrid() {
     return (
         <div className="py-4 px-2">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 pb-8">
                 {CATEGORIES.map((cat) => (
                     <Link
                         key={cat.id}
                         href={`/category/${cat.id}`}
-                        className="stagger-item flex flex-col p-4 rounded-2xl border border-slate-100 bg-white hover:border-indigo-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
+                        className="flex flex-col p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all duration-200 group active:scale-[0.98]"
                     >
-                        <div className={`w-12 h-12 rounded-xl ${cat.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}>
-                            <cat.icon className={`w-6 h-6 ${cat.color}`} />
+                        <div className="flex items-center justify-between mb-3">
+                            <div className={`w-10 h-10 rounded-xl ${cat.bg} flex items-center justify-center`}>
+                                <cat.icon className={`w-5 h-5 ${cat.color}`} strokeWidth={2.5} />
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
                         </div>
-                        <span className="font-black text-slate-800 text-lg leading-tight mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
-                            {cat.name}
-                        </span>
-                        <p className="text-[10px] font-bold text-slate-400 leading-tight pr-2">
-                            See all {cat.name.toLowerCase()} available to rent in your college.
-                        </p>
+                        
+                        <div className="mt-auto">
+                            <span className="font-black text-slate-800 text-[15px] block mb-0.5 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
+                                {cat.name}
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-400">
+                                Browse items
+                            </span>
+                        </div>
                     </Link>
                 ))}
             </div>

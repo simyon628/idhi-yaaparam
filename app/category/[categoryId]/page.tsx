@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collection, query, where, onSnapshot, getDocs } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useNearestBlock } from "@/lib/hooks/useNearestBlock";
 import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
@@ -12,15 +12,15 @@ import { CATEGORIES } from "@/components/ui/CategoryGrid";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { TopBar } from "@/components/layout/TopBar";
 import { RentalCard } from "@/components/rental/RentalCard";
-import { ChevronLeft, Loader2, Filter, ArrowUpDown } from "lucide-react";
+import { ChevronLeft, Loader2, Filter, ArrowUpDown, Plus } from "lucide-react";
+import { auth } from "@/lib/firebase";
 
 export default function CategoryPage({ params }: { params: Promise<{ categoryId: string }> }) {
     const router = useRouter();
     const { categoryId } = use(params);
     const { selectedCollege, isReady } = useCollege();
-    const { nearestBlock, isLoading: nearestLoading } = useNearestBlock(selectedCollege);
-
-    const { formatting: blockNames, loading: blocksLoading } = useCampusBlocks(selectedCollege);
+    const { nearestBlock } = useNearestBlock(selectedCollege);
+    const { formatting: blockNames } = useCampusBlocks(selectedCollege);
 
     const [rentals, setRentals] = useState<Listing[]>([]);
     const [loading, setLoading] = useState(true);
@@ -36,15 +36,9 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     const [sortOrder, setSortOrder] = useState<"nearest" | "lowest_price" | "newest">("nearest");
 
     useEffect(() => {
-        if (!selectedCollege) {
-            router.push("/");
-            return;
-        }
-
-        if (!db) return;
+        if (!selectedCollege || !db) return;
         setLoading(true);
 
-        // Listen for rentals
         const q = query(
             collection(db, "rentals"),
             where("collegeId", "==", selectedCollege.id),
@@ -58,11 +52,19 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
         });
 
         return () => unsub();
-    }, [selectedCollege, categoryId, router]);
+    }, [selectedCollege, categoryId]);
+
+    const handleFabClick = () => {
+        const url = `/rentals/new?category=${categoryId}`;
+        if (!auth?.currentUser) {
+            router.push(`/login?redirect=${encodeURIComponent(url)}`);
+        } else {
+            router.push(url);
+        }
+    };
 
     if (!isReady || !selectedCollege) return null;
 
-    // Apply Client-Side Filters & Sorting
     let filteredRentals = rentals.filter(r => {
         if (selectedBranch !== "All" && r.branch !== selectedBranch) return false;
         if (selectedYear !== "All" && r.yearSection !== selectedYear) return false;
@@ -71,98 +73,56 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     });
 
     if (sortOrder === "newest") {
-        filteredRentals.sort((a, b) => {
-            const aTime = (a.createdAt as any)?.toMillis?.() || 0;
-            const bTime = (b.createdAt as any)?.toMillis?.() || 0;
-            return bTime - aTime;
-        });
+        filteredRentals.sort((a, b) => ((b.createdAt as any)?.toMillis?.() || 0) - ((a.createdAt as any)?.toMillis?.() || 0));
     } else if (sortOrder === "lowest_price") {
         filteredRentals.sort((a, b) => a.pricePerHour - b.pricePerHour);
-    } else if (sortOrder === "nearest") {
-        // Nearest block items first
-        if (nearestBlock) {
-            filteredRentals.sort((a, b) => {
-                const aIsNear = a.block === nearestBlock.name ? -1 : 1;
-                const bIsNear = b.block === nearestBlock.name ? -1 : 1;
-                return aIsNear - bIsNear;
-            });
-        }
+    } else if (sortOrder === "nearest" && nearestBlock) {
+        filteredRentals.sort((a, b) => (a.block === nearestBlock.name ? -1 : 1) - (b.block === nearestBlock.name ? -1 : 1));
     }
 
     const branches = ["All", "CSE", "ECE", "ME", "CE", "EEE"];
     const years = ["All", "1st Year", "2nd Year", "3rd Year", "4th Year"];
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-24">
             <TopBar />
 
             <div className="mt-[72px] px-5 py-4">
-                <button
-                    onClick={() => router.back()}
-                    className="flex items-center gap-1 text-slate-500 font-bold text-sm mb-4 hover:text-indigo-600 transition"
-                >
+                <button onClick={() => router.back()} className="flex items-center gap-1 text-slate-500 font-bold text-sm mb-4">
                     <ChevronLeft className="w-4 h-4" /> Back
                 </button>
 
                 <div className="flex items-center gap-3 mb-6">
                     {category && (
-                        <div className={`w-12 h-12 rounded-2xl ${category.bg} flex items-center justify-center shrink-0`}>
+                        <div className={`w-12 h-12 rounded-2xl ${category.bg} flex items-center justify-center shrink-0 border border-slate-100`}>
                             <category.icon className={`w-6 h-6 ${category.color}`} />
                         </div>
                     )}
                     <div>
-                        <h1 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
-                            {pluralCategoryName} in {selectedCollege.name}
-                        </h1>
-                        <p className="text-xs font-bold text-slate-500">
-                            Sorted by {sortOrder === 'nearest' ? 'nearest first' : sortOrder === 'lowest_price' ? 'price' : 'newest'}
-                        </p>
+                        <h1 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>{pluralCategoryName}</h1>
+                        <p className="text-xs font-bold text-slate-500">{selectedCollege.name}</p>
                     </div>
+                    <button onClick={handleFabClick} className="ml-auto bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-indigo-100 shadow-sm active:scale-95 transition-all">
+                        List {categoryName} +
+                    </button>
                 </div>
 
-                {/* Filters Row */}
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-2">
                     <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
                         <Filter className="w-3.5 h-3.5 text-indigo-400" /> Branch:
-                        <select
-                            value={selectedBranch}
-                            onChange={(e) => setSelectedBranch(e.target.value)}
-                            className="bg-transparent outline-none ml-1 text-indigo-700"
-                        >
+                        <select value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)} className="bg-transparent outline-none ml-1 text-indigo-700">
                             {branches.map(b => <option key={b} value={b}>{b}</option>)}
                         </select>
                     </div>
-
                     <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                        Year / Section:
-                        <select
-                            value={selectedYear}
-                            onChange={(e) => setSelectedYear(e.target.value)}
-                            className="bg-transparent outline-none ml-1 text-indigo-700"
-                        >
+                        Year/Sec:
+                        <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="bg-transparent outline-none ml-1 text-indigo-700">
                             {years.map(y => <option key={y} value={y}>{y}</option>)}
                         </select>
                     </div>
-
                     <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                        Block / Area:
-                        <select
-                            value={selectedBlock}
-                            onChange={(e) => setSelectedBlock(e.target.value)}
-                            className="bg-transparent outline-none ml-1 text-indigo-700"
-                        >
-                            <option value="All">All Blocks</option>
-                            {blockNames.map(bName => <option key={bName} value={bName}>{bName}</option>)}
-                        </select>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                        <ArrowUpDown className="w-3.5 h-3.5 text-indigo-400" /> Sort:
-                        <select
-                            value={sortOrder}
-                            onChange={(e) => setSortOrder(e.target.value as any)}
-                            className="bg-transparent outline-none ml-1 text-indigo-700"
-                        >
+                         <ArrowUpDown className="w-3.5 h-3.5 text-indigo-400" /> Sort:
+                        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as any)} className="bg-transparent outline-none ml-1 text-indigo-700">
                             <option value="nearest">Nearest</option>
                             <option value="lowest_price">Lowest Price</option>
                             <option value="newest">Newest</option>
@@ -170,38 +130,30 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                     </div>
                 </div>
 
-                {/* Listings */}
                 {loading ? (
-                    <div className="flex items-center justify-center py-20">
-                        <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
-                    </div>
+                    <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>
                 ) : filteredRentals.length === 0 ? (
                     <div className="mt-10">
                         <EmptyState
-                            title={`No ${categoryName} listed yet in ${selectedCollege.name}.`}
-                            description={`Be the first to list your ${categoryName} and earn for every lab or exam.`}
-                            actionLabel="List your item"
-                            actionHref="/rentals/new"
+                            title={`No ${categoryName} listed yet.`}
+                            description="Be the first to list and earn trust coins."
+                            actionLabel={`List ${categoryName}`}
+                            actionHref={`/rentals/new?category=${categoryId}`}
                         />
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 gap-3 pb-10">
-                        {filteredRentals.map((rental) => {
-                            const isNear = sortOrder === "nearest" && nearestBlock && rental.block === nearestBlock.name;
-                            return (
-                                <div key={rental.id} className="relative">
-                                    {isNear && (
-                                        <div className="absolute -top-2 -right-2 z-10 bg-indigo-500 text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm border border-indigo-600 shadow-indigo">
-                                            Near You
-                                        </div>
-                                    )}
-                                    <RentalCard item={rental} />
-                                </div>
-                            );
-                        })}
+                    <div className="grid grid-cols-2 gap-3">
+                        {filteredRentals.map((rental) => (
+                            <RentalCard key={rental.id} item={rental} />
+                        ))}
                     </div>
                 )}
             </div>
+
+            <button onClick={handleFabClick} className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-4 px-6 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20">
+                <Plus className="w-5 h-5 shrink-0" />
+                <span className="font-black text-xs uppercase tracking-widest">List {categoryName}</span>
+            </button>
         </div>
     );
 }
