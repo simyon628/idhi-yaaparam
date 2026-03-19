@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 export const dynamic = "force-dynamic";
 import { db, auth, storage } from "@/lib/firebase";
@@ -19,7 +19,7 @@ import { compressImageFile } from "@/lib/image/compressImage";
 const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
 
-export default function NewRentalPage() {
+function NewRentalForm() {
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState("");
     const searchParams = useSearchParams();
@@ -523,5 +523,13 @@ export default function NewRentalPage() {
                 </div>
             </form>
         </div>
+    );
+}
+
+export default function NewRentalPage() {
+    return (
+        <Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>}>
+            <NewRentalForm />
+        </Suspense>
     );
 }
