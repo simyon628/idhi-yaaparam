@@ -27,6 +27,11 @@ export default function SearchPage() {
     const [filterSort, setFilterSort] = useState<"newest" | "price_asc" | "price_desc">("newest");
     const [allSuggestions, setAllSuggestions] = useState<string[]>([]);
 
+    const POPULAR_ITEMS = [
+        "Calculator", "Casio fx991", "Casio 897", "Drafter", "Mini Drafter", "Mobile", "Cycle", "Cooler", 
+        "Lab Record", "Lab Coat", "Geometry Box", "Arduino Uno", "Multimeter", "Engineering Drawing Kit"
+    ];
+
     // Fetch all item names in this college for true auto-suggest
     useEffect(() => {
         if (!selectedCollege || !db) return;
@@ -41,11 +46,13 @@ export default function SearchPage() {
                 const name = d.data().itemName;
                 if (name) names.add(name);
             });
+            // Combine popular items with actual database items
+            POPULAR_ITEMS.forEach(item => names.add(item));
             setAllSuggestions(Array.from(names));
         });
     }, [selectedCollege]);
 
-    const handleSearch = useCallback(async () => {
+    const handleSearch = useCallback(async (forcedQuery?: string) => {
         if (!selectedCollege || !db) return;
         setLoading(true);
         setSearched(true);
@@ -59,8 +66,9 @@ export default function SearchPage() {
             let items: Listing[] = snap.docs.map(d => ({ id: d.id, ...d.data() } as Listing));
 
             // Client-side text filter (Fuzzy multi-word match for title, brand, model, tags, category)
-            if (query_.trim()) {
-                const cleanQuery = query_.toLowerCase().trim();
+            const activeQuery = typeof forcedQuery === "string" ? forcedQuery : query_;
+            if (activeQuery.trim()) {
+                const cleanQuery = activeQuery.toLowerCase().trim();
                 const searchTerms = cleanQuery.split(" ").filter(Boolean);
                 items = items.filter(i => {
                     const searchableText = `${i.itemName} ${i.department || ""} ${i.categoryId || ""} ${i.block || ""} ${i.branch || ""}`.toLowerCase();
@@ -183,7 +191,7 @@ export default function SearchPage() {
                         </div>
 
                         <button
-                            onClick={handleSearch}
+                            onClick={() => handleSearch()}
                             className="w-full h-11 rounded-xl bg-indigo-600 text-white font-black text-sm"
                         >
                             Apply Filters
@@ -198,14 +206,13 @@ export default function SearchPage() {
                     <div className="absolute top-0 left-5 right-5 z-40 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
                         {allSuggestions
                             .filter(name => name.toLowerCase().includes(query_.toLowerCase()) && name.toLowerCase() !== query_.toLowerCase())
-                            .slice(0, 5)
+                            .slice(0, 8)
                             .map(name => (
                                 <button
                                     key={name}
-                                    onClick={() => { setQuery_(name); handleSearch(); }}
-                                    className="w-full px-5 py-4 text-left hover:bg-slate-50 flex items-center gap-3 border-b border-slate-50 last:border-none"
+                                    onClick={() => { setQuery_(name); handleSearch(name); }}
+                                    className="w-full px-5 py-4 text-left hover:bg-slate-50 flex items-center border-b border-slate-50 last:border-none"
                                 >
-                                    <Search className="w-4 h-4 text-slate-300" />
                                     <span className="font-bold text-slate-700">{name}</span>
                                 </button>
                             ))}
@@ -243,7 +250,7 @@ export default function SearchPage() {
                                 {["Casio fx991", "Drafter", "Lab Coat", "Reference Books"].map(tag => (
                                     <button 
                                         key={tag}
-                                        onClick={() => { setQuery_(tag); handleSearch(); }}
+                                        onClick={() => { setQuery_(tag); handleSearch(tag); }}
                                         className="px-4 py-2 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-600 hover:border-indigo-400 hover:text-indigo-600 transition-all"
                                     >
                                         {tag}
@@ -258,11 +265,13 @@ export default function SearchPage() {
                             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{results.length} items found</p>
                             <button onClick={() => setSearched(false)} className="text-[10px] font-black text-indigo-500 uppercase">Clear</button>
                         </div>
-                        {results.map(item => (
-                            <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="cursor-pointer">
-                                <RentalCard item={item} />
-                            </div>
-                        ))}
+                        <div className="grid grid-cols-2 gap-3">
+                            {results.map(item => (
+                                <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="cursor-pointer">
+                                    <RentalCard item={item} />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
             </main>

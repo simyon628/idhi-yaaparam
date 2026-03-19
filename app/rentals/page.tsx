@@ -54,10 +54,12 @@ export default function RentalsMarketplace() {
                     <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
                         <span className="text-lg">🔍</span>
                     </div>
-                    <div className="flex-1">
-                        <p className="text-sm font-bold text-slate-800">Search items in your college</p>
-                        <p className="text-[10px] font-semibold text-slate-400">(calculator, Casio, books...)</p>
-                    </div>
+                    <input
+                        type="text"
+                        readOnly
+                        placeholder="Search items in your college (calculator...)"
+                        className="flex-1 bg-transparent text-sm font-bold text-slate-800 placeholder-slate-400 outline-none cursor-pointer"
+                    />
                 </div>
 
                 <div className="flex-1 bg-white rounded-3xl border border-slate-100 shadow-sm mb-24 overflow-hidden">
