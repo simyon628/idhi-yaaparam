@@ -9,8 +9,25 @@ import { Listing } from "@/lib/types";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { RentalCard } from "@/components/rental/RentalCard";
-import { Search, Loader2, SlidersHorizontal, X, IndianRupee } from "lucide-react";
+import { Search, Loader2, SlidersHorizontal, X, IndianRupee, ArrowUpLeft } from "lucide-react";
 import { CATEGORIES } from "@/components/ui/CategoryGrid";
+
+const SUGGESTION_DETAILS: Record<string, { category: string; icon: string }> = {
+    "Calculator": { category: "Calculators", icon: "🔢" },
+    "Casio fx991": { category: "Calculators", icon: "🔢" },
+    "Casio 897": { category: "Calculators", icon: "🔢" },
+    "Drafter": { category: "Lab Gear", icon: "📏" },
+    "Mini Drafter": { category: "Lab Gear", icon: "📏" },
+    "Mobile": { category: "Electronics", icon: "📱" },
+    "Cycle": { category: "Transport", icon: "🚲" },
+    "Cooler": { category: "Gadgets", icon: "❄️" },
+    "Lab Record": { category: "Books & Notes", icon: "📘" },
+    "Lab Coat": { category: "Lab Gear", icon: "🧥" },
+    "Geometry Box": { category: "Lab Gear", icon: "📐" },
+    "Arduino Uno": { category: "Electronics", icon: "🔋" },
+    "Multimeter": { category: "Electronics", icon: "📟" },
+    "Engineering Drawing Kit": { category: "Lab Gear", icon: "📐" },
+};
 
 export default function SearchPage() {
     const router = useRouter();
@@ -202,22 +219,53 @@ export default function SearchPage() {
 
             <main className="px-5 pt-5 space-y-4 relative">
                 {/* Auto-suggest Dropdown */}
-                {query_ && !searched && results.length > 0 && (
-                    <div className="absolute top-0 left-5 right-5 z-40 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
-                        {allSuggestions
-                            .filter(name => name.toLowerCase().includes(query_.toLowerCase()) && name.toLowerCase() !== query_.toLowerCase())
-                            .slice(0, 8)
-                            .map(name => (
-                                <button
-                                    key={name}
-                                    onClick={() => { setQuery_(name); handleSearch(name); }}
-                                    className="w-full px-5 py-4 text-left hover:bg-slate-50 flex items-center border-b border-slate-50 last:border-none"
-                                >
-                                    <span className="font-bold text-slate-700">{name}</span>
-                                </button>
-                            ))}
-                    </div>
-                )}
+                {(() => {
+                    if (!query_ || searched) return null;
+                    const filteredSuggestions = allSuggestions
+                        .filter(name => name.toLowerCase().includes(query_.toLowerCase()))
+                        .slice(0, 10);
+                    
+                    if (filteredSuggestions.length === 0) return null;
+
+                    return (
+                        <div className="absolute top-0 left-5 right-5 z-40 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                            {filteredSuggestions.map(name => {
+                                const lowerName = name.toLowerCase();
+                                const lowerQuery = query_.toLowerCase();
+                                const matchIndex = lowerName.indexOf(lowerQuery);
+                                
+                                // Flipkart style: match part is normal/light, completion part is bold
+                                const prefix = name.substring(0, matchIndex + query_.length);
+                                const boldPart = name.substring(matchIndex + query_.length);
+                                const detail = SUGGESTION_DETAILS[name] || { category: "Items", icon: "📦" };
+                                
+                                return (
+                                    <button
+                                        key={name}
+                                        onClick={() => { setQuery_(name); handleSearch(name); }}
+                                        className="w-full px-5 py-4 text-left hover:bg-slate-50 flex items-center justify-between border-b border-slate-100 last:border-none group active:bg-slate-100"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-lg shadow-sm border border-slate-200 group-hover:bg-white group-hover:scale-110 transition-all">
+                                                {detail.icon}
+                                            </div>
+                                            <div>
+                                                <div className="text-sm">
+                                                    <span className="font-medium text-slate-400">{prefix}</span>
+                                                    <span className="font-black text-slate-900">{boldPart}</span>
+                                                </div>
+                                                <div className="text-[10px] font-bold text-indigo-500 mt-0.5 group-hover:translate-x-1 transition-transform inline-block">
+                                                    in {detail.category}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ArrowUpLeft className="w-4 h-4 text-slate-300 group-hover:text-indigo-400 rotate-90 transition-all opacity-0 group-hover:opacity-100" />
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    );
+                })()}
 
                 {loading ? (
                     <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>
@@ -244,16 +292,20 @@ export default function SearchPage() {
                         </div>
                         
                         {/* Trending/Recent Searches placeholder */}
-                        <div className="space-y-3">
-                            <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Suggested for you</h3>
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1 flex items-center gap-2">
+                                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-pulse"></span>
+                                Suggested for you
+                            </h3>
                             <div className="flex flex-wrap gap-2">
-                                {["Casio fx991", "Drafter", "Lab Coat", "Reference Books"].map(tag => (
+                                {["Calculator", "Drafter", "Lab Coat", "Scientific Calculator", "Casio fx991", "Reference Books"].map(tag => (
                                     <button 
                                         key={tag}
                                         onClick={() => { setQuery_(tag); handleSearch(tag); }}
-                                        className="px-4 py-2 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-600 hover:border-indigo-400 hover:text-indigo-600 transition-all"
+                                        className="px-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-[11px] font-black text-slate-600 hover:border-indigo-400 hover:text-indigo-600 active:scale-95 transition-all shadow-sm flex items-center gap-2"
                                     >
                                         {tag}
+                                        <ArrowUpLeft className="w-3 h-3 text-slate-300 opacity-40 rotate-90" />
                                     </button>
                                 ))}
                             </div>
