@@ -69,7 +69,7 @@ export interface Listing {
     collegeId?: string; // New field for robust querying
     blockId?: string;   // New field for robust querying
     categoryId?: string; // New field for categorization
-    listingType?: "rent" | "buy" | "sell";
+    listingType?: "rent" | "buy" | "sell" | "free";
     branch?: string;     // Generic search/filter field
     yearSection?: string; // Generic search/filter field
     department?: string;

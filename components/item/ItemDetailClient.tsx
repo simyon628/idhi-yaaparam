@@ -98,7 +98,6 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
     const [isSaved, setIsSaved] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [ownerActionLoading, setOwnerActionLoading] = useState(false);
-    const viewIncrementedRef = useRef(false);
 
     // Resolve auth state on client
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -121,13 +120,26 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
         getDoc(doc(db!, `users/${currentUserId}/saved`, item.id)).then(snap => setIsSaved(snap.exists()));
     }, [currentUserId, item.id]);
 
-    // Increment views once per session
+    const hasViewed = useRef(false);
+
     useEffect(() => {
-        if (viewIncrementedRef.current || !db) return;
-        viewIncrementedRef.current = true;
-        updateDoc(doc(db!, "rentals", item.id), {
-            views: ((item.views || 0) + 1)
-        }).catch(() => null);
+        if (hasViewed.current) return;
+        hasViewed.current = true;
+        
+        if (db) {
+            updateDoc(doc(db, "rentals", item.id), {
+                views: ((item.views || 0) + 1)
+            }).catch(() => null);
+        }
+        
+        // Note: The requested Supabase snippet was provided in the prompt,
+        // but since this project runs on Firebase, the logic above achieves 
+        // the equivalent database update.
+        /*
+        supabase.from('items')
+            .update({ views: (item.views ?? 0) + 1 })
+            .eq('id', item.id)
+        */
     }, [item.id, item.views]);
 
     // Scroll detection for sticky header
@@ -270,9 +282,9 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
                     </div>
 
                     {/* Time posted + views */}
-                    <div className="flex items-center gap-3 text-[11px] text-slate-400">
+                    <div className="flex flex-col gap-1 text-[11px] text-slate-400">
                         <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{timeAgo(item.createdAt)}</span>
-                        {(item.views ?? 0) > 0 && <span>{item.views} views</span>}
+                        <span>{item.views ?? 0} views</span>
                     </div>
                 </div>
 
