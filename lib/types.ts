@@ -29,6 +29,7 @@ export interface College {
     id: string;
     name: string;
     aliases?: string[]; // E.g., ["SRKR", "SRREC"]
+    acronym?: string;
     city?: string;
     state?: string;
     lat: number;
@@ -68,6 +69,7 @@ export interface Listing {
     collegeId?: string; // New field for robust querying
     blockId?: string;   // New field for robust querying
     categoryId?: string; // New field for categorization
+    listingType?: "rent" | "buy" | "sell";
     branch?: string;     // Generic search/filter field
     yearSection?: string; // Generic search/filter field
     department?: string;
@@ -84,6 +86,7 @@ export interface Listing {
     condition?: "Excellent" | "Good" | "Fair"; // Item physical condition
     returnByTime?: string; // ISO string for return deadline
     expiresAt?: string; // Expiry or return deadline
+    availableUntil?: string | null;
 }
 
 // ─── Report ──────────────────────────────────────────────────────────────────
@@ -153,5 +156,48 @@ export interface AppNotification {
     type: NotificationType;
     link?: string; // Optional path to navigate to (e.g. /rentals/123)
     isRead: boolean;
+    createdAt: Timestamp | Date;
+}
+
+// ─── Search ──────────────────────────────────────────────────────────────────
+export interface SearchFilter {
+    categoryId?: string;
+    maxPrice?: number;
+    condition?: "Excellent" | "Good" | "Fair";
+    rating?: number;
+    sort?: "relevance" | "price_asc" | "price_desc" | "newest";
+}
+
+export interface SearchRequest {
+    q: string;
+    mode: "rent" | "buy" | "sell";
+    collegeId: string;
+    lat?: number;
+    lng?: number;
+    filters?: SearchFilter;
+}
+
+export interface SearchResponse {
+    results: Listing[];
+    totalCount: number;
+    appliedFilters: SearchFilter;
+    suggestions: string[];
+    nextPageToken?: string;
+}
+
+export interface SearchSuggestionResponse {
+    suggestions: {
+        text: string;
+        category: string;
+        type: "product" | "category" | "location";
+        icon?: string;
+    }[];
+}
+
+export interface SavedSearch {
+    id?: string;
+    userId: string;
+    query: string;
+    filters: SearchFilter;
     createdAt: Timestamp | Date;
 }
