@@ -20,14 +20,23 @@ export async function GET(request: Request) {
         const q = searchParams.get('q')?.toLowerCase() || '';
         const collegeId = searchParams.get('collegeId');
 
-        if (!q || q.length < 2) {
+        if (!q || q.length < 1) {
             return NextResponse.json({ suggestions: [] });
         }
 
         let suggestions: SearchSuggestionResponse['suggestions'] = [];
 
         // 1. Static/Trained Suggestions (super fast)
-        const staticMatches = COMMON_TERMS.filter(t => t.text.toLowerCase().includes(q));
+        // Sort matches by: StartsWith first, then Includes
+        const staticMatches = COMMON_TERMS
+            .filter(t => t.text.toLowerCase().includes(q))
+            .sort((a, b) => {
+                const aLower = a.text.toLowerCase();
+                const bLower = b.text.toLowerCase();
+                const aStarts = aLower.startsWith(q) ? 1 : 0;
+                const bStarts = bLower.startsWith(q) ? 1 : 0;
+                return bStarts - aStarts; // Prefix matches first
+            });
         suggestions.push(...staticMatches.map(s => ({
             text: s.text,
             category: s.category,

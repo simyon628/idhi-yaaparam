@@ -4,16 +4,28 @@ import { useCollege } from "@/contexts/CollegeContext";
 import { CategoryGrid } from "@/components/ui/CategoryGrid";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
-import { Plus } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useListingMode } from "@/lib/hooks/useListingMode";
+import { useSuggestions, useCategoryCounts } from "@/lib/hooks/useSearch";
+import { useSearchHistory } from "@/lib/hooks/useSearchHistory";
+import { SearchDropdown } from "@/components/search/SearchDropdown";
 
 export default function RentalsMarketplace() {
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
     const { listingMode, setListingMode } = useListingMode();
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    // Suggestions hook — lightweight, for autocomplete only
+    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id);
+    const { recentSearches, removeSearch } = useSearchHistory();
+
+    const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
+
+    const { counts, loading: countsLoading } = useCategoryCounts(selectedCollege?.id);
 
     useEffect(() => {
         if (isReady && !selectedCollege) {
@@ -31,12 +43,20 @@ export default function RentalsMarketplace() {
         }
     };
 
+    // When user selects a suggestion or presses Enter → navigate to /search
+    const handleSearchSubmit = (q: string) => {
+        if (!q.trim()) return;
+        setShowDropdown(false);
+        clearSuggestions();
+        router.push(`/search?q=${encodeURIComponent(q.trim())}`);
+    };
+
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-20">
             <TopBar />
 
             <div className="mt-[80px] px-5 flex-1 flex flex-col">
-                <div className="py-2 animate-page-enter">
+                <div className="py-2">
                     <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em] mb-1">
                         Welcome to {selectedCollege?.name}
                     </p>
@@ -48,19 +68,52 @@ export default function RentalsMarketplace() {
                     </p>
                 </div>
 
-                {/* Quick Search Bar directly above categories */}
-                <div 
-                    onClick={() => router.push("/search")}
-                    className="mb-4 bg-white border border-slate-100 rounded-[1.5rem] p-3 flex items-center gap-3 shadow-sm cursor-text hover:border-indigo-100 transition-colors"
-                >
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
-                        <span className="text-lg">🔍</span>
+                {/* Search Bar — Suggestions Only (navigates to /search on submit) */}
+                <div className="mb-4 relative z-50">
+                    <div className="flex items-center gap-2 bg-white border border-slate-100 rounded-full p-1 shadow-sm hover:border-indigo-100 transition-colors focus-within:ring-4 focus-within:ring-indigo-50 focus-within:border-indigo-300">
+                        <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
+                            <Search className="w-4 h-4 text-slate-400" />
+                        </div>
+                        <input
+                            type="text"
+                            value={query}
+                            onChange={e => {
+                                setQuery(e.target.value);
+                                if (e.target.value.length >= 2 || recentSearches.length > 0) {
+                                    setShowDropdown(true);
+                                } else {
+                                    setShowDropdown(false);
+                                }
+                            }}
+                            onFocus={() => {
+                                if (query.length >= 2 || recentSearches.length > 0) setShowDropdown(true);
+                            }}
+                            onKeyDown={e => {
+                                if (e.key === "Enter" && query.trim()) handleSearchSubmit(query);
+                                if (e.key === "Escape") { setShowDropdown(false); clearSuggestions(); }
+                            }}
+                            placeholder="Search items (calculator, lab coat...)"
+                            className="flex-1 bg-transparent text-sm font-bold text-slate-800 placeholder-slate-400 outline-none"
+                            autoComplete="off"
+                        />
+                        {query && (
+                            <button onClick={() => { clearSuggestions(); setShowDropdown(false); }} className="p-2">
+                                <X className="w-4 h-4 text-slate-400" />
+                            </button>
+                        )}
                     </div>
-                    <input
-                        type="text"
-                        readOnly
-                        placeholder="Search items in your college (calculator...)"
-                        className="flex-1 bg-transparent text-sm font-bold text-slate-800 placeholder-slate-400 outline-none cursor-pointer"
+
+                    {/* Dropdown BELOW the search bar */}
+                    <SearchDropdown
+                        suggestions={suggestions}
+                        recentSearches={recentSearches}
+                        trendingSearches={trendingSearches}
+                        collegeName={selectedCollege?.name || "Campus"}
+                        query={query}
+                        visible={showDropdown}
+                        onSelect={handleSearchSubmit}
+                        onRemoveRecent={removeSearch}
+                        onClose={() => setShowDropdown(false)}
                     />
                 </div>
 
@@ -77,14 +130,17 @@ export default function RentalsMarketplace() {
                     ))}
                 </div>
 
-                <div className="flex-1 bg-white rounded-3xl border border-slate-100 shadow-sm mb-24 overflow-hidden">
-                    <div className="h-full overflow-y-auto no-scrollbar p-2">
-                        <CategoryGrid />
+                {/* Category grid — hide when dropdown is open */}
+                {!showDropdown && (
+                    <div className="flex-1 bg-white rounded-3xl border border-slate-100 shadow-sm mb-24 overflow-hidden">
+                        <div className="h-full overflow-y-auto no-scrollbar p-2">
+                            <CategoryGrid counts={counts} loading={countsLoading} />
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
-            {/* Floating FAB - hidden in Buy mode (browse-only) */}
+            {/* Floating FAB */}
             {listingMode !== "buy" && (
                 <button
                     onClick={handleFabClick}

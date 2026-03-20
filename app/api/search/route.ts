@@ -31,9 +31,9 @@ function calculateTextScore(queryStr: string, item: Listing): number {
     const terms = queryStr.toLowerCase().split(/\s+/).filter(Boolean);
     if (terms.length === 0) return 1.0;
 
-    let score = 0;
+    let totalScore = 0;
     const searchSpace = [
-        { text: item.itemName?.toLowerCase() || '', weight: 3.0 },
+        { text: item.itemName?.toLowerCase() || '', weight: 4.0 }, // Increased weight for item name
         { text: item.categoryId?.toLowerCase() || '', weight: 1.5 },
         { text: item.department?.toLowerCase() || '', weight: 1.0 },
         { text: item.block?.toLowerCase() || '', weight: 1.0 },
@@ -42,15 +42,21 @@ function calculateTextScore(queryStr: string, item: Listing): number {
     for (const term of terms) {
         let termScore = 0;
         for (const field of searchSpace) {
-            if (field.text === term) termScore += field.weight * 1.5; // Exact match
-            else if (field.text.includes(term)) termScore += field.weight; // Partial match
-            else if (term.length > 2 && field.text.includes(term.slice(0, 3))) termScore += field.weight * 0.5; // Fuzzy prefix
+            if (field.text === term) {
+                termScore += field.weight * 2.0; // Exact match boost
+            } else if (field.text.startsWith(term)) {
+                termScore += field.weight * 1.5; // Prefix match boost
+            } else if (field.text.includes(term)) {
+                termScore += field.weight; // Partial match
+            } else if (term.length > 2 && field.text.includes(term.slice(0, 3))) {
+                termScore += field.weight * 0.3; // Fuzzy prefix
+            }
         }
-        score += termScore;
+        totalScore += termScore;
     }
 
-    // Rough normalization between 0 and 1
-    return Math.min(score / (terms.length * 5.0), 1.0);
+    // Normalization logic: item name carries the most importance.
+    return Math.min(totalScore / (terms.length * 5.0), 1.0);
 }
 
 function calculateProximityScore(userLat?: number, userLng?: number, itemLat?: number, itemLng?: number): number {
@@ -187,7 +193,9 @@ export async function GET(request: Request) {
             suggestions: isFallback ? ["Try broader terms", "Check spelling"] : []
         };
 
-        return NextResponse.json(response);
+        return NextResponse.json(response, {
+            headers: { 'Cache-Control': 'no-store' }
+        });
 
     } catch (error) {
         console.error("Search error:", error);

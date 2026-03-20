@@ -7,11 +7,31 @@ import { useRouter } from "next/navigation";
 
 interface RentalCardProps {
     item: Listing;
+    highlight?: string;
 }
 
-export function RentalCard({ item }: RentalCardProps) {
+export function RentalCard({ item, highlight }: RentalCardProps) {
     const router = useRouter();
     const [imgLoaded, setImgLoaded] = useState(false);
+
+    // Helper to highlight matching text
+    const renderTitle = () => {
+        if (!highlight || highlight.length < 2) return item.itemName;
+        const lowerTitle = item.itemName.toLowerCase();
+        const lowerHighlight = highlight.toLowerCase();
+        const startIdx = lowerTitle.indexOf(lowerHighlight);
+        if (startIdx === -1) return item.itemName;
+
+        return (
+            <>
+                {item.itemName.slice(0, startIdx)}
+                <span className="text-indigo-600 font-black decoration-indigo-200 decoration-2 underline-offset-2">
+                    {item.itemName.slice(startIdx, startIdx + highlight.length)}
+                </span>
+                {item.itemName.slice(startIdx + highlight.length)}
+            </>
+        );
+    };
 
     // Show "New" badge if listed within last 30 minutes
     const isNew = item.createdAt && typeof (item.createdAt as any).toMillis === "function"
@@ -62,7 +82,7 @@ export function RentalCard({ item }: RentalCardProps) {
             <div className="p-3 flex flex-col flex-1 gap-2">
                 <div className="flex justify-between items-start gap-2">
                     <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-slate-800 text-xs truncate leading-tight group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{item.itemName}</h3>
+                        <h3 className="font-bold text-slate-800 text-xs truncate leading-tight group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{renderTitle()}</h3>
                         <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                             <MapPin className="w-2.5 h-2.5" />
                             <span className="truncate">{item.block || "Campus"}</span>

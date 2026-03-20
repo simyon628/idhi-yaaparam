@@ -12,33 +12,46 @@ export const CATEGORIES = [
     { id: "others", name: "Others", icon: MoreHorizontal, color: "text-slate-600", bg: "bg-slate-50" },
 ];
 
-export function CategoryGrid() {
+interface CategoryGridProps {
+    counts?: Record<string, number>;
+    loading?: boolean;
+}
+
+export function CategoryGrid({ counts = {}, loading = false }: CategoryGridProps) {
     return (
         <div className="py-4 px-2">
             <div className="grid grid-cols-2 gap-3 pb-8">
-                {CATEGORIES.map((cat) => (
-                    <Link
-                        key={cat.id}
-                        href={`/category/${cat.id}`}
-                        className="flex flex-col p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all duration-200 group active:scale-[0.98]"
-                    >
-                        <div className="flex items-center justify-between mb-3">
-                            <div className={`w-10 h-10 rounded-xl ${cat.bg} flex items-center justify-center`}>
-                                <cat.icon className={`w-5 h-5 ${cat.color}`} strokeWidth={2.5} />
+                {CATEGORIES.map((cat) => {
+                    const count = counts[cat.id] || 0;
+                    
+                    return (
+                        <Link
+                            key={cat.id}
+                            href={`/search?q=${encodeURIComponent(cat.name)}&category=${encodeURIComponent(cat.id === 'books' ? 'Books & Notes' : cat.id === 'lab-coat' ? 'Lab Gear' : cat.id === 'electronics' ? 'Electronics' : cat.id === 'geometry' ? 'Stationery' : cat.name)}`}
+                            className="flex flex-col p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all duration-200 group active:scale-[0.98]"
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <div className={`w-10 h-10 rounded-xl ${cat.bg} flex items-center justify-center`}>
+                                    <cat.icon className={`w-5 h-5 ${cat.color}`} strokeWidth={2.5} />
+                                </div>
+                                <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
                             </div>
-                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
-                        </div>
-                        
-                        <div className="mt-auto">
-                            <span className="font-black text-slate-800 text-[15px] block mb-0.5 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
-                                {cat.name}
-                            </span>
-                            <span className="text-[10px] font-bold text-slate-400">
-                                Browse items
-                            </span>
-                        </div>
-                    </Link>
-                ))}
+                            
+                            <div className="mt-auto">
+                                <span className="font-black text-slate-800 text-[15px] block mb-0.5 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
+                                    {cat.name}
+                                </span>
+                                {loading ? (
+                                    <div className="h-3 w-16 bg-slate-100 animate-pulse rounded-full" />
+                                ) : (
+                                    <span className={`text-[10px] font-bold ${count > 0 ? "text-emerald-500" : "text-slate-400"}`}>
+                                        {count > 0 ? `${count} available` : "Browse items"}
+                                    </span>
+                                )}
+                            </div>
+                        </Link>
+                    );
+                })}
             </div>
         </div>
     );

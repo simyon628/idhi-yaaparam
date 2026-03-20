@@ -40,12 +40,15 @@ export function TopBar() {
         <>
             <div className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/60 px-5 py-3.5 flex items-center justify-between max-w-md mx-auto shadow-sm transition-all duration-300">
                 {/* Left: Logo */}
-                <div className="flex items-center gap-2">
+                <div
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={() => router.push("/rentals")}
+                >
                     <div className="w-8 h-8 rounded-lg gradient-indigo flex items-center justify-center shadow-indigo shrink-0">
                         <span className="text-base text-white">🚀</span>
                     </div>
                     <span
-                        className="text-base font-black text-slate-800 cursor-pointer"
+                        className="text-base font-black text-slate-800"
                         style={{ fontFamily: "Outfit, sans-serif" }}
                     >
                         Idhi Yaaparam
