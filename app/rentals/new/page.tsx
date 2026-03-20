@@ -15,6 +15,7 @@ import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
 
 import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
 import { compressImageFile } from "@/lib/image/compressImage";
+import { useListingMode } from "@/lib/hooks/useListingMode";
 
 const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
@@ -24,6 +25,12 @@ function NewRentalForm() {
     const [name, setName] = useState("");
     const searchParams = useSearchParams();
     const initialCategory = searchParams.get("category") || "";
+    const typeFromUrl = searchParams.get("type") as "rent" | "sell" | null;
+    const { listingMode } = useListingMode();
+    const activeType: "rent" | "sell" = typeFromUrl === "sell" || listingMode === "sell" ? "sell" : "rent";
+    const formConfig = activeType === "sell"
+        ? { title: "Sell Your Item",  subtitle: "List it for sale",   priceLabel: "Selling Price (₹)", submitLabel: "List for Sale" }
+        : { title: "Rent Your Item",  subtitle: "Earn by lending",    priceLabel: "Price per day (₹)",  submitLabel: "List for Rent" };
     const [category, setCategory] = useState(initialCategory);
     const [price, setPrice] = useState("");
     const [block, setBlock] = useState("");
@@ -202,6 +209,7 @@ function NewRentalForm() {
                 collegeId: selectedCollege.id,
                 department,
                 categoryId: selectedCat?.id || "others",
+                listingType: activeType,
                 icon: iconMap[category] || "📦",
                 photoUrl: photoDataUrl,   // base64 — visible immediately, no storage needed
                 extraPhotoUrls: [],
@@ -281,8 +289,8 @@ function NewRentalForm() {
                     <ChevronLeft className="w-5 h-5" />
                 </button>
                 <div>
-                    <h1 className="text-2xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>Rent Your Item</h1>
-                    <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1.5">Earn by lending</p>
+                    <h1 className="text-2xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>{formConfig.title}</h1>
+                    <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1.5">{formConfig.subtitle}</p>
                 </div>
             </header>
 
@@ -364,7 +372,7 @@ function NewRentalForm() {
                     </div>
                     {/* Price + Smart Pricing Suggestion */}
                     <div className="space-y-2.5 w-1/2">
-                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Price / hr *</label>
+                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">{formConfig.priceLabel}</label>
                         <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
                             <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
                             <input
@@ -515,7 +523,7 @@ function NewRentalForm() {
                         disabled={loading}
                         className="w-full h-16 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
                     >
-                        {loading ? <Loader2 className="animate-spin w-6 h-6" /> : "Publish Listing"}
+                        {loading ? <Loader2 className="animate-spin w-6 h-6" /> : formConfig.submitLabel}
                     </button>
                     <p className="text-center text-[10px] text-slate-400 mt-5 uppercase tracking-widest font-black">
                         By listing, you agree to the <span className="text-indigo-400">2-Strike Campus Policy</span>

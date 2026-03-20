@@ -8,10 +8,12 @@ import { Plus } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useListingMode } from "@/lib/hooks/useListingMode";
 
 export default function RentalsMarketplace() {
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
+    const { listingMode, setListingMode } = useListingMode();
 
     useEffect(() => {
         if (isReady && !selectedCollege) {
@@ -25,7 +27,7 @@ export default function RentalsMarketplace() {
         if (!auth?.currentUser) {
             router.push("/login?redirect=/rentals/new");
         } else {
-            router.push("/rentals/new");
+            router.push(`/rentals/new?type=${listingMode}`);
         }
     };
 
@@ -62,6 +64,19 @@ export default function RentalsMarketplace() {
                     />
                 </div>
 
+                {/* Mode Selection */}
+                <div className="flex gap-2 mb-4 bg-white p-1.5 rounded-2xl border border-slate-100 shadow-sm">
+                    {(["rent", "buy", "sell"] as const).map(m => (
+                        <button
+                            key={m}
+                            onClick={() => setListingMode(m)}
+                            className={`flex-1 py-3 rounded-xl text-sm font-black capitalize transition-all active:scale-95 ${listingMode === m ? "bg-indigo-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"}`}
+                        >
+                            {m}
+                        </button>
+                    ))}
+                </div>
+
                 <div className="flex-1 bg-white rounded-3xl border border-slate-100 shadow-sm mb-24 overflow-hidden">
                     <div className="h-full overflow-y-auto no-scrollbar p-2">
                         <CategoryGrid />
@@ -69,14 +84,16 @@ export default function RentalsMarketplace() {
                 </div>
             </div>
 
-            {/* Floating FAB */}
-            <button
-                onClick={handleFabClick}
-                className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-3 px-5 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20"
-            >
-                <Plus className="w-5 h-5 shrink-0" />
-                <span className="font-black text-[11px] uppercase tracking-widest">List Item</span>
-            </button>
+            {/* Floating FAB - hidden in Buy mode (browse-only) */}
+            {listingMode !== "buy" && (
+                <button
+                    onClick={handleFabClick}
+                    className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-3 px-5 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20"
+                >
+                    <Plus className="w-5 h-5 shrink-0" />
+                    <span className="font-black text-[11px] uppercase tracking-widest">{listingMode === "sell" ? "Sell Item" : "List Item"}</span>
+                </button>
+            )}
 
             <BottomNav />
         </div>

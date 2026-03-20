@@ -70,7 +70,7 @@ export function TopBar() {
                         className="flex items-center gap-1 pl-2 border-l border-slate-200"
                     >
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate max-w-[80px]">
-                            {selectedCollege?.name?.split(' ')[0] || "Campus"}
+                            {selectedCollege?.acronym || (selectedCollege?.name ? selectedCollege.name.split(" ").map((w: string) => w[0]).join("").toUpperCase() : "Campus")}
                         </span>
                         <ChevronDown className="w-3 h-3 text-slate-300" />
                     </button>

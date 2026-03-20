@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
 import { collection, query, where, orderBy, onSnapshot, writeBatch, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { ChevronLeft, Loader2, Bell, CheckCircle2, AlertTriangle, ArrowRight, MessageSquare } from "lucide-react";
+import { ChevronLeft, Loader2, Bell, CheckCircle2, AlertTriangle, ArrowRight, MessageSquare, Clock } from "lucide-react";
 import { AppNotification } from "@/lib/types";
 
 export default function NotificationsPage() {
@@ -108,28 +108,53 @@ export default function NotificationsPage() {
                         <p className="text-slate-500 font-semibold text-sm">You have no notifications.</p>
                     </div>
                 ) : (
-                    notifications.map((notif) => (
-                        <div
-                            key={notif.id}
-                            onClick={() => {
-                                if (notif.link) router.push(notif.link);
-                            }}
-                            className={`p-4 rounded-2xl border transition-all ${notif.isRead ? "bg-white border-slate-100 shadow-sm" : "bg-indigo-50 border-indigo-100 shadow-md"} ${notif.link ? "cursor-pointer active:scale-[0.98] hover:shadow-lg" : ""}`}
-                        >
-                            <div className="flex gap-4 items-start">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.isRead ? "bg-slate-50" : "bg-white"}`}>
-                                    {getIcon(notif.type)}
+                    (() => {
+                        const requests = notifications.filter(n => n.type === "request");
+                        const approvals = notifications.filter(n => n.type === "approval");
+                        const others = notifications.filter(n => n.type !== "request" && n.type !== "approval");
+
+                        const renderSection = (title: string, items: AppNotification[]) => {
+                            if (items.length === 0) return null;
+                            return (
+                                <div className="mb-6">
+                                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-2">{title}</h2>
+                                    <div className="space-y-3">
+                                        {items.map(notif => (
+                                            <div
+                                                key={notif.id}
+                                                onClick={() => {
+                                                    if (notif.link) router.push(notif.link);
+                                                }}
+                                                className={`p-4 rounded-2xl border transition-all ${notif.isRead ? "bg-white border-slate-100 shadow-sm" : "bg-indigo-50 border-indigo-100 shadow-md"} ${notif.link ? "cursor-pointer active:scale-[0.98] hover:shadow-lg" : ""}`}
+                                            >
+                                                <div className="flex gap-4 items-start">
+                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.isRead ? "bg-slate-50" : "bg-white shadow-sm"}`}>
+                                                        {getIcon(notif.type)}
+                                                    </div>
+                                                    <div>
+                                                        <h3 className={`text-[15px] leading-tight mb-1 ${notif.isRead ? "font-bold text-slate-700" : "font-black text-slate-900"}`}>{notif.title}</h3>
+                                                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{notif.message}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2 flex items-center gap-1">
+                                                            <Clock className="w-3 h-3" />
+                                                            {notif.createdAt ? new Date((notif.createdAt as any).seconds * 1000).toLocaleString() : "Just now"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className={`text-[15px] leading-tight mb-1 ${notif.isRead ? "font-bold text-slate-700" : "font-black text-slate-900"}`}>{notif.title}</h3>
-                                    <p className="text-sm text-slate-600 font-medium leading-relaxed">{notif.message}</p>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">
-                                        {notif.createdAt ? new Date((notif.createdAt as any).seconds * 1000).toLocaleString() : "Just now"}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    ))
+                            );
+                        };
+
+                        return (
+                            <>
+                                {renderSection("Requests", requests)}
+                                {renderSection("Approvals & Returns", approvals)}
+                                {renderSection("Other Updates", others)}
+                            </>
+                        );
+                    })()
                 )}
             </main>
         </div>

@@ -76,9 +76,11 @@ async function seed() {
 
             for (const col of chunk) {
                 const newDocRef = doc(collegesRef);
+                const acronym = col.name.split(/[\s-]+/).map(w => w[0]?.toUpperCase()).filter(c => /[A-Z]/.test(c)).join('');
                 batch.set(newDocRef, {
                     id: newDocRef.id,
                     name: col.name,
+                    acronym: acronym || "",
                     state: col.state,
                     city: "",
                     lat: 0,

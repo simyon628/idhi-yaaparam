@@ -8,6 +8,7 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc
 import { toast } from "sonner";
 import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
+import { useRecentItems } from "@/lib/hooks/useRecentItems";
 import RentalCalculator from "@/components/rental/RentalCalculator";
 import dynamic_ from "next/dynamic";
 const MeetupMap = dynamic_(() => import("@/components/map/MeetupMap"), { 
@@ -105,6 +106,8 @@ export default function RentalDetailPage() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportReason, setReportReason] = useState<ReportReason | "">("");
     const [reportNotes, setReportNotes] = useState("");
+    
+    const { addItem } = useRecentItems();
 
     // Rating State
     const [showRatingModal, setShowRatingModal] = useState(false);
@@ -113,6 +116,9 @@ export default function RentalDetailPage() {
 
     const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number, overallRating?: number, reviewCount?: number } | null>(null);
     const [renterName, setRenterName] = useState<string>("");
+
+    const [showDurationModal, setShowDurationModal] = useState(false);
+    const [borrowDuration, setBorrowDuration] = useState("1 Hour");
 
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
@@ -145,6 +151,7 @@ export default function RentalDetailPage() {
             if (docSnap.exists()) {
                 const data = { id: docSnap.id, ...docSnap.data() } as Listing;
                 setRental(data);
+                addItem(data);
 
                 // Fetch owner info
                 if (data.ownerId) {
@@ -242,13 +249,13 @@ export default function RentalDetailPage() {
         finally { setActionLoading(false); }
     };
 
-    const handleRequest = async () => {
+    const handleRequest = async (duration: string) => {
         if (!userId) { 
             toast.error("Please sign in first"); 
             router.push(`/login?redirect=/rentals/${id}`);
             return; 
         }
-        await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp() });
+        await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: duration });
 
         // Fire notification to Owner
         if (rental?.ownerId && rental.ownerId !== userId) {
@@ -264,6 +271,7 @@ export default function RentalDetailPage() {
         }
 
         toast.success("Request sent to owner! 🎉");
+        setShowDurationModal(false);
     };
 
     const handleApprove = async () => {
@@ -286,8 +294,18 @@ export default function RentalDetailPage() {
     };
 
     const handleMarkReturned = async () => {
-        await updateStatus("completed", { completedAt: serverTimestamp() });
-        toast.success("Rental marked as complete!");
+        if (!rental) return;
+        const now = new Date();
+        const availableUntil = rental.availableUntil || rental.expiresAt ? new Date(rental.availableUntil || rental.expiresAt!) : null;
+        
+        const isStillAvailable = !availableUntil || now <= availableUntil;
+        
+        await updateStatus(isStillAvailable ? "available" : "completed", { 
+            completedAt: serverTimestamp(),
+            ...(isStillAvailable ? { renterId: null } : {})
+        });
+        
+        toast.success(isStillAvailable ? "Item returned and is available again!" : "Rental marked as complete!");
         setShowRatingModal(true);
     };
 
@@ -592,13 +610,16 @@ export default function RentalDetailPage() {
                         ) : rental?.status === "active" ? (
                             <div className="grid grid-cols-2 gap-3">
                                 <button
-                                    onClick={() => router.push(`/chat/${id}`)}
-                                    className="h-20 rounded-2xl bg-white border-2 border-indigo-50 flex flex-col items-center justify-center gap-1.5 text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all shadow-sm group"
+                                    onClick={() => {
+                                        setReportReason("Item not returned");
+                                        setShowReportModal(true);
+                                    }}
+                                    className="h-20 rounded-2xl bg-white border-2 border-rose-50 flex flex-col items-center justify-center gap-1.5 text-rose-600 hover:border-rose-200 hover:bg-rose-50/30 transition-all shadow-sm group"
                                 >
-                                    <div className="p-2 bg-indigo-50 rounded-xl group-hover:scale-110 transition-transform">
-                                        <MessageSquare className="w-5 h-5 fill-indigo-100" />
+                                    <div className="p-2 bg-rose-50 rounded-xl group-hover:scale-110 transition-transform">
+                                        <AlertTriangle className="w-5 h-5 fill-rose-100" />
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Open Chat</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-center">Not Returned</span>
                                 </button>
                                 <button
                                     onClick={handleMarkReturned}
@@ -608,7 +629,7 @@ export default function RentalDetailPage() {
                                     <div className="p-2 bg-emerald-50 rounded-xl group-hover:scale-110 transition-transform">
                                         <Package className="w-5 h-5" />
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Item Returned</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-center">Returned</span>
                                 </button>
                             </div>
                         ) : rental?.status === "completed" ? (
@@ -633,7 +654,7 @@ export default function RentalDetailPage() {
                     </div>
                 ) : rental?.status === "available" ? (
                     <button
-                        onClick={handleRequest}
+                        onClick={() => setShowDurationModal(true)}
                         disabled={actionLoading}
                         className="w-full h-14 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:-translate-y-0.5"
                     >
@@ -645,16 +666,6 @@ export default function RentalDetailPage() {
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">You will be notified</p>
                     </div>
                 ) : isRenter && rental?.status === "active" ? (
-                    <div className="grid grid-cols-2 gap-3">
-                         <button
-                            onClick={() => router.push(`/chat/${id}`)}
-                            className="h-20 rounded-2xl bg-white border-2 border-indigo-50 flex flex-col items-center justify-center gap-1.5 text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all shadow-sm group"
-                        >
-                            <div className="p-2 bg-indigo-50 rounded-xl group-hover:scale-110 transition-transform">
-                                <MessageSquare className="w-5 h-5 fill-indigo-100" />
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest">Open Chat</span>
-                        </button>
                         <button
                             onClick={() => {
                                 // Simulate Razorpay for now
@@ -664,14 +675,11 @@ export default function RentalDetailPage() {
                                     handleMarkReturned(); // Complete the transaction
                                 }, 1500);
                             }}
-                            className="h-20 rounded-2xl bg-white border-2 border-emerald-50 flex flex-col items-center justify-center gap-1.5 text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all shadow-sm group"
+                            className="w-full h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center gap-2 font-black transition-all shadow-sm active:scale-95 group"
                         >
-                            <div className="p-2 bg-emerald-50 rounded-xl group-hover:scale-110 transition-transform">
-                                <CreditCard className="w-5 h-5" />
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest">Pay & Return</span>
+                            <CreditCard className="w-5 h-5" />
+                            <span className="text-sm uppercase tracking-widest">Pay & Return</span>
                         </button>
-                    </div>
                 ) : (
                     <div className="h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
                         <span className="text-slate-400 font-black text-sm uppercase tracking-widest text-center">ITEM ALREADY BOOKED</span>
@@ -772,6 +780,44 @@ export default function RentalDetailPage() {
                             className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-indigo-700 shadow-sm"
                         >
                             {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><Star className="w-4 h-4 fill-white" /> SUBMIT REVIEW</>}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ─── Duration Modal ─── */}
+            {showDurationModal && (
+                <div className="fixed inset-0 z-[100] flex items-end justify-center max-w-md mx-auto">
+                    <div className="absolute inset-0 bg-slate-800/40 backdrop-blur-sm" onClick={() => setShowDurationModal(false)} />
+                    <div className="relative w-full bg-slate-50 border-t border-indigo-100 rounded-t-[2rem] p-6 space-y-5 z-10 shadow-2xl">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Borrow Duration</h3>
+                                <p className="text-xs text-slate-500 mt-0.5 font-medium">How long do you need this item for?</p>
+                            </div>
+                            <button onClick={() => setShowDurationModal(false)} className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
+                                <X className="w-4 h-4 text-slate-400" />
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 pb-2">
+                            {["1 Hour", "1.5 Hours", "2 Hours", "1 Day", "2 Days", "1 Week"].map(opt => (
+                                <button
+                                    key={opt}
+                                    onClick={() => setBorrowDuration(opt)}
+                                    className={`py-3 rounded-xl border-2 text-sm font-black transition-all shadow-sm active:scale-95 ${borrowDuration === opt ? "border-indigo-600 bg-indigo-50 text-indigo-600" : "border-slate-100 bg-white text-slate-600 hover:border-indigo-200"}`}
+                                >
+                                    {opt}
+                                </button>
+                            ))}
+                        </div>
+                        
+                        <button
+                            onClick={() => handleRequest(borrowDuration)}
+                            disabled={actionLoading}
+                            className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-indigo-700 shadow-sm"
+                        >
+                            {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : `CONFIRM ${borrowDuration.toUpperCase()}`}
                         </button>
                     </div>
                 </div>

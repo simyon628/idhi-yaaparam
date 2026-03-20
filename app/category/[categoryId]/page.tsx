@@ -14,6 +14,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { RentalCard } from "@/components/rental/RentalCard";
 import { ChevronLeft, Loader2, Filter, ArrowUpDown, Plus } from "lucide-react";
 import { auth } from "@/lib/firebase";
+import { useListingMode } from "@/lib/hooks/useListingMode";
 
 export default function CategoryPage({ params }: { params: Promise<{ categoryId: string }> }) {
     const router = useRouter();
@@ -21,6 +22,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     const { selectedCollege, isReady } = useCollege();
     const { nearestBlock } = useNearestBlock(selectedCollege);
     const { formatting: blockNames } = useCampusBlocks(selectedCollege);
+    const { listingMode, isModeLoaded } = useListingMode();
 
     const [rentals, setRentals] = useState<Listing[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,7 +57,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     }, [selectedCollege, categoryId]);
 
     const handleFabClick = () => {
-        const url = `/rentals/new?category=${categoryId}`;
+        const url = `/rentals/new?category=${categoryId}&type=${listingMode}`;
         if (!auth?.currentUser) {
             router.push(`/login?redirect=${encodeURIComponent(url)}`);
         } else {
@@ -66,9 +68,18 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
     if (!isReady || !selectedCollege) return null;
 
     let filteredRentals = rentals.filter(r => {
+        // Mode filter: handle legacy items (no listingType) as "rent"
+        const rType = r.listingType || "rent";
+        if (rType !== listingMode) return false;
+
+        // Other filters
         if (selectedBranch !== "All" && r.branch !== selectedBranch) return false;
         if (selectedYear !== "All" && r.yearSection !== selectedYear) return false;
         if (selectedBlock !== "All" && r.block !== selectedBlock) return false;
+        
+        // Priority to 'available' items
+        if (r.status !== 'available') return false; 
+
         return true;
     });
 
@@ -102,9 +113,6 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                         <h1 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>{pluralCategoryName}</h1>
                         <p className="text-xs font-bold text-slate-500">{selectedCollege.name}</p>
                     </div>
-                    <button onClick={handleFabClick} className="ml-auto bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-indigo-100 shadow-sm active:scale-95 transition-all">
-                        List {categoryName} +
-                    </button>
                 </div>
 
                 <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-2">
@@ -134,12 +142,19 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                     <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>
                 ) : filteredRentals.length === 0 ? (
                     <div className="mt-10">
-                        <EmptyState
-                            title={`No ${categoryName} listed yet.`}
-                            description="Be the first to list and earn trust coins."
-                            actionLabel={`List ${categoryName}`}
-                            actionHref={`/rentals/new?category=${categoryId}`}
-                        />
+                        {listingMode !== "buy" ? (
+                            <EmptyState
+                                title={`No ${categoryName} ${listingMode === "sell" ? "for sale" : "for rent"} yet.`}
+                                description={listingMode === "sell" ? "Be the first to list yours for sale." : "Be the first to list and earn trust coins."}
+                                actionLabel={listingMode === "sell" ? `Sell ${categoryName}` : `List ${categoryName}`}
+                                actionHref={`/rentals/new?category=${categoryId}&type=${listingMode}`}
+                            />
+                        ) : (
+                            <EmptyState
+                                title={`No ${categoryName} for sale yet.`}
+                                description="No one has listed this for sale yet. Check back later!"
+                            />
+                        )}
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 gap-3">
@@ -150,10 +165,12 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                 )}
             </div>
 
-            <button onClick={handleFabClick} className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-4 px-6 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20">
-                <Plus className="w-5 h-5 shrink-0" />
-                <span className="font-black text-xs uppercase tracking-widest">List {categoryName}</span>
-            </button>
+            {listingMode !== "buy" && (
+                <button onClick={handleFabClick} className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-4 px-6 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20">
+                    <Plus className="w-5 h-5 shrink-0" />
+                    <span className="font-black text-xs uppercase tracking-widest">{listingMode === "sell" ? `Sell ${categoryName}` : `List ${categoryName}`}</span>
+                </button>
+            )}
         </div>
     );
 }
