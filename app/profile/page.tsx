@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, orderBy, deleteDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { toast } from "sonner";
 import {
@@ -21,6 +21,7 @@ type Tab = "overview" | "my-items" | "stats";
 
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState<Tab>("overview");
+    const [listFilter, setListFilter] = useState<string>("all");
     const [userProfile, setUserProfile] = useState<any>(null);
     const [myListings, setMyListings] = useState<Listing[]>([]);
     const [myBorrowing, setMyBorrowing] = useState<Listing[]>([]);
@@ -83,6 +84,19 @@ export default function ProfilePage() {
         }
     };
 
+    const handleDeleteListing = async (e: React.MouseEvent, itemId: string) => {
+        e.stopPropagation();
+        const ok = confirm("Delete this listing? This cannot be undone.");
+        if (!ok) return;
+        try {
+            await deleteDoc(doc(db as any, "rentals", itemId));
+            setMyListings(prev => prev.filter(i => i.id !== itemId));
+            toast.success("Listing deleted successfully");
+        } catch {
+            toast.error("Failed to delete listing");
+        }
+    };
+
     // Not logged in
     if (!userId && !loading) {
         return (
@@ -112,6 +126,10 @@ export default function ProfilePage() {
         { id: "my-items", label: "My Items", icon: Package },
         { id: "stats", label: "Stats", icon: BarChart2 },
     ];
+
+    const displayListings = listFilter === "all" ? myListings
+        : listFilter === "active" ? myListings.filter(i => i.status === "available")
+        : myListings.filter(i => ["completed", "active", "requested"].includes(i.status));
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-28">
@@ -286,30 +304,61 @@ export default function ProfilePage() {
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">My Listings ({myListings.length})</h2>
-                            <button onClick={() => router.push("/rentals/new")} className="text-[10px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-xl">+ List Item</button>
+                            <button onClick={() => router.push("/rentals/new")} className="text-[10px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-xl hover:bg-indigo-100 transition-colors">+ List Item</button>
                         </div>
-                        {myListings.length === 0 ? (
+                        
+                        <div className="flex gap-2">
+                            {["all", "active", "sold_borrowed"].map(f => (
+                                <button
+                                    key={f}
+                                    onClick={() => setListFilter(f)}
+                                    className={`px-4 py-1.5 text-[11px] font-black uppercase tracking-widest rounded-full transition-all ${listFilter === f ? "bg-indigo-600 text-white shadow-sm" : "bg-slate-200 text-slate-500 hover:bg-slate-300"}`}
+                                >
+                                    {f === "all" ? "All" : f === "active" ? "Active" : "Sold/Borrowed"}
+                                </button>
+                            ))}
+                        </div>
+
+                        {displayListings.length === 0 ? (
                             <div className="bg-white rounded-2xl p-8 border border-slate-100 text-center">
                                 <Package className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-                                <p className="text-slate-500 font-semibold text-sm">No listings yet.</p>
-                                <button onClick={() => router.push("/rentals/new")} className="mt-4 px-5 py-2.5 gradient-indigo text-white text-sm font-black rounded-xl shadow-indigo">List Your First Item</button>
+                                <p className="text-slate-500 font-semibold text-sm">No listings found.</p>
                             </div>
                         ) : (
-                            myListings.map(item => (
-                                <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-all shadow-sm hover:shadow-md">
-                                    <div className="w-12 h-12 rounded-xl bg-slate-50 overflow-hidden shrink-0 border border-slate-100">
-                                        {item.photoUrl ? <img src={item.photoUrl} alt={item.itemName} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl">{item.icon}</div>}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-black text-slate-800 leading-tight">{item.itemName}</p>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-xs font-bold text-indigo-600">₹{item.pricePerHour}/hr</span>
-                                            <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" : item.status === "active" ? "bg-indigo-50 text-indigo-600" : item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
-                                                {item.status}
-                                            </span>
+                            displayListings.map(item => (
+                                <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-3 cursor-pointer active:scale-[0.98] transition-all shadow-sm hover:shadow-md">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-xl bg-slate-50 overflow-hidden shrink-0 border border-slate-100">
+                                            {item.photoUrl ? <img src={item.photoUrl} alt={item.itemName} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl">{item.icon}</div>}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm font-black text-slate-800 leading-tight truncate">{item.itemName}</p>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className="text-xs font-bold text-indigo-600">₹{item.pricePerHour}</span>
+                                                <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" : item.status === "active" ? "bg-indigo-50 text-indigo-600" : item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
+                                                    {item.status}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-2 border-t border-slate-50 pt-3">
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); router.push(`/rentals/edit/${item.id}`); }}
+                                            className="flex-1 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 transition-colors"
+                                        >
+                                            Edit
+                                        </button>
+                                        {item.status === "available" && (
+                                            <button
+                                                onClick={(e) => handleDeleteListing(e, item.id)}
+                                                className="flex-1 py-1.5 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-black uppercase tracking-widest hover:bg-rose-100 transition-colors"
+                                            >
+                                                Delete
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             ))
                         )}

@@ -11,7 +11,7 @@ import { Listing, ReportReason } from "@/lib/types";
 import { useRecentItems } from "@/lib/hooks/useRecentItems";
 import RentalCalculator from "@/components/rental/RentalCalculator";
 import dynamic_ from "next/dynamic";
-const MeetupMap = dynamic_(() => import("@/components/map/MeetupMap"), { 
+const MeetupMap = dynamic_(() => import("@/lib/map/MeetupMap"), { 
   ssr: false,
   loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Map...</div>
 });

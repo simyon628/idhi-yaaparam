@@ -7,7 +7,8 @@ interface PhotoCarouselProps {
     itemName: string;
 }
 
-export function PhotoCarousel({ photos, itemName }: PhotoCarouselProps) {
+export function PhotoCarousel({ photos: maybePhotos, itemName }: PhotoCarouselProps) {
+    const photos = maybePhotos ?? [];
     const [current, setCurrent] = useState(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -15,6 +16,15 @@ export function PhotoCarousel({ photos, itemName }: PhotoCarouselProps) {
 
     const touchStartX = useRef<number>(0);
     const touchStartY = useRef<number>(0);
+
+    // --- URL Helper ---
+    const getPhotoUrl = (path: string) => {
+        if (!path) return "";
+        // Supabase conversion logic would go here if we weren't using Firebase
+        // Since we are using Firebase, our URLs are already public "http" links.
+        if (path.startsWith('http')) return path;
+        return path;
+    };
 
     // --- Touch swipe logic ---
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -26,9 +36,10 @@ export function PhotoCarousel({ photos, itemName }: PhotoCarouselProps) {
         const dx = e.changedTouches[0].clientX - touchStartX.current;
         const dy = e.changedTouches[0].clientY - touchStartY.current;
         if (Math.abs(dx) < Math.abs(dy)) return; // vertical — ignore
-        if (Math.abs(dx) < 40) return; // too small
-        if (dx < 0 && currentIdx < total - 1) setter(currentIdx + 1);
-        else if (dx > 0 && currentIdx > 0) setter(currentIdx - 1);
+        
+        const diff = touchStartX.current - e.changedTouches[0].clientX;
+        if (diff > 50) setter(Math.min(currentIdx + 1, total - 1));
+        if (diff < -50) setter(Math.max(currentIdx - 1, 0));
     }, []);
 
     const handleLightboxTouchEnd = useCallback((e: React.TouchEvent) => {
@@ -63,25 +74,22 @@ export function PhotoCarousel({ photos, itemName }: PhotoCarouselProps) {
                     <div className="absolute inset-0 bg-slate-200 animate-pulse z-10" />
                 )}
 
-                {photos.map((url, i) => (
-                    <img
-                        key={i}
-                        src={url}
-                        alt={`${itemName} photo ${i + 1}`}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${i === current ? "opacity-100" : "opacity-0"}`}
-                        onLoad={() => i === 0 && setImgLoaded(true)}
-                        onClick={() => { setLightboxIndex(current); setLightboxOpen(true); }}
-                    />
-                ))}
+                <img
+                    src={getPhotoUrl(photos[current])}
+                    alt={`${itemName} photo ${current + 1}`}
+                    className="w-full h-full object-cover"
+                    onLoad={() => setImgLoaded(true)}
+                    onClick={() => { setLightboxIndex(current); setLightboxOpen(true); }}
+                />
 
                 {/* Dot indicators */}
                 {photos.length > 1 && (
                     <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20">
                         {photos.map((_, i) => (
-                            <button
+                            <div
                                 key={i}
                                 onClick={() => setCurrent(i)}
-                                className={`rounded-full transition-all duration-300 ${i === current ? "w-5 h-1.5 bg-white" : "w-1.5 h-1.5 bg-white/50"}`}
+                                className={`w-2 h-2 rounded-full cursor-pointer ${i === current ? 'bg-white' : 'bg-white/40'}`}
                             />
                         ))}
                     </div>

@@ -13,7 +13,7 @@ interface SellerCardProps {
         strikeCount?: number;
         createdAt?: any;
         itemsListedCount?: number;
-    };
+    } | null;
 }
 
 function BadgeByScore({ score }: { score: number }) {
@@ -27,9 +27,14 @@ function BadgeByScore({ score }: { score: number }) {
             <Shield className="w-3 h-3" /> Moderate
         </span>
     );
-    return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-100">
+    if (score >= 1) return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">
             <AlertTriangle className="w-3 h-3" /> New User
+        </span>
+    );
+    return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 text-slate-700 border border-slate-200">
+            <AlertTriangle className="w-3 h-3 text-slate-400" /> No score yet
         </span>
     );
 }
@@ -42,7 +47,23 @@ function formatMemberSince(d: any): string {
 
 export function SellerCard({ owner }: SellerCardProps) {
     const router = useRouter();
-    const trustScore = owner.strikeCount === 0 ? 90 : owner.strikeCount === 1 ? 55 : 20;
+
+    if (!owner) {
+        return (
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 animate-pulse">
+                <div className="h-3 w-16 bg-slate-200 rounded mb-4" />
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="w-11 h-11 rounded-full bg-slate-200 shrink-0" />
+                    <div className="flex-1 space-y-2">
+                        <div className="h-4 w-32 bg-slate-200 rounded" />
+                        <div className="h-3 w-24 bg-slate-200 rounded" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const trustScore = owner.strikeCount === 0 ? 90 : owner.strikeCount === 1 ? 55 : owner.strikeCount === undefined ? 0 : 20;
 
     return (
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
