@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, orderBy, deleteDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, orderBy, deleteDoc, updateDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { toast } from "sonner";
 import {
@@ -94,6 +94,20 @@ export default function ProfilePage() {
             toast.success("Listing deleted successfully");
         } catch {
             toast.error("Failed to delete listing");
+        }
+    };
+
+    const handleMarkStatus = async (e: React.MouseEvent, itemId: string, newStatus: "available" | "completed") => {
+        e.stopPropagation();
+        if (!db) return;
+        try {
+            await updateDoc(doc(db as any, "rentals", itemId), { status: newStatus });
+            setMyListings(prev =>
+                prev.map(i => i.id === itemId ? { ...i, status: newStatus } : i)
+            );
+            toast.success(newStatus === "completed" ? "Marked as sold" : "Marked as available");
+        } catch {
+            toast.error("Could not update status.");
         }
     };
 
@@ -350,14 +364,21 @@ export default function ProfilePage() {
                                         >
                                             Edit
                                         </button>
-                                        {item.status === "available" && (
+                                        {item.status === "available" ? (
                                             <button
-                                                onClick={(e) => handleDeleteListing(e, item.id)}
+                                                onClick={(e) => handleMarkStatus(e, item.id, "completed")}
                                                 className="flex-1 py-1.5 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-black uppercase tracking-widest hover:bg-rose-100 transition-colors"
                                             >
-                                                Delete
+                                                Mark Sold
                                             </button>
-                                        )}
+                                        ) : item.status === "completed" ? (
+                                            <button
+                                                onClick={(e) => handleMarkStatus(e, item.id, "available")}
+                                                className="flex-1 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-100 transition-colors"
+                                            >
+                                                Mark Available
+                                            </button>
+                                        ) : null}
                                     </div>
                                 </div>
                             ))

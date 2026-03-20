@@ -13,28 +13,34 @@ interface SellerCardProps {
         strikeCount?: number;
         createdAt?: any;
         itemsListedCount?: number;
+        college_id?: string;
     } | null;
 }
 
-function BadgeByScore({ score }: { score: number }) {
+export function getTrustScore(strikeCount?: number): number {
+    return strikeCount === 0 ? 90 : strikeCount === 1 ? 55 : strikeCount === undefined ? 0 : 20;
+}
+
+export function TrustBadge({ score, large = false }: { score: number, large?: boolean }) {
+    const base = `inline-flex items-center gap-1.5 rounded-full font-bold ${large ? 'px-3 py-1 text-[14px]' : 'px-2 py-0.5 text-[10px]'}`;
     if (score >= 80) return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
-            <ShieldCheck className="w-3 h-3" /> Trusted
+        <span className={`${base} bg-emerald-50 text-emerald-700 border border-emerald-100`}>
+            <ShieldCheck className={large ? "w-4 h-4" : "w-3 h-3"} /> Trusted Lender
         </span>
     );
     if (score >= 50) return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100">
-            <Shield className="w-3 h-3" /> Moderate
+        <span className={`${base} bg-amber-50 text-amber-700 border border-amber-100`}>
+            <Shield className={large ? "w-4 h-4" : "w-3 h-3"} /> Moderate
         </span>
     );
-    if (score >= 1) return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">
-            <AlertTriangle className="w-3 h-3" /> New User
+    if (score > 0) return (
+        <span className={`${base} bg-rose-50 text-rose-700 border border-rose-100`}>
+            <AlertTriangle className={large ? "w-4 h-4" : "w-3 h-3"} /> New User
         </span>
     );
     return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 text-slate-700 border border-slate-200">
-            <AlertTriangle className="w-3 h-3 text-slate-400" /> No score yet
+        <span className={`${base} bg-slate-50 text-slate-700 border border-slate-200`}>
+            <AlertTriangle className={(large ? "w-4 h-4 " : "w-3 h-3 ") + "text-slate-400"} /> No score yet
         </span>
     );
 }
@@ -73,37 +79,27 @@ export function SellerCard({ owner }: SellerCardProps) {
                 <div className="w-11 h-11 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-lg shrink-0 shadow-sm">
                     {owner.name.charAt(0).toUpperCase()}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 space-y-1">
                     <p className="font-bold text-slate-800 text-sm">{owner.name}</p>
-                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                        <BadgeByScore score={trustScore} />
-                        {owner.department && (
-                            <span className="text-[10px] text-slate-400 font-semibold">{owner.department}</span>
-                        )}
+                    <div className="flex flex-col gap-1">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                            {owner.department && (
+                                <span className="text-[10px] text-slate-500 font-semibold">{owner.department}</span>
+                            )}
+                            <span className="text-[10px] text-slate-400 font-medium">
+                                {owner.college_id ? `ID: ${owner.college_id}` : "ID: Not verified"}
+                            </span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <TrustBadge score={trustScore} />
+                            {owner.reviewCount !== undefined && owner.reviewCount > 0 && (
+                                <span className="text-[10px] font-bold text-amber-500 flex items-center gap-0.5">
+                                    ★ {owner.overallRating?.toFixed(1)} <span className="text-slate-400 font-normal">({owner.reviewCount} reviews)</span>
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Stats row */}
-            <div className="flex gap-3 text-center mb-4">
-                {owner.itemsListedCount !== undefined && (
-                    <div className="flex-1 bg-slate-50 rounded-xl py-2">
-                        <p className="text-sm font-black text-slate-800">{owner.itemsListedCount}</p>
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Listed</p>
-                    </div>
-                )}
-                {owner.reviewCount !== undefined && owner.reviewCount > 0 && (
-                    <div className="flex-1 bg-slate-50 rounded-xl py-2">
-                        <p className="text-sm font-black text-amber-500">{owner.overallRating?.toFixed(1)}</p>
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{owner.reviewCount} Reviews</p>
-                    </div>
-                )}
-                {owner.createdAt && (
-                    <div className="flex-1 bg-slate-50 rounded-xl py-2 px-1">
-                        <p className="text-[11px] font-black text-slate-600">{formatMemberSince(owner.createdAt)}</p>
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Joined</p>
-                    </div>
-                )}
             </div>
 
             <button
@@ -132,23 +128,23 @@ export function OwnerActionsCard({ itemId, onMarkSold, onDelete, loading }: Owne
             <div className="flex flex-col gap-2">
                 <button
                     onClick={() => router.push(`/rentals/edit/${itemId}`)}
-                    className="w-full py-3 rounded-xl border border-amber-200 text-amber-700 text-xs font-black uppercase tracking-widest hover:bg-amber-100 transition-colors"
+                    className="w-full py-3 rounded-xl border border-amber-200 text-amber-700 text-xs font-black uppercase tracking-widest hover:bg-amber-100 transition-colors flex items-center justify-center"
                 >
-                    ✏️ Edit Listing
+                    <span className="w-3 h-3 mr-1" /> Edit Listing
                 </button>
                 <button
                     onClick={onMarkSold}
                     disabled={loading}
-                    className="w-full py-3 rounded-xl bg-slate-700 text-white text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-colors disabled:opacity-50"
+                    className="w-full py-3 rounded-xl bg-slate-700 text-white text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-colors disabled:opacity-50 flex items-center justify-center"
                 >
-                    {loading ? "Updating..." : "✓ Mark as Completed"}
+                    {loading ? "Updating..." : "Mark as Completed"}
                 </button>
                 <button
                     onClick={onDelete}
                     disabled={loading}
-                    className="w-full py-3 rounded-xl text-rose-600 text-xs font-black uppercase tracking-widest hover:bg-rose-50 transition-colors border border-rose-100"
+                    className="w-full py-3 rounded-xl text-rose-600 text-xs font-black uppercase tracking-widest hover:bg-rose-50 transition-colors border border-rose-100 flex items-center justify-center"
                 >
-                    🗑️ Delete Listing
+                    <span className="w-3 h-3 mr-1" /> Delete Listing
                 </button>
             </div>
         </div>

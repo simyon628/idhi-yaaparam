@@ -35,6 +35,7 @@ async function getOwnerById(ownerId: string) {
         strikeCount: data.strikeCount ?? 0,
         createdAt: data.createdAt,
         itemsListedCount: listingsSnap.size,
+        college_id: data.college_id,
     };
 }
 

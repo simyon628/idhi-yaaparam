@@ -6,10 +6,11 @@ export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "sonner";
-import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock } from "lucide-react";
+import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock, Sparkles, ThumbsUp } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
 import { useRecentItems } from "@/lib/hooks/useRecentItems";
 import RentalCalculator from "@/components/rental/RentalCalculator";
+import { SellerCard, TrustBadge, getTrustScore } from "@/components/item/SellerCard";
 import dynamic_ from "next/dynamic";
 const MeetupMap = dynamic_(() => import("@/lib/map/MeetupMap"), { 
   ssr: false,
@@ -140,7 +141,7 @@ export default function RentalDetailPage() {
         } else {
             await setDoc(ref, { savedAt: serverTimestamp() });
             setIsSaved(true);
-            toast.success("Saved to wishlist! 🔖");
+            toast.success("Saved to wishlist!");
         }
     };
 
@@ -233,7 +234,7 @@ export default function RentalDetailPage() {
     let liveDistanceStr = "";
     if (rental && rental.ownerLocation && rental.renterLocation) {
         const dist = getDistanceInMeters(rental.ownerLocation.lat, rental.ownerLocation.lng, rental.renterLocation.lat, rental.renterLocation.lng);
-        liveDistanceStr = dist < 50 ? "Very close! Look around 👀" : `${dist}m away`;
+        liveDistanceStr = dist < 50 ? "Very close! Look around" : `${dist}m away`;
     }
 
     const updateStatus = async (newStatus: string, extraFields: Record<string, any> = {}) => {
@@ -270,7 +271,7 @@ export default function RentalDetailPage() {
             });
         }
 
-        toast.success("Request sent to owner! 🎉");
+        toast.success("Request sent to owner!");
         setShowDurationModal(false);
     };
 
@@ -439,47 +440,42 @@ export default function RentalDetailPage() {
             {/* Content sheet */}
             <div className="flex-1 px-5 pt-6 -mt-4 bg-slate-50 rounded-t-3xl relative z-10 border-t border-white shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)]">
 
-                {/* Title & price */}
-                <div className="flex items-start justify-between mb-6">
-                    <div className="space-y-1 flex-1 mr-4">
-                        <span className="text-3xl drop-shadow-sm">{rental?.icon}</span>
-                        <h1 className="text-2xl font-black text-slate-800 leading-tight mt-1" style={{ fontFamily: "Outfit, sans-serif" }}>
-                            {rental?.itemName}
-                        </h1>
-                        <div className="flex items-center gap-1.5 text-indigo-500">
-                            <MapPin className="w-3.5 h-3.5" />
-                            <span className="text-xs font-bold uppercase tracking-wider">{rental?.block}</span>
-                        </div>
-                    </div>
-                    <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl text-center min-w-[88px] shadow-sm">
-                        <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mb-1">Per Hour</p>
-                        <div className="flex items-center justify-center gap-0.5 text-amber-600">
-                            <IndianRupee className="w-3.5 h-3.5" />
-                            <span className="text-xl font-black">{rental?.pricePerHour}</span>
-                        </div>
-                    </div>
-                </div>
+                {/* Product Header details */}
+                <div>
+                    {/* Title */}
+                    <h1 className="text-2xl font-black text-slate-800 leading-tight mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        {rental?.itemName}
+                    </h1>
 
-                {/* Info grid */}
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm hover:shadow-md transition-shadow">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Trust Score</p>
-                        <div className="flex items-center gap-1.5 text-emerald-600">
-                            <ShieldCheck className="w-4 h-4" />
-                            <span className="text-sm font-black">Verified</span>
+                    {/* Trust Score Row */}
+                    {ownerInfo && (
+                        <div className="mb-3">
+                            <TrustBadge score={getTrustScore(ownerInfo.strikeCount)} large={true} />
                         </div>
+                    )}
+
+                    {/* Price */}
+                     <div className="flex items-baseline gap-1.5 mb-3">
+                        <span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{rental?.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">/ hr</span>
                     </div>
-                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm hover:shadow-md transition-shadow">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Condition</p>
+
+                    {/* Location badge, Condition badge etc. */}
+                    <div className="flex flex-wrap items-center gap-2 mb-6">
+                        {rental?.block && (
+                            <div className="flex items-center gap-1 text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+                                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                                <span className="text-xs font-bold uppercase tracking-wider">{rental?.block}</span>
+                            </div>
+                        )}
                         <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black ${
                             rental?.condition === "Excellent" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" :
                             rental?.condition === "Good" ? "bg-indigo-50 text-indigo-700 border border-indigo-200" :
                             rental?.condition === "Fair" ? "bg-amber-50 text-amber-700 border border-amber-200" :
-                            "bg-slate-100 text-slate-500"
+                            "bg-slate-100 text-slate-500 border border-slate-200"
                         }`}>
-                            {rental?.condition === "Excellent" ? "✨ Excellent" :
-                             rental?.condition === "Good" ? "👍 Good" :
-                             rental?.condition === "Fair" ? "⚠️ Fair" : "Not stated"}
+                            {rental?.condition === "Excellent" ? <><Sparkles className="w-3.5 h-3.5"/> Excellent</> :
+                             rental?.condition === "Good" ? <><ThumbsUp className="w-3.5 h-3.5"/> Good</> :
+                             rental?.condition === "Fair" ? <><AlertTriangle className="w-3.5 h-3.5"/> Fair</> : "Not stated"}
                         </div>
                     </div>
                 </div>
@@ -555,32 +551,8 @@ export default function RentalDetailPage() {
 
                 {/* Owner Profile Card */}
                 {ownerInfo && (
-                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-indigo-50 shadow-sm flex items-center justify-between group cursor-pointer hover:border-indigo-100 transition-all mb-4">
-                        <div className="flex items-center gap-3 relative">
-                            <div className="w-12 h-12 rounded-full gradient-indigo flex items-center justify-center text-white font-black text-lg shadow-indigo shrink-0">
-                                {ownerInfo.name.charAt(0).toUpperCase()}
-                            </div>
-                            {ownerInfo.strikeCount === 0 && ownerInfo.isVerified && (
-                                <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border-2 border-white shadow-sm">
-                                    <ShieldCheck className="w-3.5 h-3.5" />
-                                </div>
-                            )}
-                            <div>
-                                <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5">Listed By</p>
-                                <p className="text-[15px] font-bold text-slate-800 leading-tight flex items-center gap-1.5">
-                                    {ownerInfo.name}
-                                </p>
-                                <div className="flex items-center gap-2 mt-0.5">
-                                    <p className="text-xs font-semibold text-indigo-500">{ownerInfo.department}</p>
-                                    {ownerInfo.reviewCount && ownerInfo.reviewCount > 0 ? (
-                                        <div className="flex items-center gap-0.5 text-xs font-bold text-amber-500 bg-amber-50 border border-amber-100 px-1.5 py-[1px] rounded">
-                                            <Star className="w-3 h-3 fill-amber-500" />
-                                            {ownerInfo.overallRating?.toFixed(1)} <span className="text-amber-600/60 font-medium">({ownerInfo.reviewCount})</span>
-                                        </div>
-                                    ) : null}
-                                </div>
-                            </div>
-                        </div>
+                    <div className="mb-4">
+                        <SellerCard owner={{ id: rental?.ownerId!, ...ownerInfo }} />
                     </div>
                 )}
 

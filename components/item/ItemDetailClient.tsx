@@ -8,7 +8,7 @@ import { ChevronLeft, Share2, Heart, IndianRupee, MapPin, Clock } from "lucide-r
 import { Listing } from "@/lib/types";
 
 import { PhotoCarousel } from "./PhotoCarousel";
-import { SellerCard, OwnerActionsCard } from "./SellerCard";
+import { SellerCard, OwnerActionsCard, TrustBadge, getTrustScore } from "./SellerCard";
 import { DetailsGrid } from "./DetailsGrid";
 import { ActionBar } from "./ActionBar";
 import { SimilarItems } from "./SimilarItems";
@@ -246,9 +246,22 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
             <div className="px-4 pt-4 flex flex-col gap-5">
 
                 {/* Price + Title + Badges */}
+                {/* Product Header details */}
                 <div>
+                    {/* Title */}
+                    <h1 className="text-2xl font-black text-slate-800 leading-snug mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        {item.itemName}
+                    </h1>
+
+                    {/* Trust Score Row */}
+                    {ownerData !== null && ownerData !== undefined && (
+                        <div className="mb-3">
+                            <TrustBadge score={getTrustScore(ownerData.strikeCount)} large={true} />
+                        </div>
+                    )}
+
                     {/* Price */}
-                    <div className="flex items-baseline gap-1.5 mb-2">
+                    <div className="flex items-baseline gap-1.5 mb-3">
                         {isRent ? (
                             <><span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{item.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">/ hr</span></>
                         ) : (item as any).listingType === "free" ? (
@@ -258,21 +271,14 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
                         )}
                     </div>
 
-                    {/* Title */}
-                    <h1 className="text-[18px] font-medium text-slate-800 leading-snug mb-3" style={{ fontFamily: "Outfit, sans-serif" }}>
-                        {item.itemName}
-                    </h1>
-
-                    {/* Location */}
-                    {item.block && (
-                        <div className="flex items-center gap-1 text-slate-500 mb-3">
-                            <MapPin className="w-3.5 h-3.5 shrink-0" />
-                            <span className="text-xs font-semibold">{item.block}</span>
-                        </div>
-                    )}
-
-                    {/* Badges */}
-                    <div className="flex flex-wrap gap-1.5 mb-3">
+                    {/* Badges row: Location, Type, Condition, Status, etc */}
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                        {item.block && (
+                            <div className="flex items-center gap-1 text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                                <MapPin className="w-3 h-3 shrink-0" />
+                                <span className="text-[10px] font-bold">{item.block}</span>
+                            </div>
+                        )}
                         <TypeBadge type={item.listingType} />
                         <ConditionBadge condition={item.condition} />
                         <StatusBadge status={item.status} />
