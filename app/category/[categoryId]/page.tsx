@@ -94,8 +94,12 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
             try {
                 const userCollege = selectedCollege.id;
                 
+                if (!db) {
+                    setLoading(false);
+                    return;
+                }
                 const q = query(
-                    collection(db!, 'listings'),
+                    collection(db, 'listings'),
                     where('college', '==', userCollege),
                     where('status', '==', 'available'),
                     limit(50)
