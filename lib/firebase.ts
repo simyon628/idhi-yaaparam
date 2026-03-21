@@ -51,19 +51,25 @@ let analytics;
 let messaging: any = null;
 
 if (typeof window !== "undefined" && app) {
+  // Analytics
   isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
     }
-  });
+  }).catch(() => {});
 
-  // Load messaging
-  const { getMessaging, isSupported: isMsgSupported } = require("firebase/messaging");
-  isMsgSupported().then((supported: boolean) => {
-    if (supported) {
-      messaging = getMessaging(app);
-    }
-  });
+  // FCM Messaging — only load in browsers that support it (requires HTTPS + SW)
+  import("firebase/messaging").then(({ getMessaging, isSupported: isMsgSupported }) => {
+    isMsgSupported().then((supported: boolean) => {
+      if (supported) {
+        try {
+          messaging = getMessaging(app);
+        } catch {
+          // FCM unavailable in this context (e.g. incognito, Safari) — silently skip
+        }
+      }
+    }).catch(() => {});
+  }).catch(() => {});
 }
 
 export { app, auth, db, storage, analytics, messaging };

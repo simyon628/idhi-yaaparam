@@ -9,54 +9,62 @@ import { TopBar } from "@/components/layout/TopBar";
 import { ChevronLeft, SearchX } from "lucide-react";
 import { getCachedItems } from "@/lib/cache/itemsCache";
 
-// ─── Category → keywords map (expanded & strict) ──────────────────────────
+// ─── Category → keywords map ──────────────────────────────────────────────
+// Matches against itemName AND categoryId stored in the rentals documents
 const categoryMap: Record<string, string[]> = {
-  'calculator':    ['calculator','casio','scientific','fx-991','fx991','calc'],
-  'drafter':       ['drafter','drawing board','drafting','mini drafter','a1 board','a2 board'],
-  'lab-coat':      ['lab coat','labcoat','lab-coat','apron','white coat'],
-  'geometry-set':  ['geometry','compass','protractor','set square','geometry set'],
-  'books':         ['book','notes','textbook','notebook','novel','guide','material'],
-  'electronics':   ['laptop','phone','charger','earphone','powerbank','cable','adapter','electronic','gadget','device'],
-  'others':        [],
+  'cat-calculator':    ['calculator','casio','scientific','fx-991','fx991','calc'],
+  'cat-drafter':       ['drafter','drawing board','drafting','mini drafter','a1 board','a2 board'],
+  'cat-labcoat':       ['lab coat','labcoat','lab-coat','apron','white coat'],
+  'cat-geometry':      ['geometry','compass','protractor','set square','geometry set'],
+  'cat-books':         ['book','notes','textbook','notebook','novel','guide','material'],
+  'cat-electronics':   ['laptop','phone','charger','earphone','powerbank','cable','adapter','electronic','gadget','device','arduino'],
+  'cat-tools':         ['tool','wrench','hammer','screwdriver'],
+  'cat-others':        [],
 };
 
-// ─── Strict filter: each category only shows its own items ────────────────
+// ─── Filter by categoryId first, then keyword fallback ───────────────────
 const filterByCategory = (items: any[], categoryId: string) => {
-  const keywords = categoryMap[categoryId] ?? [];
-
-  if (categoryId === 'others') {
+  if (categoryId === 'cat-others') {
     const allKnownKeywords = Object.values(categoryMap).flat();
+    const knownIds = Object.keys(categoryMap).filter(k => k !== 'cat-others');
     return items.filter(item => {
-      const text = (
-        (item.title ?? '') + ' ' +
-        (item.category ?? '') + ' ' +
-        (item.description ?? '')
-      ).toLowerCase();
+      // Not in any known categoryId AND no known keywords in name
+      if (knownIds.includes(item.categoryId)) return false;
+      const text = ((item.itemName ?? '') + ' ' + (item.categoryId ?? '')).toLowerCase();
       return !allKnownKeywords.some(kw => text.includes(kw));
     });
   }
 
   return items.filter(item => {
+    // 1. Exact categoryId match (most reliable)
+    // The rentals collection might store "cat-calculator", or just the name "Calculator",
+    // or the grid category ID. We check if the item's categoryId mapped back matches this category.
+    if (item.categoryId === categoryId) return true;
+    
+    // 2. Keyword match in itemName as fallback
+    const keywords = categoryMap[categoryId] ?? [];
+    if (keywords.length === 0) return false;
     const text = (
-      (item.title ?? '') + ' ' +
-      (item.category ?? '') + ' ' +
+      (item.itemName ?? '') + ' ' +
+      (item.categoryId ?? '') + ' ' +
       (item.description ?? '')
     ).toLowerCase();
     return keywords.some(kw => text.includes(kw));
   });
 };
 
-// ─── Category-specific placeholder images ────────────────────────────────
-const getCategoryPlaceholder = (category: string): string => {
+// ─── Category placeholder icons ───────────────────────────────────────────
+const getCategoryPlaceholder = (categoryId: string): string => {
   const placeholders: Record<string, string> = {
-    'calculator':   '/icons/calculator.svg',
-    'drafter':      '/icons/drafter.svg',
-    'lab-coat':     '/icons/labcoat.svg',
-    'geometry-set': '/icons/book.svg',
-    'books':        '/icons/book.svg',
-    'electronics':  '/icons/electronics.svg',
+    'cat-calculator':   '/icons/calculator.svg',
+    'cat-drafter':      '/icons/drafter.svg',
+    'cat-labcoat':      '/icons/labcoat.svg',
+    'cat-geometry':     '/icons/book.svg',
+    'cat-books':        '/icons/book.svg',
+    'cat-electronics':  '/icons/electronics.svg',
+    'cat-tools':        '/icons/package.svg',
   };
-  return placeholders[category] ?? '/icons/package.svg';
+  return placeholders[categoryId] ?? '/icons/package.svg';
 };
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────
@@ -80,12 +88,14 @@ function ItemCard({ item, categoryId }: { item: any; categoryId: string }) {
     : 'Good';
 
   const priceText =
-    item.listingType === 'rent'
-      ? `₹${item.pricePerHour || item.price || 0}/hr`
-      : `₹${item.price || item.pricePerHour || 0}`;
+    item.listingType === 'sell'
+      ? `₹${item.pricePerHour || item.price || 0}`
+      : `₹${item.pricePerHour || item.price || 0}/day`;
 
-  const titleText = item.title || item.itemName || 'Item';
-  const imageSrc = item.images?.[0] || item.imageUrl || '';
+  // rentals collection uses 'itemName' not 'title'
+  const titleText = item.itemName || item.title || 'Item';
+  // rentals collection uses 'photoUrl' not 'images[]'
+  const imageSrc = item.photoUrl || item.images?.[0] || item.imageUrl || '';
   const placeholder = getCategoryPlaceholder(categoryId);
 
   return (
@@ -162,7 +172,6 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
 
         <div className="mb-6">
           <h1 className="text-3xl font-black text-slate-800 tracking-tight">{categoryName}</h1>
-          {/* Only show count after loading to avoid "0 items" flash */}
           {!loading && (
             <p className="text-sm font-bold text-slate-500 mt-1">{items.length} items available</p>
           )}
@@ -176,7 +185,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
             <h2 className="text-xl font-bold text-slate-700 mb-1">No {categoryName} items yet</h2>
             <p className="text-sm text-slate-500 mb-6">Be the first to list one!</p>
             <button
-              onClick={() => router.push('/listings/new')}
+              onClick={() => router.push('/rentals/new')}
               className="bg-indigo-600 text-white px-6 py-3 rounded-full font-bold text-sm shadow-indigo active:scale-95 transition-transform"
             >
               + List Item

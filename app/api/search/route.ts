@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, limit, orderBy } from 'firebase/firestore';
+import { getAdminDb } from '@/lib/firebaseAdmin';
 import { Listing, SearchFilter, SearchResponse } from '@/lib/types';
 
 // Constants for Ranking
@@ -109,16 +108,13 @@ export async function GET(request: Request) {
             console.warn("Invalid filters param");
         }
 
-        // 1. Fetch Candidates from Firebase based on Mode & College
-        // We use coarse filters to reduce read operations
-        const rentalsRef = collection(db!, 'rentals');
-        let qRef = query(
-            rentalsRef, 
-            where('collegeId', '==', collegeId),
-            where('status', '==', 'available') // Never show unavailable
-        );
-        
-        const snapshot = await getDocs(qRef);
+        // 1. Fetch Candidates from Firebase using Admin SDK
+        const adminDb = getAdminDb();
+        const snapshot = await adminDb
+            .collection('rentals')
+            .where('collegeId', '==', collegeId)
+            .where('status', '==', 'available')
+            .get();
         let candidates: Listing[] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Listing));
         
         // Mode filter: Default to rent if mapping not rigorous in DB, but normally strict
