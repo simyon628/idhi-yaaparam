@@ -17,15 +17,38 @@ function getAdminApp(): App {
     return getApps()[0];
   }
 
+  // Option 1: Individual Env Vars (easier for Vercel manual entry)
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  // Vercel sometimes escapes "\n", so we replace it with actual newlines
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+
+  if (projectId && clientEmail && privateKey) {
+    return initializeApp({
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
+    });
+  }
+
+  // Option 2: Full JSON Payload string
   const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
   if (!serviceAccountJson) {
     throw new Error(
-      'Missing FIREBASE_SERVICE_ACCOUNT_JSON environment variable. ' +
-      'Add it to your .env.local (local) and Vercel dashboard (production).'
+      'Missing FIREBASE_SERVICE_ACCOUNT_JSON or (FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY) environment variables.'
     );
   }
 
-  const serviceAccount = JSON.parse(serviceAccountJson);
+  let serviceAccount;
+  try {
+    const unescapedJson = serviceAccountJson.replace(/\\n/g, '\n');
+    serviceAccount = JSON.parse(unescapedJson);
+  } catch (error: any) {
+    console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_JSON:", error);
+    throw new Error("Invalid FIREBASE_SERVICE_ACCOUNT_JSON formatting.");
+  }
 
   return initializeApp({
     credential: cert(serviceAccount),
