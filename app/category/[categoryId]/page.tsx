@@ -12,21 +12,20 @@ import { getCachedItems } from "@/lib/cache/itemsCache";
 // ─── Category → keywords map ──────────────────────────────────────────────
 // Matches against itemName AND categoryId stored in the rentals documents
 const categoryMap: Record<string, string[]> = {
-  'cat-calculator':    ['calculator','casio','scientific','fx-991','fx991','calc'],
-  'cat-drafter':       ['drafter','drawing board','drafting','mini drafter','a1 board','a2 board'],
-  'cat-labcoat':       ['lab coat','labcoat','lab-coat','apron','white coat'],
-  'cat-geometry':      ['geometry','compass','protractor','set square','geometry set'],
-  'cat-books':         ['book','notes','textbook','notebook','novel','guide','material'],
-  'cat-electronics':   ['laptop','phone','charger','earphone','powerbank','cable','adapter','electronic','gadget','device','arduino'],
-  'cat-tools':         ['tool','wrench','hammer','screwdriver'],
-  'cat-others':        [],
+  'calculator':    ['calculator','casio','scientific','fx-991','fx991','calc'],
+  'drafter':       ['drafter','drawing board','drafting','mini drafter','a1 board','a2 board'],
+  'lab-coat':      ['lab coat','labcoat','lab-coat','apron','white coat'],
+  'geometry':      ['geometry','compass','protractor','set square','geometry set'],
+  'books':         ['book','notes','textbook','notebook','novel','guide','material'],
+  'electronics':   ['laptop','phone','charger','earphone','powerbank','cable','adapter','electronic','gadget','device','arduino'],
+  'others':        ['tool','wrench','hammer','screwdriver'],
 };
 
 // ─── Filter by categoryId first, then keyword fallback ───────────────────
 const filterByCategory = (items: any[], categoryId: string) => {
-  if (categoryId === 'cat-others') {
+  if (categoryId === 'others') {
     const allKnownKeywords = Object.values(categoryMap).flat();
-    const knownIds = Object.keys(categoryMap).filter(k => k !== 'cat-others');
+    const knownIds = Object.keys(categoryMap).filter(k => k !== 'others');
     return items.filter(item => {
       // Not in any known categoryId AND no known keywords in name
       if (knownIds.includes(item.categoryId)) return false;
@@ -56,13 +55,13 @@ const filterByCategory = (items: any[], categoryId: string) => {
 // ─── Category placeholder icons ───────────────────────────────────────────
 const getCategoryPlaceholder = (categoryId: string): string => {
   const placeholders: Record<string, string> = {
-    'cat-calculator':   '/icons/calculator.svg',
-    'cat-drafter':      '/icons/drafter.svg',
-    'cat-labcoat':      '/icons/labcoat.svg',
-    'cat-geometry':     '/icons/book.svg',
-    'cat-books':        '/icons/book.svg',
-    'cat-electronics':  '/icons/electronics.svg',
-    'cat-tools':        '/icons/package.svg',
+    'calculator':   '/icons/calculator.svg',
+    'drafter':      '/icons/drafter.svg',
+    'lab-coat':     '/icons/labcoat.svg',
+    'geometry':     '/icons/book.svg',
+    'books':        '/icons/book.svg',
+    'electronics':  '/icons/electronics.svg',
+    'others':       '/icons/package.svg',
   };
   return placeholders[categoryId] ?? '/icons/package.svg';
 };
