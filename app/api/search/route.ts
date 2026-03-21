@@ -124,9 +124,23 @@ export async function GET(request: Request) {
         // Mode filter: Default to rent if mapping not rigorous in DB, but normally strict
         candidates = candidates.filter(item => (item.listingType || 'rent') === mode);
 
-        // 2. Hard Filters (Zero Tolerance)
+        // 2. Flexible Category Filter (Zero Tolerance on mismatch, but flexible on naming)
         if (filters.categoryId && filters.categoryId !== "All") {
-            candidates = candidates.filter(item => item.categoryId === filters.categoryId);
+            const catKey = filters.categoryId.toLowerCase();
+            const CATEGORY_KEYWORDS: Record<string, string[]> = {
+              'calculator': ['calculator', 'casio', 'scientific'],
+              'lab gear': ['lab', 'coat', 'labcoat', 'lab-coat', 'lab gear'],
+              'drafter': ['drafter', 'drawing', 'board'],
+              'stationery': ['geometry', 'compass', 'set', 'stationery', 'record'],
+              'books & notes': ['book', 'notes', 'textbook', 'record'],
+              'electronics': ['electronic', 'gadget', 'laptop', 'phone', 'charger', 'device', 'tablet', 'ipad'],
+            };
+            const keywords = CATEGORY_KEYWORDS[catKey] || [catKey];
+            candidates = candidates.filter(item => {
+                const itemCat = (item.categoryId || "").toLowerCase();
+                const itemTitle = (item.itemName || "").toLowerCase();
+                return keywords.some(kw => itemCat.includes(kw) || itemTitle.includes(kw));
+            });
         }
         if (filters.maxPrice !== undefined) {
             candidates = candidates.filter(item => item.pricePerHour <= filters.maxPrice!);

@@ -3,96 +3,130 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { useCollege } from "@/contexts/CollegeContext";
-import { useNearestBlock } from "@/lib/hooks/useNearestBlock";
-import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
-import { Listing } from "@/lib/types";
 import { CATEGORIES } from "@/components/ui/CategoryGrid";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { TopBar } from "@/components/layout/TopBar";
-import { RentalCard } from "@/components/rental/RentalCard";
-import { ChevronLeft, Loader2, Filter, ArrowUpDown, Plus } from "lucide-react";
-import { auth } from "@/lib/firebase";
-import { useListingMode } from "@/lib/hooks/useListingMode";
+import { ChevronLeft, SearchX } from "lucide-react";
+
+const categoryKeywords: Record<string, string[]> = {
+  'calculator':    ['calculator','casio','scientific'],
+  'lab-coat':      ['lab','coat','labcoat'],
+  'drafter':       ['drafter','drawing','board'],
+  'geometry-set':  ['geometry','compass','protractor'],
+  'books':         ['book','notes','textbook'],
+  'electronics':   ['electronic','gadget','laptop', 'phone','charger'],
+  'others':        [] 
+};
+
+function CategorySkeleton() {
+    return (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', padding: '16px' }}>
+            {[1, 2, 3, 4].map(i => (
+                <div key={i} className="aspect-[4/5] bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+            ))}
+        </div>
+    );
+}
+
+function ItemCard({ item }: { item: any }) {
+    const router = useRouter();
+    
+    const typeBadge = item.listingType === 'sell' ? 'Sell' : item.listingType === 'buy' ? 'Buy' : 'Rent';
+    const conditionBadge = item.condition ? item.condition.charAt(0).toUpperCase() + item.condition.slice(1) : 'Good';
+    
+    // Price formatting
+    const priceText = item.listingType === 'rent' 
+        ? `₹${item.pricePerHour || item.price || 0}/hr` 
+        : `₹${item.price || item.pricePerHour || 0}`;
+
+    const titleText = item.title || item.itemName || 'Item';
+    const imageSrc = item.images?.[0] || item.imageUrl || '';
+
+    return (
+        <div 
+            onClick={() => router.push(`/item/${item.id}`)}
+            className="flex flex-col bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm active:scale-95 transition-transform cursor-pointer"
+        >
+            <div className="w-full aspect-[4/3] bg-slate-100 relative">
+                {imageSrc ? (
+                    <img src={imageSrc} alt={titleText} className="w-full h-full object-cover" />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-300 text-xs">No Image</div>
+                )}
+                <div className="absolute top-2 left-2 flex flex-col gap-1">
+                    <span className="bg-indigo-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider w-fit">
+                        {typeBadge}
+                    </span>
+                    <span className="bg-white/90 backdrop-blur text-slate-700 text-[10px] font-bold px-1.5 py-0.5 rounded-md w-fit">
+                        {conditionBadge}
+                    </span>
+                </div>
+            </div>
+            <div className="p-2 flex flex-col gap-0.5 bg-white">
+                <h3 className="text-[13px] font-bold text-slate-800 line-clamp-1 select-none">
+                    {titleText}
+                </h3>
+                <span className="text-[12px] font-bold text-purple-600 select-none">
+                    {priceText}
+                </span>
+            </div>
+        </div>
+    );
+}
 
 export default function CategoryPage({ params }: { params: Promise<{ categoryId: string }> }) {
     const router = useRouter();
     const { categoryId } = use(params);
     const { selectedCollege, isReady } = useCollege();
-    const { nearestBlock } = useNearestBlock(selectedCollege);
-    const { formatting: blockNames } = useCampusBlocks(selectedCollege);
-    const { listingMode, isModeLoaded } = useListingMode();
 
-    const [rentals, setRentals] = useState<Listing[]>([]);
+    const [items, setItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const category = CATEGORIES.find(c => c.id === categoryId);
     const categoryName = category?.name || "Category";
-    const pluralCategoryName = categoryName.endsWith("s") ? categoryName : `${categoryName}s`;
-
-    // Filter states
-    const [selectedBranch, setSelectedBranch] = useState("All");
-    const [selectedYear, setSelectedYear] = useState("All");
-    const [selectedBlock, setSelectedBlock] = useState("All");
-    const [sortOrder, setSortOrder] = useState<"nearest" | "lowest_price" | "newest">("nearest");
 
     useEffect(() => {
         if (!selectedCollege || !db) return;
-        setLoading(true);
 
-        const q = query(
-            collection(db, "rentals"),
-            where("collegeId", "==", selectedCollege.id),
-            where("categoryId", "==", categoryId)
-        );
+        const fetchItems = async () => {
+            setLoading(true);
+            try {
+                const userCollege = selectedCollege.id;
+                
+                const q = query(
+                    collection(db, 'listings'),
+                    where('college', '==', userCollege),
+                    where('status', '==', 'available'),
+                    limit(50)
+                );
+                
+                const snap = await getDocs(q);
+                const allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        const unsub = onSnapshot(q, (snap) => {
-            const rawRentals = snap.docs.map(d => ({ id: d.id, ...d.data() } as Listing));
-            setRentals(rawRentals);
-            setLoading(false);
-        });
+                const keywords = categoryKeywords[categoryId] ?? [];
+                
+                const filtered = keywords.length === 0
+                  ? allItems
+                  : allItems.filter(item =>
+                      keywords.some(kw =>
+                        ((item.category || item.categoryId || "") as string).toLowerCase().includes(kw) ||
+                        ((item.title || item.itemName || "") as string).toLowerCase().includes(kw)
+                      )
+                    );
 
-        return () => unsub();
+                setItems(filtered);
+            } catch (err) {
+                console.error("Search error:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchItems();
     }, [selectedCollege, categoryId]);
 
-    const handleFabClick = () => {
-        const url = `/rentals/new?category=${categoryId}&type=${listingMode}`;
-        if (!auth?.currentUser) {
-            router.push(`/login?redirect=${encodeURIComponent(url)}`);
-        } else {
-            router.push(url);
-        }
-    };
-
     if (!isReady || !selectedCollege) return null;
-
-    let filteredRentals = rentals.filter(r => {
-        // Mode filter: handle legacy items (no listingType) as "rent"
-        const rType = r.listingType || "rent";
-        if (rType !== listingMode) return false;
-
-        // Other filters
-        if (selectedBranch !== "All" && r.branch !== selectedBranch) return false;
-        if (selectedYear !== "All" && r.yearSection !== selectedYear) return false;
-        if (selectedBlock !== "All" && r.block !== selectedBlock) return false;
-        
-        // Priority to 'available' items
-        if (r.status !== 'available') return false; 
-
-        return true;
-    });
-
-    if (sortOrder === "newest") {
-        filteredRentals.sort((a, b) => ((b.createdAt as any)?.toMillis?.() || 0) - ((a.createdAt as any)?.toMillis?.() || 0));
-    } else if (sortOrder === "lowest_price") {
-        filteredRentals.sort((a, b) => a.pricePerHour - b.pricePerHour);
-    } else if (sortOrder === "nearest" && nearestBlock) {
-        filteredRentals.sort((a, b) => (a.block === nearestBlock.name ? -1 : 1) - (b.block === nearestBlock.name ? -1 : 1));
-    }
-
-    const branches = ["All", "CSE", "ECE", "ME", "CE", "EEE"];
-    const years = ["All", "1st Year", "2nd Year", "3rd Year", "4th Year"];
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-24">
@@ -103,74 +137,33 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                     <ChevronLeft className="w-4 h-4" /> Back
                 </button>
 
-                <div className="flex items-center gap-3 mb-6">
-                    {category && (
-                        <div className={`w-12 h-12 rounded-2xl ${category.bg} flex items-center justify-center shrink-0 border border-slate-100`}>
-                            <category.icon className={`w-6 h-6 ${category.color}`} />
-                        </div>
-                    )}
-                    <div>
-                        <h1 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>{pluralCategoryName}</h1>
-                        <p className="text-xs font-bold text-slate-500">{selectedCollege.name}</p>
-                    </div>
-                </div>
-
-                <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-2">
-                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                        <Filter className="w-3.5 h-3.5 text-indigo-400" /> Branch:
-                        <select value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)} className="bg-transparent outline-none ml-1 text-indigo-700">
-                            {branches.map(b => <option key={b} value={b}>{b}</option>)}
-                        </select>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                        Year/Sec:
-                        <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="bg-transparent outline-none ml-1 text-indigo-700">
-                            {years.map(y => <option key={y} value={y}>{y}</option>)}
-                        </select>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 shrink-0">
-                         <ArrowUpDown className="w-3.5 h-3.5 text-indigo-400" /> Sort:
-                        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as any)} className="bg-transparent outline-none ml-1 text-indigo-700">
-                            <option value="nearest">Nearest</option>
-                            <option value="lowest_price">Lowest Price</option>
-                            <option value="newest">Newest</option>
-                        </select>
-                    </div>
+                <div className="mb-6">
+                    <h1 className="text-3xl font-black text-slate-800 tracking-tight">{categoryName}</h1>
+                    <p className="text-sm font-bold text-slate-500 mt-1">{items.length} items available</p>
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>
-                ) : filteredRentals.length === 0 ? (
-                    <div className="mt-10">
-                        {listingMode !== "buy" ? (
-                            <EmptyState
-                                title={`No ${categoryName} ${listingMode === "sell" ? "for sale" : "for rent"} yet.`}
-                                description={listingMode === "sell" ? "Be the first to list yours for sale." : "Be the first to list and earn trust coins."}
-                                actionLabel={listingMode === "sell" ? `Sell ${categoryName}` : `List ${categoryName}`}
-                                actionHref={`/rentals/new?category=${categoryId}&type=${listingMode}`}
-                            />
-                        ) : (
-                            <EmptyState
-                                title={`No ${categoryName} for sale yet.`}
-                                description="No one has listed this for sale yet. Check back later!"
-                            />
-                        )}
+                    <CategorySkeleton />
+                ) : items.length === 0 ? (
+                    <div className="mt-20 flex flex-col items-center justify-center text-center px-4">
+                        <SearchX className="w-10 h-10 text-slate-400 mb-4" />
+                        <h2 className="text-xl font-bold text-slate-700 mb-1">No {categoryName} items yet</h2>
+                        <p className="text-sm text-slate-500 mb-6">Be the first to list one!</p>
+                        <button 
+                            onClick={() => router.push('/listings/new')}
+                            className="bg-indigo-600 text-white px-6 py-3 rounded-full font-bold text-sm shadow-indigo active:scale-95 transition-transform"
+                        >
+                            + List Item
+                        </button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 gap-3">
-                        {filteredRentals.map((rental) => (
-                            <RentalCard key={rental.id} item={rental} />
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', padding: '16px' }} className="bg-slate-50 -mx-5 px-5">
+                        {items.map((item) => (
+                            <ItemCard key={item.id} item={item} />
                         ))}
                     </div>
                 )}
             </div>
-
-            {listingMode !== "buy" && (
-                <button onClick={handleFabClick} className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-4 px-6 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20">
-                    <Plus className="w-5 h-5 shrink-0" />
-                    <span className="font-black text-xs uppercase tracking-widest">{listingMode === "sell" ? `Sell ${categoryName}` : `List ${categoryName}`}</span>
-                </button>
-            )}
         </div>
     );
 }

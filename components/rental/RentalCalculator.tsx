@@ -1,122 +1,134 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Calculator, Clock, IndianRupee, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Calculator, CalendarCheck } from "lucide-react";
 
 interface RentalCalculatorProps {
     pricePerHour: number;
+    onDurationChange?: (hours: number, minutes: number) => void;
+    onBorrow?: () => void;
+    isBorrowLoading?: boolean;
 }
 
-const DURATION_PRESETS = [
-    { label: "1 hr", hours: 1 },
-    { label: "3 hrs", hours: 3 },
-    { label: "6 hrs", hours: 6 },
-    { label: "1 day", hours: 24 },
-    { label: "2 days", hours: 48 },
-    { label: "1 week", hours: 168 },
-];
+const HOURS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+const MINUTES = [0, 15, 30, 45];
+const MIN_LABELS = ["00", "15", "30", "45"];
 
-export default function RentalCalculator({ pricePerHour }: RentalCalculatorProps) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedHours, setSelectedHours] = useState<number | null>(null);
-    const [customHours, setCustomHours] = useState("");
+export default function RentalCalculator({ 
+    pricePerHour, 
+    onDurationChange, 
+    onBorrow,
+    isBorrowLoading 
+}: RentalCalculatorProps) {
+    const [hTop, setHTop] = useState(40);
+    const [mTop, setMTop] = useState(0);
+    
+    const hRef = useRef<HTMLDivElement>(null);
+    const mRef = useRef<HTMLDivElement>(null);
 
-    const hours = selectedHours ?? (customHours ? parseFloat(customHours) : null);
-    const total = hours ? (pricePerHour * hours).toFixed(2) : null;
+    // FIX 2: Initial scroll position
+    useEffect(() => {
+        if (hRef.current) {
+            hRef.current.scrollTop = 1 * 40;
+        }
+        if (mRef.current) {
+            mRef.current.scrollTop = 0 * 40;
+        }
+    }, []);
+
+    // FIX 1: Selected index calculation
+    const hIdx = Math.round((hTop) / 40);
+    const mIdx = Math.round((mTop) / 40);
+
+    const selectedHours = HOURS[hIdx] ?? 0;
+    const selectedMinutes = MINUTES[mIdx] ?? 0;
+
+    const onDurationChangeRef = useRef(onDurationChange);
+    useEffect(() => {
+        onDurationChangeRef.current = onDurationChange;
+    }, [onDurationChange]);
+
+    useEffect(() => {
+        if (onDurationChangeRef.current) {
+            onDurationChangeRef.current(selectedHours, selectedMinutes);
+        }
+    }, [selectedHours, selectedMinutes]);
+
+    const totalHours = selectedHours + (selectedMinutes / 60);
+    const cost = Math.round(totalHours * pricePerHour);
+
+    const getItemClass = (i: number, activeIdx: number) => {
+        const diff = Math.abs(i - activeIdx);
+        if (diff === 0) return "text-[22px] font-bold text-[#7F77DD]";
+        if (diff === 1) return "text-[18px] font-medium text-[#9CA3AF]";
+        return "text-[16px] font-medium text-[#D1D5DB]";
+    };
 
     return (
-        <div className="mb-4">
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between bg-white border border-slate-100 rounded-2xl px-4 py-3 shadow-sm active:scale-[0.99] transition-all"
-            >
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-amber-50 rounded-xl flex items-center justify-center">
-                        <Calculator className="w-4 h-4 text-amber-500" />
+        <div className="bg-white border-2 border-[#7F77DD] rounded-[20px] p-5 mb-6 shadow-sm max-w-sm mx-auto font-sans">
+            <div className="flex items-center gap-2 mb-4 px-1">
+                <Calculator className="text-[#7F77DD]" size={18} />
+                <span className="text-[#7F77DD] text-[14px] font-medium">Estimate your rental cost</span>
+            </div>
+
+            <div className="bg-[#F8F7FF] rounded-[16px] p-[16px_12px] flex flex-col items-center">
+                <div className="flex justify-center gap-10 w-full mb-2">
+                    <span className="w-20 text-center text-[11px] text-[#9CA3AF] font-bold">HRS</span>
+                    <span className="w-20 text-center text-[11px] text-[#9CA3AF] font-bold">MINS</span>
+                </div>
+                
+                <div className="relative flex justify-center gap-10 overflow-hidden">
+                    {/* FIX 3: Highlight Band */}
+                    <div 
+                        className="absolute left-0 right-0 bg-[#EEEDFE] rounded-lg z-0" 
+                        style={{ top: "40px", height: "40px", position: "absolute" }}
+                    />
+
+                    <div 
+                        ref={hRef}
+                        onScroll={(e) => setHTop(e.currentTarget.scrollTop)}
+                        className="w-20 h-[120px] overflow-y-scroll snap-y snap-mandatory scrollbar-hide z-10"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none", paddingTop: "40px", paddingBottom: "40px" }}
+                    >
+                        <style dangerouslySetInnerHTML={{ __html: `.scrollbar-hide::-webkit-scrollbar { display: none; }` }} />
+                        {HOURS.map((h, i) => (
+                            <div key={h} className="h-10 snap-center flex items-center justify-center shrink-0">
+                                <span className={getItemClass(i, hIdx)}>{h}</span>
+                            </div>
+                        ))}
                     </div>
-                    <div className="text-left">
-                        <p className="text-xs font-black text-slate-700">Cost Calculator</p>
-                        <p className="text-[10px] text-slate-400 font-medium">
-                            {total ? `₹${total} total` : "Estimate your rental cost"}
-                        </p>
+
+                    <div 
+                        ref={mRef}
+                        onScroll={(e) => setMTop(e.currentTarget.scrollTop)}
+                        className="w-20 h-[120px] overflow-y-scroll snap-y snap-mandatory scrollbar-hide z-10"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none", paddingTop: "40px", paddingBottom: "40px" }}
+                    >
+                        {MINUTES.map((m, i) => (
+                            <div key={m} className="h-10 snap-center flex items-center justify-center shrink-0">
+                                <span className={getItemClass(i, mIdx)}>{MIN_LABELS[i]}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
-                <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                    <ChevronDown className="w-4 h-4 text-slate-400" />
-                </motion.div>
-            </button>
+            </div>
 
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 38 }}
-                        className="overflow-hidden"
-                    >
-                        <div className="bg-white border border-slate-100 border-t-0 rounded-b-2xl px-4 pb-4 pt-2 shadow-sm">
-                            {/* Presets */}
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2.5 mt-1">Select duration</p>
-                            <div className="grid grid-cols-3 gap-2 mb-3">
-                                {DURATION_PRESETS.map(p => (
-                                    <button
-                                        key={p.label}
-                                        onClick={() => { setSelectedHours(p.hours); setCustomHours(""); }}
-                                        className={`py-2 rounded-xl text-[11px] font-black border transition-all active:scale-95 ${selectedHours === p.hours
-                                            ? "bg-indigo-600 text-white border-indigo-600 shadow-indigo"
-                                            : "bg-slate-50 text-slate-600 border-slate-200 hover:border-indigo-200"
-                                            }`}
-                                    >
-                                        {p.label}
-                                    </button>
-                                ))}
-                            </div>
+            <div className="mt-5 flex flex-col items-center">
+                <p className="text-[12px] text-gray-400 font-medium mb-1">
+                    Duration: {selectedHours}h {MIN_LABELS[mIdx]}m
+                </p>
+                
+                <p className="text-[#1D9E75] text-[32px] font-bold leading-tight">₹{cost}</p>
+                
+                <p className="text-[11px] text-gray-400 italic mt-1 mb-5">
+                    Rate: ₹{pricePerHour}/hour
+                </p>
 
-                            {/* Custom Hours */}
-                            <div className="relative mb-3">
-                                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                                <input
-                                    type="number"
-                                    min="0.5"
-                                    step="0.5"
-                                    placeholder="or enter custom hours..."
-                                    value={customHours}
-                                    onChange={(e) => { setCustomHours(e.target.value); setSelectedHours(null); }}
-                                    className="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
-                                />
-                            </div>
-
-                            {/* Result */}
-                            {total && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 rounded-xl p-3 flex items-center justify-between"
-                                >
-                                    <div>
-                                        <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Estimated Total</p>
-                                        <div className="flex items-center gap-0.5 text-indigo-700 font-black text-xl mt-0.5">
-                                            <IndianRupee className="w-4 h-4" />
-                                            {total}
-                                        </div>
-                                        <p className="text-[9px] text-slate-400 font-medium">
-                                            ₹{pricePerHour}/hr × {hours} hrs
-                                        </p>
-                                    </div>
-                                    <div className="text-3xl">💸</div>
-                                </motion.div>
-                            )}
-
-                            {/* Rate display */}
-                            <div className="mt-2 text-center text-[10px] font-bold text-slate-400">
-                                Rate: ₹{pricePerHour} per hour
-                            </div>
-                        </div>
-                    </motion.div>
+                {selectedHours === 0 && selectedMinutes === 0 && (
+                    <p className="text-red-500 font-bold mb-3 text-[12px]">Please select a duration above</p>
                 )}
-            </AnimatePresence>
+            </div>
         </div>
     );
 }
+

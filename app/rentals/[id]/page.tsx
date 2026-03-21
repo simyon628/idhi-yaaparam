@@ -12,6 +12,7 @@ import { useRecentItems } from "@/lib/hooks/useRecentItems";
 import RentalCalculator from "@/components/rental/RentalCalculator";
 import { SellerCard, TrustBadge, getTrustScore } from "@/components/item/SellerCard";
 import dynamic_ from "next/dynamic";
+import { CalendarCheck } from "lucide-react";
 const MeetupMap = dynamic_(() => import("@/lib/map/MeetupMap"), { 
   ssr: false,
   loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Map...</div>
@@ -118,8 +119,14 @@ export default function RentalDetailPage() {
     const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number, overallRating?: number, reviewCount?: number } | null>(null);
     const [renterName, setRenterName] = useState<string>("");
 
-    const [showDurationModal, setShowDurationModal] = useState(false);
-    const [borrowDuration, setBorrowDuration] = useState("1 Hour");
+    const [selectedDuration, setSelectedDuration] = useState({ hours: 1, minutes: 0 });
+
+    const handleDurationChange = (hours: number, minutes: number) => {
+        setSelectedDuration(prev => {
+            if (prev.hours === hours && prev.minutes === minutes) return prev;
+            return { hours, minutes };
+        });
+    };
 
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
@@ -250,13 +257,13 @@ export default function RentalDetailPage() {
         finally { setActionLoading(false); }
     };
 
-    const handleRequest = async (duration: string) => {
+    const handleRequest = async (durationStr: string) => {
         if (!userId) { 
             toast.error("Please sign in first"); 
             router.push(`/login?redirect=/rentals/${id}`);
             return; 
         }
-        await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: duration });
+        await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: durationStr });
 
         // Fire notification to Owner
         if (rental?.ownerId && rental.ownerId !== userId) {
@@ -272,7 +279,6 @@ export default function RentalDetailPage() {
         }
 
         toast.success("Request sent to owner!");
-        setShowDurationModal(false);
     };
 
     const handleApprove = async () => {
@@ -546,7 +552,12 @@ export default function RentalDetailPage() {
 
                 {/* Rental Cost Calculator */}
                 {rental?.status === "available" && (
-                    <RentalCalculator pricePerHour={rental.pricePerHour} />
+                    <RentalCalculator 
+                        pricePerHour={rental.pricePerHour} 
+                        onDurationChange={handleDurationChange}
+                        onBorrow={() => handleRequest(`${selectedDuration.hours}h ${selectedDuration.minutes}m`)}
+                        isBorrowLoading={actionLoading}
+                    />
                 )}
 
                 {/* Owner Profile Card */}
@@ -626,11 +637,11 @@ export default function RentalDetailPage() {
                     </div>
                 ) : rental?.status === "available" ? (
                     <button
-                        onClick={() => setShowDurationModal(true)}
-                        disabled={actionLoading}
-                        className="w-full h-14 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:-translate-y-0.5"
+                        onClick={() => handleRequest(`${selectedDuration.hours}h ${selectedDuration.minutes}m`)}
+                        disabled={actionLoading || (selectedDuration.hours === 0 && selectedDuration.minutes === 0)}
+                        className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 hover:bg-indigo-700 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 transition-all"
                     >
-                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : "BORROW NOW →"}
+                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><CalendarCheck className="w-5 h-5" /> BORROW NOW</>}
                     </button>
                 ) : isRenter && rental?.status === "requested" ? (
                     <div className="flex flex-col items-center gap-2 text-center py-2">
@@ -757,43 +768,7 @@ export default function RentalDetailPage() {
                 </div>
             )}
 
-            {/* ─── Duration Modal ─── */}
-            {showDurationModal && (
-                <div className="fixed inset-0 z-[100] flex items-end justify-center max-w-md mx-auto">
-                    <div className="absolute inset-0 bg-slate-800/40 backdrop-blur-sm" onClick={() => setShowDurationModal(false)} />
-                    <div className="relative w-full bg-slate-50 border-t border-indigo-100 rounded-t-[2rem] p-6 space-y-5 z-10 shadow-2xl">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Borrow Duration</h3>
-                                <p className="text-xs text-slate-500 mt-0.5 font-medium">How long do you need this item for?</p>
-                            </div>
-                            <button onClick={() => setShowDurationModal(false)} className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
-                                <X className="w-4 h-4 text-slate-400" />
-                            </button>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3 pb-2">
-                            {["1 Hour", "1.5 Hours", "2 Hours", "1 Day", "2 Days", "1 Week"].map(opt => (
-                                <button
-                                    key={opt}
-                                    onClick={() => setBorrowDuration(opt)}
-                                    className={`py-3 rounded-xl border-2 text-sm font-black transition-all shadow-sm active:scale-95 ${borrowDuration === opt ? "border-indigo-600 bg-indigo-50 text-indigo-600" : "border-slate-100 bg-white text-slate-600 hover:border-indigo-200"}`}
-                                >
-                                    {opt}
-                                </button>
-                            ))}
-                        </div>
-                        
-                        <button
-                            onClick={() => handleRequest(borrowDuration)}
-                            disabled={actionLoading}
-                            className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-indigo-700 shadow-sm"
-                        >
-                            {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : `CONFIRM ${borrowDuration.toUpperCase()}`}
-                        </button>
-                    </div>
-                </div>
-            )}
+            {/* ─── Duration Modal Removed ─── */}
         </div>
     );
 }
