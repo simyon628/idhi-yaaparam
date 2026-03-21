@@ -95,14 +95,14 @@ export default function CategoryPage({ params }: { params: Promise<{ categoryId:
                 const userCollege = selectedCollege.id;
                 
                 const q = query(
-                    collection(db, 'listings'),
+                    collection(db!, 'listings'),
                     where('college', '==', userCollege),
                     where('status', '==', 'available'),
                     limit(50)
                 );
                 
                 const snap = await getDocs(q);
-                const allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                const allItems = snap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
 
                 const keywords = categoryKeywords[categoryId] ?? [];
                 
