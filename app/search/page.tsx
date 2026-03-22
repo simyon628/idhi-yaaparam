@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense, useRef } from "react";
+import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useListingMode } from "@/lib/hooks/useListingMode";
@@ -75,46 +75,52 @@ function SearchPageContent() {
     const isFirstMount = useRef(true);
 
     const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id);
-    const { results, loading, totalCount, search, clearResults } = useSearchResults(selectedCollege?.id, defaultMode);
+    const [activeFilters, setActiveFilters] = useState<string[]>(() => getChipsFromParams(searchParams));
+    
+    // Derived filters for the reactive hook
+    const activeCategoryId = useMemo(() => activeFilters.find(f => CHIP_TO_CATEGORY[f]), [activeFilters]);
+    const activeMode = useMemo(() => activeFilters.find(f => CHIP_TO_MODE[f]) || defaultMode, [activeFilters, defaultMode]);
+
+    const { results, isLoading, totalCount } = useSearchResults({
+        q: query,
+        categoryId: activeCategoryId,
+        mode: activeMode,
+        collegeId: selectedCollege?.id
+    });
+
     const { recentSearches, saveSearch, removeSearch } = useSearchHistory();
 
     const [showDropdown, setShowDropdown] = useState(false);
-    const [activeFilters, setActiveFilters] = useState<string[]>(() => getChipsFromParams(searchParams));
     const [sortBy, setSortBy] = useState(searchParams.get("sort") || "relevance");
-    const [hasSearched, setHasSearched] = useState(false);
+    const [hasSearched, setHasSearched] = useState(() => !!urlQuery || !!urlCategory);
 
     const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
-
     const activeCategoryName = urlCategory ? CATEGORY_NAMES[urlCategory] : null;
 
     // ── Deep Linking: Initialize from URL on mount ──────────────────────────
     useEffect(() => {
-        if (isFirstMount.current) {
+        if (isFirstMount.current && (urlQuery || urlCategory)) {
             isFirstMount.current = false;
-            if (urlQuery || urlCategory) {
-                if (urlQuery) setQuery(urlQuery);
-                search(urlQuery, buildApiFilters(getChipsFromParams(searchParams), sortBy));
-                setHasSearched(true);
-            }
+            if (urlQuery) setQuery(urlQuery);
+            setHasSearched(true);
         }
-    }, [urlQuery, urlCategory, searchParams, sortBy, setQuery, search]);
+    }, [urlQuery, urlCategory, setQuery]);
 
-    // ── Reactive Search: Observe filter/sort changes ─────────────────────────
+    // ── URL Sync: Keep URL in sync with reactive state ──────────────────────
     useEffect(() => {
-        if (!isFirstMount.current && hasSearched && (query.trim() || activeFilters.length > 0)) {
-            search(query, buildApiFilters(activeFilters, sortBy));
-            
-            // Sync URL (debouced or silent update could be better, but simple push for now)
+        if (!isFirstMount.current && hasSearched) {
             const params = new URLSearchParams();
             if (query) params.set("q", query);
+            
             const apiFilters = buildApiFilters(activeFilters, sortBy);
             if (apiFilters.mode) params.set("mode", apiFilters.mode);
             if (apiFilters.categoryId) params.set("category", apiFilters.categoryId);
             if (apiFilters.maxPrice) params.set("maxPrice", apiFilters.maxPrice.toString());
             if (sortBy !== "relevance") params.set("sort", sortBy);
+            
             router.replace(`/search?${params.toString()}`, { scroll: false });
         }
-    }, [activeFilters, sortBy, hasSearched, query, search, router]);
+    }, [activeFilters, sortBy, hasSearched, query, router]);
 
     const handleSubmit = useCallback((q: string) => {
         if (!q.trim()) return;
@@ -123,26 +129,28 @@ function SearchPageContent() {
         saveSearch(trimmed);
         setShowDropdown(false);
         setHasSearched(true);
-        search(trimmed, buildApiFilters(activeFilters, sortBy));
-    }, [saveSearch, search, setQuery, activeFilters, sortBy]);
+    }, [saveSearch, setQuery]);
 
     const handleQueryChange = useCallback((q: string) => {
         setQuery(q);
         if (q.length >= 2) setShowDropdown(true);
         else if (q.length === 0) {
             setShowDropdown(false);
-            if (!urlQuery && !urlCategory) { clearResults(); setHasSearched(false); }
+            if (!urlQuery && !urlCategory) setHasSearched(false);
         }
-    }, [setQuery, clearResults, urlQuery, urlCategory]);
+    }, [setQuery, urlQuery, urlCategory]);
 
     const handleClear = useCallback(() => {
-        clearSuggestions(); clearResults();
-        setShowDropdown(false); setHasSearched(false);
-        setActiveFilters([]); setSortBy("relevance");
+        clearSuggestions();
+        setShowDropdown(false); 
+        setHasSearched(false);
+        setActiveFilters([]); 
+        setSortBy("relevance");
         router.push("/search", { scroll: false });
-    }, [clearSuggestions, clearResults, router]);
+    }, [clearSuggestions, router]);
 
     const handleFilterToggle = useCallback((filterId: string) => {
+        setHasSearched(true);
         setActiveFilters(prev =>
             filterId === "all"
                 ? []
@@ -200,7 +208,7 @@ function SearchPageContent() {
             )}
 
             <main className="flex-1">
-                {hasSearched && results.length === 0 && !loading ? (
+                {hasSearched && results.length === 0 && !isLoading ? (
                     <SearchEmptyState
                         query={query || activeCategoryName || "this category"}
                         onSuggestionClick={handleSubmit}
@@ -210,7 +218,7 @@ function SearchPageContent() {
                     <div className="animate-in fade-in duration-500">
                         <ResultsGrid
                             results={results}
-                            loading={loading}
+                            loading={isLoading}
                             query={query}
                             totalCount={totalCount}
                             sortBy={sortBy}
