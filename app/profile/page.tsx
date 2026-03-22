@@ -49,6 +49,11 @@ export default function ProfilePage() {
             return; 
         }
 
+        // 3-second timeout fallback so profile never hangs
+        const timeout = setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+
         const fetchData = async () => {
             try {
                 const userSnap = await getDoc(doc(db as any, "users", userId));
@@ -68,11 +73,14 @@ export default function ProfilePage() {
             } catch (err) {
                 console.error("Error fetching profile data", err);
             } finally {
+                clearTimeout(timeout);
                 setLoading(false);
             }
         };
         fetchData();
-    }, [userId]);
+
+        return () => clearTimeout(timeout);
+    }, [userId, authChecked]);
 
     const handleLogout = async () => {
         try {

@@ -263,7 +263,7 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
                     {/* Price */}
                     <div className="flex items-baseline gap-1.5 mb-3">
                         {isRent ? (
-                            <><span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{item.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">/ hr</span></>
+                            <><span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{item.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">per hour</span></>
                         ) : (item as any).listingType === "free" ? (
                             <span className="text-3xl font-black text-emerald-600">FREE</span>
                         ) : (

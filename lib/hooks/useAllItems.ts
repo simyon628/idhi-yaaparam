@@ -19,10 +19,10 @@ export function useAllItems(collegeId: string | undefined, categoryId?: string, 
       return snap.docs.map(d => ({ id: d.id, ...d.data() })) as Listing[]
     },
     {
-      revalidateOnFocus: false,
-      revalidateOnMount: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 300000 // 5 minutes cache
+      revalidateOnFocus: true,
+      revalidateOnMount: true,
+      revalidateOnReconnect: true,
+      dedupingInterval: 3000 // 3 seconds — fast enough for new listings to appear quickly
     }
   )
 }

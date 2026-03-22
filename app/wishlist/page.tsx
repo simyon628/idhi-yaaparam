@@ -147,7 +147,7 @@ export default function WishlistPage() {
                                     <div className="flex items-center gap-3 mt-1">
                                         <div className="flex items-center gap-0.5 text-indigo-600 font-black text-sm">
                                             <IndianRupee className="w-3 h-3" />
-                                            {item.pricePerHour}<span className="text-[10px] text-slate-400 font-bold ml-0.5">/hr</span>
+                                            {item.pricePerHour}<span className="text-[10px] text-slate-400 font-bold ml-0.5"> per hour</span>
                                         </div>
                                         {item.block && (
                                             <div className="flex items-center gap-0.5 text-[10px] font-bold text-slate-400">

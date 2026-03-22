@@ -317,7 +317,7 @@ function SearchPageContent() {
                 >
                     <Plus className="w-5 h-5 shrink-0" />
                     <span className="font-black text-[11px] uppercase tracking-widest">
-                        {activeMode === "sell" ? "Sell Item" : "List Item"}
+                        + List {activeCategoryName || (activeMode === "sell" ? "Item" : "Item")}
                     </span>
                 </button>
             )}

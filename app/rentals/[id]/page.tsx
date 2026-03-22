@@ -442,7 +442,7 @@ export default function RentalDetailPage() {
                 <button
                     onClick={() => {
                         const url = `https://idhi-yaaparam.vercel.app/rentals/${id}`;
-                        const msg = `Borrow my ${rental?.itemName || "item"} for ₹${rental?.pricePerHour}/hr at ${rental?.block}! → ${url}`;
+                        const msg = `Borrow my ${rental?.itemName || "item"} for ₹${rental?.pricePerHour} per hour at ${rental?.block}! → ${url}`;
                         window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
                     }}
                     className="absolute top-5 right-5 p-2.5 bg-white/60 backdrop-blur-md rounded-xl border border-white/50 active:scale-95 transition-all shadow-sm"
@@ -469,9 +469,7 @@ export default function RentalDetailPage() {
                     )}
 
                     {/* Price */}
-                     <div className="flex items-baseline gap-1.5 mb-3">
-                        <span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{rental?.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">/ hr</span>
-                    </div>
+                        <span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{rental?.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">per hour</span>
 
                     {/* Location badge, Condition badge etc. */}
                     <div className="flex flex-wrap items-center gap-2 mb-6">

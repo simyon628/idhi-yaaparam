@@ -121,7 +121,7 @@ export default function RentalCalculator({
                 <p className="text-[#1D9E75] text-[32px] font-bold leading-tight">₹{cost}</p>
                 
                 <p className="text-[11px] text-gray-400 italic mt-1 mb-5">
-                    Rate: ₹{pricePerHour}/hour
+                    Rate: ₹{pricePerHour} per hour
                 </p>
 
                 {selectedHours === 0 && selectedMinutes === 0 && (

@@ -98,7 +98,7 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
                     <div className="flex items-center gap-0.5 text-slate-800 font-black text-sm">
                         <IndianRupee className="w-3 h-3" />
                         <span>{item.pricePerHour}</span>
-                        <span className="text-[8px] text-slate-400 uppercase ml-0.5">/hr</span>
+                        <span className="text-[10px] text-slate-500 font-bold ml-1 tracking-tight">per hour</span>
                     </div>
                 </div>
 

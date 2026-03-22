@@ -320,7 +320,7 @@ export default function EditListingPage() {
                     </div>
                     <div className="space-y-2.5 w-1/2">
                         <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">
-                            {listingType === "sell" ? "Selling Price (₹)" : "Price / hr (₹)"}
+                            {listingType === "sell" ? "Selling Price (₹)" : "Price per hour (₹)"}
                         </label>
                         <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
                             <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />

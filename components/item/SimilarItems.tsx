@@ -46,7 +46,7 @@ function SimilarCard({ item }: { item: Listing }) {
                     <div className="flex items-center gap-0.5 text-slate-900">
                         <IndianRupee className="w-2.5 h-2.5" />
                         <span className="text-xs font-black">{item.pricePerHour}</span>
-                        {item.listingType === "rent" && <span className="text-[8px] text-slate-400 font-bold">/hr</span>}
+                        {item.listingType === "rent" && <span className="text-[8px] text-slate-400 font-bold"> per hour</span>}
                     </div>
                 </div>
                 

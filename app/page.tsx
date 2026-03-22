@@ -108,7 +108,7 @@ export default function LandingPage() {
                                                 <ShoppingBag className="w-3 h-3" /> Borrow items
                                             </div>
                                             <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
-                                                <BadgeIndianRupee className="w-3 h-3" /> ₹10–₹50/hr
+                                                <BadgeIndianRupee className="w-3 h-3" /> ₹10–₹50 per hour
                                             </div>
                                         </div>
                                     </div>

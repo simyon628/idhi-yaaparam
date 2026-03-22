@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { Camera, ChevronLeft, Loader2, IndianRupee, MapPin, School, GraduationCap, Plus, X, Lightbulb, Calendar } from "lucide-react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS } from "@/lib/constants";
-import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
 
 import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
 import { compressImageFile } from "@/lib/image/compressImage";
@@ -19,7 +18,6 @@ import { useListingMode } from "@/lib/hooks/useListingMode";
 import { invalidateItemsCache } from "@/lib/cache/itemsCache";
 import { mutate } from "swr";
 
-const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
 
 function NewRentalForm() {
@@ -32,7 +30,7 @@ function NewRentalForm() {
     const activeType: "rent" | "sell" = typeFromUrl === "sell" || listingMode === "sell" ? "sell" : "rent";
     const formConfig = activeType === "sell"
         ? { title: "Sell Your Item",  subtitle: "List it for sale",   priceLabel: "Selling Price (₹)", submitLabel: "List for Sale" }
-        : { title: "Rent Your Item",  subtitle: "Earn by lending",    priceLabel: "Price per day (₹)",  submitLabel: "List for Rent" };
+        : { title: "Rent Your Item",  subtitle: "Earn by lending",    priceLabel: "Price per hour (₹)",  submitLabel: "List for Rent" };
     const [category, setCategory] = useState(initialCategory);
     const [price, setPrice] = useState("");
     const [block, setBlock] = useState("");
@@ -60,27 +58,30 @@ function NewRentalForm() {
 
     const router = useRouter();
     const { selectedCollege, isReady } = useCollege();
-    const { formatting: dynamicBlocks, loading: blocksLoading } = useCampusBlocks(selectedCollege);
 
+    // Bug 2 fix: Robust category matching (by id, then by name, then by id-without-hyphens)
     useEffect(() => {
-        if (initialCategory) {
-            // Find display name for the category ID
-            const cat = GRID_CATEGORIES.find(c => c.id === initialCategory || c.name === initialCategory);
-            if (cat) {
-                setCategory(cat.name);
-                // Also suggest item name based on category
-                if (cat.id === "drafter") setName("Drafter");
-                if (cat.id === "calculator") setName("Casio fx-991");
-            }
+        if (!initialCategory) return;
+
+        let cat = GRID_CATEGORIES.find(c => c.id === initialCategory);
+
+        if (!cat) {
+            cat = GRID_CATEGORIES.find(
+                c => c.name.toLowerCase() === initialCategory.toLowerCase()
+            );
+        }
+
+        if (!cat) {
+            cat = GRID_CATEGORIES.find(
+                c => c.id.replace(/-/g, '') === initialCategory.replace(/-/g, '')
+            );
+        }
+
+        if (cat) {
+            setCategory(cat.name);
+            // NOTE: Do NOT auto-fill item name — user must type it (Bug 3 fix)
         }
     }, [initialCategory]);
-
-    // Auto-select first dynamic block once loaded
-    useEffect(() => {
-        if (dynamicBlocks.length > 0 && (!block || block === "Loading blocks...")) {
-            setBlock(dynamicBlocks[0]);
-        }
-    }, [dynamicBlocks, block]);
 
     // Feature 9: Smart Pricing - fetch avg price for this category at this college
     useEffect(() => {
@@ -184,36 +185,63 @@ function NewRentalForm() {
                 return;
             }
 
-            const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Electronic Gadgets": "💻", "Others": "📦" };
-            const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
-
-            // Feature 2: Compute expiry timestamp
-            const expiresAt = new Date();
-            expiresAt.setDate(expiresAt.getDate() + expiresInDays);
-
-            // ⚡ Step 1: Convert compressed image to Base64 data URL
-            // This runs instantly (no network needed) — image visible from the start
+            // ⚡ Step 1: Convert compressed image to Base64 data URL (~50-100ms, no network)
             const toBase64 = (file: File): Promise<string> => new Promise((res, rej) => {
                 const reader = new FileReader();
                 reader.onloadend = () => res(reader.result as string);
                 reader.onerror = rej;
                 reader.readAsDataURL(file);
             });
-            const photoDataUrl = await toBase64(image); // ~50-100ms
+            const photoDataUrl = await toBase64(image);
 
-            // ⚡ Step 2: Create Firestore doc WITH image data — item is fully visible instantly
+            const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Electronic Gadgets": "💻", "Others": "📦" };
+            const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
+            const catId = selectedCat?.id || "others";
+            const collegeId = selectedCollege.id;
+
+            // ⚡ Step 2: OPTIMISTIC UPDATE — item appears in UI at 0ms, before Firestore write
+            const tempId = `temp_${Date.now()}`;
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+
+            const optimisticItem = {
+                id: tempId,
+                ownerId: userId,
+                itemName: name,
+                pricePerHour: parseInt(price),
+                block,
+                college: selectedCollege.name,
+                collegeId,
+                department,
+                categoryId: catId,
+                listingType: activeType,
+                icon: iconMap[category] || "📦",
+                photoUrl: photoDataUrl,
+                extraPhotoUrls: [],
+                condition,
+                status: "available",
+                renterId: null,
+                createdAt: { seconds: Date.now() / 1000, nanoseconds: 0 },
+                expiresAt: expiresAt.toISOString(),
+            };
+
+            // Inject the optimistic item into the SWR cache for this college (no revalidate yet)
+            const cacheKey = `items_${collegeId}_all`;
+            mutate(cacheKey, (current: any[] = []) => [optimisticItem, ...current], false);
+
+            // ⚡ Step 3: Save to Firestore in background (user already sees item)
             const docRef = await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
                 itemName: name,
                 pricePerHour: parseInt(price),
                 block,
                 college: selectedCollege.name,
-                collegeId: selectedCollege.id,
+                collegeId,
                 department,
-                categoryId: selectedCat?.id || "others",
+                categoryId: catId,
                 listingType: activeType,
                 icon: iconMap[category] || "📦",
-                photoUrl: photoDataUrl,   // base64 — visible immediately, no storage needed
+                photoUrl: photoDataUrl,
                 extraPhotoUrls: [],
                 condition,
                 status: "available",
@@ -222,17 +250,16 @@ function NewRentalForm() {
                 expiresAt: expiresAt.toISOString(),
             });
 
-            // ⚡ Step 3: Navigate immediately — item is LIVE with image
+            // ⚡ Step 4: Smart invalidation — only revalidate the affected college cache
+            // Drafter, Lab Coat, others are NOT touched — zero wasted network calls
             invalidateItemsCache();
-            if (mutate) {
-                // Invalidate all SWR keys for this college's items
-                mutate((key: any) => typeof key === 'string' && key.startsWith(`items_${selectedCollege.id}`));
-                // Invalidate counts
-                mutate(`counts_${selectedCollege.id}`);
-            }
+            mutate(cacheKey); // revalidate with real data (replaces temp item)
+            mutate(`counts_${collegeId}`); // update category counts only
+
             toast.success("🎉 Item listed! Visible now.", { duration: 4000 });
             setLoading(false);
-            router.push("/home");
+            router.push("/rentals");
+
 
             // 🔄 Step 4: Background Storage upload — DISABLED
             // Firebase Storage CORS is not configured for Vercel domain.
@@ -283,43 +310,48 @@ function NewRentalForm() {
 
             <form onSubmit={handleSubmit} className="flex-1 px-5 space-y-7 py-8 pb-16 relative z-10 max-w-md mx-auto w-full">
 
-                {/* College Read-only */}
-                <div className="flex items-center gap-4 p-5 bg-white/70 backdrop-blur-xl rounded-3xl border border-indigo-50 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 shadow-inner">
-                        <School className="w-6 h-6 text-indigo-500" />
-                    </div>
-                    <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Listing in Campus</p>
-                        <p className="text-[15px] font-bold text-indigo-700 mt-0.5">{selectedCollege?.name}</p>
-                    </div>
-                </div>
-
-                {/* Item Name */}
+                {/* 1. Add Photo (required) */}
                 <div className="space-y-2.5">
-                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">
-                        What are you listing? *
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1 flex items-center gap-1.5">
+                        <Camera className="w-3.5 h-3.5" /> Add Photo *
                     </label>
-                    <input
-                        type="text"
-                        placeholder="e.g. Drafter, Casio fx991, Lab Coat..."
-                        list="item-suggestions"
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <p className="text-[10px] text-slate-400 font-semibold pl-1">
-                        Hint: Mention the model name for faster borrow!
-                    </p>
-                    <datalist id="item-suggestions">
-                        {ITEM_SUGGESTIONS.map(s => <option key={s} value={s} />)}
-                    </datalist>
+                    <div 
+                        onClick={() => document.getElementById("photo-upload")?.click()}
+                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden transition-all ${preview ? "border-indigo-400 bg-white" : "border-indigo-100 bg-white/70 hover:bg-white hover:border-indigo-300 shadow-inner"}`}
+                    >
+                        {preview ? (
+                            <>
+                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                                    <span className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-xs font-black uppercase text-slate-800">Change Photo</span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center gap-3">
+                                <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center shadow-inner">
+                                    <Camera className="w-8 h-8 text-indigo-500" />
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-sm font-bold text-slate-700">Tap to upload or take a photo</p>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Gallery or Camera</p>
+                                </div>
+                            </div>
+                        )}
+                        <input 
+                            id="photo-upload" 
+                            type="file" 
+                            accept="image/*" 
+                            capture="environment"
+                            className="hidden" 
+                            onChange={handleImageChange} 
+                        />
+                    </div>
                 </div>
 
-                {/* Category & Price Row */}
-                <div className="flex gap-4">
-                    <div className="space-y-2.5 flex-1">
-                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Category *</label>
+                {/* 2. Category (pre-filled) */}
+                <div className="space-y-2.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Category *</label>
+                    <div className="relative">
                         <select
                             value={category}
                             onChange={e => setCategory(e.target.value)}
@@ -328,34 +360,52 @@ function NewRentalForm() {
                             <option value="" disabled>Select Category</option>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
-                    </div>
-                    {/* Price + Smart Pricing Suggestion */}
-                    <div className="space-y-2.5 w-1/2">
-                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">{formConfig.priceLabel}</label>
-                        <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
-                            <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
-                            <input
-                                type="number"
-                                placeholder="20"
-                                min="0"
-                                className="w-full bg-transparent text-slate-800 placeholder-slate-400 font-black text-lg outline-none"
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
-                            />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <Plus className="w-4 h-4 rotate-45" />
                         </div>
-                        {suggestedPrice && (
-                            <button
-                                type="button"
-                                onClick={() => setPrice(String(suggestedPrice))}
-                                className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-500 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full"
-                            >
-                                <Lightbulb className="w-3 h-3" /> Price Smart Tip: Avg ₹{suggestedPrice} at your campus — tap to use
-                            </button>
-                        )}
                     </div>
                 </div>
 
-                {/* Item Condition Chips */}
+                {/* 3. Item Name */}
+                <div className="space-y-2.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">
+                        What are you listing? *
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="Enter item name"
+                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+
+                {/* 4. Price per hour */}
+                <div className="space-y-2.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">{formConfig.priceLabel}</label>
+                    <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
+                        <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
+                        <input
+                            type="number"
+                            placeholder="20"
+                            min="0"
+                            className="w-full bg-transparent text-slate-800 placeholder-slate-400 font-black text-lg outline-none"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                        />
+                    </div>
+                    {suggestedPrice && (
+                        <button
+                            type="button"
+                            onClick={() => setPrice(String(suggestedPrice))}
+                            className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-500 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full"
+                        >
+                            <Lightbulb className="w-3 h-3" /> Price Tip: Avg ₹{suggestedPrice} per hour at campus — use
+                        </button>
+                    )}
+                </div>
+
+                {/* 5. Condition */}
                 <div className="space-y-2.5">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Item Condition *</label>
                     <div className="flex gap-2">
@@ -378,9 +428,10 @@ function NewRentalForm() {
                     </div>
                 </div>
 
+                {/* 6. Your Department */}
                 <div className="space-y-2.5 flex-1">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
-                        <GraduationCap className="w-3.5 h-3.5" /> Your Department
+                        <GraduationCap className="w-3.5 h-3.5" /> Your Department *
                     </label>
                     <select
                         value={department}
@@ -391,23 +442,21 @@ function NewRentalForm() {
                     </select>
                 </div>
 
+                {/* 7. Block/Location */}
                 <div className="space-y-2.5 flex-1">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
                         <MapPin className="w-3.5 h-3.5" /> Block / Location *
                     </label>
                     <input
                         type="text"
-                        placeholder="e.g. Main Block, Library..."
+                        placeholder="Enter your block"
                         value={block}
                         onChange={e => setBlock(e.target.value)}
                         className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
                     />
-                    <p className="text-[9px] text-slate-400 font-bold pl-1 uppercase tracking-widest mt-1">
-                        E.g. Main Block, SJ Hall, Room 402...
-                    </p>
                 </div>
 
-                {/* Feature 2: Listing Expiry */}
+                {/* 8. Listing Expires In */}
                 <div className="space-y-2.5">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
                         <Calendar className="w-3.5 h-3.5" /> Listing Expires In
@@ -426,10 +475,10 @@ function NewRentalForm() {
                     </div>
                 </div>
 
-                {/* Feature 7: Extra Photos */}
+                {/* Extra Photos (remaining) */}
                 {preview && extraPreviews.length < 2 && (
                     <div className="space-y-2.5">
-                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Extra Photos (up to 2 more)</label>
+                        <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Extra Photos (Optional, up to 2)</label>
                         <div className="flex gap-2">
                             {extraPreviews.map((ep, i) => (
                                 <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-200">
