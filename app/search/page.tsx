@@ -8,12 +8,13 @@ import { useSuggestions, useSearchResults } from "@/lib/hooks/useSearch";
 import { useSearchHistory } from "@/lib/hooks/useSearchHistory";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SearchDropdown } from "@/components/search/SearchDropdown";
-import { FilterChips } from "@/components/search/FilterChips";
 import { ResultsGrid } from "@/components/search/ResultsGrid";
 import { SearchEmptyState } from "@/components/search/SearchEmptyState";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { SearchFilter } from "@/lib/types";
+import { db, auth } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 // ── Map FilterChip IDs ↔ API params ──────────────────────────────────────────
 const CHIP_TO_MODE: Record<string, string> = { rent: "rent", buy: "buy", sell: "sell" };
@@ -72,8 +73,11 @@ function SearchPageContent() {
 
     const urlQuery = searchParams.get("q") || "";
     const urlCategory = searchParams.get("category") || "";
+    const urlTab = searchParams.get("tab") || "all";
     const isFirstMount = useRef(true);
 
+    const [activeTab, setActiveTab] = useState(urlTab);
+    const [userProfile, setUserProfile] = useState<any>(null);
     const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id);
     const [activeFilters, setActiveFilters] = useState<string[]>(() => getChipsFromParams(searchParams));
     
@@ -85,7 +89,9 @@ function SearchPageContent() {
         q: query,
         categoryId: activeCategoryId,
         mode: activeMode,
-        collegeId: selectedCollege?.id
+        collegeId: selectedCollege?.id,
+        activeTab: activeTab,
+        userBlock: userProfile?.block || userProfile?.hostel
     });
 
     const { recentSearches, saveSearch, removeSearch } = useSearchHistory();
@@ -97,20 +103,32 @@ function SearchPageContent() {
     const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
     const activeCategoryName = urlCategory ? CATEGORY_NAMES[urlCategory] : null;
 
+    // ── Fetch User Profile for Nearby Block ────────────────────────────
+    useEffect(() => {
+        const userId = auth?.currentUser?.uid;
+        if (userId && db) {
+            getDoc(doc(db as any, "users", userId)).then(snap => {
+                if (snap.exists()) setUserProfile(snap.data());
+            }).catch(console.error);
+        }
+    }, [auth?.currentUser?.uid]);
+
     // ── Deep Linking: Initialize from URL on mount ──────────────────────────
     useEffect(() => {
         if (isFirstMount.current && (urlQuery || urlCategory)) {
             isFirstMount.current = false;
             if (urlQuery) setQuery(urlQuery);
+            if (urlTab) setActiveTab(urlTab);
             setHasSearched(true);
         }
-    }, [urlQuery, urlCategory, setQuery]);
+    }, [urlQuery, urlCategory, urlTab, setQuery]);
 
     // ── URL Sync: Keep URL in sync with reactive state ──────────────────────
     useEffect(() => {
         if (!isFirstMount.current && hasSearched) {
             const params = new URLSearchParams();
             if (query) params.set("q", query);
+            if (activeTab !== "all") params.set("tab", activeTab);
             
             const apiFilters = buildApiFilters(activeFilters, sortBy);
             if (apiFilters.mode) params.set("mode", apiFilters.mode);
@@ -120,7 +138,7 @@ function SearchPageContent() {
             
             router.replace(`/search?${params.toString()}`, { scroll: false });
         }
-    }, [activeFilters, sortBy, hasSearched, query, router]);
+    }, [activeFilters, sortBy, hasSearched, query, activeTab, router]);
 
     const handleSubmit = useCallback((q: string) => {
         if (!q.trim()) return;
@@ -146,6 +164,7 @@ function SearchPageContent() {
         setHasSearched(false);
         setActiveFilters([]); 
         setSortBy("relevance");
+        setActiveTab("all");
         router.push("/search", { scroll: false });
     }, [clearSuggestions, router]);
 
@@ -172,8 +191,30 @@ function SearchPageContent() {
         }
     };
 
+    const TABS = [
+        { id: "all", label: "All" },
+        { id: "nearby", label: "Nearby" },
+        { id: "available", label: "Available" },
+        { id: "budget", label: "Budget" },
+        { id: "low-price", label: "Low Price" },
+        { id: "top-rated", label: "Top Rated" },
+    ];
+
+    const getEmptyMessage = () => {
+        if (!hasSearched) return null;
+        if (results.length > 0) return null;
+        
+        switch (activeTab) {
+            case "available": return "All items are currently borrowed. Check back soon!";
+            case "budget": return "No items under ₹100. Try the Low Price tab.";
+            case "top-rated": return "No ratings yet. Borrow an item and leave a review!";
+            case "nearby": return `No items found in ${userProfile?.block || "your block"}. Try the All tab!`;
+            default: return `No items found in ${activeCategoryName || "this category"}. Be the first to list!`;
+        }
+    };
+
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
+        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
             <TopBar />
             <div className="mt-[60px] relative">
                 <SearchBar
@@ -183,7 +224,10 @@ function SearchPageContent() {
                     onFocus={() => { if (query.length >= 2 || recentSearches.length > 0) setShowDropdown(true); }}
                     onClear={handleClear}
                     onBack={handleBack}
-                    placeholder={activeCategoryName ? `Search in ${activeCategoryName}...` : undefined}
+                    placeholder={activeCategoryName 
+                        ? `Search ${activeCategoryName.toLowerCase()}, blocks, price...` 
+                        : "Search anything — Calculator, Drafter..."
+                    }
                     autoFocus={!urlQuery && !urlCategory}
                 />
                 <div className="relative px-4">
@@ -202,20 +246,35 @@ function SearchPageContent() {
             </div>
 
             {hasSearched && (
-                <div className="animate-in fade-in slide-in-from-top-1 duration-300">
-                    <FilterChips activeFilters={activeFilters} onToggle={handleFilterToggle} />
+                <div className="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar py-2 px-4 shadow-sm z-10 sticky top-[116px]">
+                    <div className="flex gap-2 min-w-max">
+                        {TABS.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => { setActiveTab(tab.id); setHasSearched(true); }}
+                                className={`px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
+                                    activeTab === tab.id 
+                                        ? "bg-indigo-600 text-white shadow-md active:scale-95" 
+                                        : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
 
-            <main className="flex-1">
+            <main className="flex-1 pb-24">
                 {hasSearched && results.length === 0 && !isLoading ? (
                     <SearchEmptyState
                         query={query || activeCategoryName || "this category"}
+                        message={getEmptyMessage() || undefined}
                         onSuggestionClick={handleSubmit}
                         onRequestClick={() => router.push("/requests/new")}
                     />
                 ) : hasSearched ? (
-                    <div className="animate-in fade-in duration-500">
+                    <div className="animate-in fade-in duration-500 pt-3">
                         <ResultsGrid
                             results={results}
                             loading={isLoading}
@@ -237,6 +296,20 @@ function SearchPageContent() {
                     </div>
                 )}
             </main>
+
+            {/* Floating Action Button for Category Listing */}
+            {hasSearched && urlCategory && activeCategoryName && (
+                <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[40] animate-in slide-in-from-bottom duration-500 fill-mode-forwards px-6 w-full max-w-md">
+                    <button 
+                        onClick={() => router.push(`/rentals/new?category=${urlCategory}&type=rent`)}
+                        className="w-full h-14 gradient-indigo text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-indigo flex items-center justify-center gap-3 active:scale-95 transition-all"
+                    >
+                        <span className="text-xl">✨</span>
+                        + Rent Out Your {activeCategoryName.endsWith('s') ? activeCategoryName.slice(0, -1) : activeCategoryName}
+                    </button>
+                </div>
+            )}
+
             <BottomNav />
         </div>
     );

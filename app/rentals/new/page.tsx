@@ -17,6 +17,7 @@ import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
 import { compressImageFile } from "@/lib/image/compressImage";
 import { useListingMode } from "@/lib/hooks/useListingMode";
 import { invalidateItemsCache } from "@/lib/cache/itemsCache";
+import { mutate } from "swr";
 
 const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
@@ -223,6 +224,12 @@ function NewRentalForm() {
 
             // ⚡ Step 3: Navigate immediately — item is LIVE with image
             invalidateItemsCache();
+            if (mutate) {
+                // Invalidate all SWR keys for this college's items
+                mutate((key: any) => typeof key === 'string' && key.startsWith(`items_${selectedCollege.id}`));
+                // Invalidate counts
+                mutate(`counts_${selectedCollege.id}`);
+            }
             toast.success("🎉 Item listed! Visible now.", { duration: 4000 });
             setLoading(false);
             router.push("/home");
@@ -287,6 +294,22 @@ function NewRentalForm() {
                         <p className="text-[15px] font-bold text-indigo-700 mt-0.5">{selectedCollege?.name}</p>
                     </div>
                 </div>
+
+                {/* Category Confirmation (Feature Suggestion) */}
+                {initialCategory && category && (() => {
+                    const SelectedIcon = GRID_CATEGORIES.find(c => c.name === category)?.icon;
+                    return (
+                        <div className="flex items-center gap-4 p-5 bg-emerald-50/80 backdrop-blur-xl rounded-3xl border border-emerald-100 shadow-sm animate-in zoom-in-95 duration-300">
+                            <div className="w-12 h-12 rounded-2xl bg-white border border-emerald-100 flex items-center justify-center shrink-0 shadow-sm">
+                                {SelectedIcon ? <SelectedIcon className="w-6 h-6 text-emerald-500" /> : <span className="text-2xl">📦</span>}
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Type: {category}</p>
+                                <p className="text-[13px] font-bold text-slate-700 mt-0.5">Category pre-filled from your search. You can change it below if needed.</p>
+                            </div>
+                        </div>
+                    );
+                })()}
 
                 {/* Photo Upload */}
                 <div className="space-y-2.5">

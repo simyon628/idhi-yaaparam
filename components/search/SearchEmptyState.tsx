@@ -7,9 +7,10 @@ interface SearchEmptyStateProps {
     suggestions?: string[];
     onSuggestionClick: (text: string) => void;
     onRequestClick: () => void;
+    message?: string;
 }
 
-export function SearchEmptyState({ query, suggestions = [], onSuggestionClick, onRequestClick }: SearchEmptyStateProps) {
+export function SearchEmptyState({ query, suggestions = [], onSuggestionClick, onRequestClick, message }: SearchEmptyStateProps) {
     const defaultSuggestions = suggestions.length > 0 ? suggestions : ["Calculator", "Lab Coat", "Drafter"];
 
     return (
@@ -25,7 +26,7 @@ export function SearchEmptyState({ query, suggestions = [], onSuggestionClick, o
             </div>
 
             <h3 className="text-lg font-black text-slate-800 mb-1">
-                No items found for &ldquo;{query}&rdquo;
+                {message || `No items found for "${query}"`}
             </h3>
             <p className="text-sm text-slate-500 font-medium mb-6">
                 on your campus

@@ -80,59 +80,101 @@ export function useSuggestions(collegeId?: string) {
 }
 
 /**
- * useSearchResults — Reactive in-memory search
+ * useSearchResults — Reactive in-memory search with Tabs
  */
-export function useSearchResults({ q, categoryId, mode, collegeId }: {
+export function useSearchResults({ q, categoryId, mode, collegeId, activeTab, userBlock }: {
     q: string;
     categoryId?: string;
     mode?: string;
     collegeId?: string;
+    activeTab?: string;
+    userBlock?: string;
 }) {
-    const { data: allItems = [], isLoading, error } = useAllItems(collegeId);
+    const { data: allItems = [], isLoading, error } = useAllItems(collegeId, categoryId);
 
     const results = useMemo(() => {
         let filtered = [...allItems];
 
-        // 1. Filter by category
-        if (categoryId) {
-            filtered = filtered.filter(item => item.categoryId === categoryId);
+        // 1. Filter by listing mode (Rent/Buy/Sell)
+        const activeMode = mode || "all";
+        if (activeMode !== "all") {
+            filtered = filtered.filter(item => item.listingType === activeMode);
         }
 
-        // 2. Filter by listing mode
-        if (mode && mode !== "all") {
-            filtered = filtered.filter(item => item.listingType === mode);
+        // 2. Tab-specific Filtering & Sorting
+        switch (activeTab) {
+            case "available":
+                filtered = filtered.filter(item => item.status === "available");
+                // Sort by newest first
+                filtered.sort((a, b) => {
+                  const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt as any)?.seconds || 0;
+                  const dateB = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt as any)?.seconds || 0;
+                  return dateB - dateA;
+                });
+                break;
+            case "budget":
+                // Filter Under ₹100
+                filtered = filtered.filter(item => (item.pricePerHour || 0) <= 100);
+                filtered.sort((a, b) => (a.pricePerHour || 0) - (b.pricePerHour || 0));
+                break;
+            case "low-price":
+                filtered.sort((a, b) => (a.pricePerHour || 0) - (b.pricePerHour || 0));
+                break;
+            case "top-rated":
+                // Assuming items have overallRating from owner profile or item reviews
+                filtered.sort((a, b) => ((b as any).overallRating || 0) - ((a as any).overallRating || 0));
+                break;
+            case "nearby":
+                // Sort by user's block if available
+                if (userBlock) {
+                    filtered.sort((a, b) => {
+                        const aMatch = a.block?.toLowerCase() === userBlock.toLowerCase() ? 0 : 1;
+                        const bMatch = b.block?.toLowerCase() === userBlock.toLowerCase() ? 0 : 1;
+                        return aMatch - bMatch;
+                    });
+                }
+                break;
+            default: // "all"
+                // Default sort: newest first
+                filtered.sort((a, b) => {
+                  const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt as any)?.seconds || 0;
+                  const dateB = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt as any)?.seconds || 0;
+                  return dateB - dateA;
+                });
+                break;
         }
 
-        // 3. Filter by text search
+        // 3. Text Search matching (Enhanced)
         if (q && q.trim().length > 0) {
-            const searchTerms = q.toLowerCase().trim().split(/\s+/);
+            const query = q.toLowerCase().trim();
             filtered = filtered.filter(item => {
                 const text = [
                     item.itemName || '',
-                    item.categoryId || '',
                     item.block || '',
+                    item.department || '',
                     item.college || '',
-                    item.department || ''
+                    String(item.pricePerHour || '')
                 ].join(' ').toLowerCase();
-                return searchTerms.every(term => text.includes(term));
+                return text.includes(query);
             });
         }
 
         return filtered;
-    }, [allItems, q, categoryId, mode]);
+    }, [allItems, q, mode, activeTab, userBlock]);
 
-    // Async logging (non-blocking)
+    // Async logging
     useEffect(() => {
         if (q.length > 2 && results.length > 0 && db && collegeId) {
             const logsRef = collection(db, "search_logs");
             addDoc(logsRef, {
                 query: q.toLowerCase(),
                 collegeId: collegeId,
+                categoryId: categoryId || 'all',
                 resultsCount: results.length,
                 timestamp: serverTimestamp()
             }).catch(() => {});
         }
-    }, [q, results.length > 0, collegeId]);
+    }, [q, results.length, collegeId, categoryId]);
 
     return { 
         results, 
@@ -143,7 +185,7 @@ export function useSearchResults({ q, categoryId, mode, collegeId }: {
 }
 
 /**
- * useCategoryCounts — Reactive counts from cache
+ * useCategoryCounts — SWR backed counts
  */
 export function useCategoryCounts(collegeId?: string) {
     const { data: allItems = [], isLoading } = useAllItems(collegeId);
