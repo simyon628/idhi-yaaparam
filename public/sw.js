@@ -7,6 +7,7 @@ const CONTENT_TO_CACHE = [
 ];
 
 self.addEventListener('install', (e) => {
+    self.skipWaiting();
     e.waitUntil((async () => {
         const cache = await caches.open(CACHE_NAME);
         // Fail-safe caching
@@ -17,7 +18,6 @@ self.addEventListener('install', (e) => {
                 }).catch(() => {})
             )
         );
-        self.skipWaiting();
     })());
 });
 

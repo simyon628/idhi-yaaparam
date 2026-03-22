@@ -15,6 +15,11 @@ export function PWAProvider({ children }: { children: React.ReactNode }) {
                     }
                 );
             });
+
+            // Silent update check on every page visit/load
+            navigator.serviceWorker.ready.then(registration => {
+                registration.update();
+            });
         }
     }, []);
 
