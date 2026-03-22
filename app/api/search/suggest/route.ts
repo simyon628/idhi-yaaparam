@@ -3,6 +3,7 @@ import { CATEGORIES } from '@/components/ui/CategoryGrid'
 import { SearchSuggestionResponse } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
 
 const COMMON_TERMS = [
   { text: 'Calculator', category: 'Calculators', type: 'product', icon: '🔢' },
