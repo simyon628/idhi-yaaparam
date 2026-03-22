@@ -25,20 +25,24 @@ export function AppModeProvider({ children }: { children: ReactNode }) {
     // Load persisted choice from localStorage
     useEffect(() => {
         if (typeof window === "undefined") return;
-        const saved = localStorage.getItem("iy_app_mode") as AppMode | null;
-        const picked = localStorage.getItem("iy_mode_picked");
-        if (saved) setModeState(saved);
-        if (picked === "1") setHasPickedState(true);
+        try {
+            const saved = localStorage.getItem("iy_app_mode") as AppMode | null;
+            const picked = localStorage.getItem("iy_mode_picked");
+            if (saved) setModeState(saved);
+            if (picked === "1") setHasPickedState(true);
+        } catch (e) {
+            console.warn("localStorage not available", e);
+        }
     }, []);
 
     const setMode = (m: AppMode) => {
         setModeState(m);
-        localStorage.setItem("iy_app_mode", m);
+        try { localStorage.setItem("iy_app_mode", m); } catch(e) {}
     };
 
     const setHasPicked = (v: boolean) => {
         setHasPickedState(v);
-        localStorage.setItem("iy_mode_picked", v ? "1" : "0");
+        try { localStorage.setItem("iy_mode_picked", v ? "1" : "0"); } catch(e) {}
     };
 
     return (

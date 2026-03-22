@@ -27,7 +27,7 @@ export function CategoryGrid({ counts = {}, loading = false }: CategoryGridProps
                     return (
                         <Link
                             key={cat.id}
-                            href={`/category/${cat.id}`}
+                            href={`/search?categoryId=${cat.id}`}
                             className="flex flex-col p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all duration-200 group active:scale-[0.98]"
                         >
                             <div className="flex items-center justify-between mb-3">
