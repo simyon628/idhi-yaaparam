@@ -14,10 +14,11 @@ const FILTERS = [
     { id: "sell", label: "Sell" },
     { id: "available", label: "Available Now" },
     { id: "under50", label: "Under ₹50/day" },
+    { id: "calculator", label: "Calculators" },
     { id: "books", label: "Books" },
     { id: "electronics", label: "Electronics" },
     { id: "lab", label: "Lab" },
-    { id: "stationery", label: "Stationery" },
+    { id: "stationery", label: "Geometry" },
 ];
 
 export function FilterChips({ activeFilters, onToggle }: FilterChipsProps) {
