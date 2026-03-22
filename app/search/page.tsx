@@ -20,10 +20,10 @@ const CHIP_TO_MODE: Record<string, string> = { rent: "rent", buy: "buy", sell: "
 const MODE_TO_CHIP = Object.fromEntries(Object.entries(CHIP_TO_MODE).map(([k, v]) => [v, k]));
 
 const CHIP_TO_CATEGORY: Record<string, string> = {
-    books: "Books & Notes",
-    electronics: "Electronics",
-    lab: "Lab Gear",
-    stationery: "Stationery",
+    books: "books",
+    electronics: "electronics",
+    lab: "lab-coat",
+    stationery: "geometry",
 };
 const CATEGORY_TO_CHIP = Object.fromEntries(Object.entries(CHIP_TO_CATEGORY).map(([k, v]) => [v, k]));
 

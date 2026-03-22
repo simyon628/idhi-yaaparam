@@ -1,0 +1,144 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ───────────────────────────────────────────────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // ─── colleges ──────────────────────────────────────────────────────────
+    // Public read. Only admins write.
+    match /colleges/{collegeId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── blocks ────────────────────────────────────────────────────────────
+    // Campus block/map data — public read, admin write.
+    match /blocks/{blockId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── categories ────────────────────────────────────────────────────────
+    // Public read. Only admins write (seed tool runs as admin in browser).
+    match /categories/{catId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── listings ──────────────────────────────────────────────────────────
+    // Public read so category pages work for all users.
+    // Authenticated users can create.
+    // Only the owner can update/delete their own listing.
+    match /listings/{listingId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update, delete: if isAuth() && request.auth.uid == resource.data.userId;
+    }
+
+    // ─── rentals ───────────────────────────────────────────────────────────
+    // Auth required to read (privacy of rental details).
+    // Auth required to create.
+    // Owner OR renter can update (approve/reject/complete).
+    // Admins have full access.
+    match /rentals/{rentalId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow update: if isAuth() && (
+        request.auth.uid == resource.data.ownerId ||
+        request.auth.uid == resource.data.renterId
+      );
+      allow delete: if isAdmin();
+
+      // ─── rentals/{id}/messages ─────────────────────────────────────────
+      match /messages/{msgId} {
+        allow read: if isAuth();
+        allow create: if isAuth() && (
+          request.auth.uid == get(/databases/$(database)/documents/rentals/$(rentalId)).data.ownerId ||
+          request.auth.uid == get(/databases/$(database)/documents/rentals/$(rentalId)).data.renterId
+        );
+        allow update, delete: if false;
+      }
+    }
+
+    // ─── users ─────────────────────────────────────────────────────────────
+    // Any authenticated user can read any user's public profile.
+    // Users can only write their own doc.
+    // Admins can write any user doc (for strike/block actions).
+    match /users/{userId} {
+      allow read: if isAuth();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+
+      // ─── users/{uid}/saved (wishlist) ──────────────────────────────────
+      match /saved/{itemId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // ─── notifications ─────────────────────────────────────────────────────
+    // Users can only read/update their own notifications.
+    // Any authenticated user or admin can create (send a notification).
+    match /notifications/{notifId} {
+      allow read, update: if isAuth() && request.auth.uid == resource.data.userId;
+      allow create: if isAuth();
+      allow delete: if isAdmin();
+    }
+
+    // ─── reports ───────────────────────────────────────────────────────────
+    // Authenticated users can file a report (create only).
+    // Only admins can read/manage reports.
+    match /reports/{reportId} {
+      allow create: if isAuth();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ─── reviews ───────────────────────────────────────────────────────────
+    // Public read. Authenticated users can create.
+    // Only the author can update/delete.
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update, delete: if isAuth() && request.auth.uid == resource.data.reviewerId;
+    }
+
+    // ─── requests ──────────────────────────────────────────────────────────
+    // Authenticated users can read and create.
+    // Only the requester or the listing owner can update.
+    match /requests/{requestId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow update: if isAuth() && (
+        request.auth.uid == resource.data.requesterId ||
+        request.auth.uid == resource.data.ownerId
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ─── search_logs ───────────────────────────────────────────────────────
+    // Write-only for all authenticated users. Read by admins only.
+    match /search_logs/{logId} {
+      allow create: if isAuth();
+      allow read, delete: if isAdmin();
+    }
+
+    // ─── writing_jobs ──────────────────────────────────────────────────────
+    // Authenticated users can read and create.
+    // Only the job owner can update/delete.
+    match /writing_jobs/{jobId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow update, delete: if isAuth() && request.auth.uid == resource.data.userId;
+    }
+  }
+}

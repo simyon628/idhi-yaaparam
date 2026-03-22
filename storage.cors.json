@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://idhi-yaaparam.vercel.app", "http://localhost:3000"],
+    "method": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
+    "responseHeader": ["Content-Type", "Authorization", "Content-Length"],
+    "maxAgeSeconds": 3600
+  }
+]

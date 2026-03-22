@@ -187,9 +187,13 @@ export function useSearchResults(collegeId?: string, mode?: string) {
 
         setLoading(true);
         try {
-            let url = `/api/search?q=${encodeURIComponent(searchQuery)}&collegeId=${collegeId}&mode=${mode || "rent"}`;
-            if (filters && Object.keys(filters).length > 0) {
-                url += `&filters=${encodeURIComponent(JSON.stringify(filters))}`;
+            const activeMode = (filters as any)?.mode || "all";
+            let url = `/api/search?q=${encodeURIComponent(searchQuery)}&collegeId=${collegeId}&mode=${activeMode}`;
+            if (filters?.categoryId) {
+                url += `&categoryId=${encodeURIComponent(filters.categoryId)}`;
+            }
+            if (filters?.maxPrice) {
+                url += `&maxPrice=${filters.maxPrice}`;
             }
 
             const res = await fetch(url, { signal: abortRef.current.signal });

@@ -16,6 +16,7 @@ import { useCampusBlocks } from "@/lib/hooks/useCampusBlocks";
 import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
 import { compressImageFile } from "@/lib/image/compressImage";
 import { useListingMode } from "@/lib/hooks/useListingMode";
+import { invalidateItemsCache } from "@/lib/cache/itemsCache";
 
 const ITEM_SUGGESTIONS = ["Casio fx991", "Drafter", "Mini Drafter", "Geometry Box", "Physics Lab Record", "Chemistry Lab Record", "Arduino Uno", "Multimeter"];
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
@@ -221,6 +222,7 @@ function NewRentalForm() {
             });
 
             // ⚡ Step 3: Navigate immediately — item is LIVE with image
+            invalidateItemsCache();
             toast.success("🎉 Item listed! Visible now.", { duration: 4000 });
             setLoading(false);
             router.push("/home");
