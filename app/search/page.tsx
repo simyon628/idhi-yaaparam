@@ -78,8 +78,9 @@ function SearchPageContent() {
     useEffect(() => {
         if (isFirstMount.current) {
             isFirstMount.current = false;
-            if (urlQuery) {
-                setQuery(urlQuery);
+            const hasCategory = searchParams.get("category");
+            if (urlQuery || hasCategory) {
+                if (urlQuery) setQuery(urlQuery);
                 search(urlQuery, buildApiFilters(getChipsFromParams(searchParams), sortBy));
                 setHasSearched(true);
             }
