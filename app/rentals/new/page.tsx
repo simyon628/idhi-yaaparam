@@ -227,34 +227,12 @@ function NewRentalForm() {
             setLoading(false);
             router.push("/home");
 
-            // 🔄 Step 4: Background — upgrade from base64 to Firebase Storage URL
-            // (reduces Firestore doc size from ~400KB to a small URL string)
-            // This is optional — item works perfectly even if this fails
-            if (storage) {
-                (async () => {
-                    try {
-                        const imageRef = ref(storage!, `rentals/${docRef.id}_${userId}.jpg`);
-                        const uploaded = await uploadBytes(imageRef, image);
-                        const storageUrl = await getDownloadURL(uploaded.ref);
-                        const { updateDoc: updDoc, doc: fDoc } = await import("firebase/firestore");
-                        await updDoc(fDoc(db!, "rentals", docRef.id), { photoUrl: storageUrl });
-
-                        // Extra images
-                        const extraUrls: string[] = [];
-                        for (const extraImg of extraImages) {
-                            const eRef = ref(storage!, `rental_photos/${docRef.id}_extra${extraUrls.length}_${userId}.jpg`);
-                            const eUp = await uploadBytes(eRef, extraImg);
-                            extraUrls.push(await getDownloadURL(eUp.ref));
-                        }
-                        if (extraUrls.length > 0) {
-                            const { updateDoc: upd, doc: fd } = await import("firebase/firestore");
-                            await upd(fd(db!, "rentals", docRef.id), { extraPhotoUrls: extraUrls });
-                        }
-                    } catch (e) {
-                        console.warn("Storage upgrade failed (item is still listed with base64 image):", e);
-                    }
-                })();
-            }
+            // 🔄 Step 4: Background Storage upload — DISABLED
+            // Firebase Storage CORS is not configured for Vercel domain.
+            // Items display perfectly using the base64 image saved in Step 2.
+            // To re-enable: configure CORS in Google Cloud Console for the storage bucket,
+            // then uncomment this block.
+            // if (storage) { ... }
 
         } catch (error: any) {
             console.error("Publish error:", error);
