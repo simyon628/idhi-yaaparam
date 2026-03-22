@@ -161,9 +161,15 @@ export default function RentalDetailPage() {
     };
 
     // Real-time listener for the rental document
+    // Starts immediately without waiting for auth — rental data is public
     useEffect(() => {
-        if (!id || !db || !authChecked) return;
+        if (!id || !db) return;
+
+        // Safety timeout: never stay loading forever
+        const safetyTimeout = setTimeout(() => setLoading(false), 5000);
+
         const unsub = onSnapshot(doc(db as any, "rentals", id as string), async (docSnap) => {
+            clearTimeout(safetyTimeout);
             if (docSnap.exists()) {
                 const data = { id: docSnap.id, ...docSnap.data() } as Listing;
                 setRental(data);
@@ -190,11 +196,17 @@ export default function RentalDetailPage() {
             }
             setLoading(false);
         }, (err) => {
-            toast.error("Error connecting to live update");
+            clearTimeout(safetyTimeout);
+            console.error("Rental snapshot error:", err);
             setLoading(false);
         });
-        return () => unsub();
+
+        return () => {
+            clearTimeout(safetyTimeout);
+            unsub();
+        };
     }, [id, router]);
+
 
     // Live GPS tracking when active or requested
     useEffect(() => {

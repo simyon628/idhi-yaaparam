@@ -1,49 +1,70 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { RefreshCw } from "lucide-react";
 
 export function PWAProvider({ children }: { children: React.ReactNode }) {
+    const didCheck = useRef(false);
+
     useEffect(() => {
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("/sw.js").then(
-                    (registration) => {
-                        console.log("Service Worker registered");
+        if (!("serviceWorker" in navigator)) return;
 
-                        // Detect update
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            if (newWorker) {
-                                newWorker.addEventListener('statechange', () => {
-                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                        // A new service worker is available (and skipped waiting because of sw.js skipWaiting)
-                                        // We show the notification for the user to refresh and see changes.
-                                        toast("App updated! Tap to refresh", {
-                                            duration: Infinity,
-                                            action: {
-                                                label: "Refresh Now",
-                                                onClick: () => window.location.reload(),
-                                            },
-                                            icon: <RefreshCw className="w-4 h-4" />,
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    },
-                    (err) => {
-                        console.log("Service Worker registration failed:", err);
-                    }
-                );
-            });
+        const registerAndUpdate = async () => {
+            try {
+                const registration = await navigator.serviceWorker.register("/sw.js");
+                console.log("Service Worker registered");
 
-            // Silent update check on every page visit/load
-            navigator.serviceWorker.ready.then(registration => {
-                registration.update();
-            });
+                // Silent update check — runs on every page load
+                await registration.update();
+
+                // Listen for new worker installing
+                registration.addEventListener("updatefound", () => {
+                    const newWorker = registration.installing;
+                    if (!newWorker) return;
+
+                    newWorker.addEventListener("statechange", () => {
+                        if (
+                            newWorker.state === "activated" &&
+                            navigator.serviceWorker.controller
+                        ) {
+                            // New SW activated — reload silently to serve new code
+                            window.location.reload();
+                        } else if (
+                            newWorker.state === "installed" &&
+                            navigator.serviceWorker.controller
+                        ) {
+                            // Fallback: show notification if activation is delayed
+                            toast("App updated!", {
+                                duration: Infinity,
+                                action: {
+                                    label: "Refresh Now",
+                                    onClick: () => window.location.reload(),
+                                },
+                                icon: <RefreshCw className="w-4 h-4" />,
+                            });
+                        }
+                    });
+                });
+            } catch (err) {
+                console.log("Service Worker registration failed:", err);
+            }
+        };
+
+        // Run once per page load
+        if (!didCheck.current) {
+            didCheck.current = true;
+            registerAndUpdate();
         }
+
+        // Also trigger update check when user returns to the tab
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                navigator.serviceWorker.ready.then(reg => reg.update()).catch(() => {});
+            }
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
     }, []);
 
     return <>{children}</>;
