@@ -175,7 +175,8 @@ export function useSearchResults(collegeId?: string, mode?: string) {
     const abortRef = useRef<AbortController | null>(null);
 
     const search = useCallback(async (searchQuery: string, filters?: SearchFilter) => {
-        if (!collegeId || !searchQuery.trim()) {
+        const hasCategory = filters?.categoryId;
+        if (!collegeId || (!searchQuery.trim() && !hasCategory)) {
             setResults([]);
             setTotalCount(0);
             return;
