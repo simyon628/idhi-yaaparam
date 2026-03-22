@@ -118,6 +118,7 @@ export default function RentalDetailPage() {
 
     const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number, overallRating?: number, reviewCount?: number } | null>(null);
     const [renterName, setRenterName] = useState<string>("");
+    const [authChecked, setAuthChecked] = useState(false);
 
     const [selectedDuration, setSelectedDuration] = useState({ hours: 1, minutes: 0 });
 
@@ -132,11 +133,18 @@ export default function RentalDetailPage() {
     const userId = auth?.currentUser?.uid;
     const [isSaved, setIsSaved] = useState(false);
 
+    useEffect(() => {
+        const unsub = auth?.onAuthStateChanged(() => {
+            setAuthChecked(true);
+        });
+        return () => unsub?.();
+    }, []);
+
     // Check wishlist state
     useEffect(() => {
-        if (!userId || !id || !db) return;
+        if (!authChecked || !userId || !id || !db) return;
         getDoc(doc(db as any, `users/${userId}/saved`, id as string)).then(snap => setIsSaved(snap.exists()));
-    }, [userId, id]);
+    }, [authChecked, userId, id]);
 
     const toggleSave = async () => {
         if (!userId || !id || !db) { toast.error("Sign in to save items"); return; }
@@ -154,7 +162,7 @@ export default function RentalDetailPage() {
 
     // Real-time listener for the rental document
     useEffect(() => {
-        if (!id || !db) return;
+        if (!id || !db || !authChecked) return;
         const unsub = onSnapshot(doc(db as any, "rentals", id as string), async (docSnap) => {
             if (docSnap.exists()) {
                 const data = { id: docSnap.id, ...docSnap.data() } as Listing;

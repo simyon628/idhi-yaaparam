@@ -31,18 +31,21 @@ export default function ProfilePage() {
     const { selectedCollege } = useCollege();
     const { mode, setMode } = useAppMode();
     const [userId, setUserId] = useState<string | null>(auth?.currentUser?.uid || null);
+    const [authChecked, setAuthChecked] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
 
     useEffect(() => {
         const unsub = auth?.onAuthStateChanged(user => {
             setUserId(user?.uid || null);
+            setAuthChecked(true);
         });
         return () => unsub?.();
     }, []);
 
     useEffect(() => {
+        if (!authChecked) return;
         if (!userId || !db) { 
-            if (!loading) setLoading(false); 
+            if (loading) setLoading(false); 
             return; 
         }
 
