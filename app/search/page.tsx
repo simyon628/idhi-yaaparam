@@ -15,6 +15,7 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { SearchFilter } from "@/lib/types";
 import { db, auth } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { Plus, Search, X } from "lucide-react";
 
 // ── Map FilterChip IDs ↔ API params ──────────────────────────────────────────
 const CHIP_TO_MODE: Record<string, string> = { rent: "rent", buy: "buy", sell: "sell" };
@@ -74,16 +75,17 @@ function SearchPageContent() {
     const urlQuery = searchParams.get("q") || "";
     const urlCategory = searchParams.get("category") || "";
     const urlTab = searchParams.get("tab") || "all";
+    const urlType = searchParams.get("mode") || searchParams.get("type") || "all";
     const isFirstMount = useRef(true);
 
     const [activeTab, setActiveTab] = useState(urlTab);
     const [userProfile, setUserProfile] = useState<any>(null);
-    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id);
+    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id, true);
     const [activeFilters, setActiveFilters] = useState<string[]>(() => getChipsFromParams(searchParams));
     
     // Derived filters for the reactive hook
-    const activeCategoryId = useMemo(() => activeFilters.find(f => CHIP_TO_CATEGORY[f]), [activeFilters]);
-    const activeMode = useMemo(() => activeFilters.find(f => CHIP_TO_MODE[f]) || defaultMode, [activeFilters, defaultMode]);
+    const activeCategoryId = useMemo(() => activeFilters.find(f => CHIP_TO_CATEGORY[f]) || urlCategory, [activeFilters, urlCategory]);
+    const activeMode = useMemo(() => activeFilters.find(f => CHIP_TO_MODE[f]) || urlType || defaultMode, [activeFilters, urlType, defaultMode]);
 
     const { results, isLoading, totalCount } = useSearchResults({
         q: query,
@@ -91,7 +93,8 @@ function SearchPageContent() {
         mode: activeMode,
         collegeId: selectedCollege?.id,
         activeTab: activeTab,
-        userBlock: userProfile?.block || userProfile?.hostel
+        userBlock: userProfile?.block || userProfile?.hostel,
+        shouldFetch: true
     });
 
     const { recentSearches, saveSearch, removeSearch } = useSearchHistory();
@@ -101,7 +104,7 @@ function SearchPageContent() {
     const [hasSearched, setHasSearched] = useState(() => !!urlQuery || !!urlCategory);
 
     const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
-    const activeCategoryName = urlCategory ? CATEGORY_NAMES[urlCategory] : null;
+    const activeCategoryName = activeCategoryId ? CATEGORY_NAMES[activeCategoryId] : null;
 
     // ── Fetch User Profile for Nearby Block ────────────────────────────
     useEffect(() => {
@@ -188,6 +191,15 @@ function SearchPageContent() {
             router.push("/rentals");
         } else {
             router.back();
+        }
+    };
+
+    const handleFabClick = () => {
+        const typeParam = activeMode !== "all" ? activeMode : "rent";
+        if (!auth?.currentUser) {
+            router.push(`/login?redirect=/rentals/new?category=${activeCategoryId || urlCategory}&type=${typeParam}`);
+        } else {
+            router.push(`/rentals/new?category=${activeCategoryId || urlCategory}&type=${typeParam}`);
         }
     };
 
@@ -297,17 +309,17 @@ function SearchPageContent() {
                 )}
             </main>
 
-            {/* Floating Action Button for Category Listing */}
-            {hasSearched && urlCategory && activeCategoryName && (
-                <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[40] animate-in slide-in-from-bottom duration-500 fill-mode-forwards px-6 w-full max-w-md">
-                    <button 
-                        onClick={() => router.push(`/rentals/new?category=${urlCategory}&type=rent`)}
-                        className="w-full h-14 gradient-indigo text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-indigo flex items-center justify-center gap-3 active:scale-95 transition-all"
-                    >
-                        <span className="text-xl">✨</span>
-                        + Rent Out Your {activeCategoryName.endsWith('s') ? activeCategoryName.slice(0, -1) : activeCategoryName}
-                    </button>
-                </div>
+            {/* Floating Action Button (Matches Home Page) */}
+            {hasSearched && (activeCategoryId || urlCategory) && activeMode !== "buy" && (
+                <button
+                    onClick={handleFabClick}
+                    className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-3 px-5 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20"
+                >
+                    <Plus className="w-5 h-5 shrink-0" />
+                    <span className="font-black text-[11px] uppercase tracking-widest">
+                        {activeMode === "sell" ? "Sell Item" : "List Item"}
+                    </span>
+                </button>
             )}
 
             <BottomNav />

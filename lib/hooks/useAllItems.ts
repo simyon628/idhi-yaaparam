@@ -3,31 +3,25 @@ import { db } from '@/lib/firebase'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { Listing } from '@/lib/types'
 
-export function useAllItems(collegeId: string | undefined, categoryId?: string) {
+export function useAllItems(collegeId: string | undefined, categoryId?: string, shouldFetch = true) {
   return useSWR(
-    collegeId ? `items_${collegeId}_${categoryId || 'all'}` : null,
+    (shouldFetch && collegeId) ? `items_${collegeId}_all` : null,
     async () => {
       if (!db) throw new Error("Firebase not initialized");
       
-      const constraints = [
-        where('collegeId', '==', collegeId),
-        where('status', '==', 'available')
-      ];
-
-      if (categoryId) {
-        constraints.push(where('categoryId', '==', categoryId));
-      }
-
       const snap = await getDocs(
         query(
           collection(db as any, 'rentals'),
-          ...constraints
+          where('collegeId', '==', collegeId),
+          where('status', '==', 'available')
         )
       )
       return snap.docs.map(d => ({ id: d.id, ...d.data() })) as Listing[]
     },
     {
       revalidateOnFocus: false,
+      revalidateOnMount: false,
+      revalidateOnReconnect: false,
       dedupingInterval: 300000 // 5 minutes cache
     }
   )

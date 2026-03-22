@@ -46,9 +46,9 @@ const COMMON_TERMS: SearchSuggestion[] = [
 /**
  * useSuggestions — for autocomplete dropdown
  */
-export function useSuggestions(collegeId?: string) {
+export function useSuggestions(collegeId?: string, shouldFetch = false) {
     const [query, setQuery] = useState("");
-    const { data: allItems = [] } = useAllItems(collegeId);
+    const { data: allItems = [] } = useAllItems(collegeId, undefined, shouldFetch);
 
     const suggestions = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -82,18 +82,22 @@ export function useSuggestions(collegeId?: string) {
 /**
  * useSearchResults — Reactive in-memory search with Tabs
  */
-export function useSearchResults({ q, categoryId, mode, collegeId, activeTab, userBlock }: {
+export function useSearchResults({ q, categoryId, mode, collegeId, activeTab, userBlock, shouldFetch = true }: {
     q: string;
     categoryId?: string;
     mode?: string;
     collegeId?: string;
     activeTab?: string;
     userBlock?: string;
+    shouldFetch?: boolean;
 }) {
-    const { data: allItems = [], isLoading, error } = useAllItems(collegeId, categoryId);
+    const { data: allItems = [], isLoading, error } = useAllItems(collegeId, undefined, shouldFetch);
 
     const results = useMemo(() => {
-        let filtered = [...allItems];
+        // Filter by Category first (client-side)
+        let filtered = categoryId 
+            ? allItems.filter(item => item.categoryId === categoryId)
+            : [...allItems];
 
         // 1. Filter by listing mode (Rent/Buy/Sell)
         const activeMode = mode || "all";
@@ -160,7 +164,7 @@ export function useSearchResults({ q, categoryId, mode, collegeId, activeTab, us
         }
 
         return filtered;
-    }, [allItems, q, mode, activeTab, userBlock]);
+    }, [allItems, categoryId, q, mode, activeTab, userBlock]);
 
     // Async logging
     useEffect(() => {
@@ -187,8 +191,8 @@ export function useSearchResults({ q, categoryId, mode, collegeId, activeTab, us
 /**
  * useCategoryCounts — SWR backed counts
  */
-export function useCategoryCounts(collegeId?: string) {
-    const { data: allItems = [], isLoading } = useAllItems(collegeId);
+export function useCategoryCounts(collegeId?: string, shouldFetch = true) {
+    const { data: allItems = [], isLoading } = useAllItems(collegeId, undefined, shouldFetch);
 
     const counts = useMemo(() => {
         const newCounts: Record<string, number> = {};

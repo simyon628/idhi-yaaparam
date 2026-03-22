@@ -295,66 +295,22 @@ function NewRentalForm() {
                     </div>
                 </div>
 
-                {/* Category Confirmation (Feature Suggestion) */}
-                {initialCategory && category && (() => {
-                    const SelectedIcon = GRID_CATEGORIES.find(c => c.name === category)?.icon;
-                    return (
-                        <div className="flex items-center gap-4 p-5 bg-emerald-50/80 backdrop-blur-xl rounded-3xl border border-emerald-100 shadow-sm animate-in zoom-in-95 duration-300">
-                            <div className="w-12 h-12 rounded-2xl bg-white border border-emerald-100 flex items-center justify-center shrink-0 shadow-sm">
-                                {SelectedIcon ? <SelectedIcon className="w-6 h-6 text-emerald-500" /> : <span className="text-2xl">📦</span>}
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Type: {category}</p>
-                                <p className="text-[13px] font-bold text-slate-700 mt-0.5">Category pre-filled from your search. You can change it below if needed.</p>
-                            </div>
-                        </div>
-                    );
-                })()}
-
-                {/* Photo Upload */}
-                <div className="space-y-2.5">
-                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Item Photo *</label>
-                    <div
-                        onClick={() => document.getElementById("photo-input")?.click()}
-                        className="aspect-[4/3] rounded-[2rem] border-2 border-dashed border-indigo-200 bg-white/50 flex flex-col items-center justify-center relative overflow-hidden group active:scale-[0.99] transition-all cursor-pointer hover:border-indigo-400 hover:bg-slate-50 shadow-inner"
-                    >
-                        {preview ? (
-                            <>
-                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-white/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                    <div className="p-4 bg-white rounded-full shadow-lg">
-                                        <Camera className="w-8 h-8 text-indigo-600" />
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="flex flex-col items-center gap-4 p-6 text-center">
-                                <div className="p-4 bg-indigo-50 rounded-2xl group-hover:bg-indigo-100 group-hover:scale-110 transition-all text-indigo-400">
-                                    <Camera className="w-8 h-8 group-hover:text-indigo-600 transition-colors" />
-                                </div>
-                                <div>
-                                    <p className="text-[15px] font-bold text-slate-700">Tap to upload a clear photo</p>
-                                    <p className="text-xs font-semibold text-slate-400 mt-1">Show any scratches or defects</p>
-                                </div>
-                            </div>
-                        )}
-                        <input id="photo-input" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
-                    </div>
-                </div>
-
                 {/* Item Name */}
                 <div className="space-y-2.5">
-                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex justify-between pl-1">
-                        <span>Item Name *</span>
+                    <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">
+                        What are you listing? *
                     </label>
                     <input
                         type="text"
-                        placeholder="e.g. Casio fx-991EX"
+                        placeholder="e.g. Drafter, Casio fx991, Lab Coat..."
                         list="item-suggestions"
                         className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
+                    <p className="text-[10px] text-slate-400 font-semibold pl-1">
+                        Hint: Mention the model name for faster borrow!
+                    </p>
                     <datalist id="item-suggestions">
                         {ITEM_SUGGESTIONS.map(s => <option key={s} value={s} />)}
                     </datalist>
@@ -393,7 +349,7 @@ function NewRentalForm() {
                                 onClick={() => setPrice(String(suggestedPrice))}
                                 className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-500 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full"
                             >
-                                <Lightbulb className="w-3 h-3" /> Avg ₹{suggestedPrice}/hr at your campus — tap to use
+                                <Lightbulb className="w-3 h-3" /> Price Smart Tip: Avg ₹{suggestedPrice} at your campus — tap to use
                             </button>
                         )}
                     </div>
@@ -420,16 +376,11 @@ function NewRentalForm() {
                             </button>
                         ))}
                     </div>
-                    <p className="text-[10px] text-slate-400 font-semibold pl-1">
-                        {condition === "Excellent" ? "Like new — no scratches or defects" :
-                         condition === "Good" ? "Normal wear — works perfectly" :
-                         "Visible marks — still fully functional"}
-                    </p>
                 </div>
 
                 <div className="space-y-2.5 flex-1">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
-                        <GraduationCap className="w-3.5 h-3.5" /> Department
+                        <GraduationCap className="w-3.5 h-3.5" /> Your Department
                     </label>
                     <select
                         value={department}
@@ -440,38 +391,19 @@ function NewRentalForm() {
                     </select>
                 </div>
 
-                <div className="space-y-2.5 flex-1 relative">
+                <div className="space-y-2.5 flex-1">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5 pl-1">
                         <MapPin className="w-3.5 h-3.5" /> Block / Location *
                     </label>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="e.g. Main Block, Library..."
-                            value={block}
-                            onChange={e => setBlock(e.target.value)}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
-                        />
-                        {block && dynamicBlocks.some(b => b.toLowerCase().includes(block.toLowerCase()) && b.toLowerCase() !== block.toLowerCase()) && (
-                            <div className="absolute top-full left-0 right-0 mt-2 z-30 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-1">
-                                {dynamicBlocks
-                                    .filter(b => b.toLowerCase().includes(block.toLowerCase()))
-                                    .slice(0, 4)
-                                    .map(b => (
-                                        <button
-                                            key={b}
-                                            type="button"
-                                            onClick={() => setBlock(b)}
-                                            className="w-full px-5 py-3 text-left hover:bg-slate-50 font-bold text-slate-700 border-b border-slate-50 last:border-none text-sm"
-                                        >
-                                            {b}
-                                        </button>
-                                    ))}
-                            </div>
-                        )}
-                    </div>
+                    <input
+                        type="text"
+                        placeholder="e.g. Main Block, Library..."
+                        value={block}
+                        onChange={e => setBlock(e.target.value)}
+                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
+                    />
                     <p className="text-[9px] text-slate-400 font-bold pl-1 uppercase tracking-widest mt-1">
-                        You can type a specific location or pick from suggestions
+                        E.g. Main Block, SJ Hall, Room 402...
                     </p>
                 </div>
 

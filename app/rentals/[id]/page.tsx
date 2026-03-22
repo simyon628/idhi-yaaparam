@@ -645,11 +645,16 @@ export default function RentalDetailPage() {
                     </div>
                 ) : rental?.status === "available" ? (
                     <button
-                        onClick={() => handleRequest(`${selectedDuration.hours}h ${selectedDuration.minutes}m`)}
-                        disabled={actionLoading || (selectedDuration.hours === 0 && selectedDuration.minutes === 0)}
-                        className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 hover:bg-indigo-700 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 transition-all"
+                        onClick={() => handleRequest(rental.listingType === "rent" ? `${selectedDuration.hours}h ${selectedDuration.minutes}m` : "one-time")}
+                        disabled={actionLoading || (rental.listingType === "rent" && selectedDuration.hours === 0 && selectedDuration.minutes === 0)}
+                        className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 hover:bg-indigo-700 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 transition-all font-outfit"
                     >
-                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><CalendarCheck className="w-5 h-5" /> BORROW NOW</>}
+                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : (
+                            <>
+                                {rental?.listingType === "rent" ? <CalendarCheck className="w-5 h-5" /> : <Package className="w-5 h-5" />}
+                                {rental?.listingType === "rent" ? "BORROW NOW" : "BUY NOW"}
+                            </>
+                        )}
                     </button>
                 ) : isRenter && rental?.status === "requested" ? (
                     <div className="flex flex-col items-center gap-2 text-center py-2">

@@ -6,7 +6,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Plus, Search, X } from "lucide-react";
 import { auth } from "@/lib/firebase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useListingMode } from "@/lib/hooks/useListingMode";
 import { useSuggestions, useCategoryCounts } from "@/lib/hooks/useSearch";
@@ -15,17 +15,22 @@ import { SearchDropdown } from "@/components/search/SearchDropdown";
 
 export default function RentalsMarketplace() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { selectedCollege, isReady } = useCollege();
-    const { listingMode, setListingMode } = useListingMode();
+    const { listingMode: contextMode, setListingMode } = useListingMode();
     const [showDropdown, setShowDropdown] = useState(false);
 
-    // Suggestions hook — lightweight, for autocomplete only
-    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id);
+    // Sync mode from URL if present
+    const urlType = searchParams.get("type") as "rent" | "buy" | "sell" | null;
+    const activeMode = urlType || contextMode || "rent";
+
+    // Suggestions hook — only fetch on this page
+    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id, true);
     const { recentSearches, removeSearch } = useSearchHistory();
 
     const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
 
-    const { counts, loading: countsLoading } = useCategoryCounts(selectedCollege?.id);
+    const { counts, loading: countsLoading } = useCategoryCounts(selectedCollege?.id, true);
 
     useEffect(() => {
         if (isReady && !selectedCollege) {
@@ -33,13 +38,21 @@ export default function RentalsMarketplace() {
         }
     }, [isReady, selectedCollege, router]);
 
+    // Update URL when mode changes
+    const handleModeChange = (m: "rent" | "buy" | "sell") => {
+        setListingMode(m);
+        const params = new URLSearchParams(searchParams);
+        params.set("type", m);
+        router.replace(`/rentals?${params.toString()}`, { scroll: false });
+    };
+
     if (!isReady || !selectedCollege) return null;
 
     const handleFabClick = () => {
         if (!auth?.currentUser) {
             router.push("/login?redirect=/rentals/new");
         } else {
-            router.push(`/rentals/new?type=${listingMode}`);
+            router.push(`/rentals/new?type=${activeMode}`);
         }
     };
 
@@ -122,8 +135,8 @@ export default function RentalsMarketplace() {
                     {(["rent", "buy", "sell"] as const).map(m => (
                         <button
                             key={m}
-                            onClick={() => setListingMode(m)}
-                            className={`flex-1 py-3 rounded-xl text-sm font-black capitalize transition-all active:scale-95 ${listingMode === m ? "bg-indigo-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"}`}
+                            onClick={() => handleModeChange(m)}
+                            className={`flex-1 py-3 rounded-xl text-sm font-black capitalize transition-all active:scale-95 ${activeMode === m ? "bg-indigo-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"}`}
                         >
                             {m}
                         </button>
@@ -141,13 +154,13 @@ export default function RentalsMarketplace() {
             </div>
 
             {/* Floating FAB */}
-            {listingMode !== "buy" && (
+            {activeMode !== "buy" && (
                 <button
                     onClick={handleFabClick}
                     className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-3 px-5 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20"
                 >
                     <Plus className="w-5 h-5 shrink-0" />
-                    <span className="font-black text-[11px] uppercase tracking-widest">{listingMode === "sell" ? "Sell Item" : "List Item"}</span>
+                    <span className="font-black text-[11px] uppercase tracking-widest">{activeMode === "sell" ? "Sell Item" : "List Item"}</span>
                 </button>
             )}
 
