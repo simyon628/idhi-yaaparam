@@ -20,7 +20,7 @@ export default function RentalCalculator({
     onBorrow,
     isBorrowLoading 
 }: RentalCalculatorProps) {
-    const [hTop, setHTop] = useState(40);
+    const [hTop, setHTop] = useState(40);  // starts at 1 hour — button enabled by default
     const [mTop, setMTop] = useState(0);
     
     const hRef = useRef<HTMLDivElement>(null);
@@ -29,10 +29,10 @@ export default function RentalCalculator({
     // FIX 2: Initial scroll position
     useEffect(() => {
         if (hRef.current) {
-            hRef.current.scrollTop = 1 * 40;
+            hRef.current.scrollTop = 1 * 40; // default: 1 hour selected
         }
         if (mRef.current) {
-            mRef.current.scrollTop = 0 * 40;
+            mRef.current.scrollTop = 0 * 40; // default: 0 minutes
         }
     }, []);
 

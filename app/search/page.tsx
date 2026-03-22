@@ -23,8 +23,13 @@ const MODE_TO_CHIP = Object.fromEntries(Object.entries(CHIP_TO_MODE).map(([k, v]
 
 const CHIP_TO_CATEGORY: Record<string, string> = {
     calculator: "calculator",
-    books: "books",
+    drafter: "drafter",
+    "lab-coat": "lab-coat",
+    geometry: "geometry",
     electronics: "electronics",
+    books: "books",
+    others: "others",
+    // Legacy aliases
     lab: "lab-coat",
     stationery: "geometry",
 };
@@ -51,7 +56,8 @@ function getChipsFromParams(searchParams: URLSearchParams): string[] {
     const m = searchParams.get("mode");
     if (m && MODE_TO_CHIP[m]) chips.push(MODE_TO_CHIP[m]);
     const c = searchParams.get("category");
-    if (c && CATEGORY_TO_CHIP[c]) chips.push(CATEGORY_TO_CHIP[c]);
+    // Use category ID directly as a chip (all 7 categories are now in CHIP_TO_CATEGORY)
+    if (c && CHIP_TO_CATEGORY[c]) chips.push(c);
     if (searchParams.get("maxPrice") === "50") chips.push("under50");
     return chips;
 }
@@ -135,13 +141,15 @@ function SearchPageContent() {
             
             const apiFilters = buildApiFilters(activeFilters, sortBy);
             if (apiFilters.mode) params.set("mode", apiFilters.mode);
-            if (apiFilters.categoryId) params.set("category", apiFilters.categoryId);
+            // Always preserve category — either from active filter chip or from original URL param
+            const categoryToWrite = apiFilters.categoryId || urlCategory;
+            if (categoryToWrite) params.set("category", categoryToWrite);
             if (apiFilters.maxPrice) params.set("maxPrice", apiFilters.maxPrice.toString());
             if (sortBy !== "relevance") params.set("sort", sortBy);
             
             router.replace(`/search?${params.toString()}`, { scroll: false });
         }
-    }, [activeFilters, sortBy, hasSearched, query, activeTab, router]);
+    }, [activeFilters, sortBy, hasSearched, query, activeTab, router, urlCategory]);
 
     const handleSubmit = useCallback((q: string) => {
         if (!q.trim()) return;
@@ -317,7 +325,9 @@ function SearchPageContent() {
                 >
                     <Plus className="w-5 h-5 shrink-0" />
                     <span className="font-black text-[11px] uppercase tracking-widest">
-                        + List {activeCategoryName || (activeMode === "sell" ? "Item" : "Item")}
+                        + List {activeCategoryName
+                            ? activeCategoryName.replace(/s$/, "") // "Calculators" → "Calculator"
+                            : (activeMode === "sell" ? "Item" : "Item")}
                     </span>
                 </button>
             )}

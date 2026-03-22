@@ -15,8 +15,6 @@ import { DEPARTMENTS } from "@/lib/constants";
 import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
 import { compressImageFile } from "@/lib/image/compressImage";
 import { useListingMode } from "@/lib/hooks/useListingMode";
-import { invalidateItemsCache } from "@/lib/cache/itemsCache";
-import { mutate } from "swr";
 
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
 
@@ -199,38 +197,12 @@ function NewRentalForm() {
             const catId = selectedCat?.id || "others";
             const collegeId = selectedCollege.id;
 
-            // ⚡ Step 2: OPTIMISTIC UPDATE — item appears in UI at 0ms, before Firestore write
-            const tempId = `temp_${Date.now()}`;
+            // Compute expiry timestamp
             const expiresAt = new Date();
             expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
-            const optimisticItem = {
-                id: tempId,
-                ownerId: userId,
-                itemName: name,
-                pricePerHour: parseInt(price),
-                block,
-                college: selectedCollege.name,
-                collegeId,
-                department,
-                categoryId: catId,
-                listingType: activeType,
-                icon: iconMap[category] || "📦",
-                photoUrl: photoDataUrl,
-                extraPhotoUrls: [],
-                condition,
-                status: "available",
-                renterId: null,
-                createdAt: { seconds: Date.now() / 1000, nanoseconds: 0 },
-                expiresAt: expiresAt.toISOString(),
-            };
-
-            // Inject the optimistic item into the SWR cache for this college (no revalidate yet)
-            const cacheKey = `items_${collegeId}_all`;
-            mutate(cacheKey, (current: any[] = []) => [optimisticItem, ...current], false);
-
-            // ⚡ Step 3: Save to Firestore in background (user already sees item)
-            const docRef = await addDoc(collection(db, "rentals"), {
+            // ⚡ Save to Firestore — onSnapshot listener auto-updates the category page in real-time
+            await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
                 itemName: name,
                 pricePerHour: parseInt(price),
@@ -250,12 +222,7 @@ function NewRentalForm() {
                 expiresAt: expiresAt.toISOString(),
             });
 
-            // ⚡ Step 4: Smart invalidation — only revalidate the affected college cache
-            // Drafter, Lab Coat, others are NOT touched — zero wasted network calls
-            invalidateItemsCache();
-            mutate(cacheKey); // revalidate with real data (replaces temp item)
-            mutate(`counts_${collegeId}`); // update category counts only
-
+            // onSnapshot in useAllItems auto-pushes the new item to all listeners — no manual cache bust needed.
             toast.success("🎉 Item listed! Visible now.", { duration: 4000 });
             setLoading(false);
             router.push("/rentals");
