@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { Search, X, Mic } from "lucide-react";
+import { Search, X, Mic, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface SearchBarProps {
     query: string;
@@ -10,12 +11,13 @@ interface SearchBarProps {
     onSubmit: (q: string) => void;
     onFocus?: () => void;
     onClear: () => void;
+    onBack?: () => void;
     placeholder?: string;
     autoFocus?: boolean;
 }
 
 export function SearchBar({
-    query, onQueryChange, onSubmit, onFocus, onClear,
+    query, onQueryChange, onSubmit, onFocus, onClear, onBack,
     placeholder = "Search items in your college (calculator, lab coat...)",
     autoFocus = false
 }: SearchBarProps) {
@@ -48,8 +50,20 @@ export function SearchBar({
 
     return (
         <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl px-4 pt-3 pb-2 border-b border-slate-100">
-            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 h-12 focus-within:border-indigo-500 focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)] transition-all">
-                <Search className="w-4 h-4 text-slate-400 shrink-0" />
+            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full pl-2 pr-4 h-12 focus-within:border-indigo-500 focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)] transition-all">
+                {onBack ? (
+                    <button 
+                        onClick={onBack}
+                        className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors shrink-0"
+                        title="Back"
+                    >
+                        <ChevronLeft className="w-5 h-5 text-slate-800" strokeWidth={2.5} />
+                    </button>
+                ) : (
+                    <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                        <Search className="w-4 h-4 text-slate-400" />
+                    </div>
+                )}
                 <input
                     ref={inputRef}
                     type="text"

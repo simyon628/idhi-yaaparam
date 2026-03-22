@@ -54,6 +54,16 @@ function getChipsFromParams(searchParams: URLSearchParams): string[] {
     return chips;
 }
 
+const CATEGORY_NAMES: Record<string, string> = {
+    calculator: "Calculators",
+    drafter: "Drafters",
+    "lab-coat": "Lab Coats",
+    geometry: "Geometry Sets",
+    electronics: "Electronics",
+    books: "Books & Notes",
+    others: "Other Items",
+};
+
 function SearchPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -61,6 +71,7 @@ function SearchPageContent() {
     const { listingMode: defaultMode } = useListingMode();
 
     const urlQuery = searchParams.get("q") || "";
+    const urlCategory = searchParams.get("category") || "";
     const isFirstMount = useRef(true);
 
     const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id);
@@ -74,27 +85,28 @@ function SearchPageContent() {
 
     const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
 
+    const activeCategoryName = urlCategory ? CATEGORY_NAMES[urlCategory] : null;
+
     // ── Deep Linking: Initialize from URL on mount ──────────────────────────
     useEffect(() => {
         if (isFirstMount.current) {
             isFirstMount.current = false;
-            const hasCategory = searchParams.get("category");
-            if (urlQuery || hasCategory) {
+            if (urlQuery || urlCategory) {
                 if (urlQuery) setQuery(urlQuery);
                 search(urlQuery, buildApiFilters(getChipsFromParams(searchParams), sortBy));
                 setHasSearched(true);
             }
         }
-    }, [urlQuery, searchParams, sortBy, setQuery, search]);
+    }, [urlQuery, urlCategory, searchParams, sortBy, setQuery, search]);
 
     // ── Reactive Search: Observe filter/sort changes ─────────────────────────
     useEffect(() => {
-        if (!isFirstMount.current && hasSearched && query.trim()) {
+        if (!isFirstMount.current && hasSearched && (query.trim() || activeFilters.length > 0)) {
             search(query, buildApiFilters(activeFilters, sortBy));
             
             // Sync URL (debouced or silent update could be better, but simple push for now)
             const params = new URLSearchParams();
-            params.set("q", query);
+            if (query) params.set("q", query);
             const apiFilters = buildApiFilters(activeFilters, sortBy);
             if (apiFilters.mode) params.set("mode", apiFilters.mode);
             if (apiFilters.categoryId) params.set("category", apiFilters.categoryId);
@@ -119,9 +131,9 @@ function SearchPageContent() {
         if (q.length >= 2) setShowDropdown(true);
         else if (q.length === 0) {
             setShowDropdown(false);
-            if (!urlQuery) { clearResults(); setHasSearched(false); }
+            if (!urlQuery && !urlCategory) { clearResults(); setHasSearched(false); }
         }
-    }, [setQuery, clearResults, urlQuery]);
+    }, [setQuery, clearResults, urlQuery, urlCategory]);
 
     const handleClear = useCallback(() => {
         clearSuggestions(); clearResults();
@@ -144,6 +156,14 @@ function SearchPageContent() {
         setSortBy(sort);
     }, []);
 
+    const handleBack = () => {
+        if (urlCategory || urlQuery) {
+            router.push("/rentals");
+        } else {
+            router.back();
+        }
+    };
+
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
             <TopBar />
@@ -154,7 +174,9 @@ function SearchPageContent() {
                     onSubmit={handleSubmit}
                     onFocus={() => { if (query.length >= 2 || recentSearches.length > 0) setShowDropdown(true); }}
                     onClear={handleClear}
-                    autoFocus={!urlQuery}
+                    onBack={handleBack}
+                    placeholder={activeCategoryName ? `Search in ${activeCategoryName}...` : undefined}
+                    autoFocus={!urlQuery && !urlCategory}
                 />
                 <div className="relative px-4">
                     <SearchDropdown
@@ -171,24 +193,30 @@ function SearchPageContent() {
                 </div>
             </div>
 
-            {hasSearched && <FilterChips activeFilters={activeFilters} onToggle={handleFilterToggle} />}
+            {hasSearched && (
+                <div className="animate-in fade-in slide-in-from-top-1 duration-300">
+                    <FilterChips activeFilters={activeFilters} onToggle={handleFilterToggle} />
+                </div>
+            )}
 
             <main className="flex-1">
                 {hasSearched && results.length === 0 && !loading ? (
                     <SearchEmptyState
-                        query={query}
+                        query={query || activeCategoryName || "this category"}
                         onSuggestionClick={handleSubmit}
                         onRequestClick={() => router.push("/requests/new")}
                     />
                 ) : hasSearched ? (
-                    <ResultsGrid
-                        results={results}
-                        loading={loading}
-                        query={query}
-                        totalCount={totalCount}
-                        sortBy={sortBy}
-                        onSortChange={handleSortChange}
-                    />
+                    <div className="animate-in fade-in duration-500">
+                        <ResultsGrid
+                            results={results}
+                            loading={loading}
+                            query={query}
+                            totalCount={totalCount}
+                            sortBy={sortBy}
+                            onSortChange={handleSortChange}
+                        />
+                    </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
                         <div className="text-5xl mb-4">🔍</div>
