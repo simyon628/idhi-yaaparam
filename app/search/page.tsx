@@ -86,12 +86,13 @@ function SearchPageContent() {
 
     const [activeTab, setActiveTab] = useState(urlTab);
     const [userProfile, setUserProfile] = useState<any>(null);
-    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id, true);
     const [activeFilters, setActiveFilters] = useState<string[]>(() => getChipsFromParams(searchParams));
     
     // Derived filters for the reactive hook
     const activeCategoryId = useMemo(() => activeFilters.find(f => CHIP_TO_CATEGORY[f]) || urlCategory, [activeFilters, urlCategory]);
     const activeMode = useMemo(() => activeFilters.find(f => CHIP_TO_MODE[f]) || urlType || defaultMode, [activeFilters, urlType, defaultMode]);
+
+    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id, activeMode);
 
     const { results, isLoading, totalCount } = useSearchResults({
         q: query,

@@ -124,7 +124,7 @@ export default function NewRequestPage() {
                                     category === c.name ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo/20" : "bg-white border-slate-100 text-slate-500 hover:border-indigo-200"
                                 }`}
                             >
-                                <c.icon className={`w-3.5 h-3.5 ${category === c.name ? "text-white" : c.color}`} />
+                                <span className={`text-sm ${category === c.name ? "opacity-100" : "opacity-70 saturate-50"}`}>{c.icon}</span>
                                 {c.name}
                             </button>
                         ))}

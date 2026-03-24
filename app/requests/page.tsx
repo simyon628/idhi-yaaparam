@@ -73,10 +73,12 @@ export default function RequestsPage() {
                                 )}
                                 
                                 <div className="flex items-start gap-4 mb-4">
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-slate-50 ${CATEGORIES.find(c => c.id === req.categoryId)?.bg || "bg-slate-100"}`}>
+                                    <div 
+                                        className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-slate-50"
+                                        style={{ backgroundColor: CATEGORIES.find(c => c.id === req.categoryId)?.cc.ico || "#f8fafc" }}
+                                    >
                                         <span className="text-xl">
-                                            {CATEGORIES.find(c => c.id === req.categoryId)?.id === "calculator" ? "🧮" :
-                                             CATEGORIES.find(c => c.id === req.categoryId)?.id === "drafter" ? "📐" : "📦"}
+                                            {CATEGORIES.find(c => c.id === req.categoryId)?.icon || "📦"}
                                         </span>
                                     </div>
                                     <div className="flex-1 min-w-0 pr-6">
