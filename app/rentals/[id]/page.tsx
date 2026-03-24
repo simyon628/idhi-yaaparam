@@ -273,7 +273,10 @@ export default function RentalDetailPage() {
                 ...extraFields,
             });
             setRental(r => r ? { ...r, status: newStatus as any, ...extraFields } : r);
-        } catch { toast.error("Action failed. Try again."); }
+        } catch (err) { 
+            toast.error("Action failed. Try again."); 
+            throw err;
+        }
         finally { setActionLoading(false); }
     };
 
@@ -283,10 +286,11 @@ export default function RentalDetailPage() {
             router.push(`/login?redirect=/rentals/${id}`);
             return; 
         }
-        await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: durationStr });
+        try {
+            await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: durationStr });
 
-        // Fire notification to Owner
-        if (rental?.ownerId && rental.ownerId !== userId) {
+            // Fire notification to Owner
+            if (rental?.ownerId && rental.ownerId !== userId) {
             await addDoc(collection(db as any, "notifications"), {
                 userId: rental.ownerId,
                 title: "New Rental Request",
@@ -298,11 +302,15 @@ export default function RentalDetailPage() {
             });
         }
 
-        toast.success("Request sent to owner!");
+            toast.success("Request sent to owner!");
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const handleApprove = async () => {
-        await updateStatus("active", { approvedAt: serverTimestamp() });
+        try {
+            await updateStatus("active", { approvedAt: serverTimestamp() });
 
         // Fire notification to Renter
         if (rental?.renterId) {
@@ -317,7 +325,10 @@ export default function RentalDetailPage() {
             });
         }
 
-        toast.success("Rental approved!");
+            toast.success("Rental approved!");
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const handleMarkReturned = async () => {
@@ -327,13 +338,17 @@ export default function RentalDetailPage() {
         
         const isStillAvailable = !availableUntil || now <= availableUntil;
         
-        await updateStatus(isStillAvailable ? "available" : "completed", { 
-            completedAt: serverTimestamp(),
-            ...(isStillAvailable ? { renterId: null } : {})
-        });
-        
-        toast.success(isStillAvailable ? "Item returned and is available again!" : "Rental marked as complete!");
-        setShowRatingModal(true);
+        try {
+            await updateStatus(isStillAvailable ? "available" : "completed", { 
+                completedAt: serverTimestamp(),
+                ...(isStillAvailable ? { renterId: null } : {})
+            });
+            
+            toast.success(isStillAvailable ? "Item returned and is available again!" : "Rental marked as complete!");
+            setShowRatingModal(true);
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const handleRateUser = async () => {

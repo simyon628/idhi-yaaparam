@@ -4,12 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import {
-    Plus, Search, PenTool, Clock, IndianRupee, MapPin, Loader2, ChevronRight, GraduationCap
-} from "lucide-react";
+import { Plus, Clock, IndianRupee, Loader2, GraduationCap, X } from "lucide-react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { WritingJob } from "@/lib/types";
-import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 
 export default function WritingFeedPage() {
@@ -21,11 +18,7 @@ export default function WritingFeedPage() {
     const userId = auth?.currentUser?.uid;
 
     useEffect(() => {
-        if (!selectedCollege || !db) {
-            setLoading(false);
-            return;
-        }
-
+        if (!selectedCollege || !db) { setLoading(false); return; }
         const fetchJobs = async () => {
             try {
                 const q = query(
@@ -35,25 +28,26 @@ export default function WritingFeedPage() {
                     orderBy("createdAt", "desc")
                 );
                 const snap = await getDocs(q);
-                const fetched = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as WritingJob));
-                setJobs(fetched);
+                setJobs(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as WritingJob)));
             } catch (err) {
                 console.error("Error fetching writing jobs:", err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchJobs();
     }, [selectedCollege]);
 
     if (isReady && !selectedCollege) {
         return (
-            <div className="flex-1 flex flex-col items-center justify-center min-h-screen text-center px-6 bg-slate-50">
-                <span className="text-5xl drop-shadow-sm mb-6">🎓</span>
-                <h2 className="text-2xl font-black text-slate-800 mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>Select a Campus</h2>
-                <p className="text-sm font-semibold text-slate-500 mb-8 max-w-[280px]">You must select your college from the home page to view writing jobs.</p>
-                <button onClick={() => router.push("/")} className="gradient-indigo text-white px-8 py-3.5 rounded-2xl font-bold shadow-indigo hover:-translate-y-0.5 transition-transform active:scale-95">Go to Home</button>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", textAlign: "center", padding: "0 24px", background: "linear-gradient(160deg,#13131F 0%,#1E1E30 40%,#16162A 100%)" }}>
+                <span style={{ fontSize: 52, marginBottom: 20 }}>🎓</span>
+                <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", marginBottom: 8 }}>Select a Campus</h2>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginBottom: 28, maxWidth: 280, lineHeight: 1.6 }}>Select your college from the home page to view writing jobs.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    style={{ background: "linear-gradient(135deg,#5548E8,#7B72FF)", color: "#fff", padding: "14px 32px", borderRadius: 18, fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", boxShadow: "0 8px 28px rgba(85,72,232,0.5)" }}
+                >Go to Home</button>
             </div>
         );
     }
@@ -64,112 +58,147 @@ export default function WritingFeedPage() {
     );
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 pb-24 relative">
-            <TopBar />
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--iy-surface)", fontFamily: "'DM Sans',sans-serif", paddingBottom: 112 }}>
 
-            {/* Header Section */}
-            <div className="bg-indigo-600 px-5 pt-8 pb-10 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -mr-24 -mt-24 pointer-events-none" />
-                <div className="relative z-10">
-                    <h1 className="text-2xl font-black mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>Writing Work</h1>
-                    <p className="text-indigo-200 text-sm font-medium pr-10">Help your peers with assignments, lab records, and projects to earn money.</p>
+            {/* ── DARK HEADER ── */}
+            <div style={{ background: "linear-gradient(180deg,#16162A 0%,#1E1E34 100%)", padding: "14px 20px 24px", position: "relative", overflow: "hidden" }}>
+                {/* Ambient glows */}
+                <div style={{ position: "absolute", top: -30, right: -20, width: 160, height: 160, background: "radial-gradient(circle,rgba(0,196,140,0.25) 0%,transparent 70%)", pointerEvents: "none" }} />
+                <div style={{ position: "absolute", bottom: 10, left: -10, width: 120, height: 120, background: "radial-gradient(circle,rgba(85,72,232,0.18) 0%,transparent 70%)", pointerEvents: "none" }} />
 
-                    {/* Search Bar */}
-                    <div className="relative mt-6">
-                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <Search className="h-5 w-5 text-indigo-300" />
+                {/* Top row: logo + bell */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, position: "relative", zIndex: 3 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => router.push("/rentals")}>
+                        <div style={{ width: 38, height: 38, background: "linear-gradient(135deg,#00C48C,#00A876)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 4px 16px rgba(0,196,140,0.45)" }}>✍️</div>
+                        <div>
+                            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: "#fff", lineHeight: 1 }}>Writing Work</div>
+                            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Earn Money</div>
                         </div>
-                        <input
-                            type="text"
-                            placeholder="Search assignments, records..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="block w-full pl-11 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-indigo-300 focus:outline-none focus:bg-white focus:text-slate-800 focus:placeholder-slate-400 transition-all font-semibold"
-                        />
                     </div>
+                    <button
+                        onClick={() => router.push("/notifications")}
+                        style={{ width: 36, height: 36, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, position: "relative", zIndex: 3 }}
+                    >🔔</button>
                 </div>
+
+                {/* Headline */}
+                <div style={{ position: "relative", zIndex: 3, marginBottom: 18 }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(0,196,140,0.14)", border: "1px solid rgba(0,196,140,0.22)", borderRadius: 20, padding: "4px 11px", fontSize: 11, fontWeight: 700, color: "#00C48C", letterSpacing: ".5px", marginBottom: 10 }}>
+                        ✨ EARN MONEY
+                    </div>
+                    <h1 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", lineHeight: 1.2, marginBottom: 6 }}>
+                        Open <span style={{ color: "#00C48C" }}>Bounties</span>
+                    </h1>
+                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>
+                        Help peers with assignments & lab records. Get paid per job.
+                    </p>
+                </div>
+
+                {/* Search */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "10px 14px", position: "relative", zIndex: 3 }}>
+                    <span style={{ fontSize: 16, color: "rgba(255,255,255,0.4)" }}>🔍</span>
+                    <input
+                        type="text"
+                        placeholder="Search assignments, records..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: 13, fontFamily: "'DM Sans',sans-serif" }}
+                    />
+                    {search && (
+                        <button onClick={() => setSearch("")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                            <X style={{ width: 14, height: 14, color: "rgba(255,255,255,0.4)" }} />
+                        </button>
+                    )}
+                </div>
+
+                {/* Fade bottom edge */}
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 16, background: "linear-gradient(to bottom,transparent,var(--iy-surface))", pointerEvents: "none", zIndex: 2 }} />
             </div>
 
-            <main className="flex-1 px-5 pt-6 -mt-4 bg-slate-50 rounded-t-3xl relative z-20 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)]">
-                <div className="flex items-center justify-between mb-5">
-                    <h2 className="text-base font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Open Bounties</h2>
-                    <span className="bg-indigo-100 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-lg">{jobs.length} Jobs</span>
-                </div>
+            {/* ── JOB COUNT ── */}
+            <div style={{ padding: "16px 20px 12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 17, color: "var(--iy-text1)" }}>Available Jobs</div>
+                <span style={{ background: "var(--iy-primary-light)", color: "var(--iy-primary)", fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 20 }}>
+                    {jobs.length} Jobs
+                </span>
+            </div>
 
+            {/* ── JOB LIST ── */}
+            <div style={{ flex: 1, padding: "0 16px", display: "flex", flexDirection: "column", gap: 12 }}>
                 {loading ? (
-                    <div className="py-20 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>
+                    <div style={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
+                        <Loader2 style={{ width: 32, height: 32, color: "var(--iy-primary)", animation: "spin 1s linear infinite" }} />
+                        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+                    </div>
                 ) : filteredJobs.length === 0 ? (
-                    <div className="text-center py-16 px-4">
-                        <div className="w-16 h-16 bg-slate-200/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <PenTool className="w-8 h-8 text-slate-400" />
-                        </div>
-                        <h3 className="text-lg font-black text-slate-700 mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>No open jobs</h3>
-                        <p className="text-sm font-semibold text-slate-500 mb-6">Be the first to post a new assignment bounty on campus!</p>
+                    <div style={{ textAlign: "center", padding: "60px 20px" }}>
+                        <div style={{ fontSize: 48, marginBottom: 16 }}>✍️</div>
+                        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 18, color: "var(--iy-text1)", marginBottom: 8 }}>No open jobs yet</div>
+                        <div style={{ fontSize: 13, color: "var(--iy-text3)", lineHeight: 1.6, marginBottom: 20 }}>Be the first to post a new assignment bounty on campus!</div>
+                        <button
+                            onClick={() => router.push("/writing/new")}
+                            style={{ background: "linear-gradient(135deg,#00C48C,#00A876)", color: "#fff", padding: "12px 24px", borderRadius: 14, fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer", boxShadow: "0 6px 20px rgba(0,196,140,0.35)" }}
+                        >+ Post a Job</button>
                     </div>
                 ) : (
-                    <div className="space-y-4">
-                        {filteredJobs.map(job => {
-                            const isOwner = job.posterId === userId;
-                            const deadlineDate = job.deadline?.toDate ? job.deadline.toDate() : new Date(job.deadline);
-                            const isUrgent = deadlineDate.getTime() - new Date().getTime() < 86400000; // Less than 24 hours
+                    filteredJobs.map(job => {
+                        const isOwner = job.posterId === userId;
+                        const deadlineDate = job.deadline?.toDate ? job.deadline.toDate() : new Date(job.deadline);
+                        const isUrgent = deadlineDate.getTime() - new Date().getTime() < 86400000;
+                        const typeColors: Record<string, { bg: string; cl: string }> = {
+                            Record:     { bg: "var(--iy-emerald-light)", cl: "#007A55" },
+                            Assignment: { bg: "var(--iy-amber-light)",   cl: "#B36200" },
+                        };
+                        const tc = typeColors[job.type] || { bg: "var(--iy-primary-light)", cl: "var(--iy-primary)" };
 
-                            return (
-                                <div
-                                    key={job.id}
-                                    onClick={() => router.push(`/writing/${job.id}`)}
-                                    className="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-indigo-50 shadow-sm hover:shadow-md transition-all active:scale-[0.98] cursor-pointer group"
-                                >
-                                    <div className="flex justify-between items-start mb-3">
-                                        <div className="space-y-1 pr-4">
-                                            <span className={`text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${job.type === "Record" ? "bg-emerald-50 text-emerald-600" :
-                                                job.type === "Assignment" ? "bg-amber-50 text-amber-600" : "bg-indigo-50 text-indigo-600"
-                                                }`}>
-                                                {job.type}
-                                            </span>
-                                            <h3 className="text-[16px] font-black text-slate-800 leading-tight group-hover:text-indigo-600 transition-colors">
-                                                {job.title}
-                                            </h3>
-                                        </div>
-                                        <div className="bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl flex items-center gap-0.5 text-emerald-600 shadow-sm shrink-0">
-                                            <IndianRupee className="w-3.5 h-3.5" />
-                                            <span className="font-black">{job.price}</span>
-                                        </div>
+                        return (
+                            <div
+                                key={job.id}
+                                onClick={() => router.push(`/writing/${job.id}`)}
+                                style={{ background: "#fff", borderRadius: 20, boxShadow: "var(--iy-sh-card)", padding: "16px", cursor: "pointer", transition: "transform 0.15s" }}
+                            >
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                                    <div style={{ flex: 1, paddingRight: 12 }}>
+                                        <span style={{ display: "inline-block", fontSize: 10, textTransform: "uppercase", fontWeight: 700, letterSpacing: ".5px", padding: "2px 8px", borderRadius: 6, marginBottom: 6, background: tc.bg, color: tc.cl }}>{job.type}</span>
+                                        <h3 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 15, color: "var(--iy-text1)", lineHeight: 1.3 }}>{job.title}</h3>
                                     </div>
-
-                                    <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
-                                        <div className={`flex items-center gap-1 ${isUrgent ? 'text-rose-500' : ''}`}>
-                                            <Clock className="w-3.5 h-3.5" />
-                                            <span>{deadlineDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
-                                        </div>
-                                        {job.department && (
-                                            <div className="flex items-center gap-1">
-                                                <GraduationCap className="w-3.5 h-3.5" />
-                                                <span>{job.department}</span>
-                                            </div>
-                                        )}
+                                    <div style={{ display: "flex", alignItems: "center", gap: 2, background: "var(--iy-emerald-light)", borderRadius: 12, padding: "8px 12px", flexShrink: 0 }}>
+                                        <IndianRupee style={{ width: 13, height: 13, color: "#007A55" }} />
+                                        <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 14, color: "#007A55" }}>{job.price}</span>
                                     </div>
+                                </div>
 
-                                    {isOwner && (
-                                        <div className="mt-3 pt-3 border-t border-slate-100">
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 bg-indigo-50 px-2 py-1 rounded">Your Post</span>
+                                <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 11, fontWeight: 600, color: "var(--iy-text3)" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 4, color: isUrgent ? "#FF5F5F" : "var(--iy-text3)" }}>
+                                        <Clock style={{ width: 12, height: 12 }} />
+                                        <span>{deadlineDate.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
+                                    </div>
+                                    {job.department && (
+                                        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                            <GraduationCap style={{ width: 12, height: 12 }} />
+                                            <span>{job.department}</span>
                                         </div>
                                     )}
                                 </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </main>
 
-            {/* FAB to Post New Job */}
-            <div className="fixed bottom-20 right-5 z-40">
-                <button
-                    onClick={() => router.push("/writing/new")}
-                    className="w-14 h-14 rounded-full gradient-indigo text-white flex items-center justify-center shadow-[0_10px_25px_-5px_rgba(79,70,229,0.5)] active:scale-95 hover:scale-105 transition-all outline-none"
-                >
-                    <Plus className="w-6 h-6" />
-                </button>
+                                {isOwner && (
+                                    <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--iy-primary-light)" }}>
+                                        <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: "var(--iy-primary)", background: "var(--iy-primary-light)", padding: "3px 8px", borderRadius: 6 }}>Your Post</span>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })
+                )}
             </div>
+
+            {/* ── FAB ── */}
+            <button
+                onClick={() => router.push("/writing/new")}
+                style={{ position: "fixed", bottom: 88, right: 20, width: 54, height: 54, background: "linear-gradient(135deg,#00C48C,#00A876)", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 28px rgba(0,196,140,0.50)", cursor: "pointer", zIndex: 200, border: "none" }}
+            >
+                <Plus style={{ width: 24, height: 24, color: "#fff" }} />
+            </button>
 
             <BottomNav />
         </div>

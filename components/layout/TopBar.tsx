@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCollege } from "@/contexts/CollegeContext";
-import { MapPin, ChevronDown, Bell } from "lucide-react";
 import { db, auth } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 
 export function TopBar() {
-    const { selectedCollege, setSelectedCollege, isReady } = useCollege();
+    const { selectedCollege, isReady } = useCollege();
     const router = useRouter();
     const [unreadCount, setUnreadCount] = useState(0);
     const [showCollegeModal, setShowCollegeModal] = useState(false);
@@ -27,55 +26,127 @@ export function TopBar() {
         return () => unsub();
     }, [userId]);
 
-    // Close modal when college changes
     useEffect(() => {
-        if (selectedCollege) {
-            setShowCollegeModal(false);
-        }
+        if (selectedCollege) setShowCollegeModal(false);
     }, [selectedCollege]);
 
-    if (!isReady) return null; // Avoid hydration mismatch
+    if (!isReady) return null;
+
+    const collegeName =
+        selectedCollege?.acronym ||
+        (selectedCollege?.name
+            ? selectedCollege.name.split(" ").map((w: string) => w[0]).join("").toUpperCase()
+            : "Campus");
 
     return (
         <>
-            <div className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/60 px-5 py-3.5 flex items-center justify-between max-w-md mx-auto shadow-sm transition-all duration-300">
-                {/* Left: Logo */}
+            {/* ── Top Bar ── */}
+            <div
+                style={{
+                    background: "linear-gradient(180deg,#13131F 0%,#16162A 100%)",
+                    color: "#fff",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "14px 20px 10px",
+                    fontFamily: "'DM Sans', sans-serif",
+                }}
+            >
+                {/* Logo */}
                 <div
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex items-center gap-2.5 cursor-pointer"
                     onClick={() => router.push("/rentals")}
                 >
-                    <div className="w-8 h-8 rounded-lg gradient-indigo flex items-center justify-center shadow-indigo shrink-0">
-                        <span className="text-base text-white">🚀</span>
-                    </div>
-                    <span
-                        className="text-base font-black text-slate-800"
-                        style={{ fontFamily: "Outfit, sans-serif" }}
+                    <div
+                        style={{
+                            width: 38,
+                            height: 38,
+                            background: "linear-gradient(135deg,#5548E8,#7B72FF)",
+                            borderRadius: 12,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: 20,
+                            boxShadow: "0 4px 16px rgba(85,72,232,0.45)",
+                        }}
                     >
-                        Idhi Yaaparam
-                    </span>
+                        🚀
+                    </div>
+                    <div>
+                        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: "#fff", lineHeight: 1 }}>
+                            Idhi Yaaparam
+                        </div>
+                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>
+                            Student Platform
+                        </div>
+                    </div>
                 </div>
 
-                {/* Right: Notification Bell */}
+                {/* Right: college chip + bell */}
                 <div className="flex items-center gap-2">
+                    {/* Notification bell */}
                     <button
                         onClick={() => router.push("/notifications")}
-                        className="relative p-2.5 hover:bg-slate-100 rounded-full transition-colors"
+                        style={{
+                            width: 36,
+                            height: 36,
+                            background: "rgba(255,255,255,0.08)",
+                            border: "1px solid rgba(255,255,255,0.12)",
+                            borderRadius: 11,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            position: "relative",
+                            fontSize: 16,
+                        }}
                     >
-                        <Bell className="w-5 h-5 text-slate-700" />
+                        🔔
                         {unreadCount > 0 && (
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+                            <span
+                                style={{
+                                    position: "absolute",
+                                    top: 7,
+                                    right: 7,
+                                    width: 7,
+                                    height: 7,
+                                    background: "#FF5F5F",
+                                    borderRadius: "50%",
+                                    border: "1.5px solid #16162A",
+                                }}
+                            />
                         )}
                     </button>
-                    
-                    {/* Minimalist College Picker (Text only) */}
+
+                    {/* College chip */}
                     <button
                         onClick={() => setShowCollegeModal(true)}
-                        className="flex items-center gap-1 pl-2 border-l border-slate-200"
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                            background: "rgba(255,255,255,0.07)",
+                            border: "1px solid rgba(255,255,255,0.12)",
+                            borderRadius: 20,
+                            padding: "6px 11px",
+                            cursor: "pointer",
+                        }}
                     >
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate max-w-[80px]">
-                            {selectedCollege?.acronym || (selectedCollege?.name ? selectedCollege.name.split(" ").map((w: string) => w[0]).join("").toUpperCase() : "Campus")}
+                        <span
+                            className="iy-pulse-dot"
+                            style={{
+                                width: 8,
+                                height: 8,
+                                borderRadius: "50%",
+                                background: "#00C48C",
+                                flexShrink: 0,
+                                display: "inline-block",
+                            }}
+                        />
+                        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>
+                            {collegeName}
                         </span>
-                        <ChevronDown className="w-3 h-3 text-slate-300" />
+                        <ChevronDown style={{ width: 12, height: 12, color: "rgba(255,255,255,0.4)" }} />
                     </button>
                 </div>
             </div>
@@ -84,16 +155,19 @@ export function TopBar() {
             {showCollegeModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-5 animate-in fade-in duration-200">
                     <div className="w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl relative">
-                        <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50">
-                            <h2 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Change College</h2>
-                            <button 
+                        <div className="flex items-center justify-between p-5 border-b border-slate-100"
+                            style={{ background: "linear-gradient(135deg,#5548E8,#7B72FF)" }}>
+                            <h2 className="text-lg font-black text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
+                                🎓 Change College
+                            </h2>
+                            <button
                                 onClick={() => setShowCollegeModal(false)}
-                                className="p-2 -mr-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full transition-colors"
+                                className="p-2 -mr-2 text-white/60 hover:text-white transition-colors"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
-                        <div className="p-5 max-h-[70vh] overflow-y-auto override-detector-margins">
+                        <div className="p-5 max-h-[70vh] overflow-y-auto">
                             <InlineCollegeSelection />
                         </div>
                     </div>

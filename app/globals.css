@@ -1,5 +1,85 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+
+/* ── IY Design Tokens (v2 template) ── */
+:root {
+  --iy-ink: #13131F;
+  --iy-ink2: #1E1E30;
+  --iy-ink3: #28283E;
+  --iy-surface: #F5F4FF;
+  --iy-card: #FFFFFF;
+  --iy-border: rgba(100,90,255,0.09);
+  --iy-primary: #5548E8;
+  --iy-primary-mid: #7B72FF;
+  --iy-primary-light: #ECEAFF;
+  --iy-amber: #FF9500;
+  --iy-amber-light: #FFF4E0;
+  --iy-emerald: #00C48C;
+  --iy-emerald-light: #DAFFF3;
+  --iy-coral: #FF5F5F;
+  --iy-coral-light: #FFECEC;
+  --iy-sky: #2CB8FF;
+  --iy-sky-light: #E2F6FF;
+  --iy-rose: #FF4D8D;
+  --iy-rose-light: #FFE8F3;
+  --iy-text1: #13131F;
+  --iy-text2: #5C5C7A;
+  --iy-text3: #9999B8;
+  --iy-sh-card: 0 2px 14px rgba(13,13,30,0.07), 0 0 0 1px rgba(85,72,232,0.06);
+  --iy-sh-float: 0 8px 32px rgba(85,72,232,0.22);
+  --iy-hdr-bg: linear-gradient(180deg, #16162A 0%, #1E1E34 100%);
+  --iy-hdr-start: #16162A;
+  --iy-hdr-end: #1E1E34;
+}
+
+/* ── Fade-up animations ── */
+@keyframes iy-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.iy-fu1 { animation: iy-fade-up 0.35s 0.00s both; }
+.iy-fu2 { animation: iy-fade-up 0.35s 0.07s both; }
+.iy-fu3 { animation: iy-fade-up 0.35s 0.14s both; }
+.iy-fu4 { animation: iy-fade-up 0.35s 0.21s both; }
+.iy-fu5 { animation: iy-fade-up 0.35s 0.28s both; }
+.iy-fu6 { animation: iy-fade-up 0.35s 0.35s both; }
+
+/* ── IY Card ── */
+.iy-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--iy-sh-card);
+}
+
+/* ── Category Card Interaction ── */
+.iy-cat-card {
+  transition: transform 0.15s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.2s, background-color 0.2s;
+}
+.iy-cat-card:active {
+  transform: scale(0.96) !important;
+  box-shadow: inset 0 0 0 1px var(--glow-color), 0 8px 30px -4px var(--glow-color) !important;
+}
+
+/* ── IY Dark Header ── */
+.iy-header {
+  background: var(--iy-hdr-bg);
+  padding: 14px 20px 0;
+  position: relative;
+  overflow: hidden;
+}
+.iy-header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 22px;
+  background: linear-gradient(to bottom, transparent, var(--iy-surface));
+  pointer-events: none; z-index: 2;
+}
+
+/* ── Pulsing green dot ── */
+@keyframes iy-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,196,140,0.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(0,196,140,0); }
+}
+.iy-pulse-dot { animation: iy-pulse 2s infinite; }
 
 @theme {
   --color-background: hsl(var(--background));

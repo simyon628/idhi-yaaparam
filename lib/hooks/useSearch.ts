@@ -46,7 +46,7 @@ const COMMON_TERMS: SearchSuggestion[] = [
 /**
  * useSuggestions — for autocomplete dropdown
  */
-export function useSuggestions(collegeId?: string, shouldFetch = false) {
+export function useSuggestions(collegeId?: string, mode: string = "all", shouldFetch = false) {
     const [query, setQuery] = useState("");
     const { data: allItems = [] } = useAllItems(collegeId, undefined, shouldFetch);
 
@@ -60,7 +60,12 @@ export function useSuggestions(collegeId?: string, shouldFetch = false) {
             .slice(0, 4);
 
         // 2. DB matches from cache
-        const dbMatches = allItems
+        let modeFilteredItems = allItems;
+        if (mode !== "all") {
+            modeFilteredItems = allItems.filter(item => item.listingType === mode);
+        }
+
+        const dbMatches = modeFilteredItems
             .filter(item => item.itemName.toLowerCase().includes(q))
             .map(item => ({
                 text: item.itemName,
@@ -191,19 +196,26 @@ export function useSearchResults({ q, categoryId, mode, collegeId, activeTab, us
 /**
  * useCategoryCounts — SWR backed counts
  */
-export function useCategoryCounts(collegeId?: string, shouldFetch = true) {
+export function useCategoryCounts(collegeId?: string, mode: string = "all", shouldFetch = true) {
     const { data: allItems = [], isLoading } = useAllItems(collegeId, undefined, shouldFetch);
 
     const counts = useMemo(() => {
         const newCounts: Record<string, number> = {};
-        allItems.forEach(item => {
+        
+        // Ensure strict separation by mode
+        let modeFilteredItems = allItems;
+        if (mode !== "all") {
+            modeFilteredItems = allItems.filter(item => item.listingType === mode);
+        }
+
+        modeFilteredItems.forEach(item => {
             const catId = item.categoryId;
             if (catId) {
                 newCounts[catId] = (newCounts[catId] || 0) + 1;
             }
         });
         return newCounts;
-    }, [allItems]);
+    }, [allItems, mode]);
 
     return { counts, loading: isLoading };
 }

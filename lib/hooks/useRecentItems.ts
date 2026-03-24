@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useMemo } from "react";
+import { useAllItems } from "./useAllItems";
 import { Listing } from "@/lib/types";
-
-const STORAGE_KEY = "idhi_yaaparam_recent_items";
-const MAX_ITEMS = 6;
 
 export interface RecentItem {
     id: string;
@@ -13,53 +11,42 @@ export interface RecentItem {
     pricePerHour: number;
     pricePerDay?: number;
     rating?: number;
-    viewedAt: number;
+    viewedAt: number; // kept for compatibility, replaced by createdAt logic
 }
 
-export function useRecentItems() {
-    const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
+export function useRecentItems(collegeId?: string, mode: string = "all") {
+    const { data: allItems = [] } = useAllItems(collegeId, undefined, true);
 
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                setRecentItems(JSON.parse(stored));
-            }
-        } catch (e) {
-            console.warn("Failed to parse recent items", e);
+    const recentItems = useMemo(() => {
+        let filtered = allItems;
+        
+        // Strict separation
+        if (mode !== "all") {
+            filtered = filtered.filter(item => item.listingType === mode);
         }
-    }, []);
-
-    const addItem = useCallback((item: Listing | RecentItem) => {
-        setRecentItems(prev => {
-            const newItem: RecentItem = {
-                id: item.id,
-                itemName: item.itemName,
-                photoUrl: item.photoUrl,
-                pricePerHour: item.pricePerHour,
-                pricePerDay: (item as any).pricePerDay,
-                rating: (item as any).sellerRating,
-                viewedAt: Date.now()
-            };
-
-            // Remove if exists
-            const filtered = prev.filter(i => i.id !== newItem.id);
-            
-            // Add to front
-            filtered.unshift(newItem);
-            
-            // Limit size
-            const updated = filtered.slice(0, MAX_ITEMS);
-            
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-            return updated;
+        
+        // Sort by newest first
+        const sorted = [...filtered].sort((a, b) => {
+            const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt as any)?.seconds || 0;
+            const dateB = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt as any)?.seconds || 0;
+            return dateB - dateA;
         });
-    }, []);
 
-    const clearItems = useCallback(() => {
-        localStorage.removeItem(STORAGE_KEY);
-        setRecentItems([]);
-    }, []);
+        // Take top 6 and map to RecentItem format expected by UI
+        return sorted.slice(0, 6).map(item => ({
+            id: item.id,
+            itemName: item.itemName,
+            photoUrl: item.photoUrl,
+            pricePerHour: item.pricePerHour,
+            pricePerDay: (item as any).pricePerDay,
+            rating: (item as any).sellerRating,
+            viewedAt: Date.now() // Mocked for compatibility
+        }));
+    }, [allItems, mode]);
+
+    // Keep dummy addItem for compatibility if any old components still call it
+    const addItem = (item: Listing | RecentItem) => {};
+    const clearItems = () => {};
 
     return { recentItems, addItem, clearItems };
 }
