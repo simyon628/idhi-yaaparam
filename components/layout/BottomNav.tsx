@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, User, PenTool, Bookmark } from "lucide-react";
 import { useAppMode } from "@/contexts/AppModeContext";
+import { useFCM } from "@/lib/hooks/useFCM";
 import { motion } from "framer-motion";
 
 const RENTALS_NAV = [
@@ -20,6 +21,7 @@ const WRITING_NAV = [
 ];
 
 export function BottomNav() {
+    useFCM();
     const pathname = usePathname();
     const { mode } = useAppMode();
 

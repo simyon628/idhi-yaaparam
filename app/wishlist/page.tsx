@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
-import { collection, getDocs, doc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { Listing } from "@/lib/types";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -39,13 +39,12 @@ export default function WishlistPage() {
             if (ids.length === 0) { setItems([]); setLoading(false); return; }
 
             const fetches = ids.map(id =>
-                getDocs(collection(db as any, "rentals"))
-                    .then(s => s.docs.find(d => d.id === id))
+                getDoc(doc(db as any, "rentals", id))
             );
             const docs = await Promise.all(fetches);
             const listings: Listing[] = docs
-                .filter(Boolean)
-                .map(d => ({ id: d!.id, ...d!.data() } as Listing));
+                .filter(d => d.exists())
+                .map(d => ({ id: d.id, ...d.data() } as Listing));
             setItems(listings);
             setLoading(false);
         });

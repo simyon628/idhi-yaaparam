@@ -5,14 +5,15 @@ import { CategoryGrid } from "@/components/ui/CategoryGrid";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Plus, X, Search as SearchIcon } from "lucide-react";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useListingMode } from "@/lib/hooks/useListingMode";
 import { useSuggestions, useCategoryCounts } from "@/lib/hooks/useSearch";
 import { useSearchHistory } from "@/lib/hooks/useSearchHistory";
 import { SearchDropdown } from "@/components/search/SearchDropdown";
 import { useRecentItems } from "@/lib/hooks/useRecentItems";
+import { prefetchRentals } from "@/lib/cache/itemsCache";
 
 export default function RentalsMarketplace() {
     const router = useRouter();
@@ -38,6 +39,13 @@ export default function RentalsMarketplace() {
         params.set("type", m);
         router.replace(`/rentals?${params.toString()}`, { scroll: false });
     };
+
+    // Warm cache immediately when home loads
+    useEffect(() => {
+        if (db && selectedCollege?.id) {
+            prefetchRentals(db as any, selectedCollege.id);
+        }
+    }, [selectedCollege?.id]);
 
     if (!isReady) return null;
 

@@ -174,27 +174,32 @@ export default function RentalDetailPage() {
                 const data = { id: docSnap.id, ...docSnap.data() } as Listing;
                 setRental(data);
                 addItem(data);
+                setLoading(false); // Stop the spinner instantly so the page loads
 
-                // Fetch owner info
-                if (data.ownerId) {
-                    const ownerSnap = await getDoc(doc(db as any, "users", data.ownerId));
-                    if (ownerSnap.exists()) {
-                        setOwnerInfo(ownerSnap.data() as any);
+                try {
+                    // Fetch owner info
+                    if (data.ownerId) {
+                        const ownerSnap = await getDoc(doc(db as any, "users", data.ownerId));
+                        if (ownerSnap.exists()) {
+                            setOwnerInfo(ownerSnap.data() as any);
+                        }
                     }
-                }
 
-                // Fetch renter info if exists
-                if (data.renterId) {
-                    const renterSnap = await getDoc(doc(db as any, "users", data.renterId));
-                    if (renterSnap.exists()) {
-                        setRenterName(renterSnap.data().name);
+                    // Fetch renter info if exists
+                    if (data.renterId) {
+                        const renterSnap = await getDoc(doc(db as any, "users", data.renterId));
+                        if (renterSnap.exists()) {
+                            setRenterName(renterSnap.data().name);
+                        }
                     }
+                } catch (e) {
+                    console.error("Failed to fetch user profiles (likely unauthenticated):", e);
                 }
             } else {
                 toast.error("Rental not found");
                 router.push("/rentals");
+                setLoading(false);
             }
-            setLoading(false);
         }, (err) => {
             clearTimeout(safetyTimeout);
             console.error("Rental snapshot error:", err);

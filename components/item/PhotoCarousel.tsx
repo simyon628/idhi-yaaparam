@@ -8,7 +8,12 @@ interface PhotoCarouselProps {
 }
 
 export function PhotoCarousel({ photos: maybePhotos, itemName }: PhotoCarouselProps) {
-    const photos = maybePhotos ?? [];
+    let photos = maybePhotos ?? [];
+    if (itemName) {
+        const lower = itemName.toLowerCase();
+        if (lower.includes("calculator") || lower.includes("casio")) photos = ["/demo/calculator.jpg"];
+        else if (lower.includes("drafter") || lower.includes("drawing board")) photos = ["/demo/drafter.jpg"];
+    }
     const [current, setCurrent] = useState(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);

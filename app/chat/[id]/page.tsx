@@ -88,6 +88,21 @@ export default function ChatPage() {
             type: "text",
             isRead: false
         });
+        
+        if (rental) {
+            const targetUserId = rental.ownerId === userId ? rental.renterId : rental.ownerId;
+            fetch("/api/notifications", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    targetUserId,
+                    title: `New message for ${rental.itemName}`,
+                    body: text,
+                    link: `/chat/${id}`
+                })
+            }).catch(console.error);
+        }
+        
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
@@ -108,6 +123,20 @@ export default function ChatPage() {
                 createdAt: serverTimestamp(),
                 type: "image",
             });
+            
+            if (rental) {
+                const targetUserId = rental.ownerId === userId ? rental.renterId : rental.ownerId;
+                fetch("/api/notifications", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        targetUserId,
+                        title: `New message for ${rental.itemName}`,
+                        body: "📷 Sent an image",
+                        link: `/chat/${id}`
+                    })
+                }).catch(console.error);
+            }
         } catch {
             toast.error("Image upload failed");
         } finally {

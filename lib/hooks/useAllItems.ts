@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { db } from '@/lib/firebase'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import { Listing } from '@/lib/types'
+import { getCachedRentalsSync } from '@/lib/cache/itemsCache'
 
 /**
  * Real-time items hook using onSnapshot.
@@ -9,8 +10,17 @@ import { Listing } from '@/lib/types'
  * Filters by collegeId (always) and status=available.
  */
 export function useAllItems(collegeId: string | undefined, categoryId?: string, shouldFetch = true) {
-  const [data, setData] = useState<Listing[] | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState<Listing[] | undefined>(() => {
+    if (collegeId) {
+      const cached = getCachedRentalsSync(collegeId);
+      if (cached) return cached as Listing[];
+    }
+    return undefined;
+  })
+  const [isLoading, setIsLoading] = useState(() => {
+    if (collegeId && getCachedRentalsSync(collegeId)) return false;
+    return false;
+  })
   const [error, setError] = useState<Error | null>(null)
   const unsubRef = useRef<(() => void) | null>(null)
 
@@ -27,7 +37,11 @@ export function useAllItems(collegeId: string | undefined, categoryId?: string, 
       return
     }
 
-    setIsLoading(true)
+    // Only set loading if not already cached
+    const isCached = !!getCachedRentalsSync(collegeId);
+    if (!isCached) {
+        setIsLoading(true)
+    }
 
     const q = query(
       collection(db as any, 'rentals'),
@@ -57,5 +71,12 @@ export function useAllItems(collegeId: string | undefined, categoryId?: string, 
     }
   }, [collegeId, shouldFetch])
 
-  return { data, isLoading, error }
+  // Filter local category if requested
+  const filteredData = useMemo(() => {
+    if (!data) return data;
+    if (categoryId) return data.filter(item => item.categoryId === categoryId);
+    return data;
+  }, [data, categoryId]);
+
+  return { data: filteredData, isLoading, error }
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, orderBy, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, orderBy, deleteDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { toast } from "sonner";
 import {
@@ -112,7 +112,10 @@ export default function ProfilePage() {
         e.stopPropagation();
         if (!db) return;
         try {
-            await updateDoc(doc(db as any, "rentals", itemId), { status: newStatus });
+            await updateDoc(doc(db as any, "rentals", itemId), { 
+                status: newStatus,
+                updatedAt: serverTimestamp()
+            });
             setMyListings(prev =>
                 prev.map(i => i.id === itemId ? { ...i, status: newStatus } : i)
             );

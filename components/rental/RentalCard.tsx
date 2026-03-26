@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Listing } from "@/lib/types";
 import { IndianRupee, MapPin, Zap, Bookmark } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { db, auth } from "@/lib/firebase";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { toast } from "sonner";
 
 interface RentalCardProps {
     item: Listing;
@@ -13,6 +16,7 @@ interface RentalCardProps {
 export function RentalCard({ item, highlight }: RentalCardProps) {
     const router = useRouter();
     const [imgLoaded, setImgLoaded] = useState(false);
+    const [isSavedLocally, setIsSavedLocally] = useState(false);
 
     // Helper to highlight matching text
     const renderTitle = () => {
@@ -38,6 +42,34 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
         ? Date.now() - (item.createdAt as any).toMillis() < 30 * 60 * 1000
         : false;
 
+    // Demo image overrides
+    let displayImageUrl = item.photoUrl;
+    const itemNameLower = item.itemName.toLowerCase();
+    if (itemNameLower.includes("calculator") || itemNameLower.includes("casio")) {
+        displayImageUrl = "/demo/calculator.jpg";
+    } else if (itemNameLower.includes("drafter") || itemNameLower.includes("drawing board")) {
+        displayImageUrl = "/demo/drafter.jpg";
+    }
+
+    const handleBookmarkClick = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!auth?.currentUser || !db) {
+            router.push(`/login?redirect=/rentals/${item.id}`);
+            return;
+        }
+        try {
+            if (isSavedLocally) {
+                toast.success("Already saved in wishlist!");
+                return;
+            }
+            await setDoc(doc(db, `users/${auth.currentUser.uid}/saved`, item.id), { savedAt: serverTimestamp() });
+            setIsSavedLocally(true);
+            toast.success("Saved to wishlist! 🔖");
+        } catch (error) {
+            toast.error("Failed to save.");
+        }
+    };
+
     return (
         <button
             onClick={() => router.push(`/rentals/${item.id}`)}
@@ -46,13 +78,13 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
             {/* Image Area */}
             <div className="aspect-square bg-slate-50 flex items-center justify-center relative overflow-hidden w-full">
                 {/* Shimmer skeleton shown until image loads */}
-                {!imgLoaded && item.photoUrl && (
+                {!imgLoaded && displayImageUrl && (
                     <div className="absolute inset-0 skeleton" />
                 )}
 
-                {item.photoUrl ? (
+                {displayImageUrl ? (
                     <img
-                        src={item.photoUrl}
+                        src={displayImageUrl}
                         alt={item.itemName}
                         onLoad={() => setImgLoaded(true)}
                         className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
@@ -88,10 +120,21 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
                             <span className="truncate">{item.block || "Campus"}</span>
                         </div>
                     </div>
-                    {/* Wishlist Heart Icon (Placeholder button to avoid click bubbling) */}
-                    <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 hover:bg-rose-50 hover:border-rose-100 transition-all group/heart">
-                        <Bookmark className="w-3 h-3 text-slate-300 group-hover/heart:text-rose-400 transition-colors" />
-                    </div>
+                    {/* Wishlist Heart Icon */}
+                    <button 
+                        onClick={handleBookmarkClick}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all group/heart ${
+                            isSavedLocally 
+                            ? "bg-rose-50 border-rose-200" 
+                            : "bg-slate-50 border-slate-100 hover:bg-rose-50 hover:border-rose-100"
+                        }`}
+                    >
+                        <Bookmark className={`w-3.5 h-3.5 transition-colors ${
+                            isSavedLocally
+                            ? "text-rose-500 fill-rose-500"
+                            : "text-slate-300 group-hover/heart:text-rose-400 group-hover/heart:fill-rose-100"
+                        }`} />
+                    </button>
                 </div>
 
                 <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-50">

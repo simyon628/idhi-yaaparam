@@ -116,9 +116,41 @@ function NewRentalForm() {
         });
     }, []);
 
+    const validateImage = (file: File, categoryId: string) => {
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please upload an image file only (JPG, PNG)');
+            return false;
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error('Image too large. Please upload under 5MB');
+            return false;
+        }
+
+        const categoryNames: Record<string, string> = {
+            'cat-calculator': 'Calculator',
+            'cat-drafter': 'Drafter / Drawing Board',
+            'cat-labcoat': 'Lab Coat',
+            'cat-geometry': 'Geometry Set',
+            'cat-books': 'Books / Notes',
+            'cat-electronics': 'Electronics',
+            'cat-tools': 'Tools',
+        };
+        const catName = categoryNames[categoryId] ?? category ?? 'item';
+        
+        toast.success(`Photo added for: ${catName}`);
+        return true;
+    };
+
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            // Compute category ID for validation
+            const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
+            const catId = selectedCat?.id || "";
+
+            if (!validateImage(file, catId)) return;
+
             try {
                 const previewReader = new FileReader();
                 previewReader.onloadend = () => setPreview(previewReader.result as string);
@@ -283,16 +315,52 @@ function NewRentalForm() {
                         <Camera className="w-3.5 h-3.5" /> Add Photo *
                     </label>
                     <div 
-                        onClick={() => document.getElementById("photo-upload")?.click()}
-                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden transition-all ${preview ? "border-indigo-400 bg-white" : "border-indigo-100 bg-white/70 hover:bg-white hover:border-indigo-300 shadow-inner"}`}
+                        onClick={() => { if (!preview) document.getElementById("photo-upload")?.click() }}
+                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${preview ? "border-transparent bg-transparent" : "border-indigo-100 bg-white/70 hover:bg-white hover:border-indigo-300 shadow-inner cursor-pointer overflow-hidden"}`}
                     >
                         {preview ? (
-                            <>
-                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                                    <span className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-xs font-black uppercase text-slate-800">Change Photo</span>
-                                </div>
-                            </>
+                            <div style={{position:'relative',marginTop:8, width: '100%'}}>
+                                <p style={{
+                                    fontSize:11,
+                                    color:'#9CA3AF',
+                                    marginBottom:4
+                                }}>
+                                    Photo for: {category || 'item'}
+                                </p>
+                                <img 
+                                    src={preview}
+                                    style={{
+                                        width:'100%',
+                                        aspectRatio:'4/3',
+                                        objectFit:'cover',
+                                        borderRadius:12
+                                    }}
+                                    alt="Preview"
+                                />
+                                <button 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setPreview(null);
+                                        setImage(null);
+                                    }}
+                                    style={{
+                                        position:'absolute',
+                                        top:24, right:8,
+                                        background:'rgba(0,0,0,0.5)',
+                                        color:'white',
+                                        border:'none',
+                                        borderRadius:'50%',
+                                        width:24, height:24,
+                                        cursor:'pointer',
+                                        fontSize:14,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    ×
+                                </button>
+                            </div>
                         ) : (
                             <div className="flex flex-col items-center gap-3">
                                 <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center shadow-inner">

@@ -1,320 +1,445 @@
 "use client";
 
-import { useState, useRef } from "react";
+// app/auth/verify/IdVerifyClient.tsx
+// Drop this into your existing /auth/verify page
+
+import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-export const dynamic = "force-dynamic";
-import { db, storage, auth } from "@/lib/firebase";
-import { doc, setDoc, query, collection, where, getDocs } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { verifyID } from "@/lib/ocr";
-import { toast } from "sonner";
-import { Camera, RefreshCw, Upload, CheckCircle2, ChevronRight, GraduationCap, Loader2, ShieldCheck } from "lucide-react";
+import { Camera, CheckCircle, XCircle, AlertCircle, Loader } from "lucide-react";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import {
+  verifyStudentId,
+  validateRollNumberFormat,
+  formatDisplayName,
+  type VerificationResult,
+} from "@/lib/idVerification";
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 
-const COLLEGES = [
-    "JNTU Hyderabad", "Osmania University", "CBIT", "VNR VJIET",
-    "Chaitanya Bharathi Institute", "Malla Reddy Engineering",
-    "Gokaraju Rangaraju Institute", "MGIT", "CVR College", "Other"
-];
+// ─── Types ─────────────────────────────────────────────────────────────────────
 
-const STEPS = [
-    { id: "college", label: "College", icon: GraduationCap },
-    { id: "roll", label: "Roll No.", icon: ShieldCheck },
-    { id: "camera", label: "Scan ID", icon: Camera },
-];
+type Step = "form" | "scanning" | "result";
 
-export default function VerifyPage() {
-    const [college, setCollege] = useState("");
-    const [rollNumber, setRollNumber] = useState("");
-    const [step, setStep] = useState<"college" | "roll" | "camera" | "verifying" | "success">("college");
-    const [loading, setLoading] = useState(false);
-    const [image, setImage] = useState<string | null>(null);
-    const [file, setFile] = useState<File | null>(null);
+// ─── Confidence bar color ──────────────────────────────────────────────────────
 
-    const router = useRouter();
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+function confidenceColor(score: number): string {
+  if (score >= 75) return "#22c55e";
+  if (score >= 50) return "#f59e0b";
+  return "#ef4444";
+}
 
-    const currentStepIndex = STEPS.findIndex(s => s.id === step);
+// ─── Component ─────────────────────────────────────────────────────────────────
 
-    const startCamera = async () => {
-        setStep("camera");
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: "environment" }
-            });
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
+export default function IdVerifyClient() {
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  useEffect(() => {
+    if (auth) {
+      return onAuthStateChanged(auth as any, (u) => {
+        setUser(u as FirebaseUser);
+        if (u?.displayName) setEnteredName(u.displayName);
+      });
+    }
+  }, []);
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [step, setStep] = useState<Step>("form");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [enteredName, setEnteredName] = useState(user?.displayName ?? "");
+  const [rollNumber, setRollNumber] = useState("");
+  const [rollError, setRollError] = useState<string | null>(null);
+
+  const [result, setResult] = useState<VerificationResult | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  // ── Image pick ─────────────────────────────────────────────────────────────
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setImagePreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  // ── Roll number live validation ────────────────────────────────────────────
+  function handleRollChange(val: string) {
+    setRollNumber(val);
+    if (val.length >= 8) {
+      const { valid, message } = validateRollNumberFormat(val);
+      setRollError(valid ? null : (message ?? null));
+    } else {
+      setRollError(null);
+    }
+  }
+
+  // ── Scan ───────────────────────────────────────────────────────────────────
+  async function handleScan() {
+    if (!imageFile || !user) return;
+
+    setStep("scanning");
+
+    const verResult = await verifyStudentId({
+      enteredName,
+      enteredRollNumber: rollNumber,
+      enteredCollegeId: "mock-college-srkr", // from user's college selection
+      imageFile,
+    });
+
+    setResult(verResult);
+    setStep("result");
+  }
+
+  // ── Save verification to Firestore ────────────────────────────────────────
+  async function handleAccept() {
+    if (!user || !result) return;
+    setSaving(true);
+    try {
+      await updateDoc(doc(db, "users", user.uid), {
+        isVerified: result.verified,
+        rollNumber: rollNumber.toUpperCase().replace(/\s/g, ""),
+        // Store formatted display name
+        fullName: formatDisplayName(enteredName),
+        verifiedAt: new Date().toISOString(),
+        verificationConfidence: result.confidence,
+      });
+      router.push("/home");
+    } catch (err) {
+      console.error("Save failed:", err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // ── Retry ─────────────────────────────────────────────────────────────────
+  function handleRetry() {
+    setResult(null);
+    setStep("form");
+    setImagePreview(null);
+    setImageFile(null);
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+
+  const card: React.CSSProperties = {
+    background: "var(--color-background-primary)",
+    border: "1px solid var(--color-border-tertiary)",
+    borderRadius: "var(--border-radius-lg)",
+    padding: "24px",
+    marginBottom: "16px",
+  };
+
+  return (
+    <div style={{ maxWidth: 480, margin: "0 auto", padding: "24px 16px" }}>
+      <h1 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "8px", color: "var(--color-text-primary)" }}>
+        Verify your college ID
+      </h1>
+      <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", marginBottom: "24px" }}>
+        Only SRKR students can list or rent items. We scan your ID card to confirm.
+      </p>
+
+      {/* ── FORM STEP ── */}
+      {step === "form" && (
+        <>
+          <div style={card}>
+            {/* Name field */}
+            <label style={{ fontSize: "13px", fontWeight: 500, color: "var(--color-text-secondary)", display: "block", marginBottom: "6px" }}>
+              Your name (exactly as on ID card)
+            </label>
+            <input
+              value={enteredName}
+              onChange={(e) => setEnteredName(e.target.value)}
+              placeholder="e.g. K.A.S.R.Raju or Sai Kumar"
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                fontSize: "14px",
+                border: "1px solid var(--color-border-secondary)",
+                borderRadius: "var(--border-radius-md)",
+                background: "var(--color-background-secondary)",
+                color: "var(--color-text-primary)",
+                marginBottom: "16px",
+                boxSizing: "border-box",
+              }}
+            />
+
+            {/* Roll number field */}
+            <label style={{ fontSize: "13px", fontWeight: 500, color: "var(--color-text-secondary)", display: "block", marginBottom: "6px" }}>
+              Roll number
+            </label>
+            <input
+              value={rollNumber}
+              onChange={(e) => handleRollChange(e.target.value)}
+              placeholder="e.g. 21B91A0501"
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                fontSize: "14px",
+                fontFamily: "var(--font-mono)",
+                border: `1px solid ${rollError ? "var(--color-border-danger)" : "var(--color-border-secondary)"}`,
+                borderRadius: "var(--border-radius-md)",
+                background: "var(--color-background-secondary)",
+                color: "var(--color-text-primary)",
+                boxSizing: "border-box",
+              }}
+            />
+            {rollError && (
+              <p style={{ fontSize: "12px", color: "var(--color-text-danger)", marginTop: "4px" }}>
+                {rollError}
+              </p>
+            )}
+            <p style={{ fontSize: "11px", color: "var(--color-text-tertiary)", marginTop: "6px" }}>
+              10-character code from your ID card, e.g. 21B91A0501
+            </p>
+          </div>
+
+          {/* Image upload */}
+          <div style={card}>
+            <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--color-text-secondary)", marginBottom: "12px" }}>
+              Photo of your college ID card
+            </p>
+
+            {imagePreview ? (
+              <div style={{ position: "relative" }}>
+                <img
+                  src={imagePreview}
+                  alt="ID card preview"
+                  style={{ width: "100%", borderRadius: "8px", maxHeight: "220px", objectFit: "cover" }}
+                />
+                <button
+                  onClick={() => { setImagePreview(null); setImageFile(null); }}
+                  style={{
+                    position: "absolute",
+                    top: "8px",
+                    right: "8px",
+                    background: "rgba(0,0,0,0.6)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "28px",
+                    height: "28px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  width: "100%",
+                  padding: "32px",
+                  border: "2px dashed var(--color-border-secondary)",
+                  borderRadius: "var(--border-radius-md)",
+                  background: "var(--color-background-secondary)",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: "var(--color-text-secondary)",
+                }}
+              >
+                <Camera size={28} />
+                <span style={{ fontSize: "13px" }}>Tap to upload or take a photo</span>
+                <span style={{ fontSize: "11px", color: "var(--color-text-tertiary)" }}>
+                  Make sure all text is clearly visible
+                </span>
+              </button>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+          </div>
+
+          {/* Tips */}
+          <div style={{ ...card, background: "var(--color-background-info)" }}>
+            <p style={{ fontSize: "12px", color: "var(--color-text-info)", fontWeight: 500, marginBottom: "6px" }}>
+              Tips for a successful scan
+            </p>
+            <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", color: "var(--color-text-secondary)", lineHeight: "1.8" }}>
+              <li>Place card on a dark flat surface</li>
+              <li>Use good lighting — avoid reflections</li>
+              <li>Capture the full card, not cropped</li>
+              <li>Both sides may have the roll number — use the front</li>
+            </ul>
+          </div>
+
+          <button
+            onClick={handleScan}
+            disabled={!imageFile || !enteredName || !rollNumber || !!rollError}
+            style={{
+              width: "100%",
+              padding: "14px",
+              background: (!imageFile || !enteredName || !rollNumber || !!rollError)
+                ? "var(--color-background-tertiary)"
+                : "#1a73e8",
+              color: (!imageFile || !enteredName || !rollNumber || !!rollError)
+                ? "var(--color-text-tertiary)"
+                : "#fff",
+              border: "none",
+              borderRadius: "var(--border-radius-md)",
+              fontSize: "15px",
+              fontWeight: 600,
+              cursor: (!imageFile || !enteredName || !rollNumber || !!rollError) ? "not-allowed" : "pointer",
+            }}
+          >
+            Verify my ID
+          </button>
+        </>
+      )}
+
+      {/* ── SCANNING STEP ── */}
+      {step === "scanning" && (
+        <div style={{ ...card, textAlign: "center", padding: "48px 24px" }}>
+          <Loader size={36} style={{ animation: "spin 1s linear infinite", color: "#1a73e8", marginBottom: "16px" }} />
+          <p style={{ fontSize: "15px", fontWeight: 500, color: "var(--color-text-primary)" }}>
+            Scanning your ID card...
+          </p>
+          <p style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginTop: "8px" }}>
+            Reading college name, roll number and student name
+          </p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
+      {/* ── RESULT STEP ── */}
+      {step === "result" && result && (
+        <>
+          {/* Overall verdict */}
+          <div style={{
+            ...card,
+            borderColor: result.verified ? "var(--color-border-success)" : "var(--color-border-danger)",
+            background: result.verified ? "var(--color-background-success)" : "var(--color-background-danger)",
+            textAlign: "center",
+          }}>
+            {result.verified
+              ? <CheckCircle size={40} style={{ color: "var(--color-text-success)", marginBottom: "8px" }} />
+              : <XCircle size={40} style={{ color: "var(--color-text-danger)", marginBottom: "8px" }} />
             }
-        } catch {
-            toast.error("Camera access denied. Please allow permissions.");
-        }
-    };
+            <p style={{ fontSize: "17px", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "6px" }}>
+              {result.verified ? "ID Verified!" : "Verification failed"}
+            </p>
+            {result.failReason && (
+              <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
+                {result.failReason}
+              </p>
+            )}
+          </div>
 
-    const capturePhoto = () => {
-        if (videoRef.current && canvasRef.current) {
-            const context = canvasRef.current.getContext("2d");
-            canvasRef.current.width = videoRef.current.videoWidth;
-            canvasRef.current.height = videoRef.current.videoHeight;
-            context?.drawImage(videoRef.current, 0, 0);
-            const dataUrl = canvasRef.current.toDataURL("image/jpeg");
-            setImage(dataUrl);
-            canvasRef.current.toBlob((blob) => {
-                if (blob) setFile(new File([blob], "id_photo.jpg", { type: "image/jpeg" }));
-            }, "image/jpeg");
-            const stream = videoRef.current.srcObject as MediaStream;
-            stream.getTracks().forEach(t => t.stop());
-            setStep("verifying");
-            handleVerification(dataUrl);
-        }
-    };
-
-    const handleCollegeSelect = (c: string) => {
-        setCollege(c);
-        setStep("roll");
-    };
-
-    const handleRollSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!rollNumber.match(/^[A-Z0-9]{3,}-?\d{3,}$/i)) {
-            toast.error("Invalid roll number format. Example: ECE2024-001");
-            return;
-        }
-        setLoading(true);
-        try {
-            if (!db) throw new Error("Database not initialized");
-            const q = query(collection(db, "users"), where("rollNumber", "==", rollNumber));
-            const snap = await getDocs(q);
-            if (!snap.empty) {
-                toast.error("Roll number already registered.");
-                return;
-            }
-            await startCamera();
-        } catch {
-            toast.error("Error checking roll number.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleVerification = async (capturedImage?: string) => {
-        if (!file || !rollNumber) return;
-        setLoading(true);
-        try {
-            const result = await verifyID(rollNumber, file);
-            if (result.success) {
-                const userId = auth?.currentUser?.uid;
-                if (!userId || !storage || !db) throw new Error("Init error");
-                const storageRef = ref(storage, `id_verification/${userId}.jpg`);
-                await uploadBytes(storageRef, file);
-                const photoUrl = await getDownloadURL(storageRef);
-                await setDoc(doc(db, "users", userId), {
-                    phoneNumber: auth?.currentUser?.phoneNumber,
-                    rollNumber,
-                    college,
-                    isVerified: true,
-                    idPhotoUrl: photoUrl,
-                    createdAt: new Date(),
-                    strikeCount: 0,
-                    isBlocked: false,
-                }, { merge: true });
-                setStep("success");
-                toast.success("Identity verified!");
-                setTimeout(() => router.push("/home"), 2000);
-            }
-        } catch (error: any) {
-            toast.error(
-                error.message === "ROLL_NUMBER_MISMATCH"
-                    ? "Roll number doesn't match ID. Retake."
-                    : "Could not read ID. Please retake."
-            );
-            setStep("roll");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="flex-1 flex flex-col min-h-screen gradient-hero">
-            {/* Header */}
-            <div className="px-6 pt-10 pb-6">
-                <div className="flex items-center gap-2 mb-8">
-                    <div className="w-8 h-8 rounded-lg gradient-indigo flex items-center justify-center shadow-indigo">
-                        <span className="text-base">📦</span>
-                    </div>
-                    <span className="text-sm font-semibold text-slate-400 uppercase tracking-widest" style={{ fontFamily: "Outfit, sans-serif" }}>
-                        Identity Verification
-                    </span>
-                </div>
-
-                {/* Stepper */}
-                {(step === "college" || step === "roll" || step === "camera") && (
-                    <div className="flex items-center gap-2 mb-8">
-                        {STEPS.map((s, i) => {
-                            const isActive = s.id === step;
-                            const isDone = i < currentStepIndex;
-                            return (
-                                <div key={s.id} className="flex items-center gap-2 flex-1">
-                                    <div className={`flex flex-col items-center gap-1 ${isActive ? "opacity-100" : isDone ? "opacity-80" : "opacity-30"}`}>
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${isActive ? "gradient-indigo text-white shadow-indigo" : isDone ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"}`}>
-                                            {isDone ? "✓" : i + 1}
-                                        </div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? "text-indigo-400" : "text-slate-600"}`}>
-                                            {s.label}
-                                        </span>
-                                    </div>
-                                    {i < STEPS.length - 1 && (
-                                        <div className={`flex-1 h-px mb-4 transition-all ${isDone ? "bg-emerald-500/50" : "bg-slate-700"}`} />
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-
-                <h1 className="text-3xl font-black text-white leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
-                    {step === "college" && "Select Your College"}
-                    {step === "roll" && `Welcome,\n${college.split(" ")[0]}!`}
-                    {step === "camera" && "Scan Your ID Card"}
-                    {step === "verifying" && "Verifying..."}
-                    {step === "success" && "You're In! 🎉"}
-                </h1>
-                <p className="text-slate-500 mt-1 text-sm">
-                    {step === "college" && "Start by selecting your institution."}
-                    {step === "roll" && "Enter your official university roll number."}
-                    {step === "camera" && "Position your ID card clearly in the frame."}
-                    {step === "verifying" && "Our AI is reading your roll number from the ID."}
-                    {step === "success" && "Redirecting to your campus marketplace..."}
-                </p>
+          {/* Confidence bar */}
+          <div style={card}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+              <span style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>Confidence</span>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: confidenceColor(result.confidence) }}>
+                {result.confidence}%
+              </span>
+            </div>
+            <div style={{ height: "8px", background: "var(--color-background-tertiary)", borderRadius: "4px", overflow: "hidden" }}>
+              <div style={{
+                height: "100%",
+                width: `${result.confidence}%`,
+                background: confidenceColor(result.confidence),
+                borderRadius: "4px",
+                transition: "width 0.6s ease",
+              }} />
             </div>
 
-            {/* Step: College */}
-            {step === "college" && (
-                <div className="flex-1 px-6 pb-10">
-                    <div className="grid grid-cols-1 gap-2">
-                        {COLLEGES.map((c) => (
-                            <button
-                                key={c}
-                                onClick={() => handleCollegeSelect(c)}
-                                className="flex items-center justify-between px-5 py-4 rounded-xl glass border border-slate-700 hover:border-indigo-500/60 hover:bg-indigo-500/5 text-left transition-all active:scale-[0.98] group"
-                            >
-                                <span className="font-semibold text-slate-200 group-hover:text-white transition-colors">{c}</span>
-                                <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-indigo-400 transition-colors" />
-                            </button>
-                        ))}
-                    </div>
+            {/* Breakdown */}
+            <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                { label: "College name (SRKR)", ok: result.details.collegeFound },
+                { label: `Roll number (${result.details.extractedRoll ?? "not found"})`, ok: result.details.rollMatched },
+                {
+                  label: `Student name${result.details.extractedName ? ` — "${result.details.extractedName}"` : ""}`,
+                  ok: result.details.nameMatched,
+                  partial: result.details.nameScore > 0.3 && !result.details.nameMatched,
+                },
+              ].map(({ label, ok, partial }) => (
+                <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  {ok
+                    ? <CheckCircle size={16} style={{ color: "var(--color-text-success)", flexShrink: 0 }} />
+                    : partial
+                    ? <AlertCircle size={16} style={{ color: "var(--color-text-warning)", flexShrink: 0 }} />
+                    : <XCircle size={16} style={{ color: "var(--color-text-danger)", flexShrink: 0 }} />
+                  }
+                  <span style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>{label}</span>
                 </div>
-            )}
+              ))}
+            </div>
+          </div>
 
-            {/* Step: Roll Number */}
-            {step === "roll" && (
-                <div className="flex-1 px-6 pb-10">
-                    <div className="glass rounded-2xl p-6 shadow-premium">
-                        <form onSubmit={handleRollSubmit} className="space-y-5">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase tracking-widest text-slate-500">
-                                    Roll Number
-                                </label>
-                                <div className="flex items-center gap-3 bg-[hsl(217,32%,16%)] rounded-xl border border-[hsl(217,32%,26%)] focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500/30 transition-all h-14 px-4">
-                                    <input
-                                        type="text"
-                                        placeholder="ECE2024-001"
-                                        className="flex-1 bg-transparent text-white placeholder-slate-600 text-base font-mono uppercase tracking-widest outline-none"
-                                        value={rollNumber}
-                                        onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
-                                        disabled={loading}
-                                        autoFocus
-                                    />
-                                </div>
-                                <p className="text-xs text-slate-600">Accepted formats: ECE2024-001, CS22B0042, etc.</p>
-                            </div>
+          {/* Actions */}
+          {result.verified ? (
+            <button
+              onClick={handleAccept}
+              disabled={saving}
+              style={{
+                width: "100%",
+                padding: "14px",
+                background: "#22c55e",
+                color: "#fff",
+                border: "none",
+                borderRadius: "var(--border-radius-md)",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: saving ? "not-allowed" : "pointer",
+                marginBottom: "12px",
+              }}
+            >
+              {saving ? "Saving..." : "Continue to app"}
+            </button>
+          ) : (
+            <button
+              onClick={handleRetry}
+              style={{
+                width: "100%",
+                padding: "14px",
+                background: "#1a73e8",
+                color: "#fff",
+                border: "none",
+                borderRadius: "var(--border-radius-md)",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: "pointer",
+                marginBottom: "12px",
+              }}
+            >
+              Try again with a clearer photo
+            </button>
+          )}
 
-                            <button
-                                type="submit"
-                                disabled={loading || !rollNumber}
-                                className="w-full h-14 rounded-xl gradient-indigo text-white font-bold text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
-                            >
-                                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Continue to Camera <Camera className="w-4 h-4 ml-1" /></>}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Step: Camera */}
-            {step === "camera" && (
-                <div className="flex-1 flex flex-col items-center justify-between px-6 pb-12">
-                    {/* Camera viewfinder */}
-                    <div className="w-full relative rounded-2xl overflow-hidden bg-black" style={{ aspectRatio: "3/4" }}>
-                        <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
-                        {/* Corner markers */}
-                        <div className="absolute inset-8 pointer-events-none">
-                            {["top-0 left-0", "top-0 right-0", "bottom-0 left-0", "bottom-0 right-0"].map((pos, i) => (
-                                <div key={i} className={`absolute ${pos} w-8 h-8 border-indigo-500 ${i === 0 ? "border-t-2 border-l-2 rounded-tl-lg" : i === 1 ? "border-t-2 border-r-2 rounded-tr-lg" : i === 2 ? "border-b-2 border-l-2 rounded-bl-lg" : "border-b-2 border-r-2 rounded-br-lg"}`} />
-                            ))}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <p className="text-white/50 text-xs font-bold uppercase tracking-widest text-center">Align your ID here</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Shutter */}
-                    <div className="flex flex-col items-center gap-4 pt-6">
-                        <button
-                            onClick={capturePhoto}
-                            className="w-20 h-20 rounded-full border-4 border-indigo-500 flex items-center justify-center bg-[hsl(222,47%,9%)] shadow-indigo active:scale-95 transition-all"
-                        >
-                            <div className="w-14 h-14 rounded-full gradient-indigo flex items-center justify-center">
-                                <Camera className="text-white w-7 h-7" />
-                            </div>
-                        </button>
-                        <p className="text-slate-500 text-xs font-medium">Tap to capture your Student ID</p>
-                    </div>
-                </div>
-            )}
-
-            {/* Step: Verifying */}
-            {step === "verifying" && (
-                <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
-                    <div className="relative">
-                        <div className="w-24 h-24 rounded-full border border-indigo-500/20 flex items-center justify-center pulse-ring">
-                            <div className="w-20 h-20 rounded-full gradient-indigo flex items-center justify-center shadow-indigo">
-                                <RefreshCw className="w-9 h-9 text-white animate-spin" />
-                            </div>
-                        </div>
-                        <div className="absolute -top-1 -right-1 w-7 h-7 gradient-amber rounded-full flex items-center justify-center">
-                            <Upload className="w-3.5 h-3.5 text-amber-900" />
-                        </div>
-                    </div>
-                    <div className="space-y-1.5 text-center">
-                        <p className="text-slate-500 text-sm">AI is extracting your roll number...</p>
-                        <div className="flex items-center justify-center gap-1">
-                            {[0, 1, 2].map(i => (
-                                <div key={i} className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Step: Success */}
-            {step === "success" && (
-                <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
-                    <div className="relative">
-                        <div className="w-28 h-28 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                            <CheckCircle2 className="w-14 h-14 text-emerald-400" />
-                        </div>
-                    </div>
-                    <div className="text-center space-y-2">
-                        <h2 className="text-2xl font-black text-white" style={{ fontFamily: "Outfit, sans-serif" }}>Verification Complete</h2>
-                        <p className="text-slate-500 text-sm">Welcome to the campus network, <span className="text-emerald-400 font-bold">{rollNumber}</span>!</p>
-                    </div>
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full badge-trust text-xs font-semibold">
-                        <ShieldCheck className="w-3.5 h-3.5" /> Identity Verified
-                    </div>
-                </div>
-            )}
-
-            <canvas ref={canvasRef} className="hidden" />
-        </div>
-    );
+          {/* Manual fallback — if OCR keeps failing */}
+          {!result.verified && (
+            <button
+              onClick={() => router.push("/support")}
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "none",
+                color: "var(--color-text-secondary)",
+                border: "1px solid var(--color-border-secondary)",
+                borderRadius: "var(--border-radius-md)",
+                fontSize: "13px",
+                cursor: "pointer",
+              }}
+            >
+              Submit for manual review instead
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
