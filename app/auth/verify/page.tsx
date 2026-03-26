@@ -95,10 +95,10 @@ export default function IdVerifyClient() {
 
   // ── Save verification to Firestore ────────────────────────────────────────
   async function handleAccept() {
-    if (!user || !result) return;
+    if (!user || !result || !db) return;
     setSaving(true);
     try {
-      await updateDoc(doc(db, "users", user.uid), {
+      await updateDoc(doc(db as any, "users", user.uid), {
         isVerified: result.verified,
         rollNumber: rollNumber.toUpperCase().replace(/\s/g, ""),
         // Store formatted display name
