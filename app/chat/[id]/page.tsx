@@ -145,10 +145,35 @@ export default function ChatPage() {
     };
 
     const handleCheckIn = async () => {
-        if (checkedIn) return;
-        await sendMessage(undefined, `✅ ${userId === rental?.ownerId ? "Owner" : "Renter"} confirmed the meetup & handoff!`);
+        if (checkedIn || !rental || !db || !userId) return;
+
+        // Optimistically set checked in state
         setCheckedIn(true);
-        toast.success("Check-in confirmed!");
+        await sendMessage(undefined, `✅ ${userId === rental.ownerId ? "Owner" : "Renter"} confirmed the meetup & handoff!`);
+        toast.success("Check-in confirmed! Waiting for other person.");
+
+        try {
+            // Get current checkIns from db to avoid race conditions
+            const docRef = doc(db as any, "rentals", id as string);
+            const docSnap = await getDoc(docRef);
+            if (!docSnap.exists()) return;
+
+            const data = docSnap.data();
+            const currentCheckIns: string[] = data.checkIns || [];
+            if (!currentCheckIns.includes(userId)) {
+                currentCheckIns.push(userId);
+            }
+
+            const updates: any = { checkIns: currentCheckIns };
+            if (currentCheckIns.length >= 2) {
+                updates.status = "completed";
+                updates.completedAt = serverTimestamp();
+            }
+
+            await updateDoc(docRef, updates);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     if (loading) return (

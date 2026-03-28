@@ -16,6 +16,7 @@ import {
 } from "@/lib/idVerification";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import { preLoadOcrWorker } from "@/lib/idVerification";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -34,6 +35,8 @@ function confidenceColor(score: number): string {
 export default function IdVerifyClient() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   useEffect(() => {
+    preLoadOcrWorker(); // Boot up Tesseract immediately in the background
+
     if (auth) {
       return onAuthStateChanged(auth as any, (u) => {
         setUser(u as FirebaseUser);
@@ -416,7 +419,7 @@ export default function IdVerifyClient() {
                 marginBottom: "12px",
               }}
             >
-              Try again with a clearer photo
+              Re-upload ID card
             </button>
           )}
 

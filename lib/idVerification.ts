@@ -11,7 +11,7 @@
 // ─── Install these once ────────────────────────────────────────────────────────
 // npm install fuse.js tesseract.js
 
-import Tesseract from "tesseract.js";
+import Tesseract, { createWorker, Worker } from "tesseract.js";
 import Fuse from "fuse.js";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -128,10 +128,39 @@ function expandAbbreviatedName(name: string): string[] {
 
 // ─── OCR: extract text from image ────────────────────────────────────────────
 
+let tesseractWorker: Worker | null = null;
+let isWorkerInitializing = false;
+let workerPromise: Promise<Worker> | null = null;
+
+export async function preLoadOcrWorker() {
+  if (tesseractWorker || workerPromise) return;
+  workerPromise = (async () => {
+    isWorkerInitializing = true;
+    const worker = await createWorker('eng', 1, {
+      logger: () => {}, // silence progress
+      workerPath: 'https://unpkg.com/tesseract.js@v5.0.4/dist/worker.min.js',
+      langPath: 'https://tessdata.projectnaptha.com/4.0.0',
+      corePath: 'https://unpkg.com/tesseract.js-core@v5.0.0/tesseract-core.wasm.js',
+    });
+    isWorkerInitializing = false;
+    tesseractWorker = worker;
+    return worker;
+  })();
+  return workerPromise;
+}
+
 async function extractTextFromImage(image: File | string): Promise<string> {
-  const result = await Tesseract.recognize(image, "eng", {
-    logger: () => {}, // silence progress logs
-  });
+  // Pre-load if not already loading
+  if (!tesseractWorker && !workerPromise) {
+    preLoadOcrWorker();
+  }
+
+  // Wait for worker to be ready
+  const worker = tesseractWorker || (await workerPromise);
+
+  if (!worker) throw new Error("Failed to initialize OCR worker");
+
+  const result = await worker.recognize(image);
 
   // Tesseract returns low-confidence chars with spaces/noise — clean up
   let text = result.data.text;
@@ -240,11 +269,14 @@ export async function verifyStudentId(input: IdCardInput): Promise<VerificationR
 
   try {
     extractedText = await extractTextFromImage(imageFile);
+    if (extractedText.replace(/[^a-zA-Z0-9]/g, "").length < 5) {
+       throw new Error("Image appears blank or completely unreadable.");
+    }
   } catch (err) {
     return {
       verified: false,
       confidence: 0,
-      failReason: "Could not read the ID card image. Please upload a clearer photo.",
+      failReason: "Could not read the ID card image. Please upload a clearer photo. Make sure it is not a blank screen.",
       extractedText: "",
       details: {
         collegeFound: false,
