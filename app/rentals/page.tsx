@@ -3,42 +3,25 @@
 import { useCollege } from "@/contexts/CollegeContext";
 import { CategoryGrid } from "@/components/ui/CategoryGrid";
 import { TopBar } from "@/components/layout/TopBar";
+import SearchTrigger from "@/components/search/SearchTrigger";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Plus, X, Search as SearchIcon } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useListingMode } from "@/lib/hooks/useListingMode";
-import { useSuggestions, useCategoryCounts } from "@/lib/hooks/useSearch";
-import { useSearchHistory } from "@/lib/hooks/useSearchHistory";
-import { SearchDropdown } from "@/components/search/SearchDropdown";
-import { useRecentItems } from "@/lib/hooks/useRecentItems";
+import { HomeHero } from "@/components/home/HomeHero";
 import { prefetchRentals } from "@/lib/cache/itemsCache";
+import { ProductCard } from "@/components/ui/ProductCard";
 
 export default function RentalsMarketplace() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { selectedCollege, isReady } = useCollege();
     const { listingMode: contextMode, setListingMode } = useListingMode();
-    const [showDropdown, setShowDropdown] = useState(false);
-    
-    // We remove the redirect to "/" so the user can see the shell without a college
-
     const urlType = searchParams.get("type") as "rent" | "buy" | "sell" | null;
     const activeMode = urlType || contextMode || "rent";
-
-    const { query, setQuery, suggestions, clearSuggestions } = useSuggestions(selectedCollege?.id, activeMode, true);
-    const { recentSearches, removeSearch } = useSearchHistory();
-    const { recentItems } = useRecentItems(selectedCollege?.id, activeMode);
-    const trendingSearches = ["Calculator", "Lab Coat", "Drafter", "Casio fx991", "Arduino"];
-    const { counts, loading: countsLoading } = useCategoryCounts(selectedCollege?.id, activeMode, true);
-
-    const handleModeChange = (m: "rent" | "buy" | "sell") => {
-        setListingMode(m);
-        const params = new URLSearchParams(searchParams);
-        params.set("type", m);
-        router.replace(`/rentals?${params.toString()}`, { scroll: false });
-    };
+    const recentItems: any[] = []; // Stubbed as hook is deleted
 
     // Warm cache immediately when home loads
     useEffect(() => {
@@ -57,18 +40,18 @@ export default function RentalsMarketplace() {
         }
     };
 
-    const handleSearchSubmit = (q: string) => {
-        if (!q.trim()) return;
-        setShowDropdown(false);
-        clearSuggestions();
-        router.push(`/search?q=${encodeURIComponent(q.trim())}`);
+    const handleModeChange = (m: "rent" | "buy" | "sell") => {
+        setListingMode(m);
+        const params = new URLSearchParams(searchParams);
+        params.set("type", m);
+        router.replace(`/rentals?${params.toString()}`, { scroll: false });
     };
 
     /* ── Tab config ── */
     const TABS = [
-        { id: "rent",  label: "🎒 Rentals",   activeGrad: "linear-gradient(135deg,#5548E8,#7B72FF)", shadow: "0 4px 16px rgba(85,72,232,0.45)" },
-        { id: "buy",   label: "✍️ Writing",    activeGrad: "linear-gradient(135deg,#4CAF50 0%,#00B87D 100%)", shadow: "0 4px 16px rgba(0,196,140,0.40)" },
-        { id: "sell",  label: "🏷️ Buy & Sell", activeGrad: "linear-gradient(135deg,#FF9500,#FF7A00)",  shadow: "0 4px 16px rgba(255,149,0,0.40)" },
+        { id: "rent", label: "Rentals", icon: "🏷️" },
+        { id: "buy", label: "Writing", icon: "✏️" },
+        { id: "sell", label: "Buy & Sell", icon: "💰" },
     ] as const;
 
     return (
@@ -76,11 +59,13 @@ export default function RentalsMarketplace() {
             className="flex flex-col min-h-screen pb-28"
             style={{ background: "var(--iy-surface)", fontFamily: "'DM Sans', sans-serif" }}
         >
-            {/* ── HEADER (dark) ── */}
+            {/* ── HEADER (TopBar) ── */}
+            <TopBar />
+
             <div
                 style={{
                     background: "var(--iy-ink)",
-                    padding: "16px 20px 24px",
+                    padding: "0 20px 24px",
                     position: "relative",
                     overflow: "hidden",
                 }}
@@ -89,126 +74,43 @@ export default function RentalsMarketplace() {
                 <div style={{ position: "absolute", top: -30, right: -20, width: 160, height: 160, background: "radial-gradient(circle,rgba(91,79,232,0.30) 0%,transparent 70%)", pointerEvents: "none" }} />
                 <div style={{ position: "absolute", bottom: 10, left: -10, width: 120, height: 120, background: "radial-gradient(circle,rgba(0,196,140,0.15) 0%,transparent 70%)", pointerEvents: "none" }} />
 
-                {/* Top row: logo + bell + college chip */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, position: "relative", zIndex: 3 }}>
-                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/rentals")}>
-                        <div style={{ width: 38, height: 38, background: "linear-gradient(135deg,#5548E8,#7B72FF)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 4px 16px rgba(85,72,232,0.45)" }}>🚀</div>
-                        <div>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", lineHeight: 1 }}>Idhi Yaaparam</div>
-                            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Student Platform</div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => router.push("/notifications")}
-                            style={{ width: 36, height: 36, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16 }}
-                        >🔔</button>
-                        <button
-                            onClick={() => router.push("/rentals?changeCollege=1")}
-                            style={{ display: "flex", alignItems: "center", gap: 5, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 11px", cursor: "pointer" }}
-                        >
-                            <span className="iy-pulse-dot" style={{ width: 8, height: 8, borderRadius: "50%", background: "#00C48C", flexShrink: 0, display: "inline-block" }} />
-                            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>
-                                {selectedCollege?.acronym || selectedCollege?.name?.split(" ").map((w: string) => w[0]).join("").toUpperCase() || "Campus"}
-                            </span>
-                            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>↓</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Search Bar ABOVE the tabs */}
-                <div style={{ position: "relative", zIndex: 3, marginBottom: 18 }}>
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            background: "rgba(255,255,255,0.10)",
-                            border: "1px solid rgba(255,255,255,0.14)",
-                            backdropFilter: "blur(10px)",
-                            borderRadius: 16,
-                            padding: "12px 14px",
-                        }}
-                    >
-                        <SearchIcon style={{ width: 18, height: 18, color: "rgba(255,255,255,0.4)", flexShrink: 0 }} />
-                        <input
-                            type="text"
-                            value={query}
-                            onChange={(e) => {
-                                setQuery(e.target.value);
-                                if (e.target.value.length >= 2 || recentSearches.length > 0) setShowDropdown(true);
-                                else setShowDropdown(false);
-                            }}
-                            onFocus={() => { if (query.length >= 2 || recentSearches.length > 0) setShowDropdown(true); }}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && query.trim()) handleSearchSubmit(query);
-                                if (e.key === "Escape") { setShowDropdown(false); clearSuggestions(); }
-                            }}
-                            placeholder="Search calculators, lab coats, drafters..."
-                            style={{ flex: 1, border: "none", outline: "none", fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: "#fff", background: "transparent" }}
-                            autoComplete="off"
-                        />
-                        <div style={{ display: "flex", gap: 6 }}>
-                            {query ? (
-                                <button onClick={() => { clearSuggestions(); setShowDropdown(false); }} style={{ background: "none", border: "none", cursor: "pointer" }}>
-                                    <X style={{ width: 16, height: 16, color: "rgba(255,255,255,0.5)" }} />
-                                </button>
-                            ) : (
-                                <div style={{ width: 28, height: 28, borderRadius: 6, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, cursor: "pointer", color: "rgba(255,255,255,0.5)" }}>⊞</div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Search dropdown positioned absolutely here */}
-                    {showDropdown && (
-                        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 50, marginTop: 8 }}>
-                            <SearchDropdown
-                                suggestions={suggestions}
-                                recentSearches={recentSearches}
-                                trendingSearches={trendingSearches}
-                                collegeName={selectedCollege?.name || "Campus"}
-                                query={query}
-                                visible={showDropdown}
-                                onSelect={handleSearchSubmit}
-                                onRemoveRecent={removeSearch}
-                                onClose={() => setShowDropdown(false)}
-                            />
-                        </div>
-                    )}
-                </div>
+                <HomeHero mode={activeMode} />
 
                 {/* Service switcher tabs */}
-                <div style={{ display: "flex", gap: 7, position: "relative", zIndex: 3, paddingBottom: 24 }}>
-                    {TABS.map((tab) => {
-                        const isOn = activeMode === tab.id;
-                        return (
-                            <button
-                                key={tab.id}
-                                onClick={() => handleModeChange(tab.id as "rent" | "buy" | "sell")}
-                                style={{
-                                    flex: 1,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: 5,
-                                    padding: "9px 6px",
-                                    borderRadius: 12,
-                                    fontSize: 11.5,
-                                    fontWeight: 700,
-                                    cursor: "pointer",
-                                    transition: "all 0.2s",
-                                    border: "1px solid transparent",
-                                    fontFamily: "'DM Sans', sans-serif",
-                                    ...(isOn
-                                        ? { background: tab.activeGrad, color: "#fff", boxShadow: tab.shadow }
-                                        : { background: "rgba(255,255,255,0.07)", borderColor: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.50)" }
-                                    ),
-                                }}
-                            >
-                                {tab.label}
-                            </button>
-                        );
-                    })}
+                <div style={{ padding: "0 16px 24px", position: "relative", zIndex: 3 }}>
+                    <div style={{ background: "#1A1A2E", borderRadius: 16, padding: 4, display: "flex", gap: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                        {TABS.map((tab) => {
+                            const isOn = activeMode === tab.id;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => handleModeChange(tab.id as "rent" | "buy" | "sell")}
+                                    style={{
+                                        flex: 1,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: 6,
+                                        height: 36,
+                                        borderRadius: 12,
+                                        fontSize: 12,
+                                        fontWeight: isOn ? 600 : 500,
+                                        cursor: "pointer",
+                                        transition: "all 0.2s",
+                                        border: "none",
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        ...(isOn
+                                            ? { background: "#5B4CDB", color: "#fff", boxShadow: "0 0 12px rgba(91,76,219,0.5)" }
+                                            : { background: "transparent", color: "rgba(255,255,255,0.5)" }
+                                        ),
+                                    }}
+                                >
+                                    <span style={{ fontSize: 14 }}>{tab.icon}</span>
+                                    {tab.label}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
 
 
@@ -217,57 +119,138 @@ export default function RentalsMarketplace() {
 
             {/* ── MAIN CONTENT ── */}
             <div style={{ flex: 1, padding: "16px", display: "flex", flexDirection: "column", gap: 24 }}>
-
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
                     <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                        {/* Categories */}
-                        <div>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Browse Categories</div>
-                                <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "var(--iy-primary)", background: "none", border: "none", cursor: "pointer" }}>
-                                    View all →
+                        {/* FIX 2 - Category Circle Strip */}
+                        <section style={{ padding: '0 16px', marginBottom: 24 }}>
+                          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
+                            Browse Categories
+                          </h2>
+                          <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4, margin: "0 -16px", padding: "0 16px" }}>
+                            {[
+                              { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: "🖩" },
+                              { id: "drafter", name: "Drafters", bg: "#E1F5EE", icon: "📐" },
+                              { id: "lab-coat", name: "Lab Coats", bg: "#EAF3DE", icon: "🥼" },
+                              { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: "💻" },
+                              { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: "📷" },
+                              { id: "geometry", name: "Geometry", bg: "#FAEEDA", icon: "📏" },
+                              { id: "projector", name: "Projectors", bg: "#FBEAF0", icon: "📽️" },
+                              { id: "stationery", name: "Stationery", bg: "#E1F5EE", icon: "🖊️" },
+                            ].map(cat => (
+                              <div key={cat.id} onClick={() => router.push(`/category/${cat.id}`)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", flexShrink: 0 }}>
+                                <div style={{ width: 64, height: 64, borderRadius: "50%", background: cat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 38 }}>
+                                  {cat.icon}
+                                </div>
+                                <span style={{ fontSize: 10, fontWeight: 600, color: "var(--iy-text1)", textAlign: "center", lineHeight: 1.1, width: 64, wordWrap: "break-word" }}>{cat.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </section>
+
+                        {/* Trending Shelf (Moved Up) */}
+                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                                <div style={{ fontSize: 16, fontWeight: 600 }}>Trending 🔥</div>
+                                <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                    See all →
                                 </button>
                             </div>
-                            <CategoryGrid counts={counts} loading={countsLoading} />
-                        </div>
+                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                                {[
+                                  { id: "t1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+                                  { id: "t2", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+                                  { id: "t3", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+                                ].map(item => (
+                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                    <ProductCard {...item} variant="scroll" />
+                                  </div>
+                                ))}
+                            </div>
+                        </section>
 
-                        {/* Recent Listings Horizontal Scroll */}
+                        {/* Electronic & Gadgets */}
+                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                                <div style={{ fontSize: 16, fontWeight: 600 }}>⚡ Electronic & Gadgets</div>
+                                <button onClick={() => router.push("/category/electronics")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                    See all →
+                                </button>
+                            </div>
+                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                                {[
+                                  { id: "e1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
+                                  { id: "e2", itemName: "MacBook Air M1", pricePerHour: 100, category: "laptop", branch: "CSE", distance: "0.6 km", sellerUsername: "priya_svec" },
+                                  { id: "e3", itemName: "Canon DSLR Camera", pricePerHour: 50, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
+                                ].map(item => (
+                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                    <ProductCard {...item} variant="scroll" />
+                                  </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Academic & Tools */}
+                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                                <div style={{ fontSize: 16, fontWeight: 600 }}>📐 Academic & Tools</div>
+                                <button onClick={() => router.push("/category/academic")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                    See all →
+                                </button>
+                            </div>
+                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                                {[
+                                  { id: "a1", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec" },
+                                  { id: "a2", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec" },
+                                  { id: "a3", itemName: "Geometry Box set", pricePerHour: 10, category: "geometry", branch: "Mech", distance: "0.8 km", sellerUsername: "ram_svec" },
+                                ].map(item => (
+                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                    <ProductCard {...item} variant="scroll" />
+                                  </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Near You Shelf */}
+                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                                <div style={{ fontSize: 16, fontWeight: 600 }}>Near You 📍</div>
+                                <button onClick={() => router.push("/near-you")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                    See all →
+                                </button>
+                            </div>
+                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                                {[
+                                  { id: "n1", itemName: "Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+                                  { id: "n2", itemName: "Mini Drafter", pricePerHour: 20, category: "drafter", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+                                  { id: "n3", itemName: "Lab Coat", pricePerHour: 15, category: "lab-coat", branch: "Bio", distance: "0.5 km", sellerUsername: "priya_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+                                ].map(item => (
+                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                    <ProductCard {...item} variant="scroll" />
+                                  </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Fresh Today Shelf */}
                         {recentItems.length > 0 && (
                             <div>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Recent Listings</div>
+                                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Fresh Today</div>
                                     <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "var(--iy-primary)", background: "none", border: "none", cursor: "pointer" }}>
                                         See all →
                                     </button>
                                 </div>
                                 <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
                                     {recentItems.map(item => (
-                                        <div
-                                            key={item.id}
-                                            onClick={() => router.push(`/rentals/${item.id}`)}
-                                            style={{
-                                                flex: "0 0 150px",
-                                                background: "#fff",
-                                                borderRadius: 22,
-                                                boxShadow: "var(--iy-sh-card)",
-                                                overflow: "hidden",
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            <div style={{ height: 90, background: "linear-gradient(135deg,#EAE8FF 0%,#D5D0FF 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, position: "relative" }}>
-                                                {item.itemName.toLowerCase().includes("calc") ? "🖩" : item.itemName.toLowerCase().includes("draft") ? "📐" : item.itemName.toLowerCase().includes("coat") ? "🥼" : "📦"}
-                                                <div style={{ position: "absolute", top: 8, left: 8, fontSize: 9, fontWeight: 700, padding: "3px 7px", borderRadius: 20, letterSpacing: 0.4, background: "var(--iy-primary)", color: "#fff" }}>RENT</div>
-                                            </div>
-                                            <div style={{ padding: "10px 12px 12px" }}>
-                                                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 13, color: "var(--iy-text1)", marginBottom: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.itemName}</div>
-                                                <div style={{ fontSize: 11, color: "var(--iy-text3)", marginBottom: 8, display: "flex", alignItems: "center", gap: 3 }}>
-                                                    👤 {selectedCollege?.acronym || "Campus"} St.
-                                                </div>
-                                                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 14, color: "var(--iy-primary)" }}>
-                                                    ₹{item.pricePerHour} <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 10, fontWeight: 400, color: "var(--iy-text3)" }}>/hr</span>
-                                                </div>
-                                            </div>
+                                        <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                            <ProductCard 
+                                              id={item.id}
+                                              itemName={item.itemName}
+                                              pricePerHour={item.pricePerHour}
+                                              category={item.itemName.toLowerCase().includes("calc") ? "calculator" : item.itemName.toLowerCase().includes("draft") ? "drafter" : "lab-coat"}
+                                              imageUrl="https://images.unsplash.com/photo-1434030216411-0bb793f49412?w=400&q=80"
+                                            />
                                         </div>
                                     ))}
                                 </div>
@@ -396,7 +379,7 @@ function WritingSection({ router }: { router: any }) {
                     ✨ EARN MONEY
                 </div>
                 <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", lineHeight: 1.2, marginBottom: 8, position: "relative", zIndex: 1 }}>
-                    Write & <span style={{ color: "#00C48C" }}>Earn</span><br/>on Free Time
+                    Write & <span style={{ color: "#00C48C" }}>Earn</span><br />on Free Time
                 </div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,.48)", lineHeight: 1.55, marginBottom: 18, position: "relative", zIndex: 1 }}>
                     Lab records, assignments, project reports. Get paid per completed job. Work anytime — holidays, free periods, weekends. No fixed schedule.
@@ -419,7 +402,7 @@ function WritingSection({ router }: { router: any }) {
                     Start Earning →
                 </button>
             </div>
-            
+
             {/* Social Proof for Writing */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#fff", borderRadius: 16, padding: "14px 16px", boxShadow: "var(--iy-sh-card)" }}>
                 <div style={{ display: "flex" }}>
@@ -442,7 +425,7 @@ function BuySellSection({ router }: { router: any }) {
     // Removed the internal mode tabs, just showing a consolidated view
     return (
         <div className="iy-fu1 flex flex-col gap-4">
-            
+
             {/* Browse categories for buy/sell */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
                 <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Browse Items</div>
@@ -450,7 +433,7 @@ function BuySellSection({ router }: { router: any }) {
                     View all →
                 </button>
             </div>
-            
+
             <CategoryGrid counts={{}} loading={false} />
 
             {/* Empty/placeholder state — sell */}
@@ -488,7 +471,7 @@ function BuySellSection({ router }: { router: any }) {
                     ))}
                 </div>
             </div>
-            
+
         </div>
     );
 }

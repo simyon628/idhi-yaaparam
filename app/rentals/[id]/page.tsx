@@ -6,9 +6,8 @@ export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "sonner";
-import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock, Sparkles, ThumbsUp } from "lucide-react";
+import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock, Sparkles, ThumbsUp, ShoppingBag } from "lucide-react";
 import { Listing, ReportReason } from "@/lib/types";
-import { useRecentItems } from "@/lib/hooks/useRecentItems";
 import RentalCalculator from "@/components/rental/RentalCalculator";
 import { SellerCard, TrustBadge, getTrustScore } from "@/components/item/SellerCard";
 import dynamic_ from "next/dynamic";
@@ -26,6 +25,23 @@ const REPORT_REASONS: ReportReason[] = [
     "Fraud",
     "Other",
 ];
+
+// Fallback mock data so cards with fake IDs (n1, t1, a1…) open a real detail view
+const MOCK_ITEMS: Record<string, any> = {
+  n1: { id:"n1", itemName:"Casio fx-991EX", category:"calculator", pricePerHour:15, block:"A-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Rahul Verma", department:"CSE", rollNumber:"22CSE1001", isVerified:true, strikeCount:0, overallRating:4.8, college:"SVEC" } },
+  n2: { id:"n2", itemName:"Mini Drafter", category:"drafter", pricePerHour:20, block:"B-Block", condition:"Good", status:"available", listingType:"rent", icon:"📐", photoUrl:"https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Anil Kumar", department:"Mech", rollNumber:"22ME1042", isVerified:true, strikeCount:0, overallRating:4.5, college:"SVEC" } },
+  n3: { id:"n3", itemName:"Lab Coat White", category:"lab-coat", pricePerHour:15, block:"Bio-Lab", condition:"Good", status:"available", listingType:"rent", icon:"🥼", photoUrl:"https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Priya Sharma", department:"Bio", rollNumber:"22BIO3021", isVerified:true, strikeCount:0, overallRating:4.7, college:"SVEC" } },
+  n4: { id:"n4", itemName:"MacBook Air M1", category:"laptop", pricePerHour:100, block:"C-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"💻", photoUrl:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Sneha Reddy", department:"IT", rollNumber:"22IT2011", isVerified:true, strikeCount:0, overallRating:4.9, college:"SVEC" } },
+  n5: { id:"n5", itemName:"Geometry Box", category:"geometry", pricePerHour:10, block:"D-Block", condition:"Fair", status:"available", listingType:"rent", icon:"📏", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Vikas Singh", department:"Civil", rollNumber:"22CV4055", isVerified:false, strikeCount:0, overallRating:4.2, college:"SVEC" } },
+  t1: { id:"t1", itemName:"Casio fx-991EX", category:"calculator", pricePerHour:15, block:"A-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Rahul Verma", department:"CSE", rollNumber:"22CSE1001", isVerified:true, strikeCount:0, overallRating:4.8, college:"SVEC" } },
+  t2: { id:"t2", itemName:"DSLR Camera", category:"camera", pricePerHour:80, block:"Arts Block", condition:"Good", status:"available", listingType:"rent", icon:"📷", photoUrl:"https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Kiran Patel", department:"ECE", rollNumber:"22ECE5088", isVerified:true, strikeCount:0, overallRating:4.6, college:"SVEC" } },
+  t3: { id:"t3", itemName:"Geometry Box", category:"geometry", pricePerHour:10, block:"D-Block", condition:"Fair", status:"available", listingType:"rent", icon:"📏", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Vikas Singh", department:"Civil", rollNumber:"22CV4055", isVerified:false, strikeCount:0, overallRating:4.2, college:"SVEC" } },
+  a1: { id:"a1", itemName:"Engineering Drafter", category:"drafter", pricePerHour:25, block:"Mech-Lab", condition:"Good", status:"available", listingType:"rent", icon:"📐", photoUrl:"https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Vikas Rao", department:"Mech", rollNumber:"22ME2033", isVerified:true, strikeCount:0, overallRating:4.3, college:"SVEC" } },
+  a2: { id:"a2", itemName:"Lab Coat White L", category:"lab-coat", pricePerHour:20, block:"Bio-Lab", condition:"Good", status:"available", listingType:"rent", icon:"🥼", photoUrl:"https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Sita Devi", department:"Civil", rollNumber:"22CV1044", isVerified:true, strikeCount:0, overallRating:4.5, college:"SVEC" } },
+  a3: { id:"a3", itemName:"Geometry Box Set", category:"geometry", pricePerHour:10, block:"D-Block", condition:"Fair", status:"available", listingType:"rent", icon:"📏", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Ram Kumar", department:"Mech", rollNumber:"22ME3022", isVerified:false, strikeCount:0, overallRating:4.0, college:"SVEC" } },
+  c1: { id:"c1", itemName:"Scientific Calculator Casio", category:"calculator", pricePerHour:15, block:"A-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Rahul Verma", department:"CSE", rollNumber:"22CSE1001", isVerified:true, strikeCount:0, overallRating:4.8, college:"SVEC" } },
+  c2: { id:"c2", itemName:"Basic Calculator", category:"calculator", pricePerHour:5, block:"B-Block", condition:"Good", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Priya Sharma", department:"Mech", rollNumber:"22ME1088", isVerified:false, strikeCount:0, overallRating:4.2, college:"SVEC" } },
+};
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
     available: { label: "Available", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
@@ -108,8 +124,6 @@ export default function RentalDetailPage() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportReason, setReportReason] = useState<ReportReason | "">("");
     const [reportNotes, setReportNotes] = useState("");
-    
-    const { addItem } = useRecentItems();
 
     // Rating State
     const [showRatingModal, setShowRatingModal] = useState(false);
@@ -173,7 +187,6 @@ export default function RentalDetailPage() {
             if (docSnap.exists()) {
                 const data = { id: docSnap.id, ...docSnap.data() } as Listing;
                 setRental(data);
-                addItem(data);
                 setLoading(false); // Stop the spinner instantly so the page loads
 
                 try {
@@ -196,13 +209,27 @@ export default function RentalDetailPage() {
                     console.error("Failed to fetch user profiles (likely unauthenticated):", e);
                 }
             } else {
-                toast.error("Rental not found");
-                router.push("/rentals");
-                setLoading(false);
+                // Try mock fallback for demo IDs like n1, t1, a1 etc.
+                const mockItem = MOCK_ITEMS[id as string];
+                if (mockItem) {
+                    setRental(mockItem as any);
+                    setOwnerInfo(mockItem.ownerInfo);
+                    setLoading(false);
+                } else {
+                    toast.error("Rental not found");
+                    router.push("/rentals");
+                    setLoading(false);
+                }
             }
         }, (err) => {
             clearTimeout(safetyTimeout);
-            console.error("Rental snapshot error:", err);
+            console.warn("Rental snapshot error (trying mock fallback):", err);
+            // Try mock fallback for demo IDs
+            const mockItem = MOCK_ITEMS[id as string];
+            if (mockItem) {
+                setRental(mockItem as any);
+                setOwnerInfo(mockItem.ownerInfo);
+            }
             setLoading(false);
         });
 
@@ -273,6 +300,11 @@ export default function RentalDetailPage() {
         if (!db || !id) return;
         setActionLoading(true);
         try {
+            if (MOCK_ITEMS[id as string]) {
+                setRental(r => r ? { ...r, status: newStatus as any, ...extraFields } : r);
+                return;
+            }
+
             await updateDoc(doc(db, "rentals", id as string), {
                 status: newStatus,
                 ...extraFields,
@@ -448,370 +480,251 @@ export default function RentalDetailPage() {
 
     const isOwner = rental?.ownerId === userId;
     const isRenter = rental?.renterId === userId;
-    const statusConf = STATUS_CONFIG[rental?.status || "available"];
+    const isMock = rental?.ownerId === "mock";
+    const owner = ownerInfo as any;
+    const totalPrice = rental ? rental.pricePerHour * selectedDuration.hours : 0;
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen pb-24 bg-slate-50">
-            {/* Hero Image */}
-            <div className="relative w-full bg-slate-200" style={{ aspectRatio: "16/9" }}>
-                <img
-                    src={rental?.photoUrl || `https://placehold.co/400x225/e2e8f0/4f46e5?text=${encodeURIComponent(rental?.icon || "📦")}`}
-                    alt={rental?.itemName}
-                    className="w-full h-full object-cover"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%)" }} />
+        <div className="flex flex-col min-h-screen pb-32 bg-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
-                {/* Back button */}
-                <button
-                    onClick={() => router.back()}
-                    className="absolute top-5 left-5 p-2.5 bg-white/60 backdrop-blur-md rounded-xl border border-white/50 active:scale-95 transition-all shadow-sm"
-                >
+            {/* ── Image Gallery (horizontal scroll like Flipkart) ── */}
+            <div className="relative bg-slate-100" style={{ aspectRatio: "4/3" }}>
+                <div style={{ display: "flex", width: "100%", height: "100%", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
+                    {[rental?.photoUrl, "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80"].filter(Boolean).map((src, i) => (
+                        <img key={i} src={src} alt={rental?.itemName} style={{ width: "100%", height: "100%", objectFit: "cover", flexShrink: 0, scrollSnapAlign: "center" }} />
+                    ))}
+                </div>
+                {/* dot indicators */}
+                <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 6 }}>
+                    {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: i === 0 ? "#fff" : "rgba(255,255,255,0.4)" }} />)}
+                </div>
+                {/* Back */}
+                <button onClick={() => router.back()} style={{ position: "absolute", top: 16, left: 16, background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)", border: "none", borderRadius: 12, padding: "8px 10px", cursor: "pointer", display: "flex", alignItems: "center" }}>
                     <ChevronLeft className="w-5 h-5 text-slate-700" />
                 </button>
-
-                {/* Share (WhatsApp) button */}
-                <button
-                    onClick={() => {
-                        const url = `https://idhi-yaaparam.vercel.app/rentals/${id}`;
-                        const msg = `Borrow my ${rental?.itemName || "item"} for ₹${rental?.pricePerHour} per hour at ${rental?.block}! → ${url}`;
-                        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
-                    }}
-                    className="absolute top-5 right-5 p-2.5 bg-white/60 backdrop-blur-md rounded-xl border border-white/50 active:scale-95 transition-all shadow-sm"
-                >
+                {/* Share */}
+                <button onClick={() => { const msg=`Borrow ${rental?.itemName} for ₹${rental?.pricePerHour}/hr — ${window.location.href}`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank"); }} style={{ position: "absolute", top: 16, right: 16, background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)", border: "none", borderRadius: 12, padding: "8px 10px", cursor: "pointer", display: "flex", alignItems: "center" }}>
                     <Share2 className="w-5 h-5 text-slate-700" />
                 </button>
             </div>
 
-            {/* Content sheet */}
-            <div className="flex-1 px-5 pt-6 -mt-4 bg-slate-50 rounded-t-3xl relative z-10 border-t border-white shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)]">
+            {/* ── Content Sheet ── */}
+            <div style={{ background: "#fff", borderRadius: "24px 24px 0 0", marginTop: -20, position: "relative", zIndex: 2, padding: "20px 16px 0" }}>
 
-                {/* Product Header details */}
-                <div>
-                    {/* Title */}
-                    <h1 className="text-2xl font-black text-slate-800 leading-tight mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>
-                        {rental?.itemName}
-                    </h1>
-
-                    {/* Trust Score Row */}
-                    {ownerInfo && (
-                        <div className="mb-3">
-                            <TrustBadge score={getTrustScore(ownerInfo.strikeCount)} large={true} />
-                        </div>
+                {/* Status chip */}
+                <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, background: rental?.status === "available" ? "#DCFCE7" : "#FEF3C7", color: rental?.status === "available" ? "#16a34a" : "#b45309", borderRadius: 20, padding: "3px 10px" }}>
+                        {rental?.status === "available" ? "✓ Available Now" : rental?.status === "requested" ? "⏳ Pending" : rental?.status === "active" ? "🔴 Active" : "Completed"}
+                    </span>
+                    {rental?.condition && (
+                        <span style={{ fontSize: 11, fontWeight: 700, background: "#EEF0FF", color: "#5B4CDB", borderRadius: 20, padding: "3px 10px" }}>{rental.condition}</span>
                     )}
+                </div>
 
-                    {/* Price */}
-                        <span className="text-3xl font-black text-slate-900 flex items-baseline gap-0.5"><IndianRupee className="w-6 h-6" />{rental?.pricePerHour}</span><span className="text-sm text-slate-400 font-medium">per hour</span>
+                {/* Title */}
+                <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: "0 0 4px", lineHeight: 1.2, fontFamily: "'Outfit', sans-serif" }}>{rental?.itemName}</h1>
+                <p style={{ fontSize: 13, color: "#64748b", margin: "0 0 16px" }}>{rental?.categoryId?.charAt(0).toUpperCase()}{rental?.categoryId?.slice(1)} · {rental?.block}</p>
 
-                    {/* Location badge, Condition badge etc. */}
-                    <div className="flex flex-wrap items-center gap-2 mb-6">
-                        {rental?.block && (
-                            <div className="flex items-center gap-1 text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
-                                <MapPin className="w-3.5 h-3.5 shrink-0" />
-                                <span className="text-xs font-bold uppercase tracking-wider">{rental?.block}</span>
+                {/* ── Seller Info Card (Flipkart-style) ── */}
+                <div style={{ background: "linear-gradient(135deg, #f8faff 0%, #eef0ff 100%)", border: "1px solid #c7d2fe", borderRadius: 16, padding: 14, marginBottom: 16 }}>
+                    <p style={{ fontSize: 10, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Owner / Lender</p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg, #5B4CDB, #7C3AED)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
+                            {owner?.name?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+                                <span style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{owner?.name || "Unknown"}</span>
+                                {owner?.isVerified && <span style={{ fontSize: 10, background: "#00C48C", color: "#fff", borderRadius: 10, padding: "1px 6px", fontWeight: 700 }}>✓ ID Verified</span>}
                             </div>
-                        )}
-                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black ${
-                            rental?.condition === "Excellent" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" :
-                            rental?.condition === "Good" ? "bg-indigo-50 text-indigo-700 border border-indigo-200" :
-                            rental?.condition === "Fair" ? "bg-amber-50 text-amber-700 border border-amber-200" :
-                            "bg-slate-100 text-slate-500 border border-slate-200"
-                        }`}>
-                            {rental?.condition === "Excellent" ? <><Sparkles className="w-3.5 h-3.5"/> Excellent</> :
-                             rental?.condition === "Good" ? <><ThumbsUp className="w-3.5 h-3.5"/> Good</> :
-                             rental?.condition === "Fair" ? <><AlertTriangle className="w-3.5 h-3.5"/> Fair</> : "Not stated"}
+                            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                                <span style={{ fontSize: 11, color: "#64748b" }}>🎓 {owner?.department || "—"}</span>
+                                <span style={{ fontSize: 11, color: "#64748b" }}>🏫 {owner?.college || "SVEC"}</span>
+                                <span style={{ fontSize: 11, color: "#64748b" }}>🪪 {owner?.rollNumber || "—"}</span>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
+                                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                                <span style={{ fontSize: 12, fontWeight: 700, color: "#0f172a" }}>{owner?.overallRating?.toFixed(1) || "4.5"}</span>
+                                <span style={{ fontSize: 11, color: "#64748b" }}>· {owner?.reviewCount || 0} reviews</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Return Timer for Active Rentals */}
-                {rental?.status === "active" && rental?.expiresAt && (
-                    <div className="mb-6">
-                        <TimeRemaining expiry={rental.expiresAt} />
-                    </div>
-                )}
-
-                {/* Description */}
-                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white shadow-sm mb-4">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Details</p>
-                    <p className="text-slate-600 text-sm leading-relaxed font-medium">
-                        {rental?.itemName} available in {rental?.block}. Return on time to maintain your trust score.
-                    </p>
-                    {(rental?.status === "requested" || rental?.status === "active") && (
-                        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pickup Block</span>
-                            <span className="text-sm font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
-                                {rental?.block || "See chat"}
+                {/* ── Duration Clock Picker ── */}
+                {rental?.status === "available" && !isOwner && (
+                    <div style={{ background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 14, marginBottom: 16 }}>
+                        <p style={{ fontSize: 12, fontWeight: 700, color: "#334155", marginBottom: 10 }}>⏱ How long do you need it?</p>
+                        <div style={{ display: "flex", gap: 8 }}>
+                            {[
+                                { label: "15 min", hours: 0, minutes: 15 },
+                                { label: "1 hr", hours: 1, minutes: 0 },
+                                { label: "2 hrs", hours: 2, minutes: 0 },
+                                { label: "4 hrs", hours: 4, minutes: 0 },
+                                { label: "1 Day", hours: 24, minutes: 0 },
+                            ].map(opt => {
+                                const isSelected = selectedDuration.hours === opt.hours && selectedDuration.minutes === opt.minutes;
+                                return (
+                                    <button key={opt.label} onClick={() => setSelectedDuration({ hours: opt.hours, minutes: opt.minutes })} style={{ flex: 1, padding: "8px 0", borderRadius: 10, border: isSelected ? "2px solid #5B4CDB" : "1px solid #e2e8f0", background: isSelected ? "#EEF0FF" : "#fff", color: isSelected ? "#5B4CDB" : "#475569", fontWeight: 700, fontSize: 11, cursor: "pointer", transition: "all 0.15s" }}>
+                                        {opt.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {/* Live price preview */}
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12, paddingTop: 10, borderTop: "1px solid #e2e8f0" }}>
+                            <span style={{ fontSize: 12, color: "#64748b" }}>₹{rental.pricePerHour}/hr × {selectedDuration.hours > 0 ? `${selectedDuration.hours}h` : ""}{selectedDuration.minutes > 0 ? ` ${selectedDuration.minutes}m` : ""}</span>
+                            <span style={{ fontSize: 18, fontWeight: 800, color: "#5B4CDB" }}>
+                                ₹{selectedDuration.minutes === 15 ? Math.round(rental.pricePerHour * 0.25) : rental.pricePerHour * selectedDuration.hours}
                             </span>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
 
-                {/* Live Meetup Map Integration */}
-                {(rental?.status === "requested" || rental?.status === "active") && (isOwner || isRenter) && (
-                    <div className="mb-8 space-y-3">
-                        <div className="flex items-center justify-between px-1">
-                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Meetup Tracking</h2>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Live Sync</span>
-                            </div>
+                {/* Active rental timer */}
+                {rental?.status === "active" && rental?.expiresAt && (
+                    <div style={{ background: "#FFF7ED", border: "1px solid #FED7AA", borderRadius: 16, padding: 14, marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+                        <AlarmClock className="w-5 h-5 text-orange-500" />
+                        <div>
+                            <p style={{ fontSize: 11, color: "#92400e", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>Return Timer</p>
+                            <TimeRemaining expiry={rental.expiresAt} />
                         </div>
-                        <div className="h-[300px] w-full rounded-[2rem] overflow-hidden shadow-lg border-2 border-white relative group">
-                            <MeetupMap 
-                                rental={rental} 
-                                currentUserId={userId!} 
-                                ownerName={ownerInfo?.name}
-                                renterName={renterName}
-                            />
-                            <div className="absolute inset-0 bg-slate-900/10 pointer-events-none group-hover:bg-transparent transition-colors" />
+                    </div>
+                )}
+
+                {/* Live map — shown only to parties after borrow */}
+                {(rental?.status === "requested" || rental?.status === "active") && (isOwner || isRenter) && (
+                    <div style={{ marginBottom: 16 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#00C48C", display: "inline-block", animation: "pulse 1.5s infinite" }} />
+                            <span style={{ fontSize: 12, fontWeight: 700, color: "#00C48C" }}>LIVE Meetup Tracking</span>
+                        </div>
+                        <div style={{ height: 260, borderRadius: 16, overflow: "hidden", border: "1px solid #e2e8f0" }}>
+                            <MeetupMap rental={rental} currentUserId={userId!} ownerName={ownerInfo?.name} renterName={renterName} />
                         </div>
                         {liveDistanceStr && (
-                            <div className="bg-indigo-600 text-white rounded-2xl p-4 shadow-indigo flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white/20 rounded-xl">
-                                        <Navigation className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-black text-indigo-200 uppercase tracking-widest">Meetup Distance</p>
-                                        <p className="text-lg font-black">{liveDistanceStr}</p>
-                                    </div>
+                            <div style={{ background: "#5B4CDB", color: "#fff", borderRadius: 12, padding: "10px 14px", marginTop: 8, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                    <Navigation className="w-4 h-4" />
+                                    <span style={{ fontSize: 14, fontWeight: 700 }}>{liveDistanceStr}</span>
                                 </div>
-                                <button 
-                                    onClick={() => router.push(`/chat/${id}`)}
-                                    className="bg-white text-indigo-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest active:scale-95 transition-all"
-                                >
-                                    Chat
-                                </button>
+                                <button onClick={() => router.push(`/chat/${id}`)} style={{ background: "#fff", color: "#5B4CDB", border: "none", borderRadius: 8, padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>Chat</button>
                             </div>
                         )}
                     </div>
                 )}
 
-                {/* Rental Cost Calculator */}
-                {rental?.status === "available" && (
-                    <RentalCalculator 
-                        pricePerHour={rental.pricePerHour} 
-                        onDurationChange={handleDurationChange}
-                        onBorrow={() => handleRequest(`${selectedDuration.hours}h ${selectedDuration.minutes}m`)}
-                        isBorrowLoading={actionLoading}
-                    />
-                )}
-
-                {/* Owner Profile Card */}
-                {ownerInfo && (
-                    <div className="mb-4">
-                        <SellerCard owner={{ id: rental?.ownerId!, ...ownerInfo }} />
+                {/* Location & pickup info */}
+                <div style={{ background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 14, marginBottom: 16 }}>
+                    <p style={{ fontSize: 10, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Pickup Location</p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <MapPin className="w-4 h-4 text-indigo-500" />
+                        <span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>{rental?.block || "Campus Block"}</span>
                     </div>
-                )}
+                    <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>Meet at the pickup block. Confirm with owner via chat after approval.</p>
+                </div>
 
-                {/* Requester Detail Card (Visible to Owner if status is not available) */}
+                {/* Owner's pending requester info */}
                 {isOwner && rental?.renterId && (
                     <RequesterInfo renterId={rental.renterId} />
                 )}
             </div>
 
-            {/* ─── Fixed Action Bar ─── */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-indigo-50 px-5 py-4 max-w-md mx-auto z-50 pb-safe">
+            {/* ── Fixed Bottom Bar (like Amazon/Flipkart) ── */}
+            <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #e2e8f0", padding: "12px 16px 20px", zIndex: 50, maxWidth: 480, margin: "0 auto" }}>
                 {isOwner ? (
-                    <div className="space-y-3">
-                        {rental?.status === "requested" ? (
-                            <div className="space-y-2">
-                                <p className="text-xs font-bold text-amber-500 text-center uppercase tracking-widest">
-                                    Renter is waiting for approval
-                                </p>
-                                <button
-                                    onClick={handleApprove}
-                                    disabled={actionLoading}
-                                    className="w-full h-14 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:-translate-y-0.5"
-                                >
-                                    {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><CheckCircle2 className="w-5 h-5" /> APPROVE RENTAL</>}
-                                </button>
-                            </div>
-                        ) : rental?.status === "active" ? (
-                            <div className="grid grid-cols-2 gap-3">
-                                <button
-                                    onClick={() => {
-                                        setReportReason("Item not returned");
-                                        setShowReportModal(true);
-                                    }}
-                                    className="h-20 rounded-2xl bg-white border-2 border-rose-50 flex flex-col items-center justify-center gap-1.5 text-rose-600 hover:border-rose-200 hover:bg-rose-50/30 transition-all shadow-sm group"
-                                >
-                                    <div className="p-2 bg-rose-50 rounded-xl group-hover:scale-110 transition-transform">
-                                        <AlertTriangle className="w-5 h-5 fill-rose-100" />
-                                    </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-center">Not Returned</span>
-                                </button>
-                                <button
-                                    onClick={handleMarkReturned}
-                                    disabled={actionLoading}
-                                    className="h-20 rounded-2xl bg-white border-2 border-emerald-50 flex flex-col items-center justify-center gap-1.5 text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all shadow-sm group"
-                                >
-                                    <div className="p-2 bg-emerald-50 rounded-xl group-hover:scale-110 transition-transform">
-                                        <Package className="w-5 h-5" />
-                                    </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-center">Returned</span>
-                                </button>
-                            </div>
-                        ) : rental?.status === "completed" ? (
-                            <div className="flex flex-col items-center gap-2">
-                                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full text-sm font-bold shadow-sm">
-                                    <CheckCircle2 className="w-4 h-4" /> Rental Complete
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        onClick={() => setShowRatingModal(true)}
-                                        className="text-xs font-bold text-amber-500 hover:text-amber-600 flex items-center gap-1"
-                                    >
-                                        <Star className="w-3 h-3 fill-amber-500" /> Rate Transaction
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
-                                <span className="text-slate-400 font-black text-sm uppercase tracking-widest">YOUR LISTING</span>
+                    <>
+                        {rental?.status === "requested" && (
+                            <button onClick={handleApprove} disabled={actionLoading} style={{ width: "100%", height: 52, background: "#5B4CDB", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                                {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><CheckCircle2 className="w-5 h-5" /> Approve Rental</>}
+                            </button>
+                        )}
+                        {rental?.status === "active" && (
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                                <button onClick={() => { setReportReason("Item not returned"); setShowReportModal(true); }} style={{ height: 52, background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>⚠ Not Returned</button>
+                                <button onClick={handleMarkReturned} disabled={actionLoading} style={{ height: 52, background: "#F0FDF4", color: "#16A34A", border: "1px solid #BBF7D0", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>{actionLoading ? "..." : "✓ Mark Returned"}</button>
                             </div>
                         )}
-                    </div>
+                        {rental?.status === "available" && (
+                            <div style={{ height: 52, background: "#f1f5f9", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontWeight: 700, fontSize: 13 }}>YOUR LISTING</div>
+                        )}
+                        {rental?.status === "completed" && (
+                            <button onClick={() => setShowRatingModal(true)} style={{ width: "100%", height: 52, background: "#FFF7ED", color: "#D97706", border: "1px solid #FDE68A", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>⭐ Rate This Transaction</button>
+                        )}
+                    </>
                 ) : rental?.status === "available" ? (
-                    <button
-                        onClick={() => handleRequest(rental.listingType === "rent" ? `${selectedDuration.hours}h ${selectedDuration.minutes}m` : "one-time")}
-                        disabled={actionLoading || (rental.listingType === "rent" && selectedDuration.hours === 0 && selectedDuration.minutes === 0)}
-                        className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 hover:bg-indigo-700 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 transition-all font-outfit"
-                    >
-                        {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : (
-                            <>
-                                {rental?.listingType === "rent" ? <CalendarCheck className="w-5 h-5" /> : <Package className="w-5 h-5" />}
-                                {rental?.listingType === "rent" ? "BORROW NOW" : "BUY NOW"}
-                            </>
-                        )}
-                    </button>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div>
+                            <p style={{ fontSize: 10, color: "#94a3b8", margin: 0, fontWeight: 600 }}>Total</p>
+                            <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", margin: 0 }}>
+                                ₹{selectedDuration.minutes === 15 ? Math.round((rental?.pricePerHour || 0) * 0.25) : (rental?.pricePerHour || 0) * selectedDuration.hours}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => handleRequest(selectedDuration.hours === 0 ? `${selectedDuration.minutes}m` : `${selectedDuration.hours}h`)}
+                            disabled={actionLoading}
+                            style={{ flex: 1, height: 52, background: "linear-gradient(135deg, #5B4CDB, #7C3AED)", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+                        >
+                            {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><ShoppingBag className="w-5 h-5" /> Borrow Now</>}
+                        </button>
+                    </div>
                 ) : isRenter && rental?.status === "requested" ? (
-                    <div className="flex flex-col items-center gap-2 text-center py-2">
-                        <span className="bg-amber-100 text-amber-700 border border-amber-200 px-4 py-2 rounded-full text-sm font-bold shadow-sm">Awaiting owner approval...</span>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">You will be notified</p>
+                    <div style={{ textAlign: "center", padding: "8px 0" }}>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: "#D97706", background: "#FEF3C7", borderRadius: 20, padding: "8px 20px" }}>⏳ Awaiting owner approval…</span>
                     </div>
                 ) : isRenter && rental?.status === "active" ? (
-                        <button
-                            onClick={() => {
-                                // Simulate Razorpay for now
-                                toast.info("Opening Secure Payment (Simulated)...");
-                                setTimeout(() => {
-                                    toast.success("Payment Successful! ₹" + (rental.pricePerHour * 2) + " paid.");
-                                    handleMarkReturned(); // Complete the transaction
-                                }, 1500);
-                            }}
-                            className="w-full h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center gap-2 font-black transition-all shadow-sm active:scale-95 group"
-                        >
-                            <CreditCard className="w-5 h-5" />
-                            <span className="text-sm uppercase tracking-widest">Pay & Return</span>
-                        </button>
+                    <button onClick={() => { toast.info("Opening payment…"); setTimeout(() => { toast.success("Payment done!"); handleMarkReturned(); }, 1500); }} style={{ width: "100%", height: 52, background: "#16A34A", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                        <CreditCard className="w-5 h-5" /> Pay & Return
+                    </button>
                 ) : (
-                    <div className="h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
-                        <span className="text-slate-400 font-black text-sm uppercase tracking-widest text-center">ITEM ALREADY BOOKED</span>
-                    </div>
+                    <div style={{ height: 52, background: "#f1f5f9", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontWeight: 700, fontSize: 13 }}>ITEM ALREADY BOOKED</div>
                 )}
             </div>
 
-            {/* ─── Report Modal ─── */}
+            {/* ── Report Modal ── */}
             {showReportModal && (
-                <div className="fixed inset-0 z-[100] flex items-end justify-center max-w-md mx-auto">
-                    <div className="absolute inset-0 bg-slate-800/40 backdrop-blur-sm" onClick={() => setShowReportModal(false)} />
-                    <div className="relative w-full bg-slate-50 border-t border-indigo-100 rounded-t-[2rem] p-6 space-y-5 z-10 shadow-2xl">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Report an Issue</h3>
-                                <p className="text-xs text-slate-500 mt-0.5 font-medium">Select the reason for your report</p>
-                            </div>
-                            <button onClick={() => setShowReportModal(false)} className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
-                                <X className="w-4 h-4 text-slate-400" />
-                            </button>
+                <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "flex-end" }}>
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }} onClick={() => setShowReportModal(false)} />
+                    <div style={{ position: "relative", width: "100%", background: "#fff", borderRadius: "24px 24px 0 0", padding: 24, zIndex: 10 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0 }}>Report an Issue</h3>
+                            <button onClick={() => setShowReportModal(false)} style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "6px 8px", cursor: "pointer" }}><X className="w-4 h-4" /></button>
                         </div>
-
-                        <div className="space-y-2">
-                            {REPORT_REASONS.map((reason) => (
-                                <button
-                                    key={reason}
-                                    onClick={() => setReportReason(reason)}
-                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 text-sm font-bold transition-all shadow-sm ${reportReason === reason
-                                        ? "bg-rose-50 border-rose-200 text-rose-600"
-                                        : "bg-white border-slate-100 text-slate-600 hover:border-slate-200"
-                                        }`}
-                                >
-                                    {reason}
-                                    {reportReason === reason && <AlertTriangle className="w-4 h-4 opacity-70" />}
-                                </button>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+                            {REPORT_REASONS.map(r => (
+                                <button key={r} onClick={() => setReportReason(r)} style={{ padding: "12px 16px", borderRadius: 12, border: reportReason === r ? "2px solid #DC2626" : "1px solid #e2e8f0", background: reportReason === r ? "#FEF2F2" : "#fff", color: reportReason === r ? "#DC2626" : "#334155", fontWeight: 600, fontSize: 14, textAlign: "left", cursor: "pointer" }}>{r}</button>
                             ))}
                         </div>
-
-                        <div>
-                            <textarea
-                                placeholder="Additional notes (optional)..."
-                                value={reportNotes}
-                                onChange={(e) => setReportNotes(e.target.value)}
-                                className="w-full h-24 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-rose-300 focus:ring-4 focus:ring-rose-50 resize-none shadow-inner transition-all"
-                            />
-                        </div>
-
-                        <button
-                            onClick={handleReport}
-                            disabled={actionLoading || !reportReason}
-                            className="w-full h-14 rounded-2xl bg-rose-500 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-rose-600 shadow-sm"
-                        >
-                            {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><Send className="w-4 h-4" /> SUBMIT REPORT</>}
+                        <textarea placeholder="Additional notes…" value={reportNotes} onChange={e => setReportNotes(e.target.value)} style={{ width: "100%", height: 80, borderRadius: 12, border: "1px solid #e2e8f0", padding: "10px 14px", fontSize: 13, resize: "none", marginBottom: 16, boxSizing: "border-box" }} />
+                        <button onClick={handleReport} disabled={actionLoading || !reportReason} style={{ width: "100%", height: 52, background: "#DC2626", color: "#fff", border: "none", borderRadius: 12, fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
+                            {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit Report"}
                         </button>
                     </div>
                 </div>
             )}
 
-            {/* ─── Rating Modal ─── */}
+            {/* ── Rating Modal ── */}
             {showRatingModal && (
-                <div className="fixed inset-0 z-[100] flex items-end justify-center max-w-md mx-auto">
-                    <div className="absolute inset-0 bg-slate-800/40 backdrop-blur-sm" onClick={() => setShowRatingModal(false)} />
-                    <div className="relative w-full bg-slate-50 border-t border-indigo-100 rounded-t-[2rem] p-6 space-y-5 z-10 shadow-2xl">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-lg font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>Rate Transaction</h3>
-                                <p className="text-xs text-slate-500 mt-0.5 font-medium">How was your experience?</p>
-                            </div>
-                            <button onClick={() => setShowRatingModal(false)} className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
-                                <X className="w-4 h-4 text-slate-400" />
-                            </button>
-                        </div>
-
-                        <div className="flex justify-center gap-2 py-4">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <button
-                                    key={star}
-                                    onClick={() => setRating(star)}
-                                    className="p-1 active:scale-90 transition-transform"
-                                >
-                                    <Star className={`w-10 h-10 ${star <= rating ? "fill-amber-400 text-amber-400" : "fill-slate-100 text-slate-200"}`} />
+                <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "flex-end" }}>
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }} onClick={() => setShowRatingModal(false)} />
+                    <div style={{ position: "relative", width: "100%", background: "#fff", borderRadius: "24px 24px 0 0", padding: 24, zIndex: 10 }}>
+                        <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 4 }}>Rate Transaction</h3>
+                        <p style={{ fontSize: 13, color: "#64748b", marginBottom: 16 }}>How was your experience?</p>
+                        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
+                            {[1,2,3,4,5].map(star => (
+                                <button key={star} onClick={() => setRating(star)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 36 }}>
+                                    {star <= rating ? "⭐" : "☆"}
                                 </button>
                             ))}
                         </div>
-
-                        <div>
-                            <textarea
-                                placeholder="Write a short review (optional)..."
-                                value={ratingComment}
-                                onChange={(e) => setRatingComment(e.target.value)}
-                                className="w-full h-24 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 resize-none shadow-inner transition-all"
-                            />
-                        </div>
-
-                        <button
-                            onClick={handleRateUser}
-                            disabled={actionLoading}
-                            className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all hover:bg-indigo-700 shadow-sm"
-                        >
-                            {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><Star className="w-4 h-4 fill-white" /> SUBMIT REVIEW</>}
+                        <textarea placeholder="Write a short review (optional)…" value={ratingComment} onChange={e => setRatingComment(e.target.value)} style={{ width: "100%", height: 80, borderRadius: 12, border: "1px solid #e2e8f0", padding: "10px 14px", fontSize: 13, resize: "none", marginBottom: 16, boxSizing: "border-box" }} />
+                        <button onClick={handleRateUser} disabled={actionLoading} style={{ width: "100%", height: 52, background: "#5B4CDB", color: "#fff", border: "none", borderRadius: 12, fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
+                            {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit Review"}
                         </button>
                     </div>
                 </div>
             )}
-
-            {/* ─── Duration Modal Removed ─── */}
         </div>
     );
 }
+

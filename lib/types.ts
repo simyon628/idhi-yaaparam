@@ -159,45 +159,4 @@ export interface AppNotification {
     createdAt: Timestamp | Date;
 }
 
-// ─── Search ──────────────────────────────────────────────────────────────────
-export interface SearchFilter {
-    categoryId?: string;
-    maxPrice?: number;
-    condition?: "Excellent" | "Good" | "Fair";
-    rating?: number;
-    sort?: "relevance" | "price_asc" | "price_desc" | "newest";
-}
 
-export interface SearchRequest {
-    q: string;
-    mode: "rent" | "buy" | "sell";
-    collegeId: string;
-    lat?: number;
-    lng?: number;
-    filters?: SearchFilter;
-}
-
-export interface SearchResponse {
-    results: Listing[];
-    totalCount: number;
-    appliedFilters: SearchFilter;
-    suggestions: string[];
-    nextPageToken?: string;
-}
-
-export interface SearchSuggestionResponse {
-    suggestions: {
-        text: string;
-        category: string;
-        type: "product" | "category" | "location";
-        icon?: string;
-    }[];
-}
-
-export interface SavedSearch {
-    id?: string;
-    userId: string;
-    query: string;
-    filters: SearchFilter;
-    createdAt: Timestamp | Date;
-}

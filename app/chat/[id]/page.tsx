@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { db, auth, storage } from "@/lib/firebase";
-import { doc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc } from "firebase/firestore";
+import { doc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import { ChevronLeft, Send, Loader2, Info, Image as ImageIcon, QrCode, Camera } from "lucide-react";

@@ -7,6 +7,7 @@ import { db, auth } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 import { X, ChevronDown } from "lucide-react";
+import SearchTrigger from "@/components/search/SearchTrigger";
 
 export function TopBar() {
     const { selectedCollege, isReady } = useCollege();
@@ -149,6 +150,11 @@ export function TopBar() {
                         <ChevronDown style={{ width: 12, height: 12, color: "rgba(255,255,255,0.4)" }} />
                     </button>
                 </div>
+            </div>
+
+            {/* ── Search Bar Row ── */}
+            <div className="px-5 pb-4" style={{ background: "linear-gradient(180deg,#16162A 0%,#13131F 100%)" }}>
+                <SearchTrigger />
             </div>
 
             {/* College Selection Modal */}
