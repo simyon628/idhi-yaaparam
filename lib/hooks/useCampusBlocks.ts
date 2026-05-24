@@ -31,7 +31,7 @@ export function useCampusBlocks(college: College | null | undefined) {
             }
         }
 
-        let isMounted = true;
+        const isMounted = true;
         setLoading(true);
         setError(null);
 

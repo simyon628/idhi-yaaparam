@@ -13,6 +13,10 @@ service cloud.firestore {
       return isAuth() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
+    function isFromSVEC() {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.college == 'SVEC';
+    }
 
     // ─── colleges ──────────────────────────────────────────────────────────
     // Public read. Only admins write.
@@ -52,8 +56,8 @@ service cloud.firestore {
     // Admins have full access.
     match /rentals/{rentalId} {
       allow read: if true;
-      allow create: if isAuth();
-      allow update: if isAuth() && (
+      allow create: if isAuth() && isFromSVEC();
+      allow update: if isAuth() && isFromSVEC() && (
         request.auth.uid == resource.data.ownerId ||
         ("renterId" in resource.data && request.auth.uid == resource.data.renterId) ||
         ((!("renterId" in resource.data) || resource.data.renterId == null) && request.resource.data.renterId == request.auth.uid)
@@ -109,7 +113,7 @@ service cloud.firestore {
     // Only the author can update/delete.
     match /reviews/{reviewId} {
       allow read: if true;
-      allow create: if isAuth();
+      allow create: if isAuth() && isFromSVEC();
       allow update, delete: if isAuth() && request.auth.uid == resource.data.reviewerId;
     }
 
@@ -118,8 +122,8 @@ service cloud.firestore {
     // Only the requester or the listing owner can update.
     match /requests/{requestId} {
       allow read: if isAuth();
-      allow create: if isAuth();
-      allow update: if isAuth() && (
+      allow create: if isAuth() && isFromSVEC();
+      allow update: if isAuth() && isFromSVEC() && (
         request.auth.uid == resource.data.requesterId ||
         request.auth.uid == resource.data.ownerId
       );
@@ -138,7 +142,7 @@ service cloud.firestore {
     // Only the job owner can update/delete.
     match /writing_jobs/{jobId} {
       allow read: if isAuth();
-      allow create: if isAuth();
+      allow create: if isAuth() && isFromSVEC();
       allow update, delete: if isAuth() && request.auth.uid == resource.data.userId;
     }
   }

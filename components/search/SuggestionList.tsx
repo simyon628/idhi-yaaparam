@@ -2,6 +2,7 @@
 
 import React, { memo } from "react";
 import { Search, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { SearchSuggestion, useSearchStore } from "@/stores/searchStore";
 
 interface SuggestionRowProps {
@@ -114,7 +115,12 @@ interface SuggestionListProps {
 }
 
 export default function SuggestionList({ items, activeIndex, query }: SuggestionListProps) {
+  const router = useRouter();
   const { executeSearch, setActiveIndex } = useSearchStore();
+
+  const handleSelect = (name: string) => {
+    executeSearch(name, router);
+  };
 
   return (
     <div>
@@ -125,7 +131,7 @@ export default function SuggestionList({ items, activeIndex, query }: Suggestion
           index={i}
           isActive={i === activeIndex}
           query={query}
-          onSelect={executeSearch}
+          onSelect={handleSelect}
           onHover={setActiveIndex}
         />
       ))}

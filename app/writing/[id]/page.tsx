@@ -10,6 +10,7 @@ import {
     Loader2, CheckCircle2, MessageSquare, AlertTriangle, PenTool
 } from "lucide-react";
 import { WritingJob } from "@/lib/types";
+import { useRazorpay } from "@/hooks/useRazorpay";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
     open: { label: "Open Bounty", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
@@ -22,6 +23,7 @@ export default function WritingJobDetailPage() {
     const { id } = useParams();
     const router = useRouter();
     const userId = auth?.currentUser?.uid;
+    const { initiatePayment } = useRazorpay();
 
     const [job, setJob] = useState<WritingJob | null>(null);
     const [posterInfo, setPosterInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number } | null>(null);
@@ -86,9 +88,15 @@ export default function WritingJobDetailPage() {
     };
 
     const handleMarkCompleted = async () => {
-        // Poster confirms the physical hand-over
-        await updateStatus("completed");
-        toast.success("Job marked as successfully completed! 🎉");
+        if (!job?.price) return;
+        initiatePayment({
+            amount: job.price,
+            entityId: id as string,
+            entityType: 'writing_job',
+            onSuccess: () => {
+                toast.success("Payment successful! Job completed. 🎉");
+            }
+        });
     };
 
     const handleDelete = async () => {

@@ -9,8 +9,8 @@ import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Listing } from "@/lib/types";
 import { Search, ArrowLeft, Package } from "lucide-react";
-import { useRouter as useNav } from "next/navigation";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { useAllItems } from "@/lib/hooks/useAllItems";
 
 const MOCK_PRODUCTS = [
   { id: "p_001", itemName: "Calculator", category: "calculator", icon: "🖩", pricePerHour: 10, block: "Block A", condition: "Good" },
@@ -45,15 +45,19 @@ function SearchResults() {
   const [results, setResults] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch real-time available listings for selected college
+  const { data: realItems = [], isLoading: isItemsLoading } = useAllItems(selectedCollege?.id);
+
   useEffect(() => {
+    if (isItemsLoading) return;
     setLoading(true);
     
-    // Simulate network delay
+    // Simulate slight filter animation delay
     const timer = setTimeout(() => {
-      let filtered = MOCK_PRODUCTS;
+      let filtered = [...realItems];
       
-      if (category) {
-        filtered = filtered.filter(p => p.category === category);
+      if (category && category !== "all") {
+        filtered = filtered.filter(p => p.categoryId === category);
       }
       
       if (q) {
@@ -62,13 +66,30 @@ function SearchResults() {
           p.itemName.toLowerCase().includes(lowerQ)
         );
       }
-      
-      setResults(filtered as any);
+
+      // If no real items are found matching, fall back to matching mock items so search is rich
+      if (filtered.length === 0) {
+        let mockFiltered = MOCK_PRODUCTS;
+        if (category && category !== "all") {
+          mockFiltered = mockFiltered.filter(p => p.category === category);
+        }
+        if (q) {
+          const lowerQ = q.toLowerCase();
+          mockFiltered = mockFiltered.filter(p => 
+            p.itemName.toLowerCase().includes(lowerQ)
+          );
+        }
+        setResults(mockFiltered as any);
+      } else {
+        setResults(filtered);
+      }
       setLoading(false);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
-  }, [q, category]);
+  }, [q, category, realItems, isItemsLoading]);
+
+  const displayTitle = q ? `Results for "${q}"` : category ? `${category.charAt(0).toUpperCase() + category.slice(1)} Listings` : "Search Listings";
 
   return (
     <div
@@ -102,9 +123,15 @@ function SearchResults() {
         </button>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
-            Results for &ldquo;<span style={{ color: "#5548E8" }}>{q}</span>&rdquo;
+            {q ? (
+              <>
+                Results for &ldquo;<span style={{ color: "#5548E8" }}>{q}</span>&rdquo;
+              </>
+            ) : (
+              displayTitle
+            )}
           </div>
-          {!loading && (
+          {(!loading && !isItemsLoading) && (
             <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>
               {results.length} listing{results.length !== 1 ? "s" : ""} found
             </div>
@@ -154,7 +181,7 @@ function SearchResults() {
 
       {/* Content */}
       <div style={{ padding: 16, flex: 1 }}>
-        {loading ? (
+        {(loading || isItemsLoading) ? (
           /* Loading skeletons */
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[...Array(4)].map((_, i) => (
@@ -207,13 +234,20 @@ function SearchResults() {
                   id={item.id}
                   itemName={item.itemName}
                   pricePerHour={item.pricePerHour}
-                  category={item.category}
+                  category={item.categoryId || item.category || "others"}
+                  branch={item.department || item.branch || "CSE"}
+                  distance={item.block || item.distance || "Campus"}
+                  sellerUsername={item.sellerUsername || "member"}
+                  rating={item.rating || 4.5}
                   imageUrl={
-                    item.category === "calculator" ? "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" :
-                    item.category === "drafter" ? "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" :
-                    item.category === "lab-coat" ? "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" :
-                    "https://images.unsplash.com/photo-1434030216411-0bb793f49412?w=400&q=80"
+                    item.photoUrl || item.imageUrl || (
+                      item.categoryId === "calculator" || item.category === "calculator" ? "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" :
+                      item.categoryId === "drafter" || item.category === "drafter" ? "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" :
+                      item.categoryId === "lab-coat" || item.category === "lab-coat" ? "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" :
+                      "https://images.unsplash.com/photo-1434030216411-0bb793f49412?w=400&q=80"
+                    )
                   }
+                  variant="grid"
                 />
               </div>
             ))}

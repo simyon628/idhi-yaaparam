@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+
 export const metadata: Metadata = {
   title: "Idhi Yaaparam — Student Earning Platform",
   description: "Rent campus items or earn by writing records and assignments. India's student earning platform for college students.",
@@ -35,6 +36,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..600;1,9..40,300..600&family=Inter:wght@400..700&family=Outfit:wght@400..900&family=Syne:wght@400..800&display=swap" rel="stylesheet" />
+      </head>
       <body className="min-h-screen bg-background antialiased">
         <CollegeProvider>
           <AppModeProvider>

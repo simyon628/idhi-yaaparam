@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Flame } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useSearchStore } from "@/stores/searchStore";
 
 const TRENDING = [
@@ -13,6 +14,7 @@ const TRENDING = [
 ];
 
 export default function TrendingList() {
+  const router = useRouter();
   const { executeSearch } = useSearchStore();
 
   return (
@@ -38,7 +40,7 @@ export default function TrendingList() {
       {TRENDING.map((item) => (
         <div
           key={item.name}
-          onClick={() => executeSearch(item.name)}
+          onClick={() => executeSearch(item.name, router)}
           style={{
             display: "flex",
             alignItems: "center",

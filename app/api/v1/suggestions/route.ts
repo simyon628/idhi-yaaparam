@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
     { suggestions: results },
     {
       headers: {
-        "Cache-Control": "no-store",
+        "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=600",
         "Access-Control-Allow-Origin": "same-origin",
       },
     }

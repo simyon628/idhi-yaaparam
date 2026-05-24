@@ -13,7 +13,6 @@ export async function compressImageFile(
 
     const imageUrl = URL.createObjectURL(file);
     const img = new Image();
-    img.src = imageUrl;
 
     return new Promise((resolve, reject) => {
         img.onload = () => {
@@ -65,5 +64,6 @@ export async function compressImageFile(
         img.onerror = () => {
             reject(new Error('Failed to load image for compression'));
         };
+        img.src = imageUrl;
     });
 }

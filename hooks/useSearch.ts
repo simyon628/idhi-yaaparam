@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useSearchStore } from "@/stores/searchStore";
 import { SearchSuggestion } from "@/stores/searchStore";
 
@@ -33,7 +34,7 @@ export function useSuggestions() {
       try {
         const res = await fetch(
           `/api/v1/suggestions?q=${encodeURIComponent(query)}&limit=8`,
-          { signal: controller.signal, cache: "no-store" }
+          { signal: controller.signal }
         );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
@@ -57,6 +58,7 @@ export function useSuggestions() {
 // Returns a handleKeyDown to attach to the search input
 
 export function useKeyboardNav(itemCount: number) {
+  const router = useRouter();
   const { activeIndex, setActiveIndex, suggestions, query, executeSearch, close } =
     useSearchStore();
 
@@ -73,9 +75,9 @@ export function useKeyboardNav(itemCount: number) {
       case "Enter":
         e.preventDefault();
         if (activeIndex >= 0 && suggestions[activeIndex]) {
-          executeSearch(suggestions[activeIndex].name);
+          executeSearch(suggestions[activeIndex].name, router);
         } else if (query.trim()) {
-          executeSearch(query);
+          executeSearch(query, router);
         }
         break;
       case "Escape":

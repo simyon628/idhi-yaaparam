@@ -34,7 +34,7 @@ interface SearchActions {
   setStatus: (s: SearchStatus) => void;
   setActiveIndex: (i: number) => void;
   addRecent: (query: string) => void;
-  executeSearch: (query: string) => void;
+  executeSearch: (query: string, router?: { push: (href: string) => void }) => void;
   clearRecent: () => void;
 }
 
@@ -106,13 +106,14 @@ export const useSearchStore = create<SearchState & SearchActions>((set, get) => 
     set({ recentSearches: next });
   },
 
-  executeSearch: (query: string) => {
+  executeSearch: (query: string, router?: { push: (href: string) => void }) => {
     const trimmed = query.trim();
     if (!trimmed) return;
     get().addRecent(trimmed);
     set({ isOpen: false, query: "", suggestions: [], activeIndex: -1, status: "idle" });
-    // Use window.location for simplicity — no Next.js router dependency in store
-    if (typeof window !== "undefined") {
+    if (router) {
+      router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    } else if (typeof window !== "undefined") {
       window.location.href = `/search?q=${encodeURIComponent(trimmed)}`;
     }
   },

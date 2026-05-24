@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
@@ -12,10 +12,8 @@ import RentalCalculator from "@/components/rental/RentalCalculator";
 import { SellerCard, TrustBadge, getTrustScore } from "@/components/item/SellerCard";
 import dynamic_ from "next/dynamic";
 import { CalendarCheck } from "lucide-react";
-const MeetupMap = dynamic_(() => import("@/lib/map/MeetupMap"), { 
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Map...</div>
-});
+import { useRazorpay } from "@/hooks/useRazorpay";
+
 
 
 const REPORT_REASONS: ReportReason[] = [
@@ -133,6 +131,7 @@ export default function RentalDetailPage() {
     const [ownerInfo, setOwnerInfo] = useState<{ name: string, department: string, isVerified: boolean, strikeCount: number, overallRating?: number, reviewCount?: number } | null>(null);
     const [renterName, setRenterName] = useState<string>("");
     const [authChecked, setAuthChecked] = useState(false);
+    const lastCoordsRef = useRef<{ lat: number, lng: number } | null>(null);
 
     const [selectedDuration, setSelectedDuration] = useState({ hours: 1, minutes: 0 });
 
@@ -144,6 +143,7 @@ export default function RentalDetailPage() {
     };
 
     const router = useRouter();
+    const { initiatePayment } = useRazorpay();
     const userId = auth?.currentUser?.uid;
     const [isSaved, setIsSaved] = useState(false);
 
@@ -255,10 +255,22 @@ export default function RentalDetailPage() {
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 const { latitude, longitude } = pos.coords;
+                
+                if (lastCoordsRef.current) {
+                    const dist = getDistanceInMeters(
+                        lastCoordsRef.current.lat, lastCoordsRef.current.lng,
+                        latitude, longitude
+                    );
+                    // Only update if moved more than 10 meters to avoid infinite update loops
+                    if (dist < 10) {
+                        console.log(`GPS throttle: moved only ${dist}m. Skipping Firestore push.`);
+                        return;
+                    }
+                }
+                
+                lastCoordsRef.current = { lat: latitude, lng: longitude };
                 const fieldName = isOwner ? "ownerLocation" : "renterLocation";
                 
-                // Only update if location changed significantly (> 5 meters) to save Firestore writes
-                // For simplicity here, we update regardless but ideally use a threshold
                 updateDoc(doc(db as any, "rentals", id as string), {
                     [fieldName]: { lat: latitude, lng: longitude },
                     lastLocationUpdate: serverTimestamp()
@@ -324,26 +336,37 @@ export default function RentalDetailPage() {
             return; 
         }
         try {
-            await updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: durationStr });
+            // Check verification status
+            const userDocSnap = await getDoc(doc(db as any, "users", userId));
+            if (!userDocSnap.exists() || (!userDocSnap.data().isVerified && !userDocSnap.data().verified)) {
+                toast.error("Please verify your student ID before renting items.");
+                return;
+            }
 
-            // Fire notification to Owner
+            // Optimistic navigation for perceived speed
+            router.push(`/tracking/${id}`);
+            toast.success("Connecting to live tracking…");
+
+            // Fire DB updates in background without blocking navigation
+            updateStatus("requested", { renterId: userId, requestedAt: serverTimestamp(), requestedDuration: durationStr }).catch(console.error);
+
+            // Fire notification to Owner in background
             if (rental?.ownerId && rental.ownerId !== userId) {
-            await addDoc(collection(db as any, "notifications"), {
-                userId: rental.ownerId,
-                title: "New Rental Request",
-                message: `Someone wants to borrow your ${rental.itemName}`,
-                type: "request",
-                link: `/rentals/${id}`,
-                isRead: false,
-                createdAt: serverTimestamp()
-            });
-        }
-
-            toast.success("Request sent to owner!");
+                addDoc(collection(db as any, "notifications"), {
+                    userId: rental.ownerId,
+                    title: "New Rental Request",
+                    message: `Someone wants to borrow your ${rental.itemName}`,
+                    type: "request",
+                    link: `/rentals/${id}`,
+                    isRead: false,
+                    createdAt: serverTimestamp()
+                }).catch(console.error);
+            }
         } catch (e) {
             console.error(e);
         }
     };
+
 
     const handleApprove = async () => {
         try {
@@ -363,6 +386,8 @@ export default function RentalDetailPage() {
         }
 
             toast.success("Rental approved!");
+            // Send owner straight to the tracking map
+            router.push(`/tracking/${id}`);
         } catch (e) {
             console.error(e);
         }
@@ -592,27 +617,7 @@ export default function RentalDetailPage() {
                     </div>
                 )}
 
-                {/* Live map — shown only to parties after borrow */}
-                {(rental?.status === "requested" || rental?.status === "active") && (isOwner || isRenter) && (
-                    <div style={{ marginBottom: 16 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#00C48C", display: "inline-block", animation: "pulse 1.5s infinite" }} />
-                            <span style={{ fontSize: 12, fontWeight: 700, color: "#00C48C" }}>LIVE Meetup Tracking</span>
-                        </div>
-                        <div style={{ height: 260, borderRadius: 16, overflow: "hidden", border: "1px solid #e2e8f0" }}>
-                            <MeetupMap rental={rental} currentUserId={userId!} ownerName={ownerInfo?.name} renterName={renterName} />
-                        </div>
-                        {liveDistanceStr && (
-                            <div style={{ background: "#5B4CDB", color: "#fff", borderRadius: 12, padding: "10px 14px", marginTop: 8, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                    <Navigation className="w-4 h-4" />
-                                    <span style={{ fontSize: 14, fontWeight: 700 }}>{liveDistanceStr}</span>
-                                </div>
-                                <button onClick={() => router.push(`/chat/${id}`)} style={{ background: "#fff", color: "#5B4CDB", border: "none", borderRadius: 8, padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>Chat</button>
-                            </div>
-                        )}
-                    </div>
-                )}
+
 
                 {/* Location & pickup info */}
                 <div style={{ background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 14, marginBottom: 16 }}>
@@ -640,9 +645,12 @@ export default function RentalDetailPage() {
                             </button>
                         )}
                         {rental?.status === "active" && (
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                                <button onClick={() => { setReportReason("Item not returned"); setShowReportModal(true); }} style={{ height: 52, background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>⚠ Not Returned</button>
-                                <button onClick={handleMarkReturned} disabled={actionLoading} style={{ height: 52, background: "#F0FDF4", color: "#16A34A", border: "1px solid #BBF7D0", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>{actionLoading ? "..." : "✓ Mark Returned"}</button>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                                    <button onClick={() => router.push(`/tracking/${id}`)} style={{ height: 52, background: "#EEF2FF", color: "#4F46E5", border: "1px solid #C7D2FE", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>📍 Live Tracking</button>
+                                    <button onClick={handleMarkReturned} disabled={actionLoading} style={{ height: 52, background: "#F0FDF4", color: "#16A34A", border: "1px solid #BBF7D0", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>{actionLoading ? "..." : "✓ Mark Returned"}</button>
+                                </div>
+                                <button onClick={() => { setReportReason("Item not returned"); setShowReportModal(true); }} style={{ background: "none", border: "none", color: "#94a3b8", fontSize: 11, fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}>Report issue (Not returned)</button>
                             </div>
                         )}
                         {rental?.status === "available" && (
@@ -673,7 +681,21 @@ export default function RentalDetailPage() {
                         <span style={{ fontSize: 13, fontWeight: 700, color: "#D97706", background: "#FEF3C7", borderRadius: 20, padding: "8px 20px" }}>⏳ Awaiting owner approval…</span>
                     </div>
                 ) : isRenter && rental?.status === "active" ? (
-                    <button onClick={() => { toast.info("Opening payment…"); setTimeout(() => { toast.success("Payment done!"); handleMarkReturned(); }, 1500); }} style={{ width: "100%", height: 52, background: "#16A34A", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    <button onClick={() => { 
+                        if (!rental?.pricePerHour || !rental?.requestedDuration) {
+                            handleMarkReturned();
+                            return;
+                        }
+                        const durationStr = rental.requestedDuration;
+                        const duration = durationStr.includes('h') ? parseInt(durationStr) : 0.25;
+                        const amount = rental.pricePerHour * duration;
+                        initiatePayment({ 
+                            amount, 
+                            entityId: id as string, 
+                            entityType: 'rental', 
+                            onSuccess: () => handleMarkReturned() 
+                        });
+                    }} style={{ width: "100%", height: 52, background: "#16A34A", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                         <CreditCard className="w-5 h-5" /> Pay & Return
                     </button>
                 ) : (

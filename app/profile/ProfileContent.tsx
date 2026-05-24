@@ -56,19 +56,21 @@ export default function ProfileContent() {
 
         const fetchData = async () => {
             try {
-                const userSnap = await getDoc(doc(db as any, "users", userId));
-                if (userSnap.exists()) setUserProfile(userSnap.data());
-
                 const listingsQ = query(
                     collection(db as any, "rentals"),
                     where("ownerId", "==", userId),
                     orderBy("createdAt", "desc")
                 );
-                const lSnap = await getDocs(listingsQ);
-                setMyListings(lSnap.docs.map(d => ({ id: d.id, ...d.data() } as Listing)));
-
                 const borrowQ = query(collection(db as any, "rentals"), where("renterId", "==", userId));
-                const bSnap = await getDocs(borrowQ);
+
+                const [userSnap, lSnap, bSnap] = await Promise.all([
+                    getDoc(doc(db as any, "users", userId)),
+                    getDocs(listingsQ),
+                    getDocs(borrowQ)
+                ]);
+
+                if (userSnap.exists()) setUserProfile(userSnap.data());
+                setMyListings(lSnap.docs.map(d => ({ id: d.id, ...d.data() } as Listing)));
                 setMyBorrowing(bSnap.docs.map(d => ({ id: d.id, ...d.data() } as Listing)));
             } catch (err) {
                 console.error("Error fetching profile data", err);

@@ -62,3 +62,10 @@ export const prefetchRentals = (
 ) => {
   getCachedRentals(db, collegeId) // fire and forget
 }
+
+// Update the cache entry manually (synchronously)
+export const updateCachedRentalsSync = (collegeId: string, data: any[]) => {
+  if (!collegeId) return
+  const key = `rentals_${collegeId}`
+  cache[key] = { data, timestamp: Date.now() }
+}

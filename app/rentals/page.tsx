@@ -13,6 +13,7 @@ import { useListingMode } from "@/lib/hooks/useListingMode";
 import { HomeHero } from "@/components/home/HomeHero";
 import { prefetchRentals } from "@/lib/cache/itemsCache";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { useAllItems } from "@/lib/hooks/useAllItems";
 
 export default function RentalsMarketplace() {
     const router = useRouter();
@@ -21,7 +22,20 @@ export default function RentalsMarketplace() {
     const { listingMode: contextMode, setListingMode } = useListingMode();
     const urlType = searchParams.get("type") as "rent" | "buy" | "sell" | null;
     const activeMode = urlType || contextMode || "rent";
-    const recentItems: any[] = []; // Stubbed as hook is deleted
+
+    // Real-time Firestore items
+    const { data: allItems = [], isLoading: isItemsLoading } = useAllItems(selectedCollege?.id);
+
+    // Filter items based on mode
+    const rentItems = allItems.filter(item => item.listingType === "rent" || !item.listingType);
+    const sellItems = allItems.filter(item => item.listingType === "sell");
+
+    // Sort rent items by createdAt desc for recentItems (Fresh Today)
+    const recentItems = [...rentItems].sort((a, b) => {
+        const timeA = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt?.toDate ? a.createdAt.toDate().getTime() : new Date().getTime());
+        const timeB = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : new Date().getTime());
+        return timeB - timeA;
+    });
 
     // Warm cache immediately when home loads
     useEffect(() => {
@@ -157,15 +171,34 @@ export default function RentalsMarketplace() {
                                 </button>
                             </div>
                             <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
-                                {[
-                                  { id: "t1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
-                                  { id: "t2", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
-                                  { id: "t3", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
-                                ].map(item => (
-                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                    <ProductCard {...item} variant="scroll" />
-                                  </div>
-                                ))}
+                                {(() => {
+                                  const MOCK_TRENDING = [
+                                    { id: "t1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+                                    { id: "t2", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+                                    { id: "t3", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+                                  ];
+                                  const combined = [...rentItems];
+                                  MOCK_TRENDING.forEach(mock => {
+                                    if (!combined.some(item => item.id === mock.id)) {
+                                      combined.push(mock as any);
+                                    }
+                                  });
+                                  return combined.map((item: any) => (
+                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                      <ProductCard 
+                                        id={item.id}
+                                        itemName={item.itemName}
+                                        pricePerHour={item.pricePerHour}
+                                        category={item.categoryId || item.category || "others"}
+                                        branch={item.department || item.branch || "CSE"}
+                                        sellerUsername={item.sellerUsername || "member"}
+                                        distance={item.block || item.distance || "Campus"}
+                                        imageUrl={item.photoUrl || item.imageUrl}
+                                        variant="scroll" 
+                                      />
+                                    </div>
+                                  ));
+                                })()}
                             </div>
                         </section>
 
@@ -178,15 +211,35 @@ export default function RentalsMarketplace() {
                                 </button>
                             </div>
                             <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
-                                {[
-                                  { id: "e1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
-                                  { id: "e2", itemName: "MacBook Air M1", pricePerHour: 100, category: "laptop", branch: "CSE", distance: "0.6 km", sellerUsername: "priya_svec" },
-                                  { id: "e3", itemName: "Canon DSLR Camera", pricePerHour: 50, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
-                                ].map(item => (
-                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                    <ProductCard {...item} variant="scroll" />
-                                  </div>
-                                ))}
+                                {(() => {
+                                  const MOCK_ELECTRONICS = [
+                                    { id: "e1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
+                                    { id: "e2", itemName: "MacBook Air M1", pricePerHour: 100, category: "laptop", branch: "CSE", distance: "0.6 km", sellerUsername: "priya_svec" },
+                                    { id: "e3", itemName: "Canon DSLR Camera", pricePerHour: 50, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
+                                  ];
+                                  const realElectronics = rentItems.filter(item => ["electronics", "laptop", "camera", "calculator"].includes(item.categoryId || ""));
+                                  const combined = [...realElectronics];
+                                  MOCK_ELECTRONICS.forEach(mock => {
+                                    if (!combined.some(item => item.id === mock.id)) {
+                                      combined.push(mock as any);
+                                    }
+                                  });
+                                  return combined.map((item: any) => (
+                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                      <ProductCard 
+                                        id={item.id}
+                                        itemName={item.itemName}
+                                        pricePerHour={item.pricePerHour}
+                                        category={item.categoryId || item.category || "others"}
+                                        branch={item.department || item.branch || "CSE"}
+                                        sellerUsername={item.sellerUsername || "member"}
+                                        distance={item.block || item.distance || "Campus"}
+                                        imageUrl={item.photoUrl || item.imageUrl}
+                                        variant="scroll" 
+                                      />
+                                    </div>
+                                  ));
+                                })()}
                             </div>
                         </section>
 
@@ -199,15 +252,35 @@ export default function RentalsMarketplace() {
                                 </button>
                             </div>
                             <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
-                                {[
-                                  { id: "a1", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec" },
-                                  { id: "a2", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec" },
-                                  { id: "a3", itemName: "Geometry Box set", pricePerHour: 10, category: "geometry", branch: "Mech", distance: "0.8 km", sellerUsername: "ram_svec" },
-                                ].map(item => (
-                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                    <ProductCard {...item} variant="scroll" />
-                                  </div>
-                                ))}
+                                {(() => {
+                                  const MOCK_ACADEMIC = [
+                                    { id: "a1", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec" },
+                                    { id: "a2", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec" },
+                                    { id: "a3", itemName: "Geometry Box set", pricePerHour: 10, category: "geometry", branch: "Mech", distance: "0.8 km", sellerUsername: "ram_svec" },
+                                  ];
+                                  const realAcademic = rentItems.filter(item => ["drafter", "lab-coat", "geometry", "books", "others"].includes(item.categoryId || ""));
+                                  const combined = [...realAcademic];
+                                  MOCK_ACADEMIC.forEach(mock => {
+                                    if (!combined.some(item => item.id === mock.id)) {
+                                      combined.push(mock as any);
+                                    }
+                                  });
+                                  return combined.map((item: any) => (
+                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                      <ProductCard 
+                                        id={item.id}
+                                        itemName={item.itemName}
+                                        pricePerHour={item.pricePerHour}
+                                        category={item.categoryId || item.category || "others"}
+                                        branch={item.department || item.branch || "CSE"}
+                                        sellerUsername={item.sellerUsername || "member"}
+                                        distance={item.block || item.distance || "Campus"}
+                                        imageUrl={item.photoUrl || item.imageUrl}
+                                        variant="scroll" 
+                                      />
+                                    </div>
+                                  ));
+                                })()}
                             </div>
                         </section>
 
@@ -220,15 +293,34 @@ export default function RentalsMarketplace() {
                                 </button>
                             </div>
                             <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
-                                {[
-                                  { id: "n1", itemName: "Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
-                                  { id: "n2", itemName: "Mini Drafter", pricePerHour: 20, category: "drafter", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
-                                  { id: "n3", itemName: "Lab Coat", pricePerHour: 15, category: "lab-coat", branch: "Bio", distance: "0.5 km", sellerUsername: "priya_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
-                                ].map(item => (
-                                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                    <ProductCard {...item} variant="scroll" />
-                                  </div>
-                                ))}
+                                {(() => {
+                                  const MOCK_NEAR_YOU = [
+                                    { id: "n1", itemName: "Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+                                    { id: "n2", itemName: "Mini Drafter", pricePerHour: 20, category: "drafter", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+                                    { id: "n3", itemName: "Lab Coat", pricePerHour: 15, category: "lab-coat", branch: "Bio", distance: "0.5 km", sellerUsername: "priya_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+                                  ];
+                                  const combined = [...rentItems];
+                                  MOCK_NEAR_YOU.forEach(mock => {
+                                    if (!combined.some(item => item.id === mock.id)) {
+                                      combined.push(mock as any);
+                                    }
+                                  });
+                                  return combined.map((item: any) => (
+                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
+                                      <ProductCard 
+                                        id={item.id}
+                                        itemName={item.itemName}
+                                        pricePerHour={item.pricePerHour}
+                                        category={item.categoryId || item.category || "others"}
+                                        branch={item.department || item.branch || "CSE"}
+                                        sellerUsername={item.sellerUsername || "member"}
+                                        distance={item.block || item.distance || "Campus"}
+                                        imageUrl={item.photoUrl || item.imageUrl}
+                                        variant="scroll" 
+                                      />
+                                    </div>
+                                  ));
+                                })()}
                             </div>
                         </section>
 
@@ -242,14 +334,18 @@ export default function RentalsMarketplace() {
                                     </button>
                                 </div>
                                 <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
-                                    {recentItems.map(item => (
+                                    {recentItems.map((item: any) => (
                                         <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
                                             <ProductCard 
                                               id={item.id}
                                               itemName={item.itemName}
                                               pricePerHour={item.pricePerHour}
-                                              category={item.itemName.toLowerCase().includes("calc") ? "calculator" : item.itemName.toLowerCase().includes("draft") ? "drafter" : "lab-coat"}
-                                              imageUrl="https://images.unsplash.com/photo-1434030216411-0bb793f49412?w=400&q=80"
+                                              category={item.categoryId || item.category || "others"}
+                                              branch={item.department || item.branch || "CSE"}
+                                              sellerUsername={item.sellerUsername || "member"}
+                                              distance={item.block || item.distance || "Campus"}
+                                              imageUrl={item.photoUrl || item.imageUrl}
+                                              variant="scroll" 
                                             />
                                         </div>
                                     ))}
@@ -317,40 +413,11 @@ export default function RentalsMarketplace() {
 
                 {/* Buy & Sell tab content */}
                 {activeMode === "sell" && (
-                    <BuySellSection router={router} />
+                    <BuySellSection router={router} sellItems={sellItems} />
                 )}
             </div>
 
-            {/* ── FAB ── */}
-            {activeMode !== "buy" && (
-                <button
-                    onClick={handleFabClick}
-                    style={{
-                        position: "fixed",
-                        bottom: 88,
-                        right: 20,
-                        width: 54,
-                        height: 54,
-                        background: activeMode === "sell"
-                            ? "linear-gradient(135deg,#FF9500,#FF7300)"
-                            : "linear-gradient(135deg,#5548E8,#7B72FF)",
-                        borderRadius: 18,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 26,
-                        color: "#fff",
-                        boxShadow: activeMode === "sell"
-                            ? "0 8px 28px rgba(255,149,0,.5)"
-                            : "0 8px 28px rgba(85,72,232,.5)",
-                        cursor: "pointer",
-                        zIndex: 200,
-                        border: "none",
-                    }}
-                >
-                    +
-                </button>
-            )}
+
 
             <BottomNav />
         </div>
@@ -421,8 +488,7 @@ function WritingSection({ router }: { router: any }) {
 }
 
 /* ── Buy & Sell Section ── */
-function BuySellSection({ router }: { router: any }) {
-    // Removed the internal mode tabs, just showing a consolidated view
+function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }) {
     return (
         <div className="iy-fu1 flex flex-col gap-4">
 
@@ -436,23 +502,47 @@ function BuySellSection({ router }: { router: any }) {
 
             <CategoryGrid counts={{}} loading={false} />
 
-            {/* Empty/placeholder state — sell */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 4 }}>Your Listings</div>
-                <div style={{ background: "#fff", borderRadius: 24, boxShadow: "var(--iy-sh-card)", padding: "32px 20px", textAlign: "center" as const }}>
-                    <div style={{ fontSize: 42, marginBottom: 12 }}>📦</div>
-                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, color: "var(--iy-text1)", marginBottom: 6 }}>No Listings Yet</div>
-                    <div style={{ fontSize: 12, color: "var(--iy-text3)", lineHeight: 1.5, marginBottom: 16 }}>
-                        List your used items and earn money from fellow students on campus.
+            {/* Real items for sale grid */}
+            {sellItems.length > 0 ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 4 }}>Available on Campus 💰</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, justifyItems: "center" }}>
+                        {sellItems.map(item => (
+                            <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
+                                <ProductCard 
+                                    id={item.id}
+                                    itemName={item.itemName}
+                                    pricePerHour={item.pricePerHour}
+                                    category={item.categoryId || "others"}
+                                    branch={item.department || "CSE"}
+                                    sellerUsername="member"
+                                    distance={item.block || "Campus"}
+                                    imageUrl={item.photoUrl}
+                                    variant="grid"
+                                />
+                            </div>
+                        ))}
                     </div>
-                    <button
-                        onClick={() => router.push("/rentals/new?type=sell")}
-                        style={{ background: "linear-gradient(135deg,#FF9500,#FF7300)", color: "#fff", fontSize: 13, fontWeight: 700, padding: "12px 28px", borderRadius: 18, border: "none", cursor: "pointer", boxShadow: "0 6px 20px rgba(255,149,0,.35)" }}
-                    >
-                        + List Item to Sell
-                    </button>
                 </div>
-            </div>
+            ) : (
+                /* Empty/placeholder state — sell */
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 4 }}>Your Listings</div>
+                    <div style={{ background: "#fff", borderRadius: 24, boxShadow: "var(--iy-sh-card)", padding: "32px 20px", textAlign: "center" as const }}>
+                        <div style={{ fontSize: 42, marginBottom: 12 }}>📦</div>
+                        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, color: "var(--iy-text1)", marginBottom: 6 }}>No Listings Yet</div>
+                        <div style={{ fontSize: 12, color: "var(--iy-text3)", lineHeight: 1.5, marginBottom: 16 }}>
+                            List your used items and earn money from fellow students on campus.
+                        </div>
+                        <button
+                            onClick={() => router.push("/rentals/new?type=sell")}
+                            style={{ background: "linear-gradient(135deg,#FF9500,#FF7300)", color: "#fff", fontSize: 13, fontWeight: 700, padding: "12px 28px", borderRadius: 18, border: "none", cursor: "pointer", boxShadow: "0 6px 20px rgba(255,149,0,.35)" }}
+                        >
+                            + List Item to Sell
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* How to sell */}
             <div style={{ marginTop: 12 }}>

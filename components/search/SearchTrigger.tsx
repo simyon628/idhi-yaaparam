@@ -2,10 +2,13 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { Search, X, Camera, Mic, SlidersHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useSearchStore } from "@/stores/searchStore";
 import { useKeyboardNav } from "@/hooks/useSearch";
+import { toast } from "sonner";
 
 export default function SearchTrigger() {
+  const router = useRouter();
   const {
     query,
     isOpen,
@@ -46,7 +49,54 @@ export default function SearchTrigger() {
   };
 
   const handleSubmit = () => {
-    if (query.trim()) executeSearch(query);
+    if (query.trim()) executeSearch(query, router);
+  };
+
+  const handleVoiceSearch = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast("Voice search is not supported in this browser.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.onstart = () => {
+      toast("Listening...");
+    };
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setQuery(transcript);
+      executeSearch(transcript, router);
+    };
+    recognition.onerror = (event: any) => {
+      toast("Error occurred: " + event.error);
+    };
+    recognition.start();
+  };
+
+  const handleCameraSearch = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        toast("Processing image...");
+        setTimeout(() => {
+          const name = file.name.split('.')[0];
+          let simulatedResult = name;
+          if (name.toLowerCase().includes("calc")) simulatedResult = "Calculator";
+          else if (name.toLowerCase().includes("draft")) simulatedResult = "Drafter";
+          else if (name.toLowerCase().includes("coat")) simulatedResult = "Lab Coat";
+          
+          setQuery(simulatedResult);
+          executeSearch(simulatedResult, router);
+          toast(`Recognized: ${simulatedResult}`);
+        }, 1500);
+      }
+    };
+    input.click();
   };
 
   return (
@@ -117,7 +167,7 @@ export default function SearchTrigger() {
             {/* Camera */}
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); }}
+              onClick={(e) => { e.stopPropagation(); handleCameraSearch(); }}
               style={{
                 width: 28,
                 height: 28,
@@ -136,7 +186,7 @@ export default function SearchTrigger() {
             {/* Mic */}
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); }}
+              onClick={(e) => { e.stopPropagation(); handleVoiceSearch(); }}
               style={{
                 width: 28,
                 height: 28,

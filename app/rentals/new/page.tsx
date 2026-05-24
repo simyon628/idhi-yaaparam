@@ -128,13 +128,13 @@ function NewRentalForm() {
         }
 
         const categoryNames: Record<string, string> = {
-            'cat-calculator': 'Calculator',
-            'cat-drafter': 'Drafter / Drawing Board',
-            'cat-labcoat': 'Lab Coat',
-            'cat-geometry': 'Geometry Set',
-            'cat-books': 'Books / Notes',
-            'cat-electronics': 'Electronics',
-            'cat-tools': 'Tools',
+            'calculator': 'Calculator',
+            'drafter': 'Drafter / Drawing Board',
+            'lab-coat': 'Lab Coat',
+            'geometry': 'Geometry Set',
+            'books': 'Books / Notes',
+            'electronics': 'Electronics',
+            'tools': 'Tools',
         };
         const catName = categoryNames[categoryId] ?? category ?? 'item';
         
@@ -315,8 +315,8 @@ function NewRentalForm() {
                         <Camera className="w-3.5 h-3.5" /> Add Photo *
                     </label>
                     <div 
-                        onClick={() => { if (!preview) document.getElementById("photo-upload")?.click() }}
-                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${preview ? "border-transparent bg-transparent" : "border-indigo-100 bg-white/70 hover:bg-white hover:border-indigo-300 shadow-inner cursor-pointer overflow-hidden"}`}
+                        onClick={() => document.getElementById("photo-upload")?.click()}
+                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${preview ? "border-transparent bg-transparent cursor-pointer" : "border-indigo-100 bg-white/70 hover:bg-white hover:border-indigo-300 shadow-inner cursor-pointer overflow-hidden"}`}
                     >
                         {preview ? (
                             <div style={{position:'relative',marginTop:8, width: '100%'}}>

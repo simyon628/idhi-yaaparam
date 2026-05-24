@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -63,46 +63,49 @@ export default function MeetupMap({ rental, currentUserId }: MeetupMapProps) {
         }
     }, [renterPos]);
 
-    if (!isPending && !isApproved) {
-        return null;
-    }
 
     const lenderAnimationState = ownerIsMoving ? 'running' : 'paused';
     const borrowerAnimationState = renterIsMoving ? 'running' : 'paused';
 
-    const LenderIcon = L.divIcon({
-        className: 'custom-div-icon',
-        html: `
-            <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
-                <div style="position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #7F77DD; animation: meetupPing 2s ease-out infinite; top: -6px;"></div>
-                <div style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); animation: walk 0.6s ease-in-out infinite; animation-play-state: ${lenderAnimationState}; position: relative; z-index: 2; line-height: 1;">
-                    🚶
+    const LenderIcon = useMemo(() => {
+        if (typeof window === "undefined") return null as any;
+        return L.divIcon({
+            className: 'custom-div-icon',
+            html: `
+                <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+                    <div style="position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #7F77DD; animation: meetupPing 2s ease-out infinite; top: -6px;"></div>
+                    <div style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); animation: walk 0.6s ease-in-out infinite; animation-play-state: ${lenderAnimationState}; position: relative; z-index: 2; line-height: 1;">
+                        🚶
+                    </div>
+                    <div style="background: #F5F3FF; color: #7F77DD; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 3px; white-space: nowrap; position: relative; z-index: 2;">
+                        Lender
+                    </div>
                 </div>
-                <div style="background: #F5F3FF; color: #7F77DD; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 3px; white-space: nowrap; position: relative; z-index: 2;">
-                    Lender
-                </div>
-            </div>
-        `,
-        iconSize: [60, 60],
-        iconAnchor: [30, 30],
-    });
+            `,
+            iconSize: [60, 60],
+            iconAnchor: [30, 30],
+        });
+    }, [lenderAnimationState]);
 
-    const BorrowerIcon = L.divIcon({
-        className: 'custom-div-icon',
-        html: `
-            <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
-                <div style="position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #1D9E75; animation: meetupPing 2s ease-out infinite; top: -6px; animation-delay: 0.8s;"></div>
-                <div style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); animation: walk 0.6s ease-in-out infinite; animation-delay: 0.3s; animation-play-state: ${borrowerAnimationState}; position: relative; z-index: 2; line-height: 1;">
-                    🚶
+    const BorrowerIcon = useMemo(() => {
+        if (typeof window === "undefined") return null as any;
+        return L.divIcon({
+            className: 'custom-div-icon',
+            html: `
+                <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+                    <div style="position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #1D9E75; animation: meetupPing 2s ease-out infinite; top: -6px; animation-delay: 0.8s;"></div>
+                    <div style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); animation: walk 0.6s ease-in-out infinite; animation-delay: 0.3s; animation-play-state: ${borrowerAnimationState}; position: relative; z-index: 2; line-height: 1;">
+                        🚶
+                    </div>
+                    <div style="background: #E1F5EE; color: #1D9E75; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 3px; white-space: nowrap; position: relative; z-index: 2;">
+                        You
+                    </div>
                 </div>
-                <div style="background: #E1F5EE; color: #1D9E75; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 3px; white-space: nowrap; position: relative; z-index: 2;">
-                    You
-                </div>
-            </div>
-        `,
-        iconSize: [60, 60],
-        iconAnchor: [30, 30],
-    });
+            `,
+            iconSize: [60, 60],
+            iconAnchor: [30, 30],
+        });
+    }, [borrowerAnimationState]);
 
     let computedDistance: string | null = null;
     let computedEta: string | null = null;
@@ -111,6 +114,10 @@ export default function MeetupMap({ rental, currentUserId }: MeetupMapProps) {
         const d = L.latLng(ownerPos).distanceTo(L.latLng(renterPos));
         computedDistance = Math.round(d).toString();
         computedEta = Math.max(1, Math.round(d / 80)).toString(); // Roughly 80m per min walking
+    }
+
+    if (!isPending && !isApproved) {
+        return null;
     }
 
     return (

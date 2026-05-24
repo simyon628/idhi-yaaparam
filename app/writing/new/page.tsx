@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { toast } from "sonner";
 import { ChevronLeft, Loader2, IndianRupee, PenTool, Calendar, BookOpen } from "lucide-react";
 import { useCollege } from "@/contexts/CollegeContext";
@@ -41,6 +41,14 @@ export default function NewWritingJobPage() {
         setLoading(true);
         try {
             if (!userId || !db) throw new Error("Auth error");
+
+            // Check if user is verified
+            const userDocSnap = await getDoc(doc(db as any, "users", userId));
+            if (!userDocSnap.exists() || (!userDocSnap.data().isVerified && !userDocSnap.data().verified)) {
+                toast.error("Please verify your student ID before posting a job.");
+                setLoading(false);
+                return;
+            }
 
             await addDoc(collection(db, "writing_jobs"), {
                 title,

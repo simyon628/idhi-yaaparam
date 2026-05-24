@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import Image from "next/image";
 import { Heart, ShoppingBag } from "lucide-react";
 import { useWishlistStore, useCartStore } from "@/lib/store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useListingMode } from "@/lib/hooks/useListingMode";
 
 interface ProductCardProps {
   id: string;
@@ -19,7 +21,7 @@ interface ProductCardProps {
   variant?: 'scroll' | 'grid';
 }
 
-export function ProductCard({
+function ProductCardComponent({
   id,
   itemName,
   pricePerHour,
@@ -31,10 +33,19 @@ export function ProductCard({
   rating = 4.5,
   variant = 'grid',
 }: ProductCardProps) {
-  const { items: wishlistItems, toggleItem: toggleWishlistStore } = useWishlistStore();
-  const isWishlisted = wishlistItems.has(id);
+  const isWishlisted = useWishlistStore(useCallback((state) => state.items.has(id), [id]));
+  const toggleWishlistStore = useWishlistStore((state) => state.toggleItem);
   
   const router = useRouter();
+  const { listingMode } = useListingMode();
+
+  const getButtonBg = () => {
+    switch (listingMode) {
+      case "sell": return "#FF9500";
+      case "buy": return "#00C48C";
+      default: return "#5B4CDB";
+    }
+  };
 
   const [heartScale, setHeartScale] = useState(1);
   const [showCheck, setShowCheck] = useState(false);
@@ -115,9 +126,17 @@ export function ProductCard({
         </button>
         
         {/* Product icon or photo */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', position: 'relative', width: '100%' }}>
           {hasRealPhoto ? (
-            <img src={imageUrl} alt={itemName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <Image
+              src={imageUrl}
+              alt={itemName}
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YxZjVmOSIvPjwvc3ZnPg=="
+            />
           ) : (
             <div style={{ fontSize: 40, opacity: 0.6 }}>
               {category === "calculator" ? "🖩" : category === "drafter" ? "📐" : "🥼"}
@@ -148,7 +167,7 @@ export function ProductCard({
         {/* SINGLE BORROW BUTTON */}
         <button style={{
           width: '100%', height: 36,
-          background: '#5B4CDB', color: '#fff',
+          background: getButtonBg(), color: '#fff',
           border: 'none', borderRadius: 10,
           fontSize: 13, fontWeight: 500,
           cursor: 'pointer', display: 'flex',
@@ -168,3 +187,5 @@ export function ProductCard({
     </div>
   );
 }
+
+export const ProductCard = React.memo(ProductCardComponent);

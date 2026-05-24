@@ -1,25 +1,44 @@
-import { useState, useEffect } from "react";
+import { create } from "zustand";
 
 export type ListingMode = "rent" | "buy" | "sell";
 
-export function useListingMode() {
-    const [listingMode, setListingModeState] = useState<ListingMode>("rent");
-    const [isLoaded, setIsLoaded] = useState(false);
+interface ModeStore {
+  listingMode: ListingMode;
+  isLoaded: boolean;
+  setListingMode: (mode: ListingMode) => void;
+}
 
-    useEffect(() => {
-        const saved = localStorage.getItem("iy_listing_mode");
-        if (saved === "rent" || saved === "buy" || saved === "sell") {
-            setListingModeState(saved as ListingMode);
-        }
-        setIsLoaded(true);
-    }, []);
+// Helper to safely get the initial mode once at startup
+const getInitialMode = (): ListingMode => {
+  if (typeof window !== "undefined") {
+    try {
+      const saved = localStorage.getItem("iy_listing_mode");
+      if (saved === "rent" || saved === "buy" || saved === "sell") {
+        return saved as ListingMode;
+      }
+    } catch (e) {
+      console.error("Failed to read from localStorage", e);
+    }
+  }
+  return "rent";
+};
 
-    const setListingMode = (mode: ListingMode) => {
-        setListingModeState(mode);
+const useModeStore = create<ModeStore>((set) => ({
+  listingMode: getInitialMode(),
+  isLoaded: typeof window !== "undefined",
+  setListingMode: (mode) => {
+    set({ listingMode: mode });
+    if (typeof window !== "undefined") {
+      try {
         localStorage.setItem("iy_listing_mode", mode);
-        // Also fire a storage event so other tabs/components on same page could re-render if we were to listen,
-        // but for now simple state is fine.
-    };
+      } catch (e) {
+        console.error("Failed to write to localStorage", e);
+      }
+    }
+  },
+}));
 
-    return { listingMode, setListingMode, isModeLoaded: isLoaded };
+export function useListingMode() {
+  const { listingMode, setListingMode, isLoaded } = useModeStore();
+  return { listingMode, setListingMode, isModeLoaded: isLoaded };
 }

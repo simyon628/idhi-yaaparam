@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useMemo } from 'react'
 import { db } from '@/lib/firebase'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import { Listing } from '@/lib/types'
-import { getCachedRentalsSync } from '@/lib/cache/itemsCache'
+import { getCachedRentalsSync, updateCachedRentalsSync } from '@/lib/cache/itemsCache'
 
 /**
  * Real-time items hook using onSnapshot.
@@ -53,6 +53,7 @@ export function useAllItems(collegeId: string | undefined, categoryId?: string, 
       q,
       (snap) => {
         const items = snap.docs.map(d => ({ id: d.id, ...d.data() })) as Listing[]
+        updateCachedRentalsSync(collegeId, items)
         setData(items)
         setIsLoading(false)
         setError(null)

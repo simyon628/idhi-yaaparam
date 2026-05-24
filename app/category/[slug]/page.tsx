@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Search, SlidersHorizontal } from "lucide-react";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
+import { usePaginatedItems } from "@/lib/hooks/usePaginatedItems";
+import { useCollege } from "@/contexts/CollegeContext";
 
 // Mock Data for Category Page
 const MOCK_DATA = [
@@ -18,9 +20,19 @@ const MOCK_DATA = [
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
   const { slug } = React.use(params);
+  const { selectedCollege } = useCollege();
   const [sortBy, setSortBy] = useState("nearest");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingState, setIsLoadingState] = useState(true);
   const [error, setError] = useState("");
+  const [categoryItems, setCategoryItems] = useState<any[]>([]);
+
+  const {
+    data: paginatedItems = [],
+    isLoading: isItemsLoading,
+    isLoadingMore,
+    hasMore,
+    loadMore,
+  } = usePaginatedItems(selectedCollege?.id, slug);
 
   const slugToCategoryMap: { [key: string]: string } = {
     'calculator': 'calculator',
@@ -32,26 +44,57 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    if (isItemsLoading) return;
+    setIsLoadingState(true);
     setError("");
-    // Simulate fetching products by category
-    const timer = setTimeout(() => {
-      try {
-        const categoryValue = slugToCategoryMap[slug];
-        if (!categoryValue && slug !== "electronics" && slug !== "academic") {
-          setError("Category not found");
-        }
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Error loading items:', err);
-        setError("Could not load items. Please try again.");
-        setIsLoading(false);
-      }
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [slug]);
 
-  const categoryItems = MOCK_DATA.filter(item => item.category === slug || slug === "electronics" || slug === "academic");
+    try {
+      const categoryValue = slugToCategoryMap[slug];
+      if (!categoryValue && slug !== "electronics" && slug !== "academic") {
+        // We still support misc categories like stationery, projector, etc.
+      }
+
+      // Since usePaginatedItems already filters by category slug directly at DB level,
+      // we only need to sort the resulting items!
+      const filtered = [...paginatedItems];
+
+      // Sort
+      if (sortBy === "price_asc") {
+        filtered.sort((a, b) => a.pricePerHour - b.pricePerHour);
+      } else if (sortBy === "price_desc") {
+        filtered.sort((a, b) => b.pricePerHour - a.pricePerHour);
+      }
+
+      // Fallback to mock items if no real items exist in this category
+      if (filtered.length === 0) {
+        const mockFiltered = MOCK_DATA.filter(item => {
+          if (slug === "electronics") {
+            return ["electronics", "laptop", "camera"].includes(item.category);
+          }
+          if (slug === "academic") {
+            return ["geometry", "books", "drafter", "calculator", "lab-coat", "stationery"].includes(item.category);
+          }
+          return item.category === slug;
+        });
+
+        if (sortBy === "price_asc") {
+          mockFiltered.sort((a, b) => a.pricePerHour - b.pricePerHour);
+        } else if (sortBy === "price_desc") {
+          mockFiltered.sort((a, b) => b.pricePerHour - a.pricePerHour);
+        }
+        setCategoryItems(mockFiltered);
+      } else {
+        setCategoryItems(filtered);
+      }
+
+      setIsLoadingState(false);
+    } catch (err) {
+      console.error('Error loading items:', err);
+      setError("Could not load items. Please try again.");
+      setIsLoadingState(false);
+    }
+  }, [slug, paginatedItems, isItemsLoading, sortBy]);
+
   const displayTitle = slug ? slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "Category";
 
   return (
@@ -76,7 +119,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <Search size={20} color="#1e293b" />
-            <button onClick={() => router.push(`/list-item?category=${slug}`)} style={{ background: "none", border: "none", fontSize: 24, fontWeight: 300, cursor: "pointer", color: "#1e293b" }}>
+            <button onClick={() => router.push(`/rentals/new?category=${slug}`)} style={{ background: "none", border: "none", fontSize: 24, fontWeight: 300, cursor: "pointer", color: "#1e293b" }}>
               +
             </button>
           </div>
@@ -146,7 +189,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             <div style={{ gridColumn: "span 2", textAlign: "center", padding: "40px 0", color: "#64748b" }}>
               {error}
             </div>
-          ) : isLoading ? (
+          ) : (isLoadingState || isItemsLoading) ? (
             <>
               <SkeletonCard />
               <SkeletonCard />
@@ -164,24 +207,46 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                   id={item.id}
                   itemName={item.itemName}
                   pricePerHour={item.pricePerHour}
-                  category={item.category}
-                  branch={item.branch}
-                  distance={item.distance}
-                  sellerUsername={item.sellerUsername}
-                  rating={item.rating}
+                  category={item.categoryId || item.category || "others"}
+                  branch={item.department || item.branch || "CSE"}
+                  distance={item.block || item.distance || "Campus"}
+                  sellerUsername={item.sellerUsername || "member"}
+                  rating={item.rating || 4.5}
                   variant="grid"
-                  imageUrl={
-                    item.category === "calculator" ? "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" :
-                    item.category === "drafter" ? "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" :
-                    "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80"
-                  }
+                  imageUrl={item.photoUrl || item.imageUrl}
                 />
               </div>
             ))
           )}
+
+          {/* Load More Button */}
+          {hasMore && !isItemsLoading && !isLoadingState && categoryItems.length > 0 && (
+            <div style={{ gridColumn: "span 2", width: "100%", display: "flex", justifyContent: "center", marginTop: "16px", marginBottom: "16px" }}>
+              <button
+                onClick={loadMore}
+                disabled={isLoadingMore}
+                style={{
+                  padding: "10px 24px",
+                  borderRadius: "12px",
+                  background: "#5B4CDB",
+                  color: "#fff",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  border: "none",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 12px rgba(91, 76, 219, 0.2)",
+                  transition: "opacity 0.2s, transform 0.1s",
+                  opacity: isLoadingMore ? 0.7 : 1,
+                  fontFamily: "'DM Sans', sans-serif"
+                }}
+              >
+                {isLoadingMore ? "Loading more..." : "Load More"}
+              </button>
+            </div>
+          )}
           
           {/* Fill empty space if fewer than 4 items */}
-          {!isLoading && categoryItems.length < 4 && (
+          {!(isLoadingState || isItemsLoading) && categoryItems.length < 4 && (
             <div
               style={{
                 width: 148,
@@ -200,7 +265,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               <div style={{ fontSize: 24, marginBottom: 8 }}>✨</div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 4 }}>Be the first!</div>
               <div style={{ fontSize: 11, color: "#64748b", marginBottom: 12 }}>List a {displayTitle} now</div>
-              <button onClick={() => router.push(`/list-item?category=${slug}`)} style={{ padding: "6px 12px", background: "#5B4CDB", color: "#fff", fontSize: 11, fontWeight: 700, borderRadius: 6, border: "none", cursor: "pointer" }}>
+              <button onClick={() => router.push(`/rentals/new?category=${slug}`)} style={{ padding: "6px 12px", background: "#5B4CDB", color: "#fff", fontSize: 11, fontWeight: 700, borderRadius: 6, border: "none", cursor: "pointer" }}>
                 + List Item
               </button>
             </div>

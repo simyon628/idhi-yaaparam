@@ -2,9 +2,11 @@
 
 import React from "react";
 import { Clock, X, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useSearchStore } from "@/stores/searchStore";
 
 export default function RecentList() {
+  const router = useRouter();
   const { recentSearches, clearRecent, executeSearch } = useSearchStore();
 
   const handleDeleteOne = (id: string) => {
@@ -70,7 +72,7 @@ export default function RecentList() {
         recentSearches.slice(0, 5).map((item) => (
           <div
             key={item.id}
-            onClick={() => executeSearch(item.query)}
+            onClick={() => executeSearch(item.query, router)}
             style={{
               display: "flex",
               alignItems: "center",
