@@ -44,7 +44,7 @@ export function useRazorpay() {
         return;
       }
       
-      const user = auth.currentUser;
+      const user = auth?.currentUser;
       if (!user) {
         toast.error('You must be logged in to make a payment.');
         return;

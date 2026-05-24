@@ -79,6 +79,7 @@ export interface Listing {
     renterId?: string | null;
     createdAt: Timestamp | Date;
     requestedAt?: Timestamp | Date;
+    requestedDuration?: string;
     approvedAt?: Timestamp | Date;
     completedAt?: Timestamp | Date;
     ownerLocation?: { lat: number, lng: number };
