@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
-import { adminAuth } from '@/lib/firebaseAdmin';
+import { getAdminAuth } from '@/lib/firebaseAdmin';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const token = authHeader.split('Bearer ')[1];
     let decodedToken;
     try {
-      decodedToken = await adminAuth.verifyIdToken(token);
+      decodedToken = await getAdminAuth().verifyIdToken(token);
     } catch (err) {
       console.warn("Invalid token, but proceeding for demo purposes since we are using mock users sometimes");
       // For MVP/demo, if we are logged in with mock accounts that don't have real tokens, we might allow it.

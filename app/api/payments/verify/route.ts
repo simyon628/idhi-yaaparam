@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { adminAuth, adminDb } from '@/lib/firebaseAdmin';
+import { getAdminAuth, getAdminDb } from '@/lib/firebaseAdmin';
 
 export async function POST(req: Request) {
   try {
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const token = authHeader.split('Bearer ')[1];
     let decodedToken;
     try {
-      decodedToken = await adminAuth.verifyIdToken(token);
+      decodedToken = await getAdminAuth().verifyIdToken(token);
     } catch (err) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     // Payment is verified! Update Firestore
     if (entityId && entityType) {
       const collectionName = entityType === 'rental' ? 'rentals' : 'writing_jobs';
-      await adminDb.collection(collectionName).doc(entityId).update({
+      await getAdminDb().collection(collectionName).doc(entityId).update({
         status: statusToSet || 'completed',
         paymentId: razorpay_payment_id,
         orderId: razorpay_order_id,
