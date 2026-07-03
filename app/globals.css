@@ -6,33 +6,31 @@
   --font-dm: "DM Sans", sans-serif;
   --font-outfit: "Outfit", sans-serif;
   --font-inter: "Inter", sans-serif;
-  --iy-ink: #13131F;
-  --iy-ink2: #1E1E30;
-  --iy-ink3: #28283E;
-  --iy-surface: #F5F4FF;
+  --iy-ink: #111116;
+  --iy-ink2: #1A1A24;
+  --iy-ink3: #2A2A3B;
+  --iy-surface: #F3F4F6; /* Soft Gray */
   --iy-card: #FFFFFF;
-  --iy-border: rgba(100,90,255,0.09);
-  --iy-primary: #5548E8;
-  --iy-primary-mid: #7B72FF;
-  --iy-primary-light: #ECEAFF;
-  --iy-amber: #FF9500;
-  --iy-amber-light: #FFF4E0;
-  --iy-emerald: #00C48C;
-  --iy-emerald-light: #DAFFF3;
-  --iy-coral: #FF5F5F;
-  --iy-coral-light: #FFECEC;
-  --iy-sky: #2CB8FF;
-  --iy-sky-light: #E2F6FF;
-  --iy-rose: #FF4D8D;
-  --iy-rose-light: #FFE8F3;
-  --iy-text1: #13131F;
-  --iy-text2: #5C5C7A;
-  --iy-text3: #9999B8;
-  --iy-sh-card: 0 2px 14px rgba(13,13,30,0.07), 0 0 0 1px rgba(85,72,232,0.06);
-  --iy-sh-float: 0 8px 32px rgba(85,72,232,0.22);
-  --iy-hdr-bg: linear-gradient(180deg, #16162A 0%, #1E1E34 100%);
-  --iy-hdr-start: #16162A;
-  --iy-hdr-end: #1E1E34;
+  --iy-border: rgba(79, 70, 229, 0.08); /* Indigo border */
+  --iy-primary: #4F46E5; /* Deep Indigo */
+  --iy-primary-mid: #6366F1;
+  --iy-primary-light: #EEF2FF;
+  --iy-amber: #F59E0B;
+  --iy-amber-light: #FEF3C7;
+  --iy-emerald: #10B981; /* Success Green */
+  --iy-emerald-light: #D1FAE5;
+  --iy-coral: #EF4444;
+  --iy-coral-light: #FEE2E2;
+  --iy-violet: #8B5CF6; /* Secondary Violet */
+  --iy-violet-light: #EDE9FE;
+  --iy-text1: #111827;
+  --iy-text2: #4B5563;
+  --iy-text3: #9CA3AF;
+  --iy-sh-card: 0 4px 20px -2px rgba(17, 24, 39, 0.05), 0 0 0 1px rgba(79, 70, 229, 0.05);
+  --iy-sh-float: 0 10px 40px -10px rgba(79, 70, 229, 0.15);
+  --iy-hdr-bg: #FFFFFF;
+  --iy-hdr-start: #FFFFFF;
+  --iy-hdr-end: #F9FAFB;
 }
 
 /* ── Fade-up animations ── */
@@ -124,66 +122,65 @@
 
 @layer base {
   :root {
-    /* Base Background - Very light pastel purple/blue */
-    --background: 250 100% 98%;
-    --foreground: 230 40% 25%;
+    /* Base Background - Soft Gray */
+    --background: 220 14% 96%;
+    --foreground: 222.2 84% 4.9%;
 
-    /* Glass Cards - White with slight transparency */
+    /* Glass Cards - White */
     --card: 0 0% 100%;
-    --card-foreground: 230 40% 25%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 230 40% 25%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    /* Primary CTA - Royal Blue/Periwinkle from ref image "Get Started" */
-    --primary: 228 80% 64%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary CTA - Deep Indigo */
+    --primary: 243 75% 59%;
+    --primary-foreground: 210 40% 98%;
 
-    /* Secondary Elements */
-    --secondary: 250 50% 94%;
-    --secondary-foreground: 230 40% 25%;
+    /* Secondary Elements - Violet */
+    --secondary: 258 90% 66%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 20% 95%;
-    --muted-foreground: 220 15% 55%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    /* Accent colors based on image buttons (Buy/Rent) */
-    --accent: 195 90% 60%;
-    /* Cyan/Blue */
-    --accent-foreground: 0 0% 100%;
+    /* Accent colors */
+    --accent: 258 90% 66%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 345 80% 65%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 220 20% 90%;
-    --input: 220 20% 94%;
-    --ring: 228 80% 64%;
-    --radius: 1.25rem;
-    /* Larger, softer radii */
-
-    --trust: 160 60% 50%;
-    --trust-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 243 75% 59%;
+    --radius: 1rem;
+    
+    /* Trust/Success - Green */
+    --trust: 160 84% 39%;
+    --trust-foreground: 210 40% 98%;
   }
 
   /* Force light mode variables everywhere since this is a pure light theme */
   .dark {
-    --background: 250 100% 98%;
-    --foreground: 230 40% 25%;
+    --background: 220 14% 96%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 230 40% 25%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 230 40% 25%;
-    --primary: 228 80% 64%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 250 50% 94%;
-    --secondary-foreground: 230 40% 25%;
-    --muted: 220 20% 95%;
-    --muted-foreground: 220 15% 55%;
-    --accent: 195 90% 60%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 345 80% 65%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 20% 90%;
-    --input: 220 20% 94%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 243 75% 59%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 258 90% 66%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 258 90% 66%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
   }
 }
 
@@ -410,3 +407,18 @@
 .badge-amber  { @apply bg-orange-100 text-orange-700 border border-orange-200; }
 .badge-indigo { @apply bg-blue-100 text-blue-700 border border-blue-200; }
 .badge-rose   { @apply bg-rose-100 text-rose-700 border border-rose-200; }
+
+/* ─── Product Card Animations (defined once here, not per-card) ──────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes burst {
+  0%   { opacity: 1; transform: scale(1);   }
+  100% { opacity: 0; transform: scale(2.5); }
+}
+.pc-shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite ease-in-out;
+}

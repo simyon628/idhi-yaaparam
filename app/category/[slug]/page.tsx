@@ -1,277 +1,331 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, Search, SlidersHorizontal, Plus, X } from "lucide-react";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
-import { usePaginatedItems } from "@/lib/hooks/usePaginatedItems";
+import { useInfiniteItems } from "@/lib/hooks/useInfiniteItems";
 import { useCollege } from "@/contexts/CollegeContext";
+import { useSearchStore } from "@/stores/searchStore";
 
-// Mock Data for Category Page
-const MOCK_DATA = [
-  { id: "c1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", rating: 4.8, sellerUsername: "rahul_svec" },
-  { id: "c2", itemName: "Basic Calculator", pricePerHour: 5, category: "calculator", branch: "Mech", distance: "0.5 km", rating: 4.2, sellerUsername: "priya_svec" },
-  { id: "d1", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Civil", distance: "1.2 km", rating: 4.5, sellerUsername: "vikas_svec" },
-  { id: "d2", itemName: "Mini Drafter", pricePerHour: 20, category: "drafter", branch: "Mech", distance: "0.4 km", rating: 4.9, sellerUsername: "anil_svec" },
-  { id: "l1", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Bio", distance: "0.1 km", rating: 4.0, sellerUsername: "sita_svec" },
+const BRANCH_CHIPS = ["All", "CSE", "ECE", "Mech", "Civil", "Bio", "IT", "EEE"];
+
+const SORT_OPTIONS = [
+  { id: "newest", label: "Newest" },
+  { id: "price_asc", label: "Price ↑" },
+  { id: "price_desc", label: "Price ↓" },
+  { id: "rating", label: "Rating" },
 ];
+
+const MOCK_ITEMS: Record<string, any[]> = {
+  calculator: [
+    { id: "c1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", rating: 4.8, imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+    { id: "c2", itemName: "Basic Casio Calculator", pricePerHour: 5, category: "calculator", branch: "Mech", distance: "0.5 km", rating: 4.2, imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+  ],
+  drafter: [
+    { id: "d1", itemName: "Engineering Drafter Set", pricePerHour: 25, category: "drafter", branch: "Civil", distance: "1.2 km", rating: 4.5, imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+    { id: "d2", itemName: "Mini Drafter", pricePerHour: 20, category: "drafter", branch: "Mech", distance: "0.4 km", rating: 4.9, imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+  ],
+  "lab-coat": [
+    { id: "l1", itemName: "Lab Coat White L Size", pricePerHour: 20, category: "lab-coat", branch: "Bio", distance: "0.1 km", rating: 4.0, imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+    { id: "l2", itemName: "Lab Coat White M Size", pricePerHour: 18, category: "lab-coat", branch: "CSE", distance: "0.3 km", rating: 4.3, imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+  ],
+};
 
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
   const { slug } = React.use(params);
   const { selectedCollege } = useCollege();
-  const [sortBy, setSortBy] = useState("nearest");
-  const [isLoadingState, setIsLoadingState] = useState(true);
-  const [error, setError] = useState("");
-  const [categoryItems, setCategoryItems] = useState<any[]>([]);
+  const [sortBy, setSortBy] = useState("newest");
+  const [activeBranch, setActiveBranch] = useState("All");
+  const [showFilterSheet, setShowFilterSheet] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const {
-    data: paginatedItems = [],
-    isLoading: isItemsLoading,
-    isLoadingMore,
-    hasMore,
-    loadMore,
-  } = usePaginatedItems(selectedCollege?.id, slug);
+  const { open: openSearch, close: closeSearch, setQuery, executeSearch, query: storeQuery } = useSearchStore();
+  const [searchInputVal, setSearchInputVal] = useState("");
 
-  const slugToCategoryMap: { [key: string]: string } = {
-    'calculator': 'calculator',
-    'drafter': 'drafter',
-    'lab-coat': 'lab-coat',
-    'laptop': 'laptop',
-    'camera': 'camera',
-    'geometry': 'geometry',
-  };
-
+  // Sync input value with store query
   useEffect(() => {
-    if (isItemsLoading) return;
-    setIsLoadingState(true);
-    setError("");
+    setSearchInputVal(storeQuery);
+  }, [storeQuery]);
 
-    try {
-      const categoryValue = slugToCategoryMap[slug];
-      if (!categoryValue && slug !== "electronics" && slug !== "academic") {
-        // We still support misc categories like stationery, projector, etc.
-      }
+  // Clean search on page unmount
+  useEffect(() => {
+    return () => {
+      closeSearch();
+    };
+  }, [closeSearch]);
 
-      // Since usePaginatedItems already filters by category slug directly at DB level,
-      // we only need to sort the resulting items!
-      const filtered = [...paginatedItems];
+  const { items: firestoreItems, isLoading, isLoadingMore, hasMore, setSentinel } =
+    useInfiniteItems(selectedCollege?.id, slug);
 
-      // Sort
-      if (sortBy === "price_asc") {
-        filtered.sort((a, b) => a.pricePerHour - b.pricePerHour);
-      } else if (sortBy === "price_desc") {
-        filtered.sort((a, b) => b.pricePerHour - a.pricePerHour);
-      }
+  const displayTitle = slug
+    ? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    : 'Category';
 
-      // Fallback to mock items if no real items exist in this category
-      if (filtered.length === 0) {
-        const mockFiltered = MOCK_DATA.filter(item => {
-          if (slug === "electronics") {
-            return ["electronics", "laptop", "camera"].includes(item.category);
-          }
-          if (slug === "academic") {
-            return ["geometry", "books", "drafter", "calculator", "lab-coat", "stationery"].includes(item.category);
-          }
-          return item.category === slug;
-        });
+  // Merge real + mock items, prioritizing real
+  const mockFallback = MOCK_ITEMS[slug] || [];
+  let allItems = firestoreItems.length > 0 ? firestoreItems : (isLoading ? [] : mockFallback) as any[];
 
-        if (sortBy === "price_asc") {
-          mockFiltered.sort((a, b) => a.pricePerHour - b.pricePerHour);
-        } else if (sortBy === "price_desc") {
-          mockFiltered.sort((a, b) => b.pricePerHour - a.pricePerHour);
-        }
-        setCategoryItems(mockFiltered);
-      } else {
-        setCategoryItems(filtered);
-      }
+  // Filter by branch
+  if (activeBranch !== 'All') {
+    allItems = allItems.filter((i: any) => (i.department || i.branch) === activeBranch);
+  }
 
-      setIsLoadingState(false);
-    } catch (err) {
-      console.error('Error loading items:', err);
-      setError("Could not load items. Please try again.");
-      setIsLoadingState(false);
-    }
-  }, [slug, paginatedItems, isItemsLoading, sortBy]);
-
-  const displayTitle = slug ? slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "Category";
+  // Sort
+  const sorted = [...allItems].sort((a: any, b: any) => {
+    if (sortBy === 'price_asc') return a.pricePerHour - b.pricePerHour;
+    if (sortBy === 'price_desc') return b.pricePerHour - a.pricePerHour;
+    return 0;
+  });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        background: "#f1f5f9",
-        fontFamily: "'DM Sans', sans-serif",
-      }}
-    >
-      {/* Top Sticky Section */}
-      <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button onClick={() => router.back()} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", color: "#1e293b" }}>
-              <ArrowLeft size={24} />
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "#F8F9FC", fontFamily: "'DM Sans', sans-serif" }}>
+      
+      {/* Sticky Header */}
+      <div style={{ position: "sticky", top: 0, zIndex: 30, background: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+        {/* Top bar */}
+        {isSearching ? (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", gap: 10 }}>
+            <button 
+              onClick={() => { 
+                setIsSearching(false); 
+                closeSearch(); 
+              }} 
+              style={{ background: "#f1f5f9", border: "none", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+            >
+              <ArrowLeft size={20} color="#334155" />
             </button>
-            <div style={{ fontSize: 18, fontWeight: 700, color: "#1e293b" }}>{displayTitle}</div>
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (searchInputVal.trim()) {
+                  executeSearch(searchInputVal, router);
+                }
+              }} 
+              style={{ flex: 1, display: "flex", alignItems: "center", background: "#f1f5f9", borderRadius: 12, padding: "0 10px" }}
+            >
+              <input 
+                type="text" 
+                value={searchInputVal}
+                onChange={(e) => {
+                  setSearchInputVal(e.target.value);
+                  setQuery(e.target.value);
+                }}
+                onFocus={openSearch}
+                placeholder={`Search in ${displayTitle}...`}
+                autoFocus
+                style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: 13, fontWeight: "bold", padding: "10px 4px", color: "#1e293b" }}
+              />
+              {searchInputVal && (
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setSearchInputVal("");
+                    setQuery("");
+                  }}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}
+                >
+                  <X size={16} color="#64748b" />
+                </button>
+              )}
+            </form>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Search size={20} color="#1e293b" />
-            <button onClick={() => router.push(`/rentals/new?category=${slug}`)} style={{ background: "none", border: "none", fontSize: 24, fontWeight: 300, cursor: "pointer", color: "#1e293b" }}>
-              +
-            </button>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button onClick={() => router.back()} style={{ background: "#f1f5f9", border: "none", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <ArrowLeft size={20} color="#334155" />
+              </button>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{displayTitle}</div>
+                <div style={{ fontSize: 10, color: "#64748b", fontWeight: 500 }}>{sorted.length > 0 ? `${sorted.length}+ listings nearby` : 'Loading...'}</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <button onClick={() => { setIsSearching(true); openSearch(); }} style={{ background: "#f1f5f9", border: "none", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <Search size={18} color="#334155" />
+              </button>
+              <button onClick={() => setShowFilterSheet(true)} style={{ background: "#EEF0FF", border: "none", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <SlidersHorizontal size={18} color="#5B4CDB" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Filter/Sort Row */}
-        <div style={{ display: "flex", alignItems: "center", padding: "8px 20px 12px", gap: 12, overflowX: "auto", scrollbarWidth: "none", borderBottom: "1px solid #e2e8f0" }}>
-          <button style={{ display: "flex", alignItems: "center", gap: 4, padding: "6px 12px", borderRadius: 8, border: "1px solid #cbd5e1", background: "#fff", fontSize: 13, fontWeight: 600, color: "#334155", flexShrink: 0 }}>
-            <SlidersHorizontal size={14} /> Filter
+        {/* Combined Filter & Sort buttons bar (replacing the multiple bulky rows of chips) */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 10px", gap: 10, borderBottom: "1px solid #f1f5f9" }}>
+          {/* Sort Selection Button */}
+          <button 
+            onClick={() => setShowFilterSheet(true)}
+            style={{ 
+              flex: 1, 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "center", 
+              gap: 6, 
+              padding: "8px 12px", 
+              borderRadius: 10, 
+              background: "#f8fafc", 
+              border: "1px solid #e2e8f0", 
+              fontSize: 12, 
+              color: "#334155", 
+              fontWeight: 500,
+              cursor: "pointer"
+            }}
+          >
+            <span>Sort:</span>
+            <span style={{ fontWeight: 700, color: "#5B4CDB" }}>
+              {SORT_OPTIONS.find(o => o.id === sortBy)?.label || "Newest"}
+            </span>
           </button>
-          
-          {[
-            { id: "nearest", label: "Nearest" },
-            { id: "price_asc", label: "Price ↑" },
-            { id: "price_desc", label: "Price ↓" },
-            { id: "rating", label: "Rating" }
-          ].map(sort => (
-            <button
-              key={sort.id}
-              onClick={() => setSortBy(sort.id)}
-              style={{
-                padding: "6px 12px",
-                borderRadius: 20,
-                fontSize: 13,
-                fontWeight: 600,
-                whiteSpace: "nowrap",
-                border: sortBy === sort.id ? "1px solid #5B4CDB" : "1px solid #cbd5e1",
-                background: sortBy === sort.id ? "#EEF0FF" : "#fff",
-                color: sortBy === sort.id ? "#5B4CDB" : "#334155",
-                cursor: "pointer",
-                flexShrink: 0
-              }}
-            >
-              {sort.label}
-            </button>
-          ))}
-        </div>
 
-        {/* Brand Filter Chips */}
-        <div style={{ display: "flex", gap: 8, padding: "8px 20px", overflowX: "auto", scrollbarWidth: "none", background: "#f8fafc" }}>
-          {["All", "Casio", "Texas Instruments", "Nataraj", "Staedtler"].map(brand => (
-            <button
-              key={brand}
-              style={{
-                padding: "4px 12px",
-                borderRadius: 16,
-                fontSize: 12,
-                fontWeight: 600,
-                whiteSpace: "nowrap",
-                border: "1px solid #e2e8f0",
-                background: brand === "All" ? "#1e293b" : "#fff",
-                color: brand === "All" ? "#fff" : "#64748b",
-                cursor: "pointer",
-                flexShrink: 0
-              }}
-            >
-              {brand}
-            </button>
-          ))}
+          {/* Branch Selection Button */}
+          <button 
+            onClick={() => setShowFilterSheet(true)}
+            style={{ 
+              flex: 1, 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "center", 
+              gap: 6, 
+              padding: "8px 12px", 
+              borderRadius: 10, 
+              background: "#f8fafc", 
+              border: "1px solid #e2e8f0", 
+              fontSize: 12, 
+              color: "#334155", 
+              fontWeight: 500,
+              cursor: "pointer"
+            }}
+          >
+            <span>Branch:</span>
+            <span style={{ fontWeight: 700, color: "#5B4CDB" }}>
+              {activeBranch}
+            </span>
+          </button>
         </div>
       </div>
 
       {/* Product Grid */}
-      <div style={{ padding: "16px", flex: 1 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, justifyItems: "center" }}>
-          {error ? (
-            <div style={{ gridColumn: "span 2", textAlign: "center", padding: "40px 0", color: "#64748b" }}>
-              {error}
-            </div>
-          ) : (isLoadingState || isItemsLoading) ? (
-            <>
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-            </>
-          ) : categoryItems.length === 0 ? (
-            <div style={{ gridColumn: "span 2", textAlign: "center", padding: "40px 0", color: "#64748b" }}>
-              No items found in this category.
-            </div>
-          ) : (
-            categoryItems.map(item => (
-              <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
-                <ProductCard
-                  id={item.id}
-                  itemName={item.itemName}
-                  pricePerHour={item.pricePerHour}
-                  category={item.categoryId || item.category || "others"}
-                  branch={item.department || item.branch || "CSE"}
-                  distance={item.block || item.distance || "Campus"}
-                  sellerUsername={item.sellerUsername || "member"}
-                  rating={item.rating || 4.5}
-                  variant="grid"
-                  imageUrl={item.photoUrl || item.imageUrl}
-                />
-              </div>
-            ))
-          )}
-
-          {/* Load More Button */}
-          {hasMore && !isItemsLoading && !isLoadingState && categoryItems.length > 0 && (
-            <div style={{ gridColumn: "span 2", width: "100%", display: "flex", justifyContent: "center", marginTop: "16px", marginBottom: "16px" }}>
-              <button
-                onClick={loadMore}
-                disabled={isLoadingMore}
-                style={{
-                  padding: "10px 24px",
-                  borderRadius: "12px",
-                  background: "#5B4CDB",
-                  color: "#fff",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  border: "none",
-                  cursor: "pointer",
-                  boxShadow: "0 4px 12px rgba(91, 76, 219, 0.2)",
-                  transition: "opacity 0.2s, transform 0.1s",
-                  opacity: isLoadingMore ? 0.7 : 1,
-                  fontFamily: "'DM Sans', sans-serif"
-                }}
-              >
-                {isLoadingMore ? "Loading more..." : "Load More"}
-              </button>
-            </div>
-          )}
-          
-          {/* Fill empty space if fewer than 4 items */}
-          {!(isLoadingState || isItemsLoading) && categoryItems.length < 4 && (
-            <div
+      <div style={{ padding: "12px 12px 100px", flex: 1 }}>
+        {isLoading ? (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+            {[1, 2, 3, 4, 5, 6].map(i => <SkeletonCard key={i} variant="grid" />)}
+          </div>
+        ) : sorted.length === 0 ? (
+          // Empty state
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 300, textAlign: "center", padding: "40px 20px" }}>
+            <div style={{ fontSize: 64, marginBottom: 16 }}>📦</div>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: "#0f172a", marginBottom: 8, fontFamily: "'Outfit', sans-serif" }}>
+              No {displayTitle}s Available
+            </h2>
+            <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, marginBottom: 20, maxWidth: 260 }}>
+              Be the first student to list a {displayTitle.toLowerCase()} and start earning!
+            </p>
+            <button
+              onClick={() => router.push(`/rentals/new?category=${slug}`)}
               style={{
-                width: 148,
-                height: 236,
-                borderRadius: 14,
-                border: "2px dashed #cbd5e1",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "#f8fafc",
-                padding: 16,
-                textAlign: "center"
+                background: "linear-gradient(135deg, #5B4CDB, #7C3AED)",
+                color: "#fff", border: "none",
+                borderRadius: 14, padding: "12px 28px",
+                fontSize: 14, fontWeight: 800, cursor: "pointer",
+                boxShadow: "0 6px 20px rgba(91,76,219,0.35)",
               }}
             >
-              <div style={{ fontSize: 24, marginBottom: 8 }}>✨</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 4 }}>Be the first!</div>
-              <div style={{ fontSize: 11, color: "#64748b", marginBottom: 12 }}>List a {displayTitle} now</div>
-              <button onClick={() => router.push(`/rentals/new?category=${slug}`)} style={{ padding: "6px 12px", background: "#5B4CDB", color: "#fff", fontSize: 11, fontWeight: 700, borderRadius: 6, border: "none", cursor: "pointer" }}>
-                + List Item
+              + List Yours
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+            {sorted.map((item: any) => (
+              <ProductCard
+                key={item.id}
+                id={item.id}
+                itemName={item.itemName}
+                pricePerHour={item.pricePerHour}
+                category={item.categoryId || item.category || "others"}
+                branch={item.department || item.branch || "CSE"}
+                distance={item.block || item.distance || "0.5 km"}
+                sellerUsername={item.sellerUsername || "member"}
+                rating={item.rating || 4.5}
+                imageUrl={item.photoUrl || item.imageUrl}
+                variant="grid"
+              />
+            ))}
+
+            {/* Infinite scroll loading skeletons */}
+            {isLoadingMore && (
+              <>
+                {[1, 2, 3, 4, 5, 6].map(i => <SkeletonCard key={`more-${i}`} variant="grid" />)}
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Sentinel for IntersectionObserver */}
+        {!isLoading && hasMore && (
+          <div ref={setSentinel} style={{ height: 40, marginTop: 8 }} />
+        )}
+      </div>
+
+
+
+      {/* Filter Bottom Sheet */}
+      {showFilterSheet && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end" }}>
+          <div
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+            onClick={() => setShowFilterSheet(false)}
+          />
+          <div style={{
+            position: "relative", width: "100%", background: "#fff",
+            borderRadius: "24px 24px 0 0", padding: "20px 20px 40px", zIndex: 10,
+            animation: "slideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0 }}>Filters</h3>
+              <button onClick={() => setShowFilterSheet(false)} style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "6px 8px", cursor: "pointer" }}>
+                <X size={18} />
               </button>
             </div>
-          )}
+
+            <p style={{ fontSize: 11, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Sort By</p>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+              {SORT_OPTIONS.map(opt => (
+                <button key={opt.id} onClick={() => { setSortBy(opt.id); setShowFilterSheet(false); }}
+                  style={{ padding: "8px 16px", borderRadius: 20, fontSize: 13, fontWeight: 700,
+                    border: sortBy === opt.id ? "1.5px solid #5B4CDB" : "1.5px solid #e2e8f0",
+                    background: sortBy === opt.id ? "#EEF0FF" : "#fff",
+                    color: sortBy === opt.id ? "#5B4CDB" : "#475569", cursor: "pointer" }}
+                >{opt.label}</button>
+              ))}
+            </div>
+
+            <p style={{ fontSize: 11, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Branch</p>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {BRANCH_CHIPS.map(branch => (
+                <button key={branch} onClick={() => { setActiveBranch(branch); setShowFilterSheet(false); }}
+                  style={{ padding: "8px 16px", borderRadius: 20, fontSize: 13, fontWeight: 700,
+                    border: activeBranch === branch ? "1.5px solid #5B4CDB" : "1.5px solid #e2e8f0",
+                    background: activeBranch === branch ? "#EEF0FF" : "#fff",
+                    color: activeBranch === branch ? "#5B4CDB" : "#475569", cursor: "pointer" }}
+                >{branch}</button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      <style>{`
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }

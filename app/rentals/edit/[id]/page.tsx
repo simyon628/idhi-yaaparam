@@ -141,16 +141,10 @@ export default function EditListingPage() {
 
             let photoUrl = existingPhotoUrl;
 
-            // If user picked a new photo, convert to base64 instantly
+            // If user picked a new photo, upload to Cloudinary instantly
             if (newImage) {
-                const toBase64 = (f: File): Promise<string> =>
-                    new Promise((res, rej) => {
-                        const r = new FileReader();
-                        r.onloadend = () => res(r.result as string);
-                        r.onerror = rej;
-                        r.readAsDataURL(f);
-                    });
-                photoUrl = await toBase64(newImage);
+                const { uploadProductPhoto } = await import("@/lib/cloudinary");
+                photoUrl = await uploadProductPhoto(newImage, id);
             }
 
             await updateDoc(doc(db!, "rentals", id), {
@@ -161,26 +155,12 @@ export default function EditListingPage() {
                 condition,
                 listingType,
                 categoryId: selectedCat?.id ?? "others",
-                ...(photoUrl ? { photoUrl } : {}),
+                ...(photoUrl ? { photoUrl, thumbnailUrl: photoUrl } : {}),
                 updatedAt: serverTimestamp(),
             });
 
             toast.success("Listing updated successfully");
             router.push("/profile");
-
-            // Background: upgrade new photo to Storage URL
-            if (newImage && storage) {
-                (async () => {
-                    try {
-                        const imageRef = ref(storage!, `rentals/${id}_${currentUserId}.jpg`);
-                        const uploaded = await uploadBytes(imageRef, newImage);
-                        const storageUrl = await getDownloadURL(uploaded.ref);
-                        await updateDoc(doc(db!, "rentals", id), { photoUrl: storageUrl });
-                    } catch (e) {
-                        console.warn("Storage upgrade failed (item still shows base64 photo):", e);
-                    }
-                })();
-            }
 
         } catch (err: any) {
             console.error("Update error:", err);

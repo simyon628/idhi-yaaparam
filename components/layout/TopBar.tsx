@@ -9,7 +9,7 @@ import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 import { X, ChevronDown } from "lucide-react";
 import SearchTrigger from "@/components/search/SearchTrigger";
 
-export function TopBar() {
+export function TopBar({ hideSearch = false, lightMode = false, isProfile = false }: { hideSearch?: boolean; lightMode?: boolean; isProfile?: boolean }) {
     const { selectedCollege, isReady } = useCollege();
     const router = useRouter();
     const [unreadCount, setUnreadCount] = useState(0);
@@ -39,18 +39,25 @@ export function TopBar() {
             ? selectedCollege.name.split(" ").map((w: string) => w[0]).join("").toUpperCase()
             : "Campus");
 
+    const headerBg = lightMode ? "#fff" : "linear-gradient(180deg,#13131F 0%,#16162A 100%)";
+    const textColor = lightMode ? "#13131F" : "#fff";
+    const subtextColor = lightMode ? "rgba(19,19,31,0.5)" : "rgba(255,255,255,0.38)";
+    const buttonBg = lightMode ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)";
+    const buttonBorder = lightMode ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(255,255,255,0.12)";
+
     return (
         <>
             {/* ── Top Bar ── */}
             <div
                 style={{
-                    background: "linear-gradient(180deg,#13131F 0%,#16162A 100%)",
-                    color: "#fff",
+                    background: headerBg,
+                    color: textColor,
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
                     padding: "14px 20px 10px",
                     fontFamily: "'DM Sans', sans-serif",
+                    borderBottom: lightMode ? "1px solid rgba(0,0,0,0.04)" : "none"
                 }}
             >
                 {/* Logo */}
@@ -74,10 +81,10 @@ export function TopBar() {
                         🚀
                     </div>
                     <div>
-                        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: "#fff", lineHeight: 1 }}>
+                        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: textColor, lineHeight: 1 }}>
                             Idhi Yaaparam
                         </div>
-                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>
+                        <div style={{ fontSize: 10, color: subtextColor, letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>
                             Student Platform
                         </div>
                     </div>
@@ -91,8 +98,8 @@ export function TopBar() {
                         style={{
                             width: 36,
                             height: 36,
-                            background: "rgba(255,255,255,0.08)",
-                            border: "1px solid rgba(255,255,255,0.12)",
+                            background: buttonBg,
+                            border: buttonBorder,
                             borderRadius: 11,
                             display: "flex",
                             alignItems: "center",
@@ -113,49 +120,53 @@ export function TopBar() {
                                     height: 7,
                                     background: "#FF5F5F",
                                     borderRadius: "50%",
-                                    border: "1.5px solid #16162A",
+                                    border: lightMode ? "1.5px solid #fff" : "1.5px solid #16162A",
                                 }}
                             />
                         )}
                     </button>
 
                     {/* College chip */}
-                    <button
-                        onClick={() => setShowCollegeModal(true)}
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            background: "rgba(255,255,255,0.07)",
-                            border: "1px solid rgba(255,255,255,0.12)",
-                            borderRadius: 20,
-                            padding: "6px 11px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <span
-                            className="iy-pulse-dot"
+                    {!isProfile && (
+                        <button
+                            onClick={() => setShowCollegeModal(true)}
                             style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: "50%",
-                                background: "#00C48C",
-                                flexShrink: 0,
-                                display: "inline-block",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                                background: buttonBg,
+                                border: buttonBorder,
+                                borderRadius: 20,
+                                padding: "6px 11px",
+                                cursor: "pointer",
                             }}
-                        />
-                        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>
-                            {collegeName}
-                        </span>
-                        <ChevronDown style={{ width: 12, height: 12, color: "rgba(255,255,255,0.4)" }} />
-                    </button>
+                        >
+                            <span
+                                className="iy-pulse-dot"
+                                style={{
+                                    width: 8,
+                                    height: 8,
+                                    borderRadius: "50%",
+                                    background: "#00C48C",
+                                    flexShrink: 0,
+                                    display: "inline-block",
+                                }}
+                            />
+                            <span style={{ fontSize: 11, color: lightMode ? "#13131F" : "rgba(255,255,255,0.72)", fontWeight: 600 }}>
+                                {collegeName}
+                            </span>
+                            <ChevronDown style={{ width: 12, height: 12, color: lightMode ? "rgba(19,19,31,0.4)" : "rgba(255,255,255,0.4)" }} />
+                        </button>
+                    )}
                 </div>
             </div>
 
             {/* ── Search Bar Row ── */}
-            <div className="px-5 pb-4" style={{ background: "linear-gradient(180deg,#16162A 0%,#13131F 100%)" }}>
-                <SearchTrigger />
-            </div>
+            {!hideSearch && (
+                <div className="px-5 pb-4" style={{ background: lightMode ? "#fff" : "linear-gradient(180deg,#16162A 0%,#13131F 100%)", borderBottom: lightMode ? "1px solid rgba(0,0,0,0.04)" : "none" }}>
+                    <SearchTrigger />
+                </div>
+            )}
 
             {/* College Selection Modal */}
             {showCollegeModal && (

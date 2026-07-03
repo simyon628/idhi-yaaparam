@@ -1,71 +1,87 @@
-import { 
-  collection, query, where, 
+import {
+  collection, query, where,
   getDocs, limit, orderBy,
-  Firestore 
+  Firestore
 } from 'firebase/firestore'
 
 interface CacheEntry {
   data: any[]
   timestamp: number
+  version: number
 }
 
-const cache: Record<string, CacheEntry> = {}
-const TTL = 5 * 60 * 1000 // 5 minutes
+// Tiered TTL: different for first load vs refresh
+const TTL_FRESH = 2 * 60 * 1000   // 2 minutes — ultra-fast first load
+const TTL_STALE = 10 * 60 * 1000  // 10 minutes — stale-while-revalidate
 
+const cache: Record<string, CacheEntry> = {}
+let globalVersion = 0
+
+/** Return cached data if fresh. Returns stale data + triggers background refresh if stale-but-valid. */
 export const getCachedRentals = async (
   db: Firestore,
   collegeId: string
 ): Promise<any[]> => {
   if (!db || !collegeId) return []
-  
+
   const key = `rentals_${collegeId}`
   const now = Date.now()
-  
-  // Return cached data instantly if fresh
-  if (cache[key] && now - cache[key].timestamp < TTL) {
-    return cache[key].data // <50ms - from memory!
+  const entry = cache[key]
+
+  // Fresh hit — instant return
+  if (entry && now - entry.timestamp < TTL_FRESH) {
+    return entry.data
   }
-  
-  // Fetch from Firebase only when cache expired
-  const snap = await getDocs(query(
-    collection(db, 'rentals'),
-    where('collegeId', '==', collegeId),
-    where('status', '==', 'available'),
-    orderBy('createdAt', 'desc'),
-    limit(100)
-  ))
-  
-  const data = snap.docs.map(d => ({ 
-    id: d.id, ...d.data() 
-  }))
-  
-  // Store in memory cache
-  cache[key] = { data, timestamp: now }
-  return data
+
+  // Stale-while-revalidate — return stale, refresh in background
+  if (entry && now - entry.timestamp < TTL_STALE) {
+    _fetchAndCache(db, collegeId).catch(() => null) // background refresh
+    return entry.data
+  }
+
+  // Cache miss — fetch synchronously
+  return _fetchAndCache(db, collegeId)
 }
 
-// Access cache instantaneously (synchronously)
+async function _fetchAndCache(db: Firestore, collegeId: string): Promise<any[]> {
+  try {
+    const snap = await getDocs(query(
+      collection(db, 'rentals'),
+      where('collegeId', '==', collegeId),
+      where('status', '==', 'available'),
+      orderBy('createdAt', 'desc'),
+      limit(120) // fetch 120 items max for the grid
+    ))
+    const data = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    cache[`rentals_${collegeId}`] = { data, timestamp: Date.now(), version: ++globalVersion }
+    return data
+  } catch {
+    return cache[`rentals_${collegeId}`]?.data || []
+  }
+}
+
+/** Synchronous instant read — returns null if no cache yet */
 export const getCachedRentalsSync = (collegeId: string): any[] | null => {
   if (!collegeId) return null
-  const key = `rentals_${collegeId}`
-  const now = Date.now()
-  if (cache[key] && now - cache[key].timestamp < TTL) {
-    return cache[key].data
-  }
+  const entry = cache[`rentals_${collegeId}`]
+  if (!entry) return null
+  // Even stale cache is better than nothing
+  if (Date.now() - entry.timestamp < TTL_STALE) return entry.data
   return null
 }
 
-// Call this on home page load to warm cache
-export const prefetchRentals = (
-  db: Firestore, 
-  collegeId: string
-) => {
-  getCachedRentals(db, collegeId) // fire and forget
+/** Warm cache on home page load */
+export const prefetchRentals = (db: Firestore, collegeId: string) => {
+  getCachedRentals(db, collegeId).catch(() => null)
 }
 
-// Update the cache entry manually (synchronously)
+/** Update cache after real-time onSnapshot update */
 export const updateCachedRentalsSync = (collegeId: string, data: any[]) => {
   if (!collegeId) return
-  const key = `rentals_${collegeId}`
-  cache[key] = { data, timestamp: Date.now() }
+  cache[`rentals_${collegeId}`] = { data, timestamp: Date.now(), version: ++globalVersion }
+}
+
+/** Invalidate cache for a college (after user lists new item) */
+export const invalidateCache = (collegeId: string) => {
+  delete cache[`rentals_${collegeId}`]
 }

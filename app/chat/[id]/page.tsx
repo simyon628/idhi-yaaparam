@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { db, auth, storage } from "@/lib/firebase";
+import { db, auth } from "@/lib/firebase";
 import { doc, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import { ChevronLeft, Send, Loader2, Info, Image as ImageIcon, QrCode, Camera } from "lucide-react";
 import { Listing } from "@/lib/types";
@@ -107,16 +106,12 @@ export default function ChatPage() {
     };
 
     const handleImageUpload = async (file: File) => {
-        if (!file || !userId || !db || !id || !storage) return;
+        if (!file || !userId || !db || !id) return;
         setImgUploading(true);
         try {
-            const storageRef = ref(storage, `chat/${id}/${Date.now()}_${file.name}`);
-            const snap = await new Promise<string>((resolve, reject) => {
-                const task = uploadBytesResumable(storageRef, file);
-                task.on("state_changed", null, reject, async () => {
-                    resolve(await getDownloadURL(task.snapshot.ref));
-                });
-            });
+            const { uploadChatImage } = await import("@/lib/cloudinary");
+            const snap = await uploadChatImage(file, id as string);
+            
             await addDoc(collection(db as any, `rentals/${id}/messages`), {
                 imageUrl: snap,
                 senderId: userId,

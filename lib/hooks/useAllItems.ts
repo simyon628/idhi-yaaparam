@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react'
 import { db } from '@/lib/firebase'
-import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import { collection, query, where, orderBy, limit, onSnapshot } from 'firebase/firestore'
 import { Listing } from '@/lib/types'
 import { getCachedRentalsSync, updateCachedRentalsSync } from '@/lib/cache/itemsCache'
 
@@ -46,7 +46,9 @@ export function useAllItems(collegeId: string | undefined, categoryId?: string, 
     const q = query(
       collection(db as any, 'rentals'),
       where('collegeId', '==', collegeId),
-      where('status', '==', 'available')
+      where('status', '==', 'available'),
+      orderBy('createdAt', 'desc'),
+      limit(30)
     )
 
     const unsub = onSnapshot(

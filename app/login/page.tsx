@@ -11,6 +11,7 @@ import { verifyRollNumber, isRollNumberInText } from "@/lib/ocr/verifyIdCard";
 import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS, COLLEGES } from "@/lib/constants";
 import { compressImageFile } from "@/lib/image/compressImage";
+import { uploadIdCard } from "@/lib/cloudinary";
 
 function LoginContent() {
     const { selectedCollege, isReady } = useCollege();
@@ -269,14 +270,15 @@ function LoginContent() {
             // 3. Upload ID photo & Attempt Background OCR Match (non-blocking)
             (async () => {
                 try {
-                    const { getStorage, ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-                    const storage = getStorage();
-                    const photoRef = ref(storage, `id_cards/${user.uid}.jpg`);
-                    await uploadBytes(photoRef, idImage);
+                    const idCardUrl = await uploadIdCard(idImage, user.uid);
                     
-                    // Mark as uploaded
+                    // Mark as uploaded and save URL
                     const { updateDoc: updDoc, doc: fDoc } = await import("firebase/firestore");
-                    await updDoc(fDoc(db!, "users", user.uid), { idPhotoUploading: false, idPhotoUploaded: true });
+                    await updDoc(fDoc(db!, "users", user.uid), { 
+                        idPhotoUrl: idCardUrl,
+                        idPhotoUploading: false, 
+                        idPhotoUploaded: true 
+                    });
 
                     // 4. SMART MATCH: Try to find roll number in the image automatically
                     // This is the background automation requested to save admin time

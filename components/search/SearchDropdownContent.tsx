@@ -3,12 +3,26 @@
 import React, { useEffect, useRef } from "react";
 import { useSearchStore } from "@/stores/searchStore";
 import RecentList from "./RecentList";
-import TrendingList from "./TrendingList";
 import SuggestionList from "./SuggestionList";
 import SearchSkeleton from "./SearchSkeleton";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, User, List, Settings, MapPin, Grid } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+const QUICK_SUGGESTIONS = [
+  { icon: User, label: "Profile", href: "/profile" },
+  { icon: List, label: "My Listings", href: "/profile" },
+  { icon: Settings, label: "Settings", href: "/profile" },
+  { icon: MapPin, label: "Near You", href: "/near-you" },
+];
+
+const QUICK_CATEGORIES = [
+  { label: "Rentals", href: "/rentals" },
+  { label: "Buy & Sell", href: "/rentals" },
+  { label: "Writing Services", href: "/writing" },
+];
 
 export default function SearchDropdownContent() {
+  const router = useRouter();
   const {
     query,
     status,
@@ -16,11 +30,12 @@ export default function SearchDropdownContent() {
     activeIndex,
     close,
     isOpen,
+    executeSearch,
   } = useSearchStore();
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // ── Close on click outside ─────────────────────────────────────────────────
+  // Close on click outside
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: MouseEvent) => {
@@ -28,7 +43,6 @@ export default function SearchDropdownContent() {
         close();
       }
     };
-    // Delay to avoid closing on the same click that opened
     const t = setTimeout(() => document.addEventListener("mousedown", handler), 50);
     return () => {
       clearTimeout(t);
@@ -36,7 +50,7 @@ export default function SearchDropdownContent() {
     };
   }, [isOpen, close]);
 
-  // ── Close on Escape ────────────────────────────────────────────────────────
+  // Close on Escape
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: KeyboardEvent) => {
@@ -46,35 +60,54 @@ export default function SearchDropdownContent() {
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, close]);
 
-  // ── Close on scroll (Zepto pattern) ──────────────────────────────────────
-  useEffect(() => {
-    if (!isOpen) return;
-    let ticking = false;
-    const handler = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => {
-          close();
-          ticking = false;
-        });
-      }
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, [isOpen, close]);
-
-  // ── State machine render ──────────────────────────────────────────────────
   const hasQuery = query.trim().length > 0;
 
   return (
-    <div ref={contentRef}>
-      {/* Empty Query State: Recent + Trending */}
+    <div ref={contentRef} className="bg-white rounded-b-2xl shadow-xl border border-gray-100 overflow-hidden">
+      {/* Empty Query State: Command Center */}
       {!hasQuery && (
-        <>
+        <div className="py-2">
           <RecentList />
-          <div style={{ height: 1, background: "#f1f5f9", margin: "0 16px" }} />
-          <TrendingList />
-        </>
+          <div className="h-px bg-gray-100 mx-4 my-2" />
+          
+          {/* Quick Suggestions */}
+          <div className="px-4 pb-2">
+            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Suggestions</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {QUICK_SUGGESTIONS.map((sug) => (
+                <button
+                  key={sug.label}
+                  onClick={() => { close(); router.push(sug.href); }}
+                  className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 transition-colors text-left"
+                >
+                  <sug.icon className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-semibold">{sug.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="h-px bg-gray-100 mx-4 my-2" />
+
+          {/* Quick Categories */}
+          <div className="px-4 pb-2">
+            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Categories</h3>
+            <div className="flex flex-col gap-1">
+              {QUICK_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.label}
+                  onClick={() => { close(); router.push(cat.href); }}
+                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 text-gray-700 transition-colors text-left w-full"
+                >
+                  <div className="bg-indigo-50 p-1.5 rounded-lg text-indigo-600">
+                    <Grid className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-semibold flex-1">{cat.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Loading: Skeleton */}
@@ -82,19 +115,8 @@ export default function SearchDropdownContent() {
 
       {/* Success with results */}
       {hasQuery && status === "success" && suggestions.length > 0 && (
-        <>
-          {/* Results count hint */}
-          <div
-            style={{
-              padding: "8px 16px 4px",
-              fontSize: 10,
-              fontWeight: 700,
-              color: "#94a3b8",
-              letterSpacing: "1.2px",
-              textTransform: "uppercase",
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
+        <div className="py-2">
+          <div className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
             {suggestions.length} result{suggestions.length !== 1 ? "s" : ""}
           </div>
           <SuggestionList
@@ -102,30 +124,17 @@ export default function SearchDropdownContent() {
             activeIndex={activeIndex}
             query={query}
           />
-        </>
+        </div>
       )}
 
       {/* Success with no results */}
       {hasQuery && status === "success" && suggestions.length === 0 && (
-        <div
-          style={{
-            padding: "32px 24px",
-            textAlign: "center",
-            fontFamily: "'DM Sans', sans-serif",
-          }}
-        >
-          <div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>
-          <div
-            style={{
-              fontSize: 15,
-              fontWeight: 700,
-              color: "#1e293b",
-              marginBottom: 6,
-            }}
-          >
+        <div className="py-12 text-center px-6">
+          <div className="text-4xl mb-3">🔍</div>
+          <div className="text-base font-bold text-gray-900 mb-1">
             No results for &ldquo;{query}&rdquo;
           </div>
-          <div style={{ fontSize: 12, color: "#94a3b8", lineHeight: 1.5 }}>
+          <div className="text-sm text-gray-500">
             Try searching for Calculator, Lab Coat, or Drafter
           </div>
         </div>
@@ -133,24 +142,11 @@ export default function SearchDropdownContent() {
 
       {/* Error state */}
       {status === "error" && (
-        <div
-          style={{
-            padding: "24px 16px",
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            color: "#ef4444",
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 13,
-          }}
-        >
-          <AlertCircle size={16} />
+        <div className="p-4 flex items-center gap-2 text-red-500 text-sm">
+          <AlertCircle className="w-4 h-4" />
           Something went wrong. Please try again.
         </div>
       )}
-
-      {/* Bottom padding for mobile keyboard */}
-      <div style={{ height: 8 }} />
     </div>
   );
 }

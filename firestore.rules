@@ -13,9 +13,25 @@ service cloud.firestore {
       return isAuth() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
-    function isFromSVEC() {
+
+    // Any verified student — works for ALL colleges, not just SVEC
+    // A student is verified when isVerified == true (set after OCR ID card check)
+    function isVerifiedUser() {
       return isAuth() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.college == 'SVEC';
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isBlocked != true;
+    }
+
+    // Scoped to same college — prevents cross-college actions
+    // rentalCollegeId is the collegeId stored on the rental document
+    function isSameCollege(rentalCollegeId) {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.college == rentalCollegeId;
+    }
+
+    // Keep the old SVEC alias for backwards compatibility during transition
+    function isFromSVEC() {
+      return isVerifiedUser();
     }
 
     // ─── colleges ──────────────────────────────────────────────────────────

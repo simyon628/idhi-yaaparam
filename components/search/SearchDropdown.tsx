@@ -1,6 +1,4 @@
-"use client";
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useSearchStore } from "@/stores/searchStore";
 import SearchDropdownContent from "./SearchDropdownContent";
@@ -8,6 +6,39 @@ import SearchDropdownContent from "./SearchDropdownContent";
 // Portal mounts to document.body — escapes all parent overflow/z-index stacking
 export default function SearchDropdown() {
   const { isOpen } = useSearchStore();
+  const [topOffset, setTopOffset] = useState(120);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const updatePosition = () => {
+      const activeEl = document.activeElement;
+      const isSearchInput = activeEl && (activeEl.tagName === "INPUT" || activeEl.getAttribute("type") === "search" || activeEl.getAttribute("inputmode") === "search");
+      
+      const searchInput = isSearchInput 
+        ? activeEl 
+        : document.querySelector('input[type="search"]') || 
+          document.querySelector('input[type="text"][placeholder*="Search"]') ||
+          document.querySelector('input[placeholder*="Search"]');
+
+      if (searchInput) {
+        const formEl = searchInput.closest("form") || searchInput;
+        const rect = formEl.getBoundingClientRect();
+        setTopOffset(rect.bottom);
+      } else {
+        setTopOffset(120);
+      }
+    };
+
+    updatePosition();
+    const frame = requestAnimationFrame(updatePosition);
+    
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [isOpen]);
 
   if (!isOpen || typeof document === "undefined") return null;
 
@@ -15,8 +46,7 @@ export default function SearchDropdown() {
     <div
       style={{
         position: "fixed",
-        // Sits just below the header — TopBar is ~120px (dark bar + search row)
-        top: 120,
+        top: topOffset,
         left: 0,
         right: 0,
         bottom: 0,

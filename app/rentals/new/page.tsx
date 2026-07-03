@@ -13,7 +13,7 @@ import { useCollege } from "@/contexts/CollegeContext";
 import { DEPARTMENTS } from "@/lib/constants";
 
 import { CATEGORIES as GRID_CATEGORIES } from "@/components/ui/CategoryGrid";
-import { compressImageFile } from "@/lib/image/compressImage";
+import { compressImageFile, generateImageVariants, blobToDataUrl } from "@/lib/image/compressImage";
 import { useListingMode } from "@/lib/hooks/useListingMode";
 
 const CATEGORIES = GRID_CATEGORIES.map(c => c.name);
@@ -145,22 +145,45 @@ function NewRentalForm() {
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            // Compute category ID for validation
             const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
             const catId = selectedCat?.id || "";
-
             if (!validateImage(file, catId)) return;
 
             try {
+                // Show preview immediately from original file for instant feedback
                 const previewReader = new FileReader();
                 previewReader.onloadend = () => setPreview(previewReader.result as string);
                 previewReader.readAsDataURL(file);
-                const compressedBlob = await compressImageFile(file, { maxWidth: 1280, quality: 0.7 });
-                const compressedFile = new File([compressedBlob], `compressed_${file.name}.jpg`, { type: "image/jpeg" });
+
+                // Generate 3 optimized sizes simultaneously
+                const variants = await generateImageVariants(file);
+                
+                // For Firestore storage we use the card-size (600px) as primary —
+                // thumbnail (300px) is what ProductCard will display,
+                // detail (1200px) is used by the detail page
+                const cardDataUrl = await blobToDataUrl(variants.card);
+                const thumbnailDataUrl = await blobToDataUrl(variants.thumbnail);
+                
+                // Store the card-size file object for form submission
+                const compressedFile = new File([variants.card], `card_${file.name}.jpg`, { type: "image/jpeg" });
                 setImage(compressedFile);
+                
+                // Store thumbnail URL separately for the listing card display
+                (window as any).__thumbnailUrl = thumbnailDataUrl;
+                
+                const savings = Math.round((1 - variants.thumbnail.size / file.size) * 100);
+                toast.success(`Photo compressed! Saved ${savings}% bandwidth`);
             } catch (error) {
                 console.error("Compression failed", error);
-                toast.error("Failed to process image.");
+                // Fallback to basic compression
+                try {
+                    const fallbackBlob = await compressImageFile(file, { maxWidth: 800, quality: 0.75 });
+                    const fallbackFile = new File([fallbackBlob], `compressed_${file.name}.jpg`, { type: "image/jpeg" });
+                    setImage(fallbackFile);
+                    toast.success("Photo added!");
+                } catch {
+                    toast.error("Failed to process image.");
+                }
             }
         }
     };
@@ -215,15 +238,6 @@ function NewRentalForm() {
                 return;
             }
 
-            // ⚡ Step 1: Convert compressed image to Base64 data URL (~50-100ms, no network)
-            const toBase64 = (file: File): Promise<string> => new Promise((res, rej) => {
-                const reader = new FileReader();
-                reader.onloadend = () => res(reader.result as string);
-                reader.onerror = rej;
-                reader.readAsDataURL(file);
-            });
-            const photoDataUrl = await toBase64(image);
-
             const iconMap: Record<string, string> = { "Calculator": "🧮", "Drafter": "📐", "Geometry Set": "📏", "Books/Notes": "📓", "Lab Coat": "🥼", "Electronic Gadgets": "💻", "Others": "📦" };
             const selectedCat = GRID_CATEGORIES.find(c => c.name === category);
             const catId = selectedCat?.id || "others";
@@ -233,8 +247,8 @@ function NewRentalForm() {
             const expiresAt = new Date();
             expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
-            // ⚡ Save to Firestore — onSnapshot listener auto-updates the category page in real-time
-            await addDoc(collection(db, "rentals"), {
+            // ⚡ Save to Firestore FIRST without photoUrl
+            const docRef = await addDoc(collection(db, "rentals"), {
                 ownerId: userId,
                 itemName: name,
                 pricePerHour: parseInt(price),
@@ -245,7 +259,8 @@ function NewRentalForm() {
                 categoryId: catId,
                 listingType: activeType,
                 icon: iconMap[category] || "📦",
-                photoUrl: photoDataUrl,
+                photoUrl: "", // Will update next
+                thumbnailUrl: "", 
                 extraPhotoUrls: [],
                 condition,
                 status: "available",
@@ -254,18 +269,24 @@ function NewRentalForm() {
                 expiresAt: expiresAt.toISOString(),
             });
 
+            // ⚡ Step 2: Upload to Cloudinary using the new doc ID
+            const { uploadProductPhoto } = await import("@/lib/cloudinary");
+            const photoUrl = await uploadProductPhoto(image, docRef.id);
+
+            // Update document with Cloudinary URL
+            const { updateDoc } = await import("firebase/firestore");
+            await updateDoc(docRef, { 
+                photoUrl: photoUrl,
+                thumbnailUrl: photoUrl // Cloudinary URL handles scaling itself
+            });
+
             // onSnapshot in useAllItems auto-pushes the new item to all listeners — no manual cache bust needed.
             toast.success("🎉 Item listed! Visible now.", { duration: 4000 });
             setLoading(false);
             router.push("/rentals");
 
 
-            // 🔄 Step 4: Background Storage upload — DISABLED
-            // Firebase Storage CORS is not configured for Vercel domain.
-            // Items display perfectly using the base64 image saved in Step 2.
-            // To re-enable: configure CORS in Google Cloud Console for the storage bucket,
-            // then uncomment this block.
-            // if (storage) { ... }
+
 
         } catch (error: any) {
             console.error("Publish error:", error);

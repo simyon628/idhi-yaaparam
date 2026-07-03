@@ -7,10 +7,11 @@ export interface User {
     rollNumber: string;
     college: string;
     department?: string;
+    year?: 1 | 2 | 3 | 4;          // Academic year — used for college → year → dept queries
     isVerified: boolean;
     isBlocked: boolean;
     strikeCount: number;
-    idPhotoUrl?: string;
+    idPhotoUrl?: string;            // Cloudinary URL (e.g. https://res.cloudinary.com/...)
     createdAt: Timestamp | Date;
     isAdmin?: boolean;
 
@@ -23,6 +24,15 @@ export interface User {
     // Social & Trust
     overallRating?: number;
     reviewCount?: number;
+}
+
+// ─── Student filter — for getStudents() query ─────────────────────────────────
+export interface StudentFilter {
+    college?: string;              // e.g. "JNTU Hyderabad" or college document ID
+    year?: 1 | 2 | 3 | 4;
+    department?: string;           // e.g. "CSE", "ECE"
+    isVerified?: boolean;          // filter by verification status
+    limit?: number;                // default 50
 }
 
 export interface College {

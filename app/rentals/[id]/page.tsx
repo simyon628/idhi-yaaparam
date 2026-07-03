@@ -6,7 +6,12 @@ export const dynamic = "force-dynamic";
 import { db, auth } from "@/lib/firebase";
 import { doc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "sonner";
-import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock, Sparkles, ThumbsUp, ShoppingBag } from "lucide-react";
+import { Camera, ChevronLeft, Loader2, MessageSquare, CheckCircle2, ShieldCheck, Star, IndianRupee, MapPin, Navigation, Clock, Calendar, AlertTriangle, Send, X, Package, CreditCard, Bookmark, Share2, AlarmClock, Sparkles, ThumbsUp, ShoppingBag, ChevronRight } from "lucide-react";
+import { Drawer } from "vaul";
+import { DayPicker, DateRange } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+import Picker from "react-mobile-picker";
+import { addDays, format, differenceInMinutes, startOfDay, isSameDay } from "date-fns";
 import { Listing, ReportReason } from "@/lib/types";
 import RentalCalculator from "@/components/rental/RentalCalculator";
 import { SellerCard, TrustBadge, getTrustScore } from "@/components/item/SellerCard";
@@ -133,14 +138,50 @@ export default function RentalDetailPage() {
     const [authChecked, setAuthChecked] = useState(false);
     const lastCoordsRef = useRef<{ lat: number, lng: number } | null>(null);
 
-    const [selectedDuration, setSelectedDuration] = useState({ hours: 1, minutes: 0 });
+    const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>({
+        from: new Date(),
+        to: addDays(new Date(), 4),
+    });
+    
+    // Convert current hour to string with leading zero
+    const currentHourStr = new Date().getHours().toString().padStart(2, '0');
+    const [selectedTime, setSelectedTime] = useState({
+        hour: currentHourStr,
+        minute: "30",
+    });
 
-    const handleDurationChange = (hours: number, minutes: number) => {
-        setSelectedDuration(prev => {
-            if (prev.hours === hours && prev.minutes === minutes) return prev;
-            return { hours, minutes };
-        });
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
+
+    // Derived states
+    let rentalDurationMinutes = 0;
+    let days = 0;
+    let hours = 0;
+    if (selectedDateRange?.from) {
+        let start = startOfDay(selectedDateRange.from);
+        start.setHours(parseInt(selectedTime.hour), parseInt(selectedTime.minute));
+        
+        let end = selectedDateRange.to ? startOfDay(selectedDateRange.to) : startOfDay(selectedDateRange.from);
+        end.setHours(parseInt(selectedTime.hour), parseInt(selectedTime.minute));
+
+        if (end < start) end = start;
+
+        rentalDurationMinutes = differenceInMinutes(end, start);
+        if (rentalDurationMinutes === 0 && !selectedDateRange.to) {
+            // Default 15 minutes if same day and no end date specified
+            rentalDurationMinutes = 15;
+        }
+        days = Math.floor(rentalDurationMinutes / (24 * 60));
+        hours = Math.floor((rentalDurationMinutes % (24 * 60)) / 60);
+    }
+    
+    const timeSelections = {
+        hour: Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0')),
+        minute: Array.from({length: 60}, (_, i) => i.toString().padStart(2, '0'))
     };
+    
+    // Generate an array of dates for the custom date strip starting from today
+    const dateStripDates = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i));
 
     const router = useRouter();
     const { initiatePayment } = useRazorpay();
@@ -507,7 +548,20 @@ export default function RentalDetailPage() {
     const isRenter = rental?.renterId === userId;
     const isMock = rental?.ownerId === "mock";
     const owner = ownerInfo as any;
-    const totalPrice = rental ? rental.pricePerHour * selectedDuration.hours : 0;
+    
+    let totalPrice = 0;
+    let timePrice = 0;
+    let dayPrice = 0;
+    if (rental) {
+        if (rentalDurationMinutes <= 15 && days === 0 && hours === 0) {
+            totalPrice = Math.round(rental.pricePerHour * 0.25);
+            timePrice = totalPrice;
+        } else {
+            timePrice = Math.round(rental.pricePerHour * hours);
+            dayPrice = Math.round(rental.pricePerHour * 24 * days);
+            totalPrice = timePrice + dayPrice;
+        }
+    }
 
     return (
         <div className="flex flex-col min-h-screen pb-32 bg-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -576,32 +630,99 @@ export default function RentalDetailPage() {
                     </div>
                 </div>
 
-                {/* ── Duration Clock Picker ── */}
+                {/* ── Premium Rental Schedule Card ── */}
                 {rental?.status === "available" && !isOwner && (
-                    <div style={{ background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 14, marginBottom: 16 }}>
-                        <p style={{ fontSize: 12, fontWeight: 700, color: "#334155", marginBottom: 10 }}>⏱ How long do you need it?</p>
-                        <div style={{ display: "flex", gap: 8 }}>
-                            {[
-                                { label: "15 min", hours: 0, minutes: 15 },
-                                { label: "1 hr", hours: 1, minutes: 0 },
-                                { label: "2 hrs", hours: 2, minutes: 0 },
-                                { label: "4 hrs", hours: 4, minutes: 0 },
-                                { label: "1 Day", hours: 24, minutes: 0 },
-                            ].map(opt => {
-                                const isSelected = selectedDuration.hours === opt.hours && selectedDuration.minutes === opt.minutes;
+                    <div style={{ background: "#fff", border: "1px solid #ECECF2", borderRadius: 24, padding: 20, marginBottom: 16, boxShadow: "0 8px 30px rgba(0,0,0,0.04)" }}>
+                        
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", margin: 0 }}>Rental Schedule</p>
+                            <button onClick={() => setIsCalendarOpen(true)} style={{ background: "none", border: "none", padding: 8, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <Calendar className="w-5 h-5 text-slate-800" />
+                            </button>
+                        </div>
+
+                        {/* Date Capsule Strip */}
+                        <div style={{ position: "relative", height: 72, borderRadius: 9999, background: "#fff", boxShadow: "inset 0 0 0 1px #ECECF2, 0 4px 10px rgba(0,0,0,0.02)", display: "flex", alignItems: "center", overflowX: "auto", overflowY: "hidden", scrollBehavior: "smooth", padding: "0 8px", scrollbarWidth: "none", WebkitOverflowScrolling: "touch", marginBottom: 20 }}>
+                            {dateStripDates.map((date, idx) => {
+                                const isSelectedStart = selectedDateRange?.from && isSameDay(date, selectedDateRange.from);
+                                const isSelectedEnd = selectedDateRange?.to && isSameDay(date, selectedDateRange.to);
+                                const isSelected = isSelectedStart || isSelectedEnd || (selectedDateRange?.from && selectedDateRange?.to && date >= selectedDateRange.from && date <= selectedDateRange.to);
+                                
                                 return (
-                                    <button key={opt.label} onClick={() => setSelectedDuration({ hours: opt.hours, minutes: opt.minutes })} style={{ flex: 1, padding: "8px 0", borderRadius: 10, border: isSelected ? "2px solid #5B4CDB" : "1px solid #e2e8f0", background: isSelected ? "#EEF0FF" : "#fff", color: isSelected ? "#5B4CDB" : "#475569", fontWeight: 700, fontSize: 11, cursor: "pointer", transition: "all 0.15s" }}>
-                                        {opt.label}
-                                    </button>
+                                    <div key={idx} onClick={() => {
+                                        // Simple tap logic for strip: start a new selection or complete it
+                                        if (!selectedDateRange?.from || (selectedDateRange?.from && selectedDateRange?.to)) {
+                                            setSelectedDateRange({ from: date, to: undefined });
+                                        } else {
+                                            if (date < selectedDateRange.from) {
+                                                setSelectedDateRange({ from: date, to: selectedDateRange.from });
+                                            } else {
+                                                setSelectedDateRange({ from: selectedDateRange.from, to: date });
+                                            }
+                                        }
+                                    }} style={{ position: "relative", minWidth: 54, height: 56, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", margin: "0 2px" }}>
+                                        {isSelected && (
+                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #6C4DFF, #9B82FF)", borderRadius: 40, boxShadow: "0 18px 40px rgba(108, 77, 255, 0.35)", zIndex: 1 }} />
+                                        )}
+                                        <span style={{ fontSize: 12, fontWeight: 700, color: isSelected ? "rgba(255,255,255,0.9)" : "#6B7280", zIndex: 2, textTransform: "uppercase", marginBottom: 2 }}>{format(date, 'EEE')}</span>
+                                        <span style={{ fontSize: 18, fontWeight: 800, color: isSelected ? "#fff" : "#0f172a", zIndex: 2 }}>{format(date, 'dd')}</span>
+                                    </div>
                                 );
                             })}
                         </div>
-                        {/* Live price preview */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12, paddingTop: 10, borderTop: "1px solid #e2e8f0" }}>
-                            <span style={{ fontSize: 12, color: "#64748b" }}>₹{rental.pricePerHour}/hr × {selectedDuration.hours > 0 ? `${selectedDuration.hours}h` : ""}{selectedDuration.minutes > 0 ? ` ${selectedDuration.minutes}m` : ""}</span>
-                            <span style={{ fontSize: 18, fontWeight: 800, color: "#5B4CDB" }}>
-                                ₹{selectedDuration.minutes === 15 ? Math.round(rental.pricePerHour * 0.25) : rental.pricePerHour * selectedDuration.hours}
+
+                        {/* Live Summary of Selection */}
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 20 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#334155" }}>
+                                {selectedDateRange?.from ? format(selectedDateRange.from, 'd MMM') : 'Start'}
                             </span>
+                            <span style={{ fontSize: 12, color: "#94a3b8" }}>↓</span>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#334155" }}>
+                                {selectedDateRange?.to ? format(selectedDateRange.to, 'd MMM') : (selectedDateRange?.from ? format(selectedDateRange.from, 'd MMM') : 'End')}
+                            </span>
+                            <span style={{ fontSize: 12, color: "#94a3b8" }}>↓</span>
+                            <span style={{ fontSize: 14, fontWeight: 800, color: "#6C4DFF" }}>
+                                {selectedTime.hour}:{selectedTime.minute}
+                            </span>
+                        </div>
+                        
+                        <div style={{ height: 1, background: "#ECECF2", margin: "0 0 20px 0" }} />
+
+                        <p style={{ fontSize: 13, fontWeight: 700, color: "#6B7280", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>Pickup Time</p>
+                        
+                        {/* Time Card */}
+                        <button onClick={() => setIsTimePickerOpen(true)} style={{ width: "100%", height: 56, background: "#F8F8FC", border: "1px solid #ECECF2", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", cursor: "pointer", transition: "background 0.2s" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                <Clock className="w-5 h-5 text-slate-700" />
+                                <span style={{ fontSize: 20, fontWeight: 800, color: "#0f172a" }}>{selectedTime.hour}:{selectedTime.minute}</span>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-slate-400" />
+                        </button>
+                    </div>
+                )}
+                
+                {/* ── Premium Price Summary Card ── */}
+                {rental?.status === "available" && !isOwner && (
+                    <div style={{ background: "#fff", border: "1px solid #ECECF2", borderRadius: 24, padding: 20, marginBottom: 16, boxShadow: "0 8px 30px rgba(0,0,0,0.04)" }}>
+                        <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", marginBottom: 16 }}>Price Summary</p>
+                        
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                            <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>₹{rental.pricePerHour}/hour × {hours} hours</span>
+                            <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>₹{timePrice}</span>
+                        </div>
+                        
+                        <div style={{ height: 1, background: "#ECECF2", margin: "12px 0" }} />
+                        
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                            <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>{days} Rental Days</span>
+                            <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>₹{dayPrice}</span>
+                        </div>
+                        
+                        <div style={{ height: 1, background: "#ECECF2", margin: "12px 0 16px" }} />
+                        
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <span style={{ fontSize: 18, fontWeight: 800, color: "#0f172a" }}>Total</span>
+                            <span style={{ fontSize: 32, fontWeight: 800, color: "#6C4DFF", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
                         </div>
                     </div>
                 )}
@@ -663,17 +784,17 @@ export default function RentalDetailPage() {
                 ) : rental?.status === "available" ? (
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <div>
-                            <p style={{ fontSize: 10, color: "#94a3b8", margin: 0, fontWeight: 600 }}>Total</p>
-                            <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", margin: 0 }}>
-                                ₹{selectedDuration.minutes === 15 ? Math.round((rental?.pricePerHour || 0) * 0.25) : (rental?.pricePerHour || 0) * selectedDuration.hours}
+                            <p style={{ fontSize: 12, color: "#6B7280", margin: 0, fontWeight: 700, textTransform: "uppercase" }}>Total</p>
+                            <p style={{ fontSize: 24, fontWeight: 900, color: "#0f172a", margin: 0, lineHeight: 1.1 }}>
+                                ₹{totalPrice}
                             </p>
                         </div>
                         <button
-                            onClick={() => handleRequest(selectedDuration.hours === 0 ? `${selectedDuration.minutes}m` : `${selectedDuration.hours}h`)}
+                            onClick={() => handleRequest(`${days}d ${hours}h`)}
                             disabled={actionLoading}
-                            style={{ flex: 1, height: 52, background: "linear-gradient(135deg, #5B4CDB, #7C3AED)", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+                            style={{ flex: 1, height: 60, background: "#6C4DFF", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(108, 77, 255, 0.4)", position: "relative", overflow: "hidden" }}
                         >
-                            {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><ShoppingBag className="w-5 h-5" /> Borrow Now</>}
+                            {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Borrow Now</>}
                         </button>
                     </div>
                 ) : isRenter && rental?.status === "requested" ? (
@@ -746,6 +867,82 @@ export default function RentalDetailPage() {
                     </div>
                 </div>
             )}
+            {/* ── Calendar Bottom Sheet ── */}
+            <Drawer.Root open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                <Drawer.Portal>
+                    <Drawer.Overlay style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 100 }} />
+                    <Drawer.Content style={{ background: "#fff", display: "flex", flexDirection: "column", borderRadius: "28px 28px 0 0", marginTop: 24, position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 101, padding: "20px 0" }}>
+                        <div style={{ width: 40, height: 5, background: "#E2E8F0", borderRadius: 99, margin: "0 auto 20px" }} />
+                        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <p style={{ fontSize: 20, fontWeight: 800, marginBottom: 20 }}>Select Rental Dates</p>
+                            <DayPicker
+                                mode="range"
+                                selected={selectedDateRange}
+                                onSelect={(range) => {
+                                    setSelectedDateRange(range);
+                                }}
+                                style={{ margin: 0, fontFamily: "inherit" }}
+                                modifiersStyles={{
+                                    selected: { backgroundColor: "#6C4DFF", color: "white" }
+                                }}
+                            />
+                            <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
+                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
+                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                            </div>
+                        </div>
+                    </Drawer.Content>
+                </Drawer.Portal>
+            </Drawer.Root>
+
+            {/* ── Time Picker Bottom Sheet ── */}
+            <Drawer.Root open={isTimePickerOpen} onOpenChange={setIsTimePickerOpen}>
+                <Drawer.Portal>
+                    <Drawer.Overlay style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 100 }} />
+                    <Drawer.Content style={{ background: "#fff", display: "flex", flexDirection: "column", borderRadius: "28px 28px 0 0", marginTop: 24, position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 101, padding: "20px 0" }}>
+                        <div style={{ width: 40, height: 5, background: "#E2E8F0", borderRadius: 99, margin: "0 auto 20px" }} />
+                        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <p style={{ fontSize: 20, fontWeight: 800, marginBottom: 20 }}>Select Pickup Time</p>
+                            
+                            <div style={{ width: "100%", height: 200, position: "relative" }}>
+                                <Picker
+                                    value={selectedTime}
+                                    onChange={setSelectedTime}
+                                    wheelMode="normal"
+                                >
+                                    <Picker.Column name="hour">
+                                        {timeSelections.hour.map((h) => (
+                                            <Picker.Item key={h} value={h}>
+                                                {({ selected }) => (
+                                                    <div style={{ color: selected ? '#0f172a' : '#94a3b8', fontWeight: selected ? 800 : 500, fontSize: selected ? 28 : 20, transition: 'all 0.2s' }}>
+                                                        {h}
+                                                    </div>
+                                                )}
+                                            </Picker.Item>
+                                        ))}
+                                    </Picker.Column>
+                                    <Picker.Column name="minute">
+                                        {timeSelections.minute.map((m) => (
+                                            <Picker.Item key={m} value={m}>
+                                                {({ selected }) => (
+                                                    <div style={{ color: selected ? '#0f172a' : '#94a3b8', fontWeight: selected ? 800 : 500, fontSize: selected ? 28 : 20, transition: 'all 0.2s' }}>
+                                                        {m}
+                                                    </div>
+                                                )}
+                                            </Picker.Item>
+                                        ))}
+                                    </Picker.Column>
+                                </Picker>
+                            </div>
+
+                            <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
+                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
+                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                            </div>
+                        </div>
+                    </Drawer.Content>
+                </Drawer.Portal>
+            </Drawer.Root>
         </div>
     );
 }

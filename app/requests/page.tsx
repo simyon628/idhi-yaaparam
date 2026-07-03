@@ -75,7 +75,7 @@ export default function RequestsPage() {
                                 <div className="flex items-start gap-4 mb-4">
                                     <div 
                                         className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-slate-50"
-                                        style={{ backgroundColor: CATEGORIES.find(c => c.id === req.categoryId)?.cc.ico || "#f8fafc" }}
+                                        style={{ backgroundColor: "#f8fafc" }}
                                     >
                                         <span className="text-xl">
                                             {CATEGORIES.find(c => c.id === req.categoryId)?.icon || "📦"}

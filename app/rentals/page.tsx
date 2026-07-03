@@ -1,19 +1,95 @@
 "use client";
 
 import { useCollege } from "@/contexts/CollegeContext";
-import { CategoryGrid } from "@/components/ui/CategoryGrid";
 import { TopBar } from "@/components/layout/TopBar";
-import SearchTrigger from "@/components/search/SearchTrigger";
 import { BottomNav } from "@/components/layout/BottomNav";
-import { Plus, X, Search as SearchIcon } from "lucide-react";
+import {
+    Plus,
+    X,
+    Search as SearchIcon,
+    ChevronRight,
+    Camera,
+    Mic,
+    ArrowRight,
+} from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useListingMode } from "@/lib/hooks/useListingMode";
-import { HomeHero } from "@/components/home/HomeHero";
 import { prefetchRentals } from "@/lib/cache/itemsCache";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { useAllItems } from "@/lib/hooks/useAllItems";
+import { useSearchStore } from "@/stores/searchStore";
+import { CategoryGrid } from "@/components/ui/CategoryGrid";
+
+// Category Data by Mode
+const CATEGORIES = {
+    rent: [
+        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: "🖩" },
+        { id: "lab-coat", name: "Lab Coats", bg: "#EAF3DE", icon: "🥼" },
+        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: "💻" },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: "📷" },
+        { id: "geometry", name: "Geometry Kits", bg: "#FAEEDA", icon: "📏" },
+        { id: "cycle", name: "Cycles", bg: "#E1F5EE", icon: "🚲" },
+        { id: "project-kit", name: "Project Kits", bg: "#EAF3DE", icon: "🔬" },
+        { id: "drafter", name: "Drafters", bg: "#E1F5EE", icon: "📐" },
+    ],
+    buy: [
+        { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: "📝" },
+        { id: "records", name: "Records", bg: "#EAF3DE", icon: "📋" },
+        { id: "notes", name: "Notes", bg: "#E6F1FB", icon: "📚" },
+        { id: "lab-manuals", name: "Lab Manuals", bg: "#FAEEDA", icon: "📓" },
+        { id: "printouts", name: "Printouts", bg: "#FBEAF0", icon: "🖨️" },
+        { id: "resume-writing", name: "Resume", bg: "#E1F5EE", icon: "📄" },
+        { id: "mini-projects", name: "Mini Projects", bg: "#E6F1FB", icon: "💻" },
+        { id: "ppt-design", name: "PPT Design", bg: "#EEF0FF", icon: "📊" },
+    ],
+    sell: [
+        { id: "mobiles", name: "Mobiles", bg: "#EEF0FF", icon: "📱" },
+        { id: "laptops", name: "Laptops", bg: "#E6F1FB", icon: "💻" },
+        { id: "books", name: "Books", bg: "#EAF3DE", icon: "📚" },
+        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: "🏍️" },
+        { id: "furniture", name: "Furniture", bg: "#E1F5EE", icon: "🪑" },
+        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: "🔌" },
+        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: "🎧" },
+        { id: "hostel-essentials", name: "Hostel Needs", bg: "#FAEEDA", icon: "📦" },
+    ]
+};
+
+// Promotional Banners Carousel Data
+const PROMO_BANNERS = [
+    {
+        id: "sell-banner",
+        mode: "sell",
+        title: "Buy & Sell Student Essentials",
+        subtitle: "Electronics, books & campus items",
+        cta: "Shop Now",
+        bg: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)"
+    },
+    {
+        id: "rent-banner",
+        mode: "rent",
+        title: "Rent Smarter on Campus",
+        subtitle: "Lab coats, calculators & laptops from students",
+        cta: "Explore Rentals",
+        bg: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)"
+    },
+    {
+        id: "writing-banner",
+        mode: "buy",
+        title: "Assignment Help & Writing",
+        subtitle: "Records, notes & project writing",
+        cta: "Explore Writing",
+        bg: "linear-gradient(135deg, #10B981 0%, #059669 100%)"
+    }
+];
+
+// Personalized Recommendation Data
+const STILL_LOOKING = {
+    rent: ["Calculator", "Lab Coat", "Laptop"],
+    buy: ["Assignment Help", "Record Writing"],
+    sell: ["Mobile", "Books"]
+};
 
 export default function RentalsMarketplace() {
     const router = useRouter();
@@ -26,6 +102,18 @@ export default function RentalsMarketplace() {
     // Real-time Firestore items
     const { data: allItems = [], isLoading: isItemsLoading } = useAllItems(selectedCollege?.id);
 
+    // Search Store controls for sticky search bar
+    const { open: openSearch, setQuery, executeSearch, query: storeQuery } = useSearchStore();
+    const [searchInputVal, setSearchInputVal] = useState("");
+
+    // Sync input value with store query
+    useEffect(() => {
+        setSearchInputVal(storeQuery);
+    }, [storeQuery]);
+
+    // Custom Local State
+    const [carouselIndex, setCarouselIndex] = useState(0);
+
     // Filter items based on mode
     const rentItems = allItems.filter(item => item.listingType === "rent" || !item.listingType);
     const sellItems = allItems.filter(item => item.listingType === "sell");
@@ -36,6 +124,14 @@ export default function RentalsMarketplace() {
         const timeB = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : new Date().getTime());
         return timeB - timeA;
     });
+
+    // Auto-cycle banner carousel
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCarouselIndex((prev) => (prev + 1) % PROMO_BANNERS.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, []);
 
     // Warm cache immediately when home loads
     useEffect(() => {
@@ -61,6 +157,20 @@ export default function RentalsMarketplace() {
         router.replace(`/rentals?${params.toString()}`, { scroll: false });
     };
 
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchInputVal.trim()) {
+            setQuery(searchInputVal);
+            executeSearch(searchInputVal, router);
+        }
+    };
+
+    const getSearchPlaceholder = () => {
+        if (activeMode === "rent") return "Search calculators, lab coats, laptops...";
+        if (activeMode === "buy") return "Search assignments, records, notes...";
+        return "Search electronics, books, bikes...";
+    };
+
     /* ── Tab config ── */
     const TABS = [
         { id: "rent", label: "Rentals", icon: "🏷️" },
@@ -73,95 +183,143 @@ export default function RentalsMarketplace() {
             className="flex flex-col min-h-screen pb-28"
             style={{ background: "var(--iy-surface)", fontFamily: "'DM Sans', sans-serif" }}
         >
-            {/* ── HEADER (TopBar) ── */}
-            <TopBar />
-
-            <div
-                style={{
-                    background: "var(--iy-ink)",
-                    padding: "0 20px 24px",
-                    position: "relative",
-                    overflow: "hidden",
-                }}
-            >
-                {/* Ambient glows */}
-                <div style={{ position: "absolute", top: -30, right: -20, width: 160, height: 160, background: "radial-gradient(circle,rgba(91,79,232,0.30) 0%,transparent 70%)", pointerEvents: "none" }} />
-                <div style={{ position: "absolute", bottom: 10, left: -10, width: 120, height: 120, background: "radial-gradient(circle,rgba(0,196,140,0.15) 0%,transparent 70%)", pointerEvents: "none" }} />
-
-                <HomeHero mode={activeMode} />
-
-                {/* Service switcher tabs */}
-                <div style={{ padding: "0 16px 24px", position: "relative", zIndex: 3 }}>
-                    <div style={{ background: "#1A1A2E", borderRadius: 16, padding: 4, display: "flex", gap: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-                        {TABS.map((tab) => {
-                            const isOn = activeMode === tab.id;
-                            return (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => handleModeChange(tab.id as "rent" | "buy" | "sell")}
-                                    style={{
-                                        flex: 1,
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        gap: 6,
-                                        height: 36,
-                                        borderRadius: 12,
-                                        fontSize: 12,
-                                        fontWeight: isOn ? 600 : 500,
-                                        cursor: "pointer",
-                                        transition: "all 0.2s",
-                                        border: "none",
-                                        fontFamily: "'DM Sans', sans-serif",
-                                        ...(isOn
-                                            ? { background: "#5B4CDB", color: "#fff", boxShadow: "0 0 12px rgba(91,76,219,0.5)" }
-                                            : { background: "transparent", color: "rgba(255,255,255,0.5)" }
-                                        ),
-                                    }}
-                                >
-                                    <span style={{ fontSize: 14 }}>{tab.icon}</span>
-                                    {tab.label}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-
-
+            {/* ── SERVICE SWITCHER TABS (At the very top) ── */}
+            <div className="px-4 py-3 bg-white flex gap-3 overflow-x-auto no-scrollbar relative z-20 border-b border-slate-100">
+                {TABS.map((tab) => {
+                    const isOn = activeMode === tab.id;
+                    return (
+                        <button
+                            key={tab.id}
+                            onClick={() => handleModeChange(tab.id as "rent" | "buy" | "sell")}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 6,
+                                padding: "8px 16px",
+                                borderRadius: "100px",
+                                fontSize: "12px",
+                                fontWeight: isOn ? 850 : 600,
+                                cursor: "pointer",
+                                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                                border: "none",
+                                flex: 1,
+                                flexShrink: 0,
+                                fontFamily: "'DM Sans', sans-serif",
+                                ...(isOn
+                                    ? { background: "#5B4CDB", color: "#fff", boxShadow: "0 4px 14px rgba(91,76,219,0.35)" }
+                                    : { background: "rgba(0,0,0,0.04)", color: "rgba(0,0,0,0.56)" }
+                                ),
+                            }}
+                        >
+                            <span style={{ fontSize: 13 }}>{tab.icon}</span>
+                            {tab.label}
+                        </button>
+                    );
+                })}
             </div>
 
+            {/* ── HEADER (TopBar) in clean LightMode ── */}
+            <TopBar hideSearch={true} lightMode={true} />
+
+            {/* ── SEARCH BAR ── */}
+            <div className="px-4 py-2 border-b border-slate-100 bg-white">
+                <form onSubmit={handleSearchSubmit} className="relative flex items-center bg-slate-50 border border-slate-200/80 rounded-xl overflow-hidden pr-1">
+                    <button type="submit" className="p-3 text-slate-400 hover:text-indigo-600 transition-colors">
+                        <SearchIcon className="w-4 h-4" />
+                    </button>
+                    <input 
+                        type="text" 
+                        value={searchInputVal}
+                        onChange={(e) => {
+                            setSearchInputVal(e.target.value);
+                            setQuery(e.target.value);
+                        }}
+                        onClick={openSearch}
+                        placeholder={getSearchPlaceholder()}
+                        className="flex-1 bg-transparent border-none outline-none font-bold text-xs py-3 text-slate-800 placeholder-slate-400"
+                    />
+                    <div className="flex items-center gap-1">
+                        <button type="button" className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+                            <Camera className="w-4 h-4" />
+                        </button>
+                        <button type="button" className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+                            <Mic className="w-4 h-4" />
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {/* ── CATEGORY SECTION ── */}
+            <section style={{ padding: '12px 16px 4px', background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
+                <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4, margin: "0 -16px", padding: "0 16px" }} className="no-scrollbar">
+                    {CATEGORIES[activeMode].map(cat => (
+                        <div 
+                            key={cat.id} 
+                            onClick={() => router.push(`/category/${cat.id}`)} 
+                            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", flexShrink: 0 }}
+                        >
+                            <div style={{ width: 50, height: 50, borderRadius: "50%", background: cat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "inset 0 -2px 6px rgba(0,0,0,0.03)" }}>
+                                {cat.icon}
+                            </div>
+                            <span style={{ fontSize: 9, fontWeight: 700, color: "var(--iy-text1)", textAlign: "center", lineHeight: 1.1, width: 54, wordWrap: "break-word" }}>{cat.name}</span>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ── PROMO CAROUSEL ── */}
+            <div className="px-4 py-3 bg-white">
+                <div className="relative overflow-hidden rounded-[20px] aspect-[25/8] shadow-sm">
+                    {PROMO_BANNERS.map((banner, index) => {
+                        const isCurrent = index === carouselIndex;
+                        return (
+                            <div
+                                key={banner.id}
+                                className="absolute inset-0 p-5 flex flex-col justify-between text-white transition-opacity duration-700 ease-in-out"
+                                style={{ 
+                                    background: banner.bg,
+                                    opacity: isCurrent ? 1 : 0,
+                                    pointerEvents: isCurrent ? "auto" : "none",
+                                    zIndex: isCurrent ? 10 : 0
+                                }}
+                            >
+                                <div className="space-y-1">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-white/70">PROMOTION</span>
+                                    <h3 className="font-extrabold text-base tracking-tight text-white leading-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
+                                        {banner.title}
+                                    </h3>
+                                    <p className="text-[10px] text-white/80 font-medium">{banner.subtitle}</p>
+                                </div>
+                                <div>
+                                    <button 
+                                        onClick={() => handleModeChange(banner.mode as "rent" | "buy" | "sell")}
+                                        className="bg-white/20 backdrop-blur-md hover:bg-white/30 transition-colors text-white font-extrabold text-[10px] px-4 py-1.5 rounded-lg flex items-center gap-1.5"
+                                    >
+                                        {banner.cta} <ArrowRight className="w-3 h-3" />
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                    {/* Carousel Dots */}
+                    <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20">
+                        {PROMO_BANNERS.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setCarouselIndex(i)}
+                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === carouselIndex ? "w-4 bg-white" : "bg-white/40"}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
 
             {/* ── MAIN CONTENT ── */}
             <div style={{ flex: 1, padding: "16px", display: "flex", flexDirection: "column", gap: 24 }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
                     <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                        {/* FIX 2 - Category Circle Strip */}
-                        <section style={{ padding: '0 16px', marginBottom: 24 }}>
-                          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
-                            Browse Categories
-                          </h2>
-                          <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4, margin: "0 -16px", padding: "0 16px" }}>
-                            {[
-                              { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: "🖩" },
-                              { id: "drafter", name: "Drafters", bg: "#E1F5EE", icon: "📐" },
-                              { id: "lab-coat", name: "Lab Coats", bg: "#EAF3DE", icon: "🥼" },
-                              { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: "💻" },
-                              { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: "📷" },
-                              { id: "geometry", name: "Geometry", bg: "#FAEEDA", icon: "📏" },
-                              { id: "projector", name: "Projectors", bg: "#FBEAF0", icon: "📽️" },
-                              { id: "stationery", name: "Stationery", bg: "#E1F5EE", icon: "🖊️" },
-                            ].map(cat => (
-                              <div key={cat.id} onClick={() => router.push(`/category/${cat.id}`)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", flexShrink: 0 }}>
-                                <div style={{ width: 64, height: 64, borderRadius: "50%", background: cat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 38 }}>
-                                  {cat.icon}
-                                </div>
-                                <span style={{ fontSize: 10, fontWeight: 600, color: "var(--iy-text1)", textAlign: "center", lineHeight: 1.1, width: 64, wordWrap: "break-word" }}>{cat.name}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </section>
-
                         {/* Trending Shelf (Moved Up) */}
                         <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
@@ -500,7 +658,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
                 </button>
             </div>
 
-            <CategoryGrid counts={{}} loading={false} />
+            <CategoryGrid />
 
             {/* Real items for sale grid */}
             {sellItems.length > 0 ? (
