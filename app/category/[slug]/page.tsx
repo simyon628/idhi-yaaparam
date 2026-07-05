@@ -240,19 +240,20 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {sorted.map((item: any) => (
-              <ProductCard
-                key={item.id}
-                id={item.id}
-                itemName={item.itemName}
-                pricePerHour={item.pricePerHour}
-                category={item.categoryId || item.category || "others"}
-                branch={item.department || item.branch || "CSE"}
-                distance={item.block || item.distance || "0.5 km"}
-                sellerUsername={item.sellerUsername || "member"}
-                rating={item.rating || 4.5}
-                imageUrl={item.photoUrl || item.imageUrl}
-                variant="grid"
-              />
+              <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
+                <ProductCard
+                  id={item.id}
+                  itemName={item.itemName}
+                  pricePerHour={item.pricePerHour}
+                  category={item.categoryId || item.category || "others"}
+                  branch={item.department || item.branch || "CSE"}
+                  distance={item.block || item.distance || "0.5 km"}
+                  sellerUsername={item.sellerUsername || "member"}
+                  rating={item.rating || 4.5}
+                  imageUrl={item.photoUrl || item.imageUrl}
+                  variant="grid"
+                />
+              </div>
             ))}
 
             {/* Infinite scroll loading skeletons */}

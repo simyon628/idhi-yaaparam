@@ -62,7 +62,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
     const isFree = (item as any).listingType === "free";
 
     const handleBorrowSend = async (msg: string) => {
-        if (!currentUserId) { router.push(`/login?redirect=/item/${item.id}`); return; }
+        if (!currentUserId) { router.push(`/login?redirect=/rentals/${item.id}`); return; }
         setSendingRequest(true);
         try {
             await addDoc(collection(db!, "borrow_requests"), {
@@ -84,7 +84,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
     };
 
     const handleMessageSeller = async () => {
-        if (!currentUserId) { router.push(`/login?redirect=/item/${item.id}`); return; }
+        if (!currentUserId) { router.push(`/login?redirect=/rentals/${item.id}`); return; }
         // Navigate to the chat page for this item
         router.push(`/chat/${item.id}`);
     };
@@ -127,7 +127,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
         return (
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-100 px-4 py-3">
                 <button
-                    onClick={() => router.push(`/login?redirect=/item/${item.id}`)}
+                    onClick={() => router.push(`/login?redirect=/rentals/${item.id}`)}
                     className="w-full h-12 rounded-2xl bg-indigo-600 text-white text-sm font-black uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-md active:scale-95"
                 >
                     Login to Contact Seller →
@@ -165,7 +165,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
                     ) : (
                         <button
                             onClick={() => {
-                                if (!currentUserId) { router.push(`/login?redirect=/item/${item.id}`); return; }
+                                if (!currentUserId) { router.push(`/login?redirect=/rentals/${item.id}`); return; }
                                 setShowSheet(true);
                             }}
                             className="flex-1 h-12 rounded-2xl bg-indigo-600 text-white font-black text-sm uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-md active:scale-95"

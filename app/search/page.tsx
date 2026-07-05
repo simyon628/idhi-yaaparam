@@ -67,22 +67,27 @@ function SearchResults() {
         );
       }
 
-      // If no real items are found matching, fall back to matching mock items so search is rich
-      if (filtered.length === 0) {
-        let mockFiltered = MOCK_PRODUCTS;
-        if (category && category !== "all") {
-          mockFiltered = mockFiltered.filter(p => p.category === category);
-        }
-        if (q) {
-          const lowerQ = q.toLowerCase();
-          mockFiltered = mockFiltered.filter(p => 
-            p.itemName.toLowerCase().includes(lowerQ)
-          );
-        }
-        setResults(mockFiltered as any);
-      } else {
-        setResults(filtered);
+      // Always combine mock items so the search remains rich
+      let mockFiltered = MOCK_PRODUCTS;
+      if (category && category !== "all") {
+        mockFiltered = mockFiltered.filter(p => p.category === category);
       }
+      if (q) {
+        const lowerQ = q.toLowerCase();
+        mockFiltered = mockFiltered.filter(p => 
+          p.itemName.toLowerCase().includes(lowerQ)
+        );
+      }
+
+      // Combine real items and mock items, avoiding duplicates if any IDs match
+      const combined = [...filtered];
+      mockFiltered.forEach((mockItem) => {
+        if (!combined.some((item) => item.id === mockItem.id)) {
+          combined.push(mockItem as any);
+        }
+      });
+
+      setResults(combined);
       setLoading(false);
     }, 300);
 

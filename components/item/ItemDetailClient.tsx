@@ -164,7 +164,7 @@ export function ItemDetailClient({ item, ownerData }: Omit<ItemDetailClientProps
     };
 
     const handleShare = async () => {
-        const url = `${typeof window !== "undefined" ? window.location.origin : ""}/item/${item.id}`;
+        const url = `${typeof window !== "undefined" ? window.location.origin : ""}/rentals/${item.id}`;
         if (navigator.share) {
             await navigator.share({ title: item.itemName, url });
         } else {

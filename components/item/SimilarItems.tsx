@@ -19,7 +19,7 @@ function SimilarCard({ item }: { item: Listing }) {
     // Card: 140px wide, 190px tall. Photo top 55% = 104.5px
     return (
         <button
-            onClick={() => router.push(`/item/${item.id}`)}
+            onClick={() => router.push(`/rentals/${item.id}`)}
             className="shrink-0 w-[140px] h-[190px] rounded-xl bg-white border border-slate-100 shadow-sm overflow-hidden flex flex-col text-left active:scale-[0.97] transition-transform group"
         >
             <div className="w-full h-[104.5px] bg-slate-50 overflow-hidden relative shrink-0">

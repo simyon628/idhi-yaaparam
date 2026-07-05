@@ -270,7 +270,7 @@ export default function RentalsMarketplace() {
 
             {/* ── PROMO CAROUSEL ── */}
             <div className="px-4 py-3 bg-white">
-                <div className="relative overflow-hidden rounded-[20px] aspect-[25/8] shadow-sm">
+                <div className="relative overflow-hidden rounded-[20px] shadow-sm" style={{ aspectRatio: "25/8" }}>
                     {PROMO_BANNERS.map((banner, index) => {
                         const isCurrent = index === carouselIndex;
                         return (
