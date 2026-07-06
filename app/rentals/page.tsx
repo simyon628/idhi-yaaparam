@@ -189,17 +189,22 @@ export default function RentalsMarketplace() {
             ══════════════════════════════════════════════════════════════ */}
             <div style={{
                 position: "relative",
-                overflow: "hidden",
-                background: "radial-gradient(circle at 50% -15%, #8F2EFF 0%, #7A2FFF 18%, #9A48FF 32%, #CFA9FF 55%, rgba(255,255,255,0.85) 75%, #ffffff 100%)",
-                minHeight: 320,
-                paddingBottom: 120,
+                background: "#ffffff",
+                paddingBottom: 20,
             }}>
-                {/* Subtle white radial glow */}
+                {/* Hero Fading Background - Ultra Smooth Natural Light Fade */}
                 <div style={{
-                    position: "absolute", inset: 0,
-                    background: "radial-gradient(circle at 50% 5%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%)",
-                    pointerEvents: "none"
-                }} />
+                    position: "absolute", top: 0, left: 0, right: 0, height: 320,
+                    background: "linear-gradient(180deg, #5B21B6 0%, #7C3AED 25%, #C084FC 50%, rgba(255,255,255,0.85) 75%, #ffffff 100%)",
+                    zIndex: 0, pointerEvents: "none",
+                }}>
+                    {/* Subtle white radial glow */}
+                    <div style={{
+                        position: "absolute", top: -50, left: "50%", transform: "translateX(-50%)",
+                        width: 600, height: 600,
+                        background: "radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%)",
+                    }} />
+                </div>
                 {/* ── Three Mode Tabs (At the very top) ── */}
                 <div style={{
                     display: "flex", gap: 8,
@@ -305,17 +310,15 @@ export default function RentalsMarketplace() {
                                 <div style={{ width: 50, height: 50, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}>
                                     {cat.icon}
                                 </div>
-                                <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.9)", textAlign: "center", lineHeight: 1.1, width: 54, wordWrap: "break-word" }}>{cat.name}</span>
+                                <span style={{ fontSize: 9, fontWeight: 700, color: "#111827", textAlign: "center", lineHeight: 1.1, width: 54, wordWrap: "break-word" }}>{cat.name}</span>
                             </div>
                         ))}
                     </div>
                 </section>
 
-            </div>
-
-            {/* ── DYNAMIC CAROUSEL ── */}
-            <div style={{ padding: "0 20px", position: "relative", zIndex: 2, marginTop: -72 }}>
-                <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 24 }}>
+                {/* ── DYNAMIC CAROUSEL ── */}
+                <div style={{ padding: "0 20px", position: "relative", zIndex: 2 }}>
+                    <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 24 }}>
                         {banners.map((banner, index) => {
                             const isCurrent = index === carouselIndex;
                             return (
@@ -347,6 +350,7 @@ export default function RentalsMarketplace() {
                         </div>
                     </div>
                 </div>
+            </div>
 
             {/* College Selection Modal */}
             {showCollegeModal && (
