@@ -91,7 +91,7 @@ function LoginContent() {
 
         try {
             const rawPhone = phone.replace(/\D/g, "");
-            if (rawPhone === "9876543210" || rawPhone === "0123456789" || rawPhone === "1234567890") {
+            if (rawPhone === "8142890284" || rawPhone === "0123456789" || rawPhone === "1234567890") {
                 toast.success("Mock Code sent to your phone");
                 setTimeout(() => otpRefs.current[0]?.focus(), 200);
                 return;
@@ -139,8 +139,8 @@ function LoginContent() {
             const rawPhone = phone.replace(/\D/g, "");
             let user;
 
-            if (rawPhone === "9876543210" || rawPhone === "0123456789" || rawPhone === "1234567890") {
-                const expectedOtp = rawPhone === "9876543210" ? "654321" : "123456";
+            if (rawPhone === "8142890284" || rawPhone === "0123456789" || rawPhone === "1234567890") {
+                const expectedOtp = rawPhone === "8142890284" ? "111111" : "123456";
                 if (code !== expectedOtp) {
                     toast.error("Invalid mock code");
                     setLoading(false);
@@ -157,8 +157,8 @@ function LoginContent() {
             // Removed legacy auto-redirect for returning users.
             // We now strictly require OCR to validate the physical ID capture before letting users through.
             // MOCK BYPASS: Auto create DB record and redirect to skip OCR
-            if (rawPhone === "9876543210" || rawPhone === "0123456789" || rawPhone === "1234567890") {
-                const isOwnerAccount = rawPhone === "9876543210";
+            if (rawPhone === "8142890284" || rawPhone === "0123456789" || rawPhone === "1234567890") {
+                const isOwnerAccount = rawPhone === "8142890284";
                 await setDoc(doc(db!, "users", user.uid), {
                     uid: user.uid,
                     name: name,
