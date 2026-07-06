@@ -24,6 +24,25 @@ export interface User {
     // Social & Trust
     overallRating?: number;
     reviewCount?: number;
+
+    // Owner flag — distinguishes platform owner from admin
+    isOwner?: boolean;
+}
+
+// ─── Banner (carousel items managed by owner) ─────────────────────────────────
+export interface Banner {
+    id: string;
+    imageUrl: string;          // Cloudinary URL — uploaded from Owner Panel
+    title: string;             // Overlay headline
+    subtitle: string;          // Overlay subtext
+    ctaText: string;           // Button text, e.g. "Shop Now"
+    ctaLink: string;           // Deep link or URL path
+    displayOrder: number;      // Controls carousel sequence
+    startDate?: Timestamp | Date | null;  // Optional scheduling
+    endDate?: Timestamp | Date | null;    // Optional scheduling
+    isActive: boolean;         // On/off toggle
+    createdAt: Timestamp | Date;
+    createdBy: string;         // Owner UID
 }
 
 // ─── Student filter — for getStudents() query ─────────────────────────────────

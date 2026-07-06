@@ -158,6 +158,7 @@ function LoginContent() {
             // We now strictly require OCR to validate the physical ID capture before letting users through.
             // MOCK BYPASS: Auto create DB record and redirect to skip OCR
             if (rawPhone === "9876543210" || rawPhone === "0123456789" || rawPhone === "1234567890") {
+                const isOwnerAccount = rawPhone === "9876543210";
                 await setDoc(doc(db!, "users", user.uid), {
                     uid: user.uid,
                     name: name,
@@ -172,8 +173,9 @@ function LoginContent() {
                     accountStatus: 'active',
                     strikeCount: 0,
                     createdAt: new Date(),
+                    ...(isOwnerAccount && { isOwner: true, isAdmin: true })
                 });
-                toast.success("Mock User Verified!");
+                toast.success(isOwnerAccount ? "Owner Account Verified!" : "Mock User Verified!");
                 setTimeout(() => router.push(redirectUrl), 800);
                 return "MOCK_BYPASS";
             }

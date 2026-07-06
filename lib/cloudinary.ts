@@ -148,6 +148,35 @@ export async function uploadChatImage(
   return result.secureUrl;
 }
 
+/**
+ * Upload a carousel banner image to Cloudinary.
+ * Used by the Owner Panel to add/update banner images.
+ *
+ * @param file      - The image file from phone gallery or camera
+ * @param bannerId  - Optional banner ID (for replacing an existing image)
+ * @returns         - The permanent Cloudinary HTTPS URL
+ *
+ * Example:
+ *   const url = await uploadBannerImage(file, "banner_diwali_2026");
+ *   // Save this URL in Firestore: banners/{bannerId}.imageUrl
+ */
+export async function uploadBannerImage(
+  file: File | Blob,
+  bannerId?: string
+): Promise<string> {
+  const result = await uploadToCloudinary(
+    file,
+    PRESETS.product, // reuse products preset or create a "banners" preset
+    "banners",
+    bannerId ? `banners/${bannerId}` : `banners/banner_${Date.now()}`
+  );
+  return result.secureUrl;
+}
+
+/** Convenience — returns a banner-optimized image URL (wide format, max 800px) */
+export const bannerUrl = (url: string | null | undefined) =>
+  cloudinaryUrl(url, { w: 800, h: 320, crop: "fill" });
+
 // ─────────────────────────────────────────────────────────────────────────────
 // URL HELPERS — get different sizes from the same Cloudinary URL
 // No extra uploads needed — Cloudinary handles resizing on the fly
