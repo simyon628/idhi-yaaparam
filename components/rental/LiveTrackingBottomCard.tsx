@@ -98,7 +98,7 @@ export default function LiveTrackingBottomCard({
     : 'Locating…';
 
   const roleLabel = isOwner ? 'BORROWER' : 'OWNER';
-  const roleColor = isOwner ? '#D97706' : '#534AB7';
+  const roleColor = isOwner ? '#D97706' : '#0B57D0';
   const roleBg   = isOwner ? '#FEF3C7' : '#EEF0FF';
 
   return (
@@ -168,13 +168,13 @@ export default function LiveTrackingBottomCard({
                     alt={otherUserName}
                     style={{
                       width: 52, height: 52, borderRadius: '50%', objectFit: 'cover',
-                      border: '2.5px solid #534AB7',
+                      border: '2.5px solid #0B57D0',
                     }}
                   />
                 ) : (
                   <div style={{
                     width: 52, height: 52, borderRadius: '50%',
-                    background: 'linear-gradient(135deg,#534AB7,#7C3AED)',
+                    background: 'linear-gradient(135deg,#0B57D0,#1A73E8)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#fff', fontWeight: 800, fontSize: 18,
                     boxShadow: '0 4px 14px rgba(83,74,183,0.3)',
@@ -214,7 +214,7 @@ export default function LiveTrackingBottomCard({
                 <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>
                   {distLabel}
                   {etaMin && distanceM && distanceM > 100 && (
-                    <span style={{ color: '#534AB7', fontWeight: 700, marginLeft: 6 }}>
+                    <span style={{ color: '#0B57D0', fontWeight: 700, marginLeft: 6 }}>
                       · ~{etaMin} min
                     </span>
                   )}
@@ -243,7 +243,7 @@ export default function LiveTrackingBottomCard({
                 onClick={() => router.push(`/chat/${rental.id}`)}
                 style={{
                   width: 42, height: 42, borderRadius: '50%',
-                  background: 'linear-gradient(135deg,#534AB7,#7C3AED)',
+                  background: 'linear-gradient(135deg,#0B57D0,#1A73E8)',
                   border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer', flexShrink: 0,
                   boxShadow: '0 4px 14px rgba(83,74,183,0.3)',
@@ -305,9 +305,9 @@ export default function LiveTrackingBottomCard({
                 background: '#F8FAFF', borderRadius: 12, padding: '8px 11px',
                 border: '0.5px solid rgba(83,74,183,0.1)',
               }}>
-                <MapPin style={{ width: 13, height: 13, color: '#534AB7', flexShrink: 0 }} />
+                <MapPin style={{ width: 13, height: 13, color: '#0B57D0', flexShrink: 0 }} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: '#534AB7', letterSpacing: '0.06em', marginBottom: 1 }}>
+                  <div style={{ fontSize: 9, fontWeight: 800, color: '#0B57D0', letterSpacing: '0.06em', marginBottom: 1 }}>
                     MEETUP POINT
                   </div>
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -332,7 +332,7 @@ export default function LiveTrackingBottomCard({
                   }}>{rental.icon || '📦'}</div>
                 )}
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: '#534AB7', letterSpacing: '0.06em', marginBottom: 1 }}>
+                  <div style={{ fontSize: 9, fontWeight: 800, color: '#0B57D0', letterSpacing: '0.06em', marginBottom: 1 }}>
                     ITEM
                   </div>
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -352,7 +352,7 @@ export default function LiveTrackingBottomCard({
                       onClick={() => { setHandoffDone(true); onMarkHandedOver?.(); }}
                       style={{
                         width: '100%', height: 50, borderRadius: 14, border: 'none',
-                        background: handoffDone ? '#F1F5F9' : 'linear-gradient(135deg,#534AB7,#7C3AED)',
+                        background: handoffDone ? '#F1F5F9' : 'linear-gradient(135deg,#0B57D0,#1A73E8)',
                         color: handoffDone ? '#94a3b8' : '#fff',
                         fontSize: 14, fontWeight: 800, cursor: handoffDone ? 'default' : 'pointer',
                         boxShadow: handoffDone ? 'none' : '0 4px 16px rgba(83,74,183,0.3)',
@@ -415,7 +415,7 @@ export default function LiveTrackingBottomCard({
                     style={{
                       flexShrink: 0, padding: '8px 14px', borderRadius: 20,
                       background: '#EEF0FF', border: 'none',
-                      color: '#534AB7', fontSize: 11.5, fontWeight: 700, cursor: 'pointer',
+                      color: '#0B57D0', fontSize: 11.5, fontWeight: 700, cursor: 'pointer',
                       whiteSpace: 'nowrap',
                       transition: 'transform 0.15s ease',
                       fontFamily: "'DM Sans', sans-serif",
@@ -428,7 +428,7 @@ export default function LiveTrackingBottomCard({
                   onClick={() => setShowMsgSheet(true)}
                   style={{
                     flexShrink: 0, padding: '8px 14px', borderRadius: 20,
-                    background: '#534AB7', border: 'none',
+                    background: '#0B57D0', border: 'none',
                     color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     fontFamily: "'DM Sans', sans-serif",
@@ -499,7 +499,7 @@ export default function LiveTrackingBottomCard({
                 disabled={!freeText.trim()}
                 style={{
                   width: 44, height: 44, borderRadius: 12, border: 'none',
-                  background: freeText.trim() ? '#534AB7' : '#F1F5F9',
+                  background: freeText.trim() ? '#0B57D0' : '#F1F5F9',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: freeText.trim() ? 'pointer' : 'default',
                   boxShadow: freeText.trim() ? '0 4px 12px rgba(83,74,183,0.25)' : 'none',

@@ -7,6 +7,7 @@ import { useWishlistStore, useCartStore } from "@/lib/store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useListingMode } from "@/lib/hooks/useListingMode";
+import { theme } from "@/lib/theme.config";
 
 interface ProductCardProps {
   id: string;
@@ -43,7 +44,7 @@ function ProductCardComponent({
     switch (listingMode) {
       case "sell": return "#FF9500";
       case "buy": return "#00C48C";
-      default: return "#5B4CDB";
+      default: return theme.brand.primary;
     }
   };
 
@@ -150,14 +151,14 @@ function ProductCardComponent({
         <p style={{ fontSize: 13, fontWeight: 600, color: '#1A1A1A', marginBottom: 2, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", lineHeight: 1.2 }}>
           {itemName}
         </p>
-        <p style={{ fontSize: 11, color: '#5B4CDB', fontWeight: 500, marginBottom: 1 }}>
+        <p style={{ fontSize: 11, color: theme.brand.primary, fontWeight: 500, marginBottom: 1 }}>
           {branch}
         </p>
         <p style={{ fontSize: 10, color: '#888', marginBottom: 4 }}>
           @{sellerUsername} · {distance}
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, marginTop: "auto" }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: '#5B4CDB' }}>
+          <span style={{ fontSize: 14, fontWeight: 700, color: theme.brand.primary }}>
             ₹{pricePerHour}
             <span style={{ fontSize: 10, fontWeight: 400, color: '#888' }}>/hr</span>
           </span>

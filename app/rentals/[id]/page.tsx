@@ -596,7 +596,7 @@ export default function RentalDetailPage() {
                         {rental?.status === "available" ? "✓ Available Now" : rental?.status === "requested" ? "⏳ Pending" : rental?.status === "active" ? "🔴 Active" : "Completed"}
                     </span>
                     {rental?.condition && (
-                        <span style={{ fontSize: 11, fontWeight: 700, background: "#EEF0FF", color: "#5B4CDB", borderRadius: 20, padding: "3px 10px" }}>{rental.condition}</span>
+                        <span style={{ fontSize: 11, fontWeight: 700, background: "#EEF0FF", color: "#0B57D0", borderRadius: 20, padding: "3px 10px" }}>{rental.condition}</span>
                     )}
                 </div>
 
@@ -606,9 +606,9 @@ export default function RentalDetailPage() {
 
                 {/* ── Seller Info Card (Flipkart-style) ── */}
                 <div style={{ background: "linear-gradient(135deg, #f8faff 0%, #eef0ff 100%)", border: "1px solid #c7d2fe", borderRadius: 16, padding: 14, marginBottom: 16 }}>
-                    <p style={{ fontSize: 10, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Owner / Lender</p>
+                    <p style={{ fontSize: 10, fontWeight: 800, color: "#0B57D0", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Owner / Lender</p>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg, #5B4CDB, #7C3AED)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
+                        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg, #0B57D0, #1A73E8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
                             {owner?.name?.charAt(0)?.toUpperCase() || "?"}
                         </div>
                         <div style={{ flex: 1 }}>
@@ -742,7 +742,7 @@ export default function RentalDetailPage() {
 
                 {/* Location & pickup info */}
                 <div style={{ background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 14, marginBottom: 16 }}>
-                    <p style={{ fontSize: 10, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Pickup Location</p>
+                    <p style={{ fontSize: 10, fontWeight: 800, color: "#0B57D0", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Pickup Location</p>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <MapPin className="w-4 h-4 text-indigo-500" />
                         <span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>{rental?.block || "Campus Block"}</span>
@@ -761,7 +761,7 @@ export default function RentalDetailPage() {
                 {isOwner ? (
                     <>
                         {rental?.status === "requested" && (
-                            <button onClick={handleApprove} disabled={actionLoading} style={{ width: "100%", height: 52, background: "#5B4CDB", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                            <button onClick={handleApprove} disabled={actionLoading} style={{ width: "100%", height: 52, background: "#0B57D0", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                                 {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><CheckCircle2 className="w-5 h-5" /> Approve Rental</>}
                             </button>
                         )}
@@ -861,7 +861,7 @@ export default function RentalDetailPage() {
                             ))}
                         </div>
                         <textarea placeholder="Write a short review (optional)…" value={ratingComment} onChange={e => setRatingComment(e.target.value)} style={{ width: "100%", height: 80, borderRadius: 12, border: "1px solid #e2e8f0", padding: "10px 14px", fontSize: 13, resize: "none", marginBottom: 16, boxSizing: "border-box" }} />
-                        <button onClick={handleRateUser} disabled={actionLoading} style={{ width: "100%", height: 52, background: "#5B4CDB", color: "#fff", border: "none", borderRadius: 12, fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
+                        <button onClick={handleRateUser} disabled={actionLoading} style={{ width: "100%", height: 52, background: "#0B57D0", color: "#fff", border: "none", borderRadius: 12, fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
                             {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit Review"}
                         </button>
                     </div>

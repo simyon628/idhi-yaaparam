@@ -381,10 +381,10 @@ export default function RentalsMarketplace() {
                 {activeMode === "rent" && (
                     <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                         {/* Trending Shelf (Moved Up) */}
-                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
+                        <section style={{ margin: '0 -16px 24px', overflow: 'hidden' }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>Trending 🔥</div>
-                                <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>
@@ -421,10 +421,10 @@ export default function RentalsMarketplace() {
                         </section>
 
                         {/* Electronic & Gadgets */}
-                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
+                        <section style={{ margin: '0 -16px 24px', overflow: 'hidden' }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>⚡ Electronic & Gadgets</div>
-                                <button onClick={() => router.push("/category/electronics")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                <button onClick={() => router.push("/category/electronics")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>
@@ -465,7 +465,7 @@ export default function RentalsMarketplace() {
                         <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>📐 Academic & Tools</div>
-                                <button onClick={() => router.push("/category/academic")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                <button onClick={() => router.push("/category/academic")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>
@@ -506,7 +506,7 @@ export default function RentalsMarketplace() {
                         <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>Near You 📍</div>
-                                <button onClick={() => router.push("/near-you")} style={{ fontSize: 12, fontWeight: 700, color: "#5B4CDB", background: "none", border: "none", cursor: "pointer" }}>
+                                <button onClick={() => router.push("/near-you")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>

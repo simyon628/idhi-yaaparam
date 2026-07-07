@@ -148,7 +148,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                 <Search size={18} color="#334155" />
               </button>
               <button onClick={() => setShowFilterSheet(true)} style={{ background: "#EEF0FF", border: "none", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <SlidersHorizontal size={18} color="#5B4CDB" />
+                <SlidersHorizontal size={18} color="#0B57D0" />
               </button>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             }}
           >
             <span>Sort:</span>
-            <span style={{ fontWeight: 700, color: "#5B4CDB" }}>
+            <span style={{ fontWeight: 700, color: "#0B57D0" }}>
               {SORT_OPTIONS.find(o => o.id === sortBy)?.label || "Newest"}
             </span>
           </button>
@@ -201,7 +201,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             }}
           >
             <span>Branch:</span>
-            <span style={{ fontWeight: 700, color: "#5B4CDB" }}>
+            <span style={{ fontWeight: 700, color: "#0B57D0" }}>
               {activeBranch}
             </span>
           </button>
@@ -227,7 +227,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             <button
               onClick={() => router.push(`/rentals/new?category=${slug}`)}
               style={{
-                background: "linear-gradient(135deg, #5B4CDB, #7C3AED)",
+                background: "linear-gradient(135deg, #0B57D0, #1A73E8)",
                 color: "#fff", border: "none",
                 borderRadius: 14, padding: "12px 28px",
                 fontSize: 14, fontWeight: 800, cursor: "pointer",
@@ -292,26 +292,26 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               </button>
             </div>
 
-            <p style={{ fontSize: 11, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Sort By</p>
+            <p style={{ fontSize: 11, fontWeight: 800, color: "#0B57D0", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Sort By</p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
               {SORT_OPTIONS.map(opt => (
                 <button key={opt.id} onClick={() => { setSortBy(opt.id); setShowFilterSheet(false); }}
                   style={{ padding: "8px 16px", borderRadius: 20, fontSize: 13, fontWeight: 700,
-                    border: sortBy === opt.id ? "1.5px solid #5B4CDB" : "1.5px solid #e2e8f0",
+                    border: sortBy === opt.id ? "1.5px solid #0B57D0" : "1.5px solid #e2e8f0",
                     background: sortBy === opt.id ? "#EEF0FF" : "#fff",
-                    color: sortBy === opt.id ? "#5B4CDB" : "#475569", cursor: "pointer" }}
+                    color: sortBy === opt.id ? "#0B57D0" : "#475569", cursor: "pointer" }}
                 >{opt.label}</button>
               ))}
             </div>
 
-            <p style={{ fontSize: 11, fontWeight: 800, color: "#5B4CDB", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Branch</p>
+            <p style={{ fontSize: 11, fontWeight: 800, color: "#0B57D0", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Branch</p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {BRANCH_CHIPS.map(branch => (
                 <button key={branch} onClick={() => { setActiveBranch(branch); setShowFilterSheet(false); }}
                   style={{ padding: "8px 16px", borderRadius: 20, fontSize: 13, fontWeight: 700,
-                    border: activeBranch === branch ? "1.5px solid #5B4CDB" : "1.5px solid #e2e8f0",
+                    border: activeBranch === branch ? "1.5px solid #0B57D0" : "1.5px solid #e2e8f0",
                     background: activeBranch === branch ? "#EEF0FF" : "#fff",
-                    color: activeBranch === branch ? "#5B4CDB" : "#475569", cursor: "pointer" }}
+                    color: activeBranch === branch ? "#0B57D0" : "#475569", cursor: "pointer" }}
                 >{branch}</button>
               ))}
             </div>

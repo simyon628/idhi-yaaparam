@@ -37,7 +37,7 @@ export default function WishlistPage() {
             </div>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1e293b", marginBottom: 8 }}>Nothing saved yet</h2>
             <p style={{ fontSize: 14, color: "#64748b", marginBottom: 24 }}>Save items you like to view them later.</p>
-            <button onClick={() => router.push('/rentals')} style={{ padding: "12px 24px", background: "#5B4CDB", color: "#fff", fontWeight: 700, borderRadius: 12, border: "none", cursor: "pointer" }}>Start Browsing</button>
+            <button onClick={() => router.push('/rentals')} style={{ padding: "12px 24px", background: "#0B57D0", color: "#fff", fontWeight: 700, borderRadius: 12, border: "none", cursor: "pointer" }}>Start Browsing</button>
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, justifyItems: "center" }}>

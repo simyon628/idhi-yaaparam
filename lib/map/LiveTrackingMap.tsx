@@ -230,7 +230,7 @@ function buildOwnerIcon(name: string | undefined, isMoving: boolean, isPending: 
             background:rgba(83,74,183,0.12);${pulse}animation-delay:0.4s"></div>
           <!-- Avatar circle -->
           <div style="position:absolute;inset:0;border-radius:50%;
-            background:linear-gradient(135deg,#534AB7 0%,#7C3AED 100%);
+            background:linear-gradient(135deg,#0B57D0 0%,#1A73E8 100%);
             display:flex;align-items:center;justify-content:center;
             font-size:17px;font-weight:800;color:#fff;
             border:2.5px solid #fff;
@@ -240,7 +240,7 @@ function buildOwnerIcon(name: string | undefined, isMoving: boolean, isPending: 
           </div>
         </div>
         <!-- Label pill -->
-        <div style="background:#534AB7;color:#fff;font-size:9px;font-weight:800;
+        <div style="background:#0B57D0;color:#fff;font-size:9px;font-weight:800;
           padding:2px 8px;border-radius:20px;white-space:nowrap;
           letter-spacing:0.06em;font-family:'DM Sans',sans-serif;
           box-shadow:0 2px 8px rgba(83,74,183,0.3);">
@@ -302,14 +302,14 @@ function buildMeetupIcon(): L.DivIcon {
           <div style="position:absolute;inset:-6px;border-radius:50%;
             border:2px solid rgba(83,74,183,0.5);animation:iy-ping 1.2s ease-out infinite;"></div>
           <div style="position:absolute;inset:0;border-radius:50%;
-            background:linear-gradient(135deg,#534AB7,#7C3AED);
+            background:linear-gradient(135deg,#0B57D0,#1A73E8);
             display:flex;align-items:center;justify-content:center;
             font-size:22px;border:2.5px solid #fff;
             box-shadow:0 4px 16px rgba(83,74,183,0.5);">
             🤝
           </div>
         </div>
-        <div style="background:linear-gradient(135deg,#534AB7,#7C3AED);color:#fff;
+        <div style="background:linear-gradient(135deg,#0B57D0,#1A73E8);color:#fff;
           font-size:9px;font-weight:800;padding:2px 10px;border-radius:20px;
           white-space:nowrap;letter-spacing:0.06em;
           box-shadow:0 2px 8px rgba(83,74,183,0.4);
@@ -433,7 +433,7 @@ function StatusBar({ phase, distanceM }: { phase: TrackingPhase; distanceM: numb
           <div key={s.key} style={{
             display: 'flex', alignItems: 'center', gap: 5,
             padding: '5px 12px', borderRadius: 24,
-            background: isActive ? '#534AB7' : 'transparent',
+            background: isActive ? '#0B57D0' : 'transparent',
             color: isActive ? '#fff' : isPast ? '#10B981' : '#94a3b8',
             fontSize: 11, fontWeight: 800,
             fontFamily: "'DM Sans', sans-serif",
@@ -471,7 +471,7 @@ function ETAFloat({ distanceM, etaMin }: { distanceM: number; etaMin: number }) 
             · {distanceM < 1000 ? `${distanceM}m` : `${(distanceM / 1000).toFixed(1)}km`}
           </span>
         </div>
-        <div style={{ fontSize: 9, fontWeight: 800, color: '#534AB7', letterSpacing: '0.08em' }}>
+        <div style={{ fontSize: 9, fontWeight: 800, color: '#0B57D0', letterSpacing: '0.08em' }}>
           ESTIMATED MEETUP TIME
         </div>
       </div>
@@ -504,7 +504,7 @@ function ArrivedBanner({ onSend }: { onSend: (msg: string) => void }) {
         {msgs.map(m => (
           <button key={m} onClick={() => onSend(m)} style={{
             padding: '7px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700,
-            border: 'none', background: '#EEF0FF', color: '#534AB7', cursor: 'pointer',
+            border: 'none', background: '#EEF0FF', color: '#0B57D0', cursor: 'pointer',
             transition: 'transform 0.15s ease', whiteSpace: 'nowrap',
             fontFamily: "'DM Sans', sans-serif",
           }}
@@ -617,7 +617,7 @@ export default function LiveTrackingMap({
   // Route polyline options
   const routeOptions = isStreet
     ? {
-        color: '#534AB7',
+        color: '#0B57D0',
         weight: 5,
         opacity: 0.9,
         lineCap: 'round' as const,
@@ -668,8 +668,8 @@ export default function LiveTrackingMap({
             center={ownerPos}
             radius={80}
             pathOptions={{
-              color: '#534AB7',
-              fillColor: '#534AB7',
+              color: '#0B57D0',
+              fillColor: '#0B57D0',
               fillOpacity: 0.07,
               weight: 2,
               dashArray: '5 5',

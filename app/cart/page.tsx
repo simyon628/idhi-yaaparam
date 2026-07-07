@@ -31,7 +31,7 @@ export default function CartPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--iy-surface)", paddingBottom: 100 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "16px 20px", background: "#5B4CDB", color: "#fff", position: "sticky", top: 0, zIndex: 10 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "16px 20px", background: "#0B57D0", color: "#fff", position: "sticky", top: 0, zIndex: 10 }}>
         <button onClick={() => router.back()} style={{ background: "none", border: "none", cursor: "pointer", color: "#fff", display: "flex" }}>
           <ArrowLeft size={24} />
         </button>
@@ -43,7 +43,7 @@ export default function CartPage() {
           <div style={{ fontSize: 64, marginBottom: 16 }}>🛒</div>
           <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1e293b", marginBottom: 8 }}>Your cart is empty</h2>
           <p style={{ fontSize: 14, color: "#64748b", marginBottom: 24 }}>Looks like you haven't added anything to your cart yet.</p>
-          <button onClick={() => router.push('/rentals')} style={{ padding: "12px 24px", background: "#5B4CDB", color: "#fff", fontWeight: 700, borderRadius: 12, border: "none", cursor: "pointer" }}>Start Browsing</button>
+          <button onClick={() => router.push('/rentals')} style={{ padding: "12px 24px", background: "#0B57D0", color: "#fff", fontWeight: 700, borderRadius: 12, border: "none", cursor: "pointer" }}>Start Browsing</button>
         </div>
       ) : (
         <>
@@ -56,7 +56,7 @@ export default function CartPage() {
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, color: "#1e293b", marginBottom: 2 }}>{item.itemName}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: "#5B4CDB" }}>{item.branch}</span>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: "#0B57D0" }}>{item.branch}</span>
                     <span style={{ fontSize: 10, color: "#888780" }}>@{item.sellerUsername}</span>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 10, color: "#888780", marginBottom: 8 }}>
@@ -65,10 +65,10 @@ export default function CartPage() {
                   </div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div style={{ fontSize: 14, fontWeight: 700, color: "#1e293b" }}>₹{item.pricePerHour}<span style={{ fontSize: 10, color: "#888780", fontWeight: 400 }}>/hr</span></div>
-                    <div style={{ display: "flex", alignItems: "center", background: "#EEF0FF", borderRadius: 8, padding: "4px 8px", color: "#5B4CDB", fontWeight: 700, gap: 12 }}>
-                      <button onClick={() => updateQty(item.id, -1)} style={{ background: "none", border: "none", color: "#5B4CDB", cursor: "pointer", display: "flex" }}><Minus size={14} /></button>
+                    <div style={{ display: "flex", alignItems: "center", background: "#EEF0FF", borderRadius: 8, padding: "4px 8px", color: "#0B57D0", fontWeight: 700, gap: 12 }}>
+                      <button onClick={() => updateQty(item.id, -1)} style={{ background: "none", border: "none", color: "#0B57D0", cursor: "pointer", display: "flex" }}><Minus size={14} /></button>
                       <span style={{ fontSize: 13 }}>{item.qty}</span>
-                      <button onClick={() => updateQty(item.id, 1)} style={{ background: "none", border: "none", color: "#5B4CDB", cursor: "pointer", display: "flex" }}><Plus size={14} /></button>
+                      <button onClick={() => updateQty(item.id, 1)} style={{ background: "none", border: "none", color: "#0B57D0", cursor: "pointer", display: "flex" }}><Plus size={14} /></button>
                     </div>
                   </div>
                 </div>
@@ -88,8 +88,8 @@ export default function CartPage() {
                     borderRadius: 20,
                     fontSize: 13,
                     fontWeight: 600,
-                    border: selectedDuration === hrs ? "1px solid #5B4CDB" : "1px solid #e2e8f0",
-                    background: selectedDuration === hrs ? "#5B4CDB" : "var(--iy-surface)",
+                    border: selectedDuration === hrs ? "1px solid #0B57D0" : "1px solid #e2e8f0",
+                    background: selectedDuration === hrs ? "#0B57D0" : "var(--iy-surface)",
                     color: selectedDuration === hrs ? "#fff" : "var(--iy-text1)",
                     cursor: "pointer",
                     flexShrink: 0
@@ -116,14 +116,14 @@ export default function CartPage() {
               <span>₹{gst}</span>
             </div>
             <div style={{ height: 1, background: "#e2e8f0", margin: "12px 0" }} />
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: "#5B4CDB" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: "#0B57D0" }}>
               <span>Total</span>
               <span>₹{total}</span>
             </div>
           </div>
 
           <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, padding: "16px", background: "var(--iy-ink)", borderTop: "1px solid #e2e8f0", zIndex: 50, maxWidth: 448, margin: "0 auto" }}>
-            <button style={{ width: "100%", height: 52, borderRadius: 14, background: "#5B4CDB", color: "#fff", fontSize: 16, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", border: "none", cursor: "pointer", boxShadow: "0 4px 12px rgba(91,76,219,0.3)" }}>
+            <button style={{ width: "100%", height: 52, borderRadius: 14, background: "#0B57D0", color: "#fff", fontSize: 16, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", border: "none", cursor: "pointer", boxShadow: "0 4px 12px rgba(91,76,219,0.3)" }}>
               <span>₹{total}</span>
               <span>Proceed to Checkout →</span>
             </button>

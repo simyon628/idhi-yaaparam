@@ -49,18 +49,18 @@ export function BottomNav() {
 
     return (
         <nav
-            className="fixed bottom-4 left-3 right-3 z-50 mx-auto max-w-sm"
+            className="fixed bottom-0 left-0 right-0 z-50 w-full"
             style={{ fontFamily: "'DM Sans', sans-serif" }}
         >
             <div
                 style={{
                     background: theme.bottomNav.bg,
-                    borderRadius: 28,
                     padding: "11px 18px",
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    boxShadow: "0 10px 48px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.05)",
+                    boxShadow: "0 -4px 20px rgba(0,0,0,.05)",
+                    borderTop: "1px solid rgba(0,0,0,0.05)",
                 }}
             >
                 {items.map((item) => {

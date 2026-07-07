@@ -25,8 +25,8 @@ const LiveTrackingBottomCard = dynamic(
 function MapSkeleton() {
   return (
     <div style={{ flex: 1, background: "linear-gradient(135deg,#f0eeff,#e8f5ff)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
-      <Loader2 style={{ width: 32, height: 32, color: "#7C3AED", animation: "spin 1s linear infinite" }} />
-      <span style={{ fontSize: 13, fontWeight: 700, color: "#7C3AED" }}>Loading live map…</span>
+      <Loader2 style={{ width: 32, height: 32, color: "#1A73E8", animation: "spin 1s linear infinite" }} />
+      <span style={{ fontSize: 13, fontWeight: 700, color: "#1A73E8" }}>Loading live map…</span>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
@@ -269,8 +269,8 @@ export default function LiveTrackingPage() {
   if (loading) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", gap: 14, background: "#f5f3ff" }}>
-        <Loader2 style={{ width: 36, height: 36, color: "#7C3AED", animation: "spin 1s linear infinite" }} />
-        <span style={{ fontSize: 14, fontWeight: 700, color: "#7C3AED" }}>Loading live session...</span>
+        <Loader2 style={{ width: 36, height: 36, color: "#1A73E8", animation: "spin 1s linear infinite" }} />
+        <span style={{ fontSize: 14, fontWeight: 700, color: "#1A73E8" }}>Loading live session...</span>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );

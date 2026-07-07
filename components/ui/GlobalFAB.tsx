@@ -8,6 +8,7 @@ import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/fires
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import { useCollege } from "@/contexts/CollegeContext";
+import { theme } from "@/lib/theme.config";
 
 export function GlobalFAB() {
   const [isOpen, setIsOpen] = useState(false);
@@ -131,13 +132,13 @@ export function GlobalFAB() {
           display: "flex",
           alignItems: "center",
           gap: 6,
-          background: "#5B4CDB",
+          background: theme.brand.primary,
           color: "#fff",
           padding: "0 18px",
           height: 44,
           borderRadius: 50,
           border: "none",
-          boxShadow: "0 4px 16px rgba(91,76,219,0.45)",
+          boxShadow: `0 4px 16px ${theme.brand.primary}66`, // 40% opacity hex
           cursor: "pointer",
           fontSize: 13,
           fontWeight: 500,

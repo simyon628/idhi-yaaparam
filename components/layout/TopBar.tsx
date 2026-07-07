@@ -39,11 +39,12 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
             ? selectedCollege.name.split(" ").map((w: string) => w[0]).join("").toUpperCase()
             : "Campus");
 
-    const headerBg = lightMode ? "#fff" : "linear-gradient(180deg,#13131F 0%,#16162A 100%)";
-    const textColor = lightMode ? "#13131F" : "#fff";
-    const subtextColor = lightMode ? "rgba(19,19,31,0.5)" : "rgba(255,255,255,0.38)";
-    const buttonBg = lightMode ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)";
-    const buttonBorder = lightMode ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(255,255,255,0.12)";
+    // Enforce light mode colors based on the new white/blue theme
+    const headerBg = "#ffffff";
+    const textColor = "#111827";
+    const subtextColor = "#6B7280";
+    const buttonBg = "rgba(0,0,0,0.04)";
+    const buttonBorder = "1px solid rgba(0,0,0,0.06)";
 
     return (
         <>
@@ -57,7 +58,7 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
                     alignItems: "center",
                     padding: "14px 20px 10px",
                     fontFamily: "'DM Sans', sans-serif",
-                    borderBottom: lightMode ? "1px solid rgba(0,0,0,0.04)" : "none"
+                    borderBottom: "1px solid rgba(0,0,0,0.04)"
                 }}
             >
                 {/* Logo */}
@@ -69,13 +70,13 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
                         style={{
                             width: 38,
                             height: 38,
-                            background: "linear-gradient(135deg,#5548E8,#7B72FF)",
+                            background: "linear-gradient(135deg,#0B57D0,#1A73E8)",
                             borderRadius: 12,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                             fontSize: 20,
-                            boxShadow: "0 4px 16px rgba(85,72,232,0.45)",
+                            boxShadow: "0 4px 16px rgba(11,87,208,0.45)",
                         }}
                     >
                         🚀
@@ -120,7 +121,7 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
                                     height: 7,
                                     background: "#FF5F5F",
                                     borderRadius: "50%",
-                                    border: lightMode ? "1.5px solid #fff" : "1.5px solid #16162A",
+                                    border: "1.5px solid #fff",
                                 }}
                             />
                         )}
@@ -152,10 +153,10 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
                                     display: "inline-block",
                                 }}
                             />
-                            <span style={{ fontSize: 11, color: lightMode ? "#13131F" : "rgba(255,255,255,0.72)", fontWeight: 600 }}>
+                            <span style={{ fontSize: 11, color: "#111827", fontWeight: 600 }}>
                                 {collegeName}
                             </span>
-                            <ChevronDown style={{ width: 12, height: 12, color: lightMode ? "rgba(19,19,31,0.4)" : "rgba(255,255,255,0.4)" }} />
+                            <ChevronDown style={{ width: 12, height: 12, color: "#6B7280" }} />
                         </button>
                     )}
                 </div>
@@ -163,7 +164,7 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
 
             {/* ── Search Bar Row ── */}
             {!hideSearch && (
-                <div className="px-5 pb-4" style={{ background: lightMode ? "#fff" : "linear-gradient(180deg,#16162A 0%,#13131F 100%)", borderBottom: lightMode ? "1px solid rgba(0,0,0,0.04)" : "none" }}>
+                <div className="px-5 pb-4" style={{ background: "#ffffff", borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
                     <SearchTrigger />
                 </div>
             )}
@@ -173,7 +174,7 @@ export function TopBar({ hideSearch = false, lightMode = false, isProfile = fals
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-5 animate-in fade-in duration-200">
                     <div className="w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl relative">
                         <div className="flex items-center justify-between p-5 border-b border-slate-100"
-                            style={{ background: "linear-gradient(135deg,#5548E8,#7B72FF)" }}>
+                            style={{ background: "linear-gradient(135deg,#0B57D0,#1A73E8)" }}>
                             <h2 className="text-lg font-black text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
                                 🎓 Change College
                             </h2>

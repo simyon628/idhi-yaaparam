@@ -40,13 +40,13 @@ export default function WritingFeedPage() {
 
     if (isReady && !selectedCollege) {
         return (
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", textAlign: "center", padding: "0 24px", background: "linear-gradient(160deg,#13131F 0%,#1E1E30 40%,#16162A 100%)" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", textAlign: "center", padding: "0 24px", background: theme.surface }}>
                 <span style={{ fontSize: 52, marginBottom: 20 }}>🎓</span>
-                <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", marginBottom: 8 }}>Select a Campus</h2>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginBottom: 28, maxWidth: 280, lineHeight: 1.6 }}>Select your college from the home page to view writing jobs.</p>
+                <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 24, color: "#111827", marginBottom: 8 }}>Select a Campus</h2>
+                <p style={{ fontSize: 13, color: "#6B7280", marginBottom: 28, maxWidth: 280, lineHeight: 1.6 }}>Select your college from the home page to view writing jobs.</p>
                 <button
                     onClick={() => router.push("/")}
-                    style={{ background: "linear-gradient(135deg,#5548E8,#7B72FF)", color: "#fff", padding: "14px 32px", borderRadius: 18, fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", boxShadow: "0 8px 28px rgba(85,72,232,0.5)" }}
+                    style={{ background: theme.brand.primary, color: "#fff", padding: "14px 32px", borderRadius: 18, fontWeight: 700, fontSize: 14, border: "none", cursor: "pointer", boxShadow: `0 8px 28px ${theme.brand.primary}66` }}
                 >Go to Home</button>
             </div>
         );
@@ -60,24 +60,20 @@ export default function WritingFeedPage() {
     return (
         <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--iy-surface)", fontFamily: "'DM Sans',sans-serif", paddingBottom: 112 }}>
 
-            {/* ── DARK HEADER ── */}
-            <div style={{ background: "linear-gradient(180deg,#16162A 0%,#1E1E34 100%)", padding: "14px 20px 24px", position: "relative", overflow: "hidden" }}>
-                {/* Ambient glows */}
-                <div style={{ position: "absolute", top: -30, right: -20, width: 160, height: 160, background: "radial-gradient(circle,rgba(0,196,140,0.25) 0%,transparent 70%)", pointerEvents: "none" }} />
-                <div style={{ position: "absolute", bottom: 10, left: -10, width: 120, height: 120, background: "radial-gradient(circle,rgba(85,72,232,0.18) 0%,transparent 70%)", pointerEvents: "none" }} />
-
+            {/* ── LIGHT HEADER ── */}
+            <div style={{ background: theme.header.background, padding: "14px 20px 24px", position: "relative", overflow: "hidden" }}>
                 {/* Top row: logo + bell */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, position: "relative", zIndex: 3 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => router.push("/rentals")}>
                         <div style={{ width: 38, height: 38, background: "linear-gradient(135deg,#00C48C,#00A876)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 4px 16px rgba(0,196,140,0.45)" }}>✍️</div>
                         <div>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: "#fff", lineHeight: 1 }}>Writing Work</div>
-                            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Earn Money</div>
+                            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: "#111827", lineHeight: 1 }}>Writing Work</div>
+                            <div style={{ fontSize: 10, color: "#6B7280", letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Earn Money</div>
                         </div>
                     </div>
                     <button
                         onClick={() => router.push("/notifications")}
-                        style={{ width: 36, height: 36, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, position: "relative", zIndex: 3 }}
+                        style={{ width: 36, height: 36, background: "#fff", border: "1px solid rgba(0,0,0,0.1)", borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, position: "relative", zIndex: 3 }}
                     >🔔</button>
                 </div>
 
@@ -86,33 +82,30 @@ export default function WritingFeedPage() {
                     <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(0,196,140,0.14)", border: "1px solid rgba(0,196,140,0.22)", borderRadius: 20, padding: "4px 11px", fontSize: 11, fontWeight: 700, color: "#00C48C", letterSpacing: ".5px", marginBottom: 10 }}>
                         ✨ EARN MONEY
                     </div>
-                    <h1 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", lineHeight: 1.2, marginBottom: 6 }}>
+                    <h1 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 26, color: "#111827", lineHeight: 1.2, marginBottom: 6 }}>
                         Open <span style={{ color: "#00C48C" }}>Bounties</span>
                     </h1>
-                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>
+                    <p style={{ fontSize: 12, color: "#6B7280", lineHeight: 1.6 }}>
                         Help peers with assignments & lab records. Get paid per job.
                     </p>
                 </div>
 
                 {/* Search */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "10px 14px", position: "relative", zIndex: 3 }}>
-                    <span style={{ fontSize: 16, color: "rgba(255,255,255,0.4)" }}>🔍</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#fff", border: "1px solid rgba(0,0,0,0.1)", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", borderRadius: 14, padding: "10px 14px", position: "relative", zIndex: 3 }}>
+                    <span style={{ fontSize: 16, color: "#9CA3AF" }}>🔍</span>
                     <input
                         type="text"
                         placeholder="Search assignments, records..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: 13, fontFamily: "'DM Sans',sans-serif" }}
+                        style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#111827", fontSize: 13, fontFamily: "'DM Sans',sans-serif" }}
                     />
                     {search && (
                         <button onClick={() => setSearch("")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                            <X style={{ width: 14, height: 14, color: "rgba(255,255,255,0.4)" }} />
+                            <X style={{ width: 14, height: 14, color: "#9CA3AF" }} />
                         </button>
                     )}
                 </div>
-
-                {/* Fade bottom edge */}
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 16, background: "linear-gradient(to bottom,transparent,var(--iy-surface))", pointerEvents: "none", zIndex: 2 }} />
             </div>
 
             {/* ── JOB COUNT ── */}

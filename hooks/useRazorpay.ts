@@ -105,7 +105,7 @@ export function useRazorpay() {
             email: user.email || '',
           },
           theme: {
-            color: '#5B4CDB'
+            color: '#0B57D0'
           }
         };
 
