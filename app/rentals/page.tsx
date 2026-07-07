@@ -2,7 +2,6 @@
 
 import { useCollege } from "@/contexts/CollegeContext";
 import { BottomNav } from "@/components/layout/BottomNav";
-import {
     Plus,
     X,
     Search as SearchIcon,
@@ -12,6 +11,24 @@ import {
     ArrowRight,
     Bell,
     ChevronDown,
+    Calculator,
+    Shirt,
+    Laptop,
+    Camera as CameraIcon,
+    Ruler,
+    BookOpen,
+    Microscope,
+    PenTool,
+    FileText,
+    ClipboardList,
+    Book,
+    Notebook,
+    Printer,
+    FileDown,
+    Presentation,
+    Smartphone,
+    Headset,
+    Package
 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -30,34 +47,34 @@ import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
-        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: "🖩" },
-        { id: "lab-coat", name: "Lab Coats", bg: "#EAF3DE", icon: "🥼" },
-        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: "💻" },
-        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: "📷" },
-        { id: "geometry", name: "Geometry Kits", bg: "#FAEEDA", icon: "📏" },
-        { id: "cycle", name: "Cycles", bg: "#E1F5EE", icon: "🚲" },
-        { id: "project-kit", name: "Project Kits", bg: "#EAF3DE", icon: "🔬" },
-        { id: "drafter", name: "Drafters", bg: "#E1F5EE", icon: "📐" },
+        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
+        { id: "lab-coat", name: "Lab Coats", bg: "#EAF3DE", icon: <Shirt size={24} /> },
+        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
+        { id: "geometry", name: "Geometry Kits", bg: "#FAEEDA", icon: <Ruler size={24} /> },
+        { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} /> },
+        { id: "project-kit", name: "Project Kits", bg: "#EAF3DE", icon: <Microscope size={24} /> },
+        { id: "drafter", name: "Drafters", bg: "#E1F5EE", icon: <PenTool size={24} /> },
     ],
     buy: [
-        { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: "📝" },
-        { id: "records", name: "Records", bg: "#EAF3DE", icon: "📋" },
-        { id: "notes", name: "Notes", bg: "#E6F1FB", icon: "📚" },
-        { id: "lab-manuals", name: "Lab Manuals", bg: "#FAEEDA", icon: "📓" },
-        { id: "printouts", name: "Printouts", bg: "#FBEAF0", icon: "🖨️" },
-        { id: "resume-writing", name: "Resume", bg: "#E1F5EE", icon: "📄" },
-        { id: "mini-projects", name: "Mini Projects", bg: "#E6F1FB", icon: "💻" },
-        { id: "ppt-design", name: "PPT Design", bg: "#EEF0FF", icon: "📊" },
+        { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: <FileText size={24} /> },
+        { id: "records", name: "Records", bg: "#EAF3DE", icon: <ClipboardList size={24} /> },
+        { id: "notes", name: "Notes", bg: "#E6F1FB", icon: <Book size={24} /> },
+        { id: "lab-manuals", name: "Lab Manuals", bg: "#FAEEDA", icon: <Notebook size={24} /> },
+        { id: "printouts", name: "Printouts", bg: "#FBEAF0", icon: <Printer size={24} /> },
+        { id: "resume-writing", name: "Resume", bg: "#E1F5EE", icon: <FileDown size={24} /> },
+        { id: "mini-projects", name: "Mini Projects", bg: "#E6F1FB", icon: <Laptop size={24} /> },
+        { id: "ppt-design", name: "PPT Design", bg: "#EEF0FF", icon: <Presentation size={24} /> },
     ],
     sell: [
-        { id: "mobiles", name: "Mobiles", bg: "#EEF0FF", icon: "📱" },
-        { id: "laptops", name: "Laptops", bg: "#E6F1FB", icon: "💻" },
-        { id: "books", name: "Books", bg: "#EAF3DE", icon: "📚" },
-        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: "🏍️" },
-        { id: "furniture", name: "Furniture", bg: "#E1F5EE", icon: "🪑" },
-        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: "🔌" },
-        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: "🎧" },
-        { id: "hostel-essentials", name: "Hostel Needs", bg: "#FAEEDA", icon: "📦" },
+        { id: "mobiles", name: "Mobiles", bg: "#EEF0FF", icon: <Smartphone size={24} /> },
+        { id: "laptops", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
+        { id: "books", name: "Books", bg: "#EAF3DE", icon: <Book size={24} /> },
+        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: <Package size={24} /> }, // Optional: use Bike icon if available in your lucide version, falling back to Package
+        { id: "furniture", name: "Furniture", bg: "#E1F5EE", icon: <Package size={24} /> },
+        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: <Laptop size={24} /> },
+        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
+        { id: "hostel-essentials", name: "Hostel Needs", bg: "#FAEEDA", icon: <Package size={24} /> },
     ]
 };
 
@@ -180,7 +197,7 @@ export default function RentalsMarketplace() {
     return (
         <div
             className="flex flex-col min-h-screen pb-28"
-            style={{ background: "var(--iy-surface)", fontFamily: "'DM Sans', sans-serif" }}
+            style={{ background: theme.surface, fontFamily: "'DM Sans', sans-serif" }}
         >
             {/* ══════════════════════════════════════════════════════════════
                 PURPLE GRADIENT HEADER — Brand Identity Section
@@ -279,11 +296,12 @@ export default function RentalsMarketplace() {
                 {/* ── Search Bar ── */}
                 <div style={{ padding: "0 20px", position: "relative", zIndex: 2, marginBottom: 20 }}>
                     <form onSubmit={handleSearchSubmit} style={{
-                        display: "flex", alignItems: "center", background: theme.header.searchBg,
-                        borderRadius: 14, boxShadow: theme.header.searchShadow, overflow: "hidden", paddingRight: 4,
+                        display: "flex", alignItems: "center", background: "#FFFFFF",
+                        border: "1px solid #E5E7EB",
+                        borderRadius: 18, height: 48, boxShadow: "0 2px 10px rgba(0,0,0,0.05)", overflow: "hidden", paddingRight: 4,
                     }}>
-                        <button type="submit" style={{ padding: 12, background: "none", border: "none", cursor: "pointer" }}>
-                            <SearchIcon style={{ width: 16, height: 16, color: "#9CA3AF" }} />
+                        <button type="submit" style={{ padding: "0 12px 0 16px", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                            <SearchIcon style={{ width: 20, height: 20, color: "#4B5563" }} />
                         </button>
                         <input
                             type="text" value={searchInputVal}
@@ -291,7 +309,7 @@ export default function RentalsMarketplace() {
                             onClick={openSearch} placeholder={getSearchPlaceholder()}
                             style={{
                                 flex: 1, background: "transparent", border: "none", outline: "none",
-                                fontWeight: 600, fontSize: 12, padding: "12px 0", color: theme.header.searchText,
+                                fontWeight: 500, fontSize: 14, color: theme.header.searchText,
                                 fontFamily: "'DM Sans', sans-serif",
                             }}
                         />
@@ -303,14 +321,14 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── CATEGORY SECTION ── */}
-                <section style={{ padding: '0 16px 16px', position: "relative", zIndex: 2 }}>
-                    <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4, margin: "0 -16px", padding: "0 16px" }} className="no-scrollbar">
+                <section style={{ padding: '0 20px 16px', position: "relative", zIndex: 2 }}>
+                    <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4, margin: "0 -20px", padding: "0 20px" }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
-                            <div key={cat.id} onClick={() => router.push(`/category/${cat.id}`)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", flexShrink: 0 }}>
-                                <div style={{ width: 50, height: 50, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}>
+                            <div key={cat.id} onClick={() => router.push(`/category/${cat.id}`)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer", flexShrink: 0 }}>
+                                <div style={{ width: 50, height: 50, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#475569", boxShadow: "0 4px 18px rgba(0,0,0,0.05)" }}>
                                     {cat.icon}
                                 </div>
-                                <span style={{ fontSize: 9, fontWeight: 700, color: "#111827", textAlign: "center", lineHeight: 1.1, width: 54, wordWrap: "break-word" }}>{cat.name}</span>
+                                <span style={{ fontSize: 12, fontWeight: 500, color: "#111827", textAlign: "center", lineHeight: 1.1, width: 60, wordWrap: "break-word" }}>{cat.name}</span>
                             </div>
                         ))}
                     </div>
@@ -376,19 +394,19 @@ export default function RentalsMarketplace() {
             )}
 
             {/* ── MAIN CONTENT ── */}
-            <div style={{ flex: 1, padding: "16px", display: "flex", flexDirection: "column", gap: 24 }}>
+            <div style={{ flex: 1, padding: "0", display: "flex", flexDirection: "column", gap: 24 }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
                     <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                         {/* Trending Shelf (Moved Up) */}
-                        <section style={{ margin: '0 -16px 24px', overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                        <section style={{ marginBottom: 24, overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 20px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>Trending 🔥</div>
                                 <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>
-                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                            <div style={{ display: "flex", gap: 12, overflowX: "auto", scrollbarWidth: "none", padding: "0 20px 4px" }}>
                                 {(() => {
                                   const MOCK_TRENDING = [
                                     { id: "t1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
@@ -421,14 +439,14 @@ export default function RentalsMarketplace() {
                         </section>
 
                         {/* Electronic & Gadgets */}
-                        <section style={{ margin: '0 -16px 24px', overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                        <section style={{ marginBottom: 24, overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 20px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>⚡ Electronic & Gadgets</div>
                                 <button onClick={() => router.push("/category/electronics")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>
-                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                            <div style={{ display: "flex", gap: 12, overflowX: "auto", scrollbarWidth: "none", padding: "0 20px 4px" }}>
                                 {(() => {
                                   const MOCK_ELECTRONICS = [
                                     { id: "e1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
@@ -462,14 +480,14 @@ export default function RentalsMarketplace() {
                         </section>
 
                         {/* Academic & Tools */}
-                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
+                        <section style={{ marginBottom: 24, overflow: 'hidden' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 20px" }}>
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>📐 Academic & Tools</div>
                                 <button onClick={() => router.push("/category/academic")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
                                     See all →
                                 </button>
                             </div>
-                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
+                            <div style={{ display: "flex", gap: 12, overflowX: "auto", scrollbarWidth: "none", padding: "0 20px 4px" }}>
                                 {(() => {
                                   const MOCK_ACADEMIC = [
                                     { id: "a1", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec" },

@@ -27,7 +27,6 @@ import { CollegeProvider } from "@/contexts/CollegeContext";
 import { AppModeProvider } from "@/contexts/AppModeContext";
 import { PageTransition } from "@/components/providers/PageTransition";
 import SearchProvider from "@/components/search/SearchProvider";
-import { GlobalFAB } from "@/components/ui/GlobalFAB";
 
 export default function RootLayout({
   children,
@@ -52,7 +51,6 @@ export default function RootLayout({
               </main>
               {/* Global search portal — mounts outside <main> to avoid overflow clipping */}
               <SearchProvider />
-              <GlobalFAB />
               <Toaster
                 position="top-center"
                 toastOptions={{

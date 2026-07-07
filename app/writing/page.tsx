@@ -8,6 +8,7 @@ import { Plus, Clock, IndianRupee, Loader2, GraduationCap, X } from "lucide-reac
 import { useCollege } from "@/contexts/CollegeContext";
 import { WritingJob } from "@/lib/types";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { theme } from "@/lib/theme.config";
 
 export default function WritingFeedPage() {
     const [jobs, setJobs] = useState<WritingJob[]>([]);

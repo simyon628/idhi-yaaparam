@@ -16,6 +16,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useAppMode } from "@/contexts/AppModeContext";
+import { theme } from "@/lib/theme.config";
 
 type Tab = "overview" | "my-items" | "stats";
 
@@ -162,10 +163,10 @@ export default function ProfileContent() {
         : myListings.filter(i => ["completed", "active", "requested"].includes(i.status));
 
     return (
-        <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-28">
+        <div className="flex-1 flex flex-col min-h-screen relative pb-28" style={{ background: theme.surface }}>
             <TopBar />
 
-            <main className="flex-1 px-5 pt-[80px] space-y-5">
+            <main className="flex-1 px-5 pt-[40px] space-y-5">
                 {/* Profile Header Card */}
                 <div className="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />

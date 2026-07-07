@@ -1,32 +1,34 @@
 "use client";
 import React, { useEffect } from "react";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, Search, User, PenTool, Bookmark, ShoppingBag } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Home, Search, User, PenTool, Bookmark, ShoppingBag, Plus } from "lucide-react";
 import { useAppMode } from "@/contexts/AppModeContext";
 import { useWishlistStore, useCartStore } from "@/lib/store";
 import { useFCM } from "@/lib/hooks/useFCM";
 import { motion } from "framer-motion";
-
 import { theme } from "@/lib/theme.config";
 
-const RENTALS_NAV = [
+const RENTALS_LEFT = [
     { icon: Home,     label: "Home",     href: "/rentals" },
-    { icon: Search,   label: "Near You", href: "/near-you" },
+    { icon: Search,   label: "Near",     href: "/near-you" },
+];
+const RENTALS_RIGHT = [
     { icon: ShoppingBag, label: "Cart",  href: "/cart" },
     { icon: User,     label: "Profile",  href: "/profile" },
 ];
 
-const WRITING_NAV = [
+const WRITING_LEFT = [
     { icon: PenTool, label: "Jobs",     href: "/writing" },
-    { icon: Home,    label: "Post Job", href: "/writing/new" },
+];
+const WRITING_RIGHT = [
     { icon: User,    label: "Profile",  href: "/profile" },
 ];
 
 export function BottomNav() {
     useFCM();
     const pathname = usePathname();
+    const router = useRouter();
     const { mode } = useAppMode();
     const { items: cartItems } = useCartStore();
 
@@ -43,9 +45,68 @@ export function BottomNav() {
         return () => window.removeEventListener('cart-bounce', handleCartBounce);
     }, []);
 
-    const items = mode === "writing" ? WRITING_NAV : RENTALS_NAV;
-    // Always use the theme brand primary color now
+    const leftItems = mode === "writing" ? WRITING_LEFT : RENTALS_LEFT;
+    const rightItems = mode === "writing" ? WRITING_RIGHT : RENTALS_RIGHT;
+    
     const accentColor = theme.bottomNav.activeColor;
+    const inactiveColor = theme.bottomNav.inactiveColor;
+
+    const renderItem = (item: any) => {
+        const isActive =
+            pathname === item.href ||
+            (item.href !== "/rentals" &&
+                item.href !== "/writing" &&
+                pathname.startsWith(item.href));
+
+        return (
+            <Link
+                key={item.label}
+                href={item.href}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 4,
+                    flex: 1,
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    position: "relative",
+                }}
+            >
+                <div style={{ position: "relative", zIndex: 1, transition: "transform 0.15s" }} id={`nav-icon-${item.label}`}>
+                    <item.icon
+                        style={{
+                            width: 22,
+                            height: 22,
+                            color: isActive ? accentColor : inactiveColor,
+                            transform: isActive ? "scale(1.1)" : "scale(1)",
+                            transition: "all 0.2s",
+                        }}
+                        strokeWidth={isActive ? 2.5 : 2}
+                    />
+                    {item.label === "Cart" && Object.keys(cartItems).length > 0 && (
+                        <div style={{ position: "absolute", top: -4, right: -6, background: "#E24B4A", color: "#fff", fontSize: 9, fontWeight: 800, width: 14, height: 14, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {Object.keys(cartItems).length}
+                        </div>
+                    )}
+                </div>
+
+                <span
+                    style={{
+                        fontSize: 10,
+                        fontWeight: isActive ? 700 : 500,
+                        color: isActive ? accentColor : inactiveColor,
+                        letterSpacing: "0.2px",
+                        position: "relative",
+                        zIndex: 1,
+                        transition: "color 0.2s",
+                    }}
+                >
+                    {item.label}
+                </span>
+            </Link>
+        );
+    };
 
     return (
         <nav
@@ -55,100 +116,49 @@ export function BottomNav() {
             <div
                 style={{
                     background: theme.bottomNav.bg,
-                    padding: "11px 18px",
+                    padding: "12px 16px 20px",
                     display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    boxShadow: "0 -4px 20px rgba(0,0,0,.05)",
-                    borderTop: "1px solid rgba(0,0,0,0.05)",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    boxShadow: (theme as any).shadows?.bottomNav || "0 -4px 20px rgba(0,0,0,.08)",
+                    borderTopLeftRadius: 24,
+                    borderTopRightRadius: 24,
+                    position: "relative"
                 }}
             >
-                {items.map((item) => {
-                    const isActive =
-                        pathname === item.href ||
-                        (item.href !== "/rentals" &&
-                            item.href !== "/writing" &&
-                            pathname.startsWith(item.href));
+                <div style={{ display: "flex", flex: 2, justifyContent: "space-around", alignItems: "center" }}>
+                    {leftItems.map(renderItem)}
+                </div>
+                
+                {/* Center FAB */}
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", position: "relative", bottom: 12 }}>
+                    <button
+                        onClick={() => router.push(mode === "writing" ? "/writing/new" : "/rentals/new")}
+                        style={{
+                            width: 56,
+                            height: 56,
+                            borderRadius: "50%",
+                            background: theme.brand.primary,
+                            color: "#fff",
+                            border: "none",
+                            boxShadow: "0 8px 24px rgba(11,87,208,0.3)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            marginBottom: 4,
+                        }}
+                    >
+                        <Plus size={28} strokeWidth={2.5} />
+                    </button>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: inactiveColor }}>
+                        List Item
+                    </span>
+                </div>
 
-                    return (
-                        <Link
-                            key={item.label}
-                            href={item.href}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                gap: 3,
-                                flex: 1,
-                                cursor: "pointer",
-                                textDecoration: "none",
-                                position: "relative",
-                            }}
-                        >
-                            {/* Active glow pill */}
-                            {isActive && (
-                                <motion.div
-                                    layoutId="iy-nav-pill"
-                                    style={{
-                                        position: "absolute",
-                                        inset: "-6px -8px",
-                                        borderRadius: 14,
-                                        background: theme.bottomNav.activeGlow,
-                                        zIndex: 0,
-                                    }}
-                                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                                />
-                            )}
-
-                            <div style={{ position: "relative", zIndex: 1, transition: "transform 0.15s" }} id={`nav-icon-${item.label}`}>
-                                <item.icon
-                                    style={{
-                                        width: 19,
-                                        height: 19,
-                                        color: isActive ? accentColor : "rgba(255,255,255,0.32)",
-                                        transform: isActive ? "scale(1.12)" : "scale(1)",
-                                        transition: "all 0.2s",
-                                    }}
-                                    strokeWidth={isActive ? 2.5 : 1.8}
-                                />
-                                {item.label === "Cart" && Object.keys(cartItems).length > 0 && (
-                                    <div style={{ position: "absolute", top: -4, right: -6, background: "#E24B4A", color: "#fff", fontSize: 9, fontWeight: 800, width: 14, height: 14, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        {Object.keys(cartItems).length}
-                                    </div>
-                                )}
-                            </div>
-
-                            <span
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: isActive ? 800 : 600,
-                                    color: isActive ? accentColor : "rgba(255,255,255,0.32)",
-                                    letterSpacing: "0.2px",
-                                    position: "relative",
-                                    zIndex: 1,
-                                    transition: "color 0.2s",
-                                }}
-                            >
-                                {item.label}
-                            </span>
-
-                            {/* Active dot */}
-                            {isActive && (
-                                <motion.div
-                                    layoutId="iy-nav-dot"
-                                    style={{
-                                        width: 4,
-                                        height: 4,
-                                        borderRadius: "50%",
-                                        background: accentColor,
-                                        marginTop: -1,
-                                    }}
-                                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                                />
-                            )}
-                        </Link>
-                    );
-                })}
+                <div style={{ display: "flex", flex: 2, justifyContent: "space-around", alignItems: "center" }}>
+                    {rightItems.map(renderItem)}
+                </div>
             </div>
             <style>{`
                 @keyframes cartBounce {

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import Image from "next/image";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Calculator, Ruler, Shirt, Package } from "lucide-react";
 import { useWishlistStore, useCartStore } from "@/lib/store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -76,7 +76,7 @@ function ProductCardComponent({
         overflow: "hidden",
         border: "1px solid #F0F0F0",
         backgroundColor: "#fff",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        boxShadow: "0 4px 18px rgba(0,0,0,0.05)",
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -139,40 +139,40 @@ function ProductCardComponent({
               blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YxZjVmOSIvPjwvc3ZnPg=="
             />
           ) : (
-            <div style={{ fontSize: 40, opacity: 0.6 }}>
-              {category === "calculator" ? "🖩" : category === "drafter" ? "📐" : "🥼"}
+            <div style={{ color: "#94a3b8" }}>
+              {category === "calculator" ? <Calculator size={36} /> : category === "drafter" ? <Ruler size={36} /> : category === "lab-coat" ? <Shirt size={36} /> : <Package size={36} />}
             </div>
           )}
         </div>
       </div>
 
       {/* INFO AREA */}
-      <div style={{ padding: '8px 10px 10px', flex: 1, display: "flex", flexDirection: "column" }}>
-        <p style={{ fontSize: 13, fontWeight: 600, color: '#1A1A1A', marginBottom: 2, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", lineHeight: 1.2 }}>
+      <div style={{ padding: '16px', flex: 1, display: "flex", flexDirection: "column" }}>
+        <p style={{ fontSize: 14, fontWeight: 600, color: '#1A1A1A', marginBottom: 4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", lineHeight: 1.2 }}>
           {itemName}
         </p>
-        <p style={{ fontSize: 11, color: theme.brand.primary, fontWeight: 500, marginBottom: 1 }}>
+        <p style={{ fontSize: 12, color: theme.brand.primary, fontWeight: 500, marginBottom: 2 }}>
           {branch}
         </p>
-        <p style={{ fontSize: 10, color: '#888', marginBottom: 4 }}>
+        <p style={{ fontSize: 12, color: '#888', fontWeight: 400, marginBottom: 8 }}>
           @{sellerUsername} · {distance}
         </p>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, marginTop: "auto" }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: theme.brand.primary }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, marginTop: "auto" }}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: theme.brand.primary }}>
             ₹{pricePerHour}
-            <span style={{ fontSize: 10, fontWeight: 400, color: '#888' }}>/hr</span>
+            <span style={{ fontSize: 12, fontWeight: 400, color: '#888' }}>/hr</span>
           </span>
-          <span style={{ fontSize: 10, color: '#F59E0B', fontWeight: 600 }}>★ {rating}</span>
+          <span style={{ fontSize: 12, color: '#F59E0B', fontWeight: 600 }}>★ {rating}</span>
         </div>
         
         {/* SINGLE BORROW BUTTON */}
         <button style={{
-          width: '100%', height: 36,
+          width: '100%', height: 40,
           background: getButtonBg(), color: '#fff',
-          border: 'none', borderRadius: 10,
-          fontSize: 13, fontWeight: 500,
+          border: 'none', borderRadius: 12,
+          fontSize: 15, fontWeight: 700,
           cursor: 'pointer', display: 'flex',
-          alignItems: 'center', justifyContent: 'center', gap: 5,
+          alignItems: 'center', justifyContent: 'center', gap: 6,
           fontFamily: "'DM Sans', sans-serif",
         }}
           onClick={handleBorrow}

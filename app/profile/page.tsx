@@ -11,9 +11,9 @@ const ProfileContent = dynamic(() => import("./ProfileContent"), {
 
 function ProfileSkeleton() {
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-28">
+    <div className="flex-1 flex flex-col min-h-screen relative pb-28" style={{ background: "#F5F7FA" }}>
       <TopBar />
-      <main className="flex-1 px-5 pt-[80px] space-y-5 animate-pulse">
+      <main className="flex-1 px-5 pt-[40px] space-y-5 animate-pulse">
         {/* Header Skeleton */}
         <div className="bg-white rounded-[2rem] p-5 border border-slate-100 flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-slate-200 shrink-0" />
