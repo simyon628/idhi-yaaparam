@@ -9,6 +9,8 @@ import { useWishlistStore, useCartStore } from "@/lib/store";
 import { useFCM } from "@/lib/hooks/useFCM";
 import { motion } from "framer-motion";
 
+import { theme } from "@/lib/theme.config";
+
 const RENTALS_NAV = [
     { icon: Home,     label: "Home",     href: "/rentals" },
     { icon: Search,   label: "Near You", href: "/near-you" },
@@ -42,7 +44,8 @@ export function BottomNav() {
     }, []);
 
     const items = mode === "writing" ? WRITING_NAV : RENTALS_NAV;
-    const accentColor = mode === "writing" ? "#00C48C" : "#7B72FF";
+    // Always use the theme brand primary color now
+    const accentColor = theme.bottomNav.activeColor;
 
     return (
         <nav
@@ -51,13 +54,13 @@ export function BottomNav() {
         >
             <div
                 style={{
-                    background: "linear-gradient(135deg,#1E1E30,#252540)",
+                    background: theme.bottomNav.bg,
                     borderRadius: 28,
                     padding: "11px 18px",
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    boxShadow: "0 10px 48px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.06)",
+                    boxShadow: "0 10px 48px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.05)",
                 }}
             >
                 {items.map((item) => {
@@ -90,9 +93,7 @@ export function BottomNav() {
                                         position: "absolute",
                                         inset: "-6px -8px",
                                         borderRadius: 14,
-                                        background: mode === "writing"
-                                            ? "rgba(0,196,140,0.12)"
-                                            : "rgba(123,114,255,0.14)",
+                                        background: theme.bottomNav.activeGlow,
                                         zIndex: 0,
                                     }}
                                     transition={{ type: "spring", stiffness: 500, damping: 40 }}

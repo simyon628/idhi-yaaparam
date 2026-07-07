@@ -61,11 +61,9 @@ const FALLBACK_BANNERS: Banner[] = [
 
 // Gradient backgrounds for banners without images
 const BANNER_GRADIENTS = [
-  "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
-  "linear-gradient(135deg, #7C3AED 0%, #9333EA 100%)",
-  "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-  "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)",
-  "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)",
+  "linear-gradient(135deg, #0B57D0 0%, #1A73E8 100%)", // Main blue
+  "linear-gradient(135deg, #1A73E8 0%, #4285F4 100%)", // Lighter blue
+  "linear-gradient(135deg, #0B57D0 0%, #0945A6 100%)", // Darker blue
 ];
 
 export function getBannerGradient(index: number): string {

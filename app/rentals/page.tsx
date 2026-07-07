@@ -195,14 +195,14 @@ export default function RentalsMarketplace() {
                 {/* Hero Fading Background - Ultra Smooth Natural Light Fade */}
                 <div style={{
                     position: "absolute", top: 0, left: 0, right: 0, height: 320,
-                    background: "linear-gradient(180deg, #5B21B6 0%, #7C3AED 25%, #C084FC 50%, rgba(255,255,255,0.85) 75%, #ffffff 100%)",
+                    background: `linear-gradient(180deg, ${theme.header.background} 0%, rgba(255,255,255,0.85) 75%, #ffffff 100%)`,
                     zIndex: 0, pointerEvents: "none",
                 }}>
                     {/* Subtle white radial glow */}
                     <div style={{
                         position: "absolute", top: -50, left: "50%", transform: "translateX(-50%)",
                         width: 600, height: 600,
-                        background: "radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%)",
+                        background: "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%)",
                     }} />
                 </div>
                 {/* ── Three Mode Tabs (At the very top) ── */}

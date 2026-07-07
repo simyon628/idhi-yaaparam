@@ -21,18 +21,18 @@
  */
 
 export const theme = {
-  // ── Brand Identity (the purple gradient) ──────────────────────
+  // ── Brand Identity ─────────────────────────────────────────────
   brand: {
     // Main gradient used on homepage header
-    gradient: "linear-gradient(135deg, #7C3AED 0%, #9333EA 40%, #A855F7 100%)",
+    gradient: "linear-gradient(135deg, #0B57D0 0%, #1A73E8 40%, #4285F4 100%)",
     // Vertical gradient for taller header sections
-    gradientVertical: "linear-gradient(180deg, #7C3AED 0%, #9333EA 60%, #A855F7 100%)",
+    gradientVertical: "linear-gradient(180deg, #0B57D0 0%, #1A73E8 60%, #4285F4 100%)",
     // Primary brand color (buttons, highlights)
-    primary: "#7C3AED",
-    primaryMid: "#9333EA",
-    primaryLight: "#A855F7",
-    primaryLighter: "#C084FC",
-    primaryPale: "#EDE9FE",  // Very light purple for backgrounds
+    primary: "#0B57D0",
+    primaryMid: "#1A73E8",
+    primaryLight: "#4285F4",
+    primaryLighter: "#8AB4F8",
+    primaryPale: "#E8F0FE",  // Very light blue for backgrounds
     // Accent color for CTAs and highlights
     accent: "#F59E0B",
     accentLight: "#FDE68A",
@@ -40,52 +40,52 @@ export const theme = {
 
   // ── Header Section ────────────────────────────────────────────
   header: {
-    background: "linear-gradient(180deg, #7C3AED 0%, #9333EA 50%, #A855F7 100%)",
-    textColor: "#FFFFFF",
-    subtextColor: "rgba(255,255,255,0.7)",
+    background: "#F8FAFC",
+    textColor: "#111827",
+    subtextColor: "#6B7280",
     // Search bar inside the gradient header
-    searchBg: "rgba(255,255,255,0.95)",
-    searchBorder: "rgba(255,255,255,0.3)",
-    searchShadow: "0 4px 20px rgba(124,58,237,0.2)",
+    searchBg: "#FFFFFF",
+    searchBorder: "rgba(0,0,0,0.1)",
+    searchShadow: "0 2px 8px rgba(0,0,0,0.05)",
     searchPlaceholder: "#9CA3AF",
-    searchText: "#1F2937",
+    searchText: "#111827",
   },
 
   // ── Mode Tabs (Rentals / Writing / Buy & Sell) ────────────────
   tab: {
-    activeBg: "#FFFFFF",
-    activeText: "#7C3AED",
-    activeShadow: "0 2px 12px rgba(124,58,237,0.25)",
-    inactiveBg: "rgba(255,255,255,0.15)",
-    inactiveText: "rgba(255,255,255,0.8)",
-    inactiveBorder: "rgba(255,255,255,0.2)",
+    activeBg: "#0B57D0",
+    activeText: "#FFFFFF",
+    activeShadow: "0 4px 12px rgba(11,87,208,0.25)",
+    inactiveBg: "#FFFFFF",
+    inactiveText: "#4B5563",
+    inactiveBorder: "rgba(0,0,0,0.1)",
   },
 
   // ── Logo ──────────────────────────────────────────────────────
   logo: {
-    iconBg: "linear-gradient(135deg, #FFFFFF 0%, #EDE9FE 100%)",
-    iconShadow: "0 4px 16px rgba(124,58,237,0.35)",
+    iconBg: "#FFFFFF",
+    iconShadow: "none",
     emoji: "🚀",
   },
 
   // ── College Chip & Notification Bell ──────────────────────────
   chip: {
-    bg: "rgba(255,255,255,0.15)",
-    border: "1px solid rgba(255,255,255,0.25)",
-    text: "rgba(255,255,255,0.9)",
-    dotColor: "#34D399",
+    bg: "#FFFFFF",
+    border: "1px solid rgba(0,0,0,0.1)",
+    text: "#111827",
+    dotColor: "#22C55E",
   },
 
   // ── Surfaces ──────────────────────────────────────────────────
-  surface: "#F3F4F6",
+  surface: "#F8FAFC",
   card: "#FFFFFF",
 
   // ── Bottom Navigation ─────────────────────────────────────────
   bottomNav: {
-    bg: "linear-gradient(135deg, #1E1E30, #252540)",
-    activeColor: "#A855F7",
-    inactiveColor: "rgba(255,255,255,0.32)",
-    activeGlow: "rgba(168,85,247,0.14)",
+    bg: "#FFFFFF",
+    activeColor: "#0B57D0",
+    inactiveColor: "#9CA3AF",
+    activeGlow: "rgba(11,87,208,0.1)",
   },
 } as const;
 
