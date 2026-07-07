@@ -11,7 +11,7 @@ import { theme } from "@/lib/theme.config";
 
 const RENTALS_LEFT = [
     { icon: Home,     label: "Home",     href: "/rentals" },
-    { icon: Search,   label: "Near",     href: "/near-you" },
+    { icon: Search,   label: "Near You", href: "/near-you" },
 ];
 const RENTALS_RIGHT = [
     { icon: ShoppingBag, label: "Cart",  href: "/cart" },
@@ -48,8 +48,9 @@ export function BottomNav() {
     const leftItems = mode === "writing" ? WRITING_LEFT : RENTALS_LEFT;
     const rightItems = mode === "writing" ? WRITING_RIGHT : RENTALS_RIGHT;
     
-    const accentColor = theme.bottomNav.activeColor;
-    const inactiveColor = theme.bottomNav.inactiveColor;
+    // Exact colors requested
+    const activeColor = "#0B57D0"; // Blue
+    const inactiveColor = "#9CA3AF"; // Gray
 
     const renderItem = (item: any) => {
         const isActive =
@@ -66,19 +67,21 @@ export function BottomNav() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    justifyContent: "center",
                     gap: 4,
                     flex: 1,
                     cursor: "pointer",
                     textDecoration: "none",
                     position: "relative",
+                    height: "100%",
                 }}
             >
                 <div style={{ position: "relative", zIndex: 1, transition: "transform 0.15s" }} id={`nav-icon-${item.label}`}>
                     <item.icon
                         style={{
-                            width: 22,
-                            height: 22,
-                            color: isActive ? accentColor : inactiveColor,
+                            width: 24,
+                            height: 24,
+                            color: isActive ? activeColor : inactiveColor,
                             transform: isActive ? "scale(1.1)" : "scale(1)",
                             transition: "all 0.2s",
                         }}
@@ -93,9 +96,9 @@ export function BottomNav() {
 
                 <span
                     style={{
-                        fontSize: 10,
+                        fontSize: 11,
                         fontWeight: isActive ? 700 : 500,
-                        color: isActive ? accentColor : inactiveColor,
+                        color: isActive ? activeColor : inactiveColor,
                         letterSpacing: "0.2px",
                         position: "relative",
                         zIndex: 1,
@@ -111,34 +114,53 @@ export function BottomNav() {
     return (
         <nav
             className="fixed bottom-0 left-0 right-0 z-50 w-full"
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
+            style={{ fontFamily: "'DM Sans', sans-serif", height: 80 }}
         >
             <div
                 style={{
-                    background: theme.bottomNav.bg,
-                    padding: "12px 16px 20px",
+                    background: "#FFFFFF",
+                    height: "100%",
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "flex-end",
-                    boxShadow: (theme as any).shadows?.bottomNav || "0 -4px 20px rgba(0,0,0,.08)",
+                    alignItems: "center",
+                    boxShadow: "0 -4px 20px rgba(0,0,0,0.06)",
                     borderTopLeftRadius: 24,
                     borderTopRightRadius: 24,
                     position: "relative"
                 }}
             >
-                <div style={{ display: "flex", flex: 2, justifyContent: "space-around", alignItems: "center" }}>
+                {/* ── FAUX NOTCH ──
+                    This circle creates the visual "bite" into the white navbar,
+                    matching the page background perfectly.
+                */}
+                <div style={{
+                    position: "absolute",
+                    top: -20,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: 76,
+                    height: 76,
+                    backgroundColor: theme.surface, // #F5F7FA
+                    borderRadius: "50%",
+                    zIndex: 1,
+                }} />
+
+                {/* Left Navigation Items */}
+                <div style={{ display: "flex", flex: 2, justifyContent: "space-around", alignItems: "center", height: "100%", zIndex: 2 }}>
                     {leftItems.map(renderItem)}
                 </div>
                 
                 {/* Center FAB */}
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", position: "relative", bottom: 12 }}>
+                <div style={{ flex: 1.2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative", zIndex: 3, height: "100%" }}>
                     <button
                         onClick={() => router.push(mode === "writing" ? "/writing/new" : "/rentals/new")}
                         style={{
-                            width: 56,
-                            height: 56,
+                            position: "absolute",
+                            top: -28, // Hovering inside the notch
+                            width: 58,
+                            height: 58,
                             borderRadius: "50%",
-                            background: theme.brand.primary,
+                            background: activeColor, // Blue button
                             color: "#fff",
                             border: "none",
                             boxShadow: "0 8px 24px rgba(11,87,208,0.3)",
@@ -146,17 +168,19 @@ export function BottomNav() {
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
-                            marginBottom: 4,
+                            transition: "transform 0.2s",
                         }}
                     >
-                        <Plus size={28} strokeWidth={2.5} />
+                        <Plus size={30} strokeWidth={3} />
                     </button>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: inactiveColor }}>
+                    {/* List Item Label placed below the floating button */}
+                    <span style={{ fontSize: 11, fontWeight: 600, color: inactiveColor, position: "absolute", bottom: 12 }}>
                         List Item
                     </span>
                 </div>
 
-                <div style={{ display: "flex", flex: 2, justifyContent: "space-around", alignItems: "center" }}>
+                {/* Right Navigation Items */}
+                <div style={{ display: "flex", flex: 2, justifyContent: "space-around", alignItems: "center", height: "100%", zIndex: 2 }}>
                     {rightItems.map(renderItem)}
                 </div>
             </div>
