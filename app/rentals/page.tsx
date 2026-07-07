@@ -2,6 +2,7 @@
 
 import { useCollege } from "@/contexts/CollegeContext";
 import { BottomNav } from "@/components/layout/BottomNav";
+import {
     Plus,
     X,
     Search as SearchIcon,
