@@ -77,8 +77,24 @@ export const theme = {
   },
 
   // ── Surfaces ──────────────────────────────────────────────────
-  surface: "#F8FAFC",
+  surface: "#F5F7FA",
   card: "#FFFFFF",
+
+  // ── Shadows ───────────────────────────────────────────────────
+  shadows: {
+    card: "0 4px 18px rgba(0,0,0,0.05)",
+    bottomNav: "0 -4px 20px rgba(0,0,0,0.08)",
+  },
+
+  // ── Typography ────────────────────────────────────────────────
+  typography: {
+    pageTitle: { fontSize: 18, fontWeight: 700 },
+    sectionTitle: { fontSize: 16, fontWeight: 600 },
+    itemName: { fontSize: 14, fontWeight: 600 },
+    subtitle: { fontSize: 12, fontWeight: 400 },
+    price: { fontSize: 16, fontWeight: 700 },
+    button: { fontSize: 15, fontWeight: 600 },
+  },
 
   // ── Bottom Navigation ─────────────────────────────────────────
   bottomNav: {
