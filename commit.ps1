@@ -1,5 +1,13 @@
 param([string]$msg = "Minor update")
 
+# Check if there are any changes (staged or unstaged)
+$status = git status --porcelain
+if ([string]::IsNullOrEmpty($status)) {
+    Write-Host "No changes detected. Generating auto-commit entry to secure green square..." -ForegroundColor Yellow
+    $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    Add-Content -Path "$PSScriptRoot/daily_commit_log.txt" -Value "Auto daily commit at $date"
+}
+
 Write-Host "Adding files..." -ForegroundColor Cyan
 git add .
 
