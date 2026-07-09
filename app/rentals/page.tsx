@@ -78,125 +78,125 @@ const CATEGORIES = {
 };
 
 const MOCK_TRENDING = [
-  { id: "t1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
-  { id: "t2", itemName: "Engineering Drafter set", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
-  { id: "t3", itemName: "Lab Coat White Large size", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
-  { id: "t4", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec", imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" },
-  { id: "t5", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" },
-  { id: "t6", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec", imageUrl: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80" },
-  { id: "t7", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec", imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80" },
-  { id: "t8", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec", imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" }
+    { id: "t1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+    { id: "t2", itemName: "Engineering Drafter set", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+    { id: "t3", itemName: "Lab Coat White Large size", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+    { id: "t4", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec", imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" },
+    { id: "t5", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" },
+    { id: "t6", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec", imageUrl: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80" },
+    { id: "t7", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec", imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80" },
+    { id: "t8", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec", imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" }
 ];
 
 const MOCK_CALCULATORS = [
-  { id: "mc1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
-  { id: "mc2", itemName: "Casio fx-82MS Scientific Calculator", pricePerHour: 8, category: "calculator", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec" },
-  { id: "mc3", itemName: "Financial Calculator HP 10bII", pricePerHour: 20, category: "calculator", branch: "MBA", distance: "0.7 km", sellerUsername: "priya_svec" },
+    { id: "mc1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
+    { id: "mc2", itemName: "Casio fx-82MS Scientific Calculator", pricePerHour: 8, category: "calculator", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec" },
+    { id: "mc3", itemName: "Financial Calculator HP 10bII", pricePerHour: 20, category: "calculator", branch: "MBA", distance: "0.7 km", sellerUsername: "priya_svec" },
 ];
 
 const MOCK_ELECTRONICS = [
-  { id: "me1", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec" },
-  { id: "me2", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
-  { id: "me3", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec" },
-  { id: "me4", itemName: "Arduino Uno Ultimate Starter Kit", pricePerHour: 15, category: "electronics", branch: "ECE", distance: "0.5 km", sellerUsername: "vijay_svec" },
+    { id: "me1", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec" },
+    { id: "me2", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
+    { id: "me3", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec" },
+    { id: "me4", itemName: "Arduino Uno Ultimate Starter Kit", pricePerHour: 15, category: "electronics", branch: "ECE", distance: "0.5 km", sellerUsername: "vijay_svec" },
 ];
 
 const MOCK_BOOKS = [
-  { id: "mb1", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec" },
-  { id: "mb2", itemName: "Introduction to Algorithms (CLRS)", pricePerHour: 12, category: "books", branch: "CSE", distance: "0.2 km", sellerUsername: "kiran_svec" },
-  { id: "mb3", itemName: "Engineering Physics Textbook", pricePerHour: 8, category: "books", branch: "First Year", distance: "0.6 km", sellerUsername: "meena_svec" },
+    { id: "mb1", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec" },
+    { id: "mb2", itemName: "Introduction to Algorithms (CLRS)", pricePerHour: 12, category: "books", branch: "CSE", distance: "0.2 km", sellerUsername: "kiran_svec" },
+    { id: "mb3", itemName: "Engineering Physics Textbook", pricePerHour: 8, category: "books", branch: "First Year", distance: "0.6 km", sellerUsername: "meena_svec" },
 ];
 
 const MOCK_HOSTEL = [
-  { id: "mh1", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec" },
-  { id: "mh2", itemName: "Electric Kettle 1.5L", pricePerHour: 12, category: "hostel-essentials", branch: "Mech", distance: "0.4 km", sellerUsername: "prasad_svec" },
-  { id: "mh3", itemName: "Pedestal Fan 3-Speed", pricePerHour: 15, category: "hostel-essentials", branch: "ECE", distance: "0.6 km", sellerUsername: "swetha_svec" },
+    { id: "mh1", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec" },
+    { id: "mh2", itemName: "Electric Kettle 1.5L", pricePerHour: 12, category: "hostel-essentials", branch: "Mech", distance: "0.4 km", sellerUsername: "prasad_svec" },
+    { id: "mh3", itemName: "Pedestal Fan 3-Speed", pricePerHour: 15, category: "hostel-essentials", branch: "ECE", distance: "0.6 km", sellerUsername: "swetha_svec" },
 ];
 
 function ProductShelf({
-  title,
-  emoji = "",
-  seeAllUrl,
-  items,
-  mockItems,
-  router
+    title,
+    emoji = "",
+    seeAllUrl,
+    items,
+    mockItems,
+    router
 }: {
-  title: string;
-  emoji?: string;
-  seeAllUrl: string;
-  items: any[];
-  mockItems: any[];
-  router: any;
+    title: string;
+    emoji?: string;
+    seeAllUrl: string;
+    items: any[];
+    mockItems: any[];
+    router: any;
 }) {
-  const combined = [...items];
-  mockItems.forEach(mock => {
-    if (!combined.some(item => item.id === mock.id)) {
-      combined.push(mock);
-    }
-  });
+    const combined = [...items];
+    mockItems.forEach(mock => {
+        if (!combined.some(item => item.id === mock.id)) {
+            combined.push(mock);
+        }
+    });
 
-  return (
-    <section style={{ marginBottom: 32, overflow: 'hidden' }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 20px" }}>
-        <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
-          {emoji && <span style={{ marginRight: 6 }}>{emoji}</span>}
-          {title}
-        </div>
-        <button
-          onClick={() => router.push(seeAllUrl)}
-          style={{
-            fontFamily: "var(--font-dm), 'DM Sans', sans-serif",
-            fontSize: 12,
-            fontWeight: 700,
-            color: "#0B57D0",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            display: "flex",
-            alignItems: "center",
-            gap: 2
-          }}
-        >
-          See all →
-        </button>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          overflowX: "auto",
-          scrollbarWidth: "none",
-          scrollSnapType: "x mandatory",
-          scrollBehavior: "smooth",
-          WebkitOverflowScrolling: "touch",
-          padding: "0 20px 4px",
-          margin: "0 -20px"
-        }}
-        className="no-scrollbar"
-      >
-        {combined.map((item: any) => (
-          <div
-            key={item.id}
-            onClick={() => router.push(`/rentals/${item.id}`)}
-            style={{ cursor: "pointer", flexShrink: 0, scrollSnapAlign: "start" }}
-          >
-            <ProductCard 
-              id={item.id}
-              itemName={item.itemName}
-              pricePerHour={item.pricePerHour}
-              category={item.categoryId || item.category || "others"}
-              branch={item.department || item.branch || "CSE"}
-              sellerUsername={item.sellerUsername || "member"}
-              distance={item.block || item.distance || "Campus"}
-              imageUrl={item.photoUrl || item.imageUrl}
-              variant="scroll" 
-            />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+    return (
+        <section style={{ marginBottom: 32, overflow: 'hidden' }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 20px" }}>
+                <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
+                    {emoji && <span style={{ marginRight: 6 }}>{emoji}</span>}
+                    {title}
+                </div>
+                <button
+                    onClick={() => router.push(seeAllUrl)}
+                    style={{
+                        fontFamily: "var(--font-dm), 'DM Sans', sans-serif",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: "#0B57D0",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2
+                    }}
+                >
+                    See all →
+                </button>
+            </div>
+            <div
+                style={{
+                    display: "flex",
+                    gap: 12,
+                    overflowX: "auto",
+                    scrollbarWidth: "none",
+                    scrollSnapType: "x mandatory",
+                    scrollBehavior: "smooth",
+                    WebkitOverflowScrolling: "touch",
+                    padding: "0 20px 4px",
+                    margin: "0 -20px"
+                }}
+                className="no-scrollbar"
+            >
+                {combined.map((item: any) => (
+                    <div
+                        key={item.id}
+                        onClick={() => router.push(`/rentals/${item.id}`)}
+                        style={{ cursor: "pointer", flexShrink: 0, scrollSnapAlign: "start" }}
+                    >
+                        <ProductCard
+                            id={item.id}
+                            itemName={item.itemName}
+                            pricePerHour={item.pricePerHour}
+                            category={item.categoryId || item.category || "others"}
+                            branch={item.department || item.branch || "CSE"}
+                            sellerUsername={item.sellerUsername || "member"}
+                            distance={item.block || item.distance || "Campus"}
+                            imageUrl={item.photoUrl || item.imageUrl}
+                            variant="scroll"
+                        />
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
 }
 
 export default function RentalsMarketplace() {
@@ -544,7 +544,7 @@ export default function RentalsMarketplace() {
                 {activeMode === "rent" && (
                     <div className="iy-fu1" style={{ display: "flex", flexDirection: "column" }}>
                         {/* 1. Trending Shelf */}
-                        <ProductShelf 
+                        <ProductShelf
                             title="Trending"
                             emoji="🔥"
                             seeAllUrl="/search"
@@ -554,7 +554,7 @@ export default function RentalsMarketplace() {
                         />
 
                         {/* 2. Academic Calculators */}
-                        <ProductShelf 
+                        <ProductShelf
                             title="Academic Calculators"
                             emoji="🖩"
                             seeAllUrl="/search?category=calculator"
@@ -564,7 +564,7 @@ export default function RentalsMarketplace() {
                         />
 
                         {/* 3. Electronic Gadgets */}
-                        <ProductShelf 
+                        <ProductShelf
                             title="Electronic Gadgets"
                             emoji="⚡"
                             seeAllUrl="/search?category=electronics"
@@ -574,7 +574,7 @@ export default function RentalsMarketplace() {
                         />
 
                         {/* 4. Books */}
-                        <ProductShelf 
+                        <ProductShelf
                             title="Books"
                             emoji="📚"
                             seeAllUrl="/search?category=books"
@@ -584,7 +584,7 @@ export default function RentalsMarketplace() {
                         />
 
                         {/* 5. Hostel Essentials */}
-                        <ProductShelf 
+                        <ProductShelf
                             title="Hostel Essentials"
                             emoji="📦"
                             seeAllUrl="/search?category=others"
@@ -749,7 +749,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, justifyItems: "center" }}>
                         {sellItems.map(item => (
                             <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
-                                <ProductCard 
+                                <ProductCard
                                     id={item.id}
                                     itemName={item.itemName}
                                     pricePerHour={item.pricePerHour}
