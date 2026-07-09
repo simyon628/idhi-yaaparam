@@ -16,5 +16,10 @@ git commit -m $msg -m "Co-authored-by: karunajyothi2005 <karunajyothi20005@gmail
 
 Write-Host "Pushing to GitHub..." -ForegroundColor Cyan
 git push
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Git push failed! Check internet connection."
+    exit 1
+}
 
 Write-Host "Done! Green squares secured." -ForegroundColor Green
+exit 0
