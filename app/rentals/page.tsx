@@ -6,7 +6,6 @@ import {
     Plus,
     X,
     Search as SearchIcon,
-    ChevronRight,
     Camera,
     Mic,
     ArrowRight,
@@ -18,8 +17,6 @@ import {
     Camera as CameraIcon,
     Ruler,
     BookOpen,
-    Microscope,
-    PenTool,
     FileText,
     ClipboardList,
     Book,
@@ -48,14 +45,15 @@ import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
-        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
-        { id: "lab-coat", name: "Lab Coats", bg: "#EAF3DE", icon: <Shirt size={24} /> },
-        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
-        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
+        { id: "calculator", name: "Academic Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
         { id: "geometry", name: "Geometry Kits", bg: "#FAEEDA", icon: <Ruler size={24} /> },
         { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} /> },
-        { id: "project-kit", name: "Project Kits", bg: "#EAF3DE", icon: <Microscope size={24} /> },
-        { id: "drafter", name: "Drafters", bg: "#E1F5EE", icon: <PenTool size={24} /> },
+        { id: "accessories", name: "Laptop Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
+        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
+        { id: "hostel-essentials", name: "Hostel Essentials", bg: "#FAEEDA", icon: <Package size={24} /> },
+        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: <Laptop size={24} /> },
+        { id: "others", name: "Others", bg: "#EEF0FF", icon: <Package size={24} /> },
     ],
     buy: [
         { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: <FileText size={24} /> },
@@ -71,13 +69,135 @@ const CATEGORIES = {
         { id: "mobiles", name: "Mobiles", bg: "#EEF0FF", icon: <Smartphone size={24} /> },
         { id: "laptops", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
         { id: "books", name: "Books", bg: "#EAF3DE", icon: <Book size={24} /> },
-        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: <Package size={24} /> }, // Optional: use Bike icon if available in your lucide version, falling back to Package
+        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: <Package size={24} /> },
         { id: "furniture", name: "Furniture", bg: "#E1F5EE", icon: <Package size={24} /> },
         { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: <Laptop size={24} /> },
         { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
         { id: "hostel-essentials", name: "Hostel Needs", bg: "#FAEEDA", icon: <Package size={24} /> },
     ]
 };
+
+const MOCK_TRENDING = [
+  { id: "t1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
+  { id: "t2", itemName: "Engineering Drafter set", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
+  { id: "t3", itemName: "Lab Coat White Large size", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
+  { id: "t4", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec", imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" },
+  { id: "t5", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" },
+  { id: "t6", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec", imageUrl: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80" },
+  { id: "t7", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec", imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80" },
+  { id: "t8", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec", imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" }
+];
+
+const MOCK_CALCULATORS = [
+  { id: "mc1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
+  { id: "mc2", itemName: "Casio fx-82MS Scientific Calculator", pricePerHour: 8, category: "calculator", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec" },
+  { id: "mc3", itemName: "Financial Calculator HP 10bII", pricePerHour: 20, category: "calculator", branch: "MBA", distance: "0.7 km", sellerUsername: "priya_svec" },
+];
+
+const MOCK_ELECTRONICS = [
+  { id: "me1", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec" },
+  { id: "me2", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
+  { id: "me3", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec" },
+  { id: "me4", itemName: "Arduino Uno Ultimate Starter Kit", pricePerHour: 15, category: "electronics", branch: "ECE", distance: "0.5 km", sellerUsername: "vijay_svec" },
+];
+
+const MOCK_BOOKS = [
+  { id: "mb1", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec" },
+  { id: "mb2", itemName: "Introduction to Algorithms (CLRS)", pricePerHour: 12, category: "books", branch: "CSE", distance: "0.2 km", sellerUsername: "kiran_svec" },
+  { id: "mb3", itemName: "Engineering Physics Textbook", pricePerHour: 8, category: "books", branch: "First Year", distance: "0.6 km", sellerUsername: "meena_svec" },
+];
+
+const MOCK_HOSTEL = [
+  { id: "mh1", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec" },
+  { id: "mh2", itemName: "Electric Kettle 1.5L", pricePerHour: 12, category: "hostel-essentials", branch: "Mech", distance: "0.4 km", sellerUsername: "prasad_svec" },
+  { id: "mh3", itemName: "Pedestal Fan 3-Speed", pricePerHour: 15, category: "hostel-essentials", branch: "ECE", distance: "0.6 km", sellerUsername: "swetha_svec" },
+];
+
+function ProductShelf({
+  title,
+  emoji = "",
+  seeAllUrl,
+  items,
+  mockItems,
+  router
+}: {
+  title: string;
+  emoji?: string;
+  seeAllUrl: string;
+  items: any[];
+  mockItems: any[];
+  router: any;
+}) {
+  const combined = [...items];
+  mockItems.forEach(mock => {
+    if (!combined.some(item => item.id === mock.id)) {
+      combined.push(mock);
+    }
+  });
+
+  return (
+    <section style={{ marginBottom: 32, overflow: 'hidden' }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 20px" }}>
+        <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
+          {emoji && <span style={{ marginRight: 6 }}>{emoji}</span>}
+          {title}
+        </div>
+        <button
+          onClick={() => router.push(seeAllUrl)}
+          style={{
+            fontFamily: "var(--font-dm), 'DM Sans', sans-serif",
+            fontSize: 12,
+            fontWeight: 700,
+            color: "#0B57D0",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: 2
+          }}
+        >
+          See all →
+        </button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 12,
+          overflowX: "auto",
+          scrollbarWidth: "none",
+          scrollSnapType: "x mandatory",
+          scrollBehavior: "smooth",
+          WebkitOverflowScrolling: "touch",
+          padding: "0 20px 4px",
+          margin: "0 -20px"
+        }}
+        className="no-scrollbar"
+      >
+        {combined.map((item: any) => (
+          <div
+            key={item.id}
+            onClick={() => router.push(`/rentals/${item.id}`)}
+            style={{ cursor: "pointer", flexShrink: 0, scrollSnapAlign: "start" }}
+          >
+            <ProductCard 
+              id={item.id}
+              itemName={item.itemName}
+              pricePerHour={item.pricePerHour}
+              category={item.categoryId || item.category || "others"}
+              branch={item.department || item.branch || "CSE"}
+              sellerUsername={item.sellerUsername || "member"}
+              distance={item.block || item.distance || "Campus"}
+              imageUrl={item.photoUrl || item.imageUrl}
+              variant="scroll" 
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function RentalsMarketplace() {
     const router = useRouter();
@@ -198,7 +318,7 @@ export default function RentalsMarketplace() {
     return (
         <div
             className="flex flex-col min-h-screen pb-28"
-            style={{ background: theme.surface, fontFamily: "'DM Sans', sans-serif" }}
+            style={{ background: "#ffffff", fontFamily: "'DM Sans', sans-serif" }}
         >
             {/* ══════════════════════════════════════════════════════════════
                 PURPLE GRADIENT HEADER — Brand Identity Section
@@ -208,7 +328,7 @@ export default function RentalsMarketplace() {
             <div style={{
                 position: "relative",
                 background: "#ffffff",
-                paddingBottom: 20,
+                paddingBottom: 0,
             }}>
                 {/* Hero Fading Background - Ultra Smooth Natural Light Fade */}
                 <div style={{
@@ -295,7 +415,7 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── Search Bar ── */}
-                <div style={{ padding: "0 20px", position: "relative", zIndex: 2, marginBottom: 20 }}>
+                <div style={{ padding: "0 20px", position: "relative", zIndex: 2, marginBottom: 24 }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
                         border: "1px solid #E5E7EB",
@@ -322,22 +442,46 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── CATEGORY SECTION ── */}
-                <section style={{ padding: '0 20px 16px', position: "relative", zIndex: 2 }}>
-                    <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4, margin: "0 -20px", padding: "0 20px" }} className="no-scrollbar">
+                <section style={{ padding: '0 20px 0', position: "relative", zIndex: 2 }}>
+                    <div style={{
+                        display: "flex",
+                        gap: 12,
+                        overflowX: "auto",
+                        scrollbarWidth: "none",
+                        scrollSnapType: "x mandatory",
+                        scrollBehavior: "smooth",
+                        WebkitOverflowScrolling: "touch",
+                        paddingBottom: 4,
+                        margin: "0 -20px",
+                        padding: "0 20px"
+                    }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
-                            <div key={cat.id} onClick={() => router.push(`/category/${cat.id}`)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer", flexShrink: 0 }}>
+                            <div
+                                key={cat.id}
+                                onClick={() => router.push(`/category/${cat.id}`)}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    cursor: "pointer",
+                                    flexShrink: 0,
+                                    width: 68,
+                                    scrollSnapAlign: "start"
+                                }}
+                            >
                                 <div style={{ width: 50, height: 50, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#475569", boxShadow: "0 4px 18px rgba(0,0,0,0.05)" }}>
                                     {cat.icon}
                                 </div>
-                                <span style={{ fontSize: 12, fontWeight: 500, color: "#111827", textAlign: "center", lineHeight: 1.1, width: 60, wordWrap: "break-word" }}>{cat.name}</span>
+                                <span style={{ fontSize: 11, fontWeight: 600, color: "#111827", textAlign: "center", lineHeight: 1.1, width: "100%", wordWrap: "break-word" }}>{cat.name}</span>
                             </div>
                         ))}
                     </div>
                 </section>
 
                 {/* ── DYNAMIC CAROUSEL ── */}
-                <div style={{ padding: "0 20px", position: "relative", zIndex: 2 }}>
-                    <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 24 }}>
+                <div style={{ padding: "0 20px", marginTop: 24, marginBottom: 24, position: "relative", zIndex: 2 }}>
+                    <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 18 }}>
                         {banners.map((banner, index) => {
                             const isCurrent = index === carouselIndex;
                             return (
@@ -398,225 +542,84 @@ export default function RentalsMarketplace() {
             <div style={{ flex: 1, padding: "0", display: "flex", flexDirection: "column", gap: 24 }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
-                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                        {/* Trending Shelf (Moved Up) */}
-                        <section style={{ marginBottom: 24, overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 20px" }}>
-                                <div style={{ fontSize: 16, fontWeight: 600 }}>Trending 🔥</div>
-                                <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
-                                    See all →
-                                </button>
-                            </div>
-                            <div style={{ display: "flex", gap: 12, overflowX: "auto", scrollbarWidth: "none", padding: "0 20px 4px" }}>
-                                {(() => {
-                                  const MOCK_TRENDING = [
-                                    { id: "t1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
-                                    { id: "t2", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
-                                    { id: "t3", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
-                                  ];
-                                  const combined = [...rentItems];
-                                  MOCK_TRENDING.forEach(mock => {
-                                    if (!combined.some(item => item.id === mock.id)) {
-                                      combined.push(mock as any);
-                                    }
-                                  });
-                                  return combined.map((item: any) => (
-                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                      <ProductCard 
-                                        id={item.id}
-                                        itemName={item.itemName}
-                                        pricePerHour={item.pricePerHour}
-                                        category={item.categoryId || item.category || "others"}
-                                        branch={item.department || item.branch || "CSE"}
-                                        sellerUsername={item.sellerUsername || "member"}
-                                        distance={item.block || item.distance || "Campus"}
-                                        imageUrl={item.photoUrl || item.imageUrl}
-                                        variant="scroll" 
-                                      />
-                                    </div>
-                                  ));
-                                })()}
-                            </div>
-                        </section>
+                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column" }}>
+                        {/* 1. Trending Shelf */}
+                        <ProductShelf 
+                            title="Trending"
+                            emoji="🔥"
+                            seeAllUrl="/search"
+                            items={rentItems}
+                            mockItems={MOCK_TRENDING}
+                            router={router}
+                        />
 
-                        {/* Electronic & Gadgets */}
-                        <section style={{ marginBottom: 24, overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 20px" }}>
-                                <div style={{ fontSize: 16, fontWeight: 600 }}>⚡ Electronic & Gadgets</div>
-                                <button onClick={() => router.push("/category/electronics")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
-                                    See all →
-                                </button>
-                            </div>
-                            <div style={{ display: "flex", gap: 12, overflowX: "auto", scrollbarWidth: "none", padding: "0 20px 4px" }}>
-                                {(() => {
-                                  const MOCK_ELECTRONICS = [
-                                    { id: "e1", itemName: "Scientific Calculator Casio", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
-                                    { id: "e2", itemName: "MacBook Air M1", pricePerHour: 100, category: "laptop", branch: "CSE", distance: "0.6 km", sellerUsername: "priya_svec" },
-                                    { id: "e3", itemName: "Canon DSLR Camera", pricePerHour: 50, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
-                                  ];
-                                  const realElectronics = rentItems.filter(item => ["electronics", "laptop", "camera", "calculator"].includes(item.categoryId || ""));
-                                  const combined = [...realElectronics];
-                                  MOCK_ELECTRONICS.forEach(mock => {
-                                    if (!combined.some(item => item.id === mock.id)) {
-                                      combined.push(mock as any);
-                                    }
-                                  });
-                                  return combined.map((item: any) => (
-                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                      <ProductCard 
-                                        id={item.id}
-                                        itemName={item.itemName}
-                                        pricePerHour={item.pricePerHour}
-                                        category={item.categoryId || item.category || "others"}
-                                        branch={item.department || item.branch || "CSE"}
-                                        sellerUsername={item.sellerUsername || "member"}
-                                        distance={item.block || item.distance || "Campus"}
-                                        imageUrl={item.photoUrl || item.imageUrl}
-                                        variant="scroll" 
-                                      />
-                                    </div>
-                                  ));
-                                })()}
-                            </div>
-                        </section>
+                        {/* 2. Academic Calculators */}
+                        <ProductShelf 
+                            title="Academic Calculators"
+                            emoji="🖩"
+                            seeAllUrl="/search?category=calculator"
+                            items={rentItems.filter(item => item.categoryId === "calculator" || (item as any).category === "calculator")}
+                            mockItems={MOCK_CALCULATORS}
+                            router={router}
+                        />
 
-                        {/* Academic & Tools */}
-                        <section style={{ marginBottom: 24, overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 20px" }}>
-                                <div style={{ fontSize: 16, fontWeight: 600 }}>📐 Academic & Tools</div>
-                                <button onClick={() => router.push("/category/academic")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
-                                    See all →
-                                </button>
-                            </div>
-                            <div style={{ display: "flex", gap: 12, overflowX: "auto", scrollbarWidth: "none", padding: "0 20px 4px" }}>
-                                {(() => {
-                                  const MOCK_ACADEMIC = [
-                                    { id: "a1", itemName: "Engineering Drafter", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec" },
-                                    { id: "a2", itemName: "Lab Coat White L", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec" },
-                                    { id: "a3", itemName: "Geometry Box set", pricePerHour: 10, category: "geometry", branch: "Mech", distance: "0.8 km", sellerUsername: "ram_svec" },
-                                  ];
-                                  const realAcademic = rentItems.filter(item => ["drafter", "lab-coat", "geometry", "books", "others"].includes(item.categoryId || ""));
-                                  const combined = [...realAcademic];
-                                  MOCK_ACADEMIC.forEach(mock => {
-                                    if (!combined.some(item => item.id === mock.id)) {
-                                      combined.push(mock as any);
-                                    }
-                                  });
-                                  return combined.map((item: any) => (
-                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                      <ProductCard 
-                                        id={item.id}
-                                        itemName={item.itemName}
-                                        pricePerHour={item.pricePerHour}
-                                        category={item.categoryId || item.category || "others"}
-                                        branch={item.department || item.branch || "CSE"}
-                                        sellerUsername={item.sellerUsername || "member"}
-                                        distance={item.block || item.distance || "Campus"}
-                                        imageUrl={item.photoUrl || item.imageUrl}
-                                        variant="scroll" 
-                                      />
-                                    </div>
-                                  ));
-                                })()}
-                            </div>
-                        </section>
+                        {/* 3. Electronic Gadgets */}
+                        <ProductShelf 
+                            title="Electronic Gadgets"
+                            emoji="⚡"
+                            seeAllUrl="/search?category=electronics"
+                            items={rentItems.filter(item => ["electronics", "laptop", "camera", "accessories"].includes(item.categoryId || (item as any).category || ""))}
+                            mockItems={MOCK_ELECTRONICS}
+                            router={router}
+                        />
 
-                        {/* Near You Shelf */}
-                        <section style={{ padding: '0 16px', margin: '0 -16px 24px', overflow: 'hidden' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 16px" }}>
-                                <div style={{ fontSize: 16, fontWeight: 600 }}>Near You 📍</div>
-                                <button onClick={() => router.push("/near-you")} style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0", background: "none", border: "none", cursor: "pointer" }}>
-                                    See all →
-                                </button>
-                            </div>
-                            <div style={{ display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none", padding: "0 16px 4px" }}>
-                                {(() => {
-                                  const MOCK_NEAR_YOU = [
-                                    { id: "n1", itemName: "Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
-                                    { id: "n2", itemName: "Mini Drafter", pricePerHour: 20, category: "drafter", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
-                                    { id: "n3", itemName: "Lab Coat", pricePerHour: 15, category: "lab-coat", branch: "Bio", distance: "0.5 km", sellerUsername: "priya_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
-                                  ];
-                                  const combined = [...rentItems];
-                                  MOCK_NEAR_YOU.forEach(mock => {
-                                    if (!combined.some(item => item.id === mock.id)) {
-                                      combined.push(mock as any);
-                                    }
-                                  });
-                                  return combined.map((item: any) => (
-                                    <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                      <ProductCard 
-                                        id={item.id}
-                                        itemName={item.itemName}
-                                        pricePerHour={item.pricePerHour}
-                                        category={item.categoryId || item.category || "others"}
-                                        branch={item.department || item.branch || "CSE"}
-                                        sellerUsername={item.sellerUsername || "member"}
-                                        distance={item.block || item.distance || "Campus"}
-                                        imageUrl={item.photoUrl || item.imageUrl}
-                                        variant="scroll" 
-                                      />
-                                    </div>
-                                  ));
-                                })()}
-                            </div>
-                        </section>
+                        {/* 4. Books */}
+                        <ProductShelf 
+                            title="Books"
+                            emoji="📚"
+                            seeAllUrl="/search?category=books"
+                            items={rentItems.filter(item => item.categoryId === "books" || (item as any).category === "books")}
+                            mockItems={MOCK_BOOKS}
+                            router={router}
+                        />
 
-                        {/* Fresh Today Shelf */}
-                        {recentItems.length > 0 && (
-                            <div>
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Fresh Today</div>
-                                    <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "var(--iy-primary)", background: "none", border: "none", cursor: "pointer" }}>
-                                        See all →
-                                    </button>
-                                </div>
-                                <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
-                                    {recentItems.map((item: any) => (
-                                        <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                            <ProductCard 
-                                              id={item.id}
-                                              itemName={item.itemName}
-                                              pricePerHour={item.pricePerHour}
-                                              category={item.categoryId || item.category || "others"}
-                                              branch={item.department || item.branch || "CSE"}
-                                              sellerUsername={item.sellerUsername || "member"}
-                                              distance={item.block || item.distance || "Campus"}
-                                              imageUrl={item.photoUrl || item.imageUrl}
-                                              variant="scroll" 
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                        {/* 5. Hostel Essentials */}
+                        <ProductShelf 
+                            title="Hostel Essentials"
+                            emoji="📦"
+                            seeAllUrl="/search?category=others"
+                            items={rentItems.filter(item => item.categoryId === "hostel-essentials" || (item as any).category === "hostel-essentials")}
+                            mockItems={MOCK_HOSTEL}
+                            router={router}
+                        />
 
                         {/* Social Proof row */}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#fff", borderRadius: 16, padding: "14px 16px", boxShadow: "var(--iy-sh-card)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#F8FAFC", borderRadius: 16, padding: "14px 16px", border: "1px solid #E5E7EB", marginBottom: 32, marginLeft: 20, marginRight: 20 }}>
                             <div style={{ display: "flex" }}>
                                 {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
-                                    <div key={av.l} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#fff", marginRight: -8, fontFamily: "'Syne',sans-serif", background: av.bg }}>{av.l}</div>
+                                    <div key={av.l} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#fff", marginRight: -8, fontFamily: "var(--font-outfit), 'Outfit', sans-serif", background: av.bg }}>{av.l}</div>
                                 ))}
                             </div>
                             <div style={{ marginLeft: 16, flex: 1 }}>
-                                <strong style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, color: "var(--iy-text1)", display: "block" }}>320 students active</strong>
-                                <small style={{ fontSize: 11, color: "var(--iy-text3)" }}>Saving money on {selectedCollege?.acronym || "your"} campus</small>
+                                <strong style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontSize: 13, fontWeight: 700, color: "#1e293b", display: "block" }}>320 students active</strong>
+                                <small style={{ fontSize: 11, color: "#64748b" }}>Saving money on {selectedCollege?.acronym || "your"} campus</small>
                             </div>
-                            <div style={{ fontSize: 13, fontWeight: 700, color: "#FF9500", fontFamily: "'Syne',sans-serif", display: "flex", alignItems: "center", gap: 3 }}>⭐ 4.8</div>
+                            <div style={{ fontSize: 13, fontWeight: 700, color: "#FF9500", fontFamily: "var(--font-outfit), 'Outfit', sans-serif", display: "flex", alignItems: "center", gap: 3 }}>⭐ 4.8</div>
                         </div>
 
                         {/* How It Works */}
-                        <div>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 12 }}>How It Works</div>
+                        <div style={{ marginBottom: 32, paddingLeft: 20, paddingRight: 20 }}>
+                            <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: 16, color: "#1e293b", marginBottom: 12 }}>How It Works</div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                                 {[
                                     { n: "1", ic: "🔍", lb: "Find what you need" },
                                     { n: "2", ic: "💬", lb: "Message owner" },
                                     { n: "3", ic: "✅", lb: "Pick up & return" }
                                 ].map(s => (
-                                    <div key={s.n} style={{ background: "#fff", borderRadius: 16, padding: "16px 10px", textAlign: "center", boxShadow: "var(--iy-sh-card)" }}>
-                                        <div style={{ width: 30, height: 30, borderRadius: "50%", background: "var(--iy-primary-light)", color: "var(--iy-primary)", fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px" }}>{s.n}</div>
+                                    <div key={s.n} style={{ background: "#fff", borderRadius: 16, padding: "16px 10px", textAlign: "center", border: "1px solid #E5E7EB" }}>
+                                        <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(11,87,208,0.1)", color: "#0B57D0", fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px" }}>{s.n}</div>
                                         <div style={{ fontSize: 20, marginBottom: 6 }}>{s.ic}</div>
-                                        <div style={{ fontSize: 10, fontWeight: 600, color: "var(--iy-text2)", lineHeight: 1.3 }}>{s.lb}</div>
+                                        <div style={{ fontSize: 10, fontWeight: 600, color: "#4B5563", lineHeight: 1.3 }}>{s.lb}</div>
                                     </div>
                                 ))}
                             </div>
@@ -624,18 +627,18 @@ export default function RentalsMarketplace() {
 
                         {/* Campus For You */}
                         {selectedCollege && (
-                            <div>
+                            <div style={{ marginBottom: 32, paddingLeft: 20, paddingRight: 20 }}>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Campus Stats</div>
+                                    <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: 16, color: "#1e293b" }}>Campus Stats</div>
                                 </div>
                                 <div style={{ background: "#13131F", color: "#fff", padding: "20px", borderRadius: 24, position: "relative", overflow: "hidden" }}>
                                     <div style={{ position: "absolute", top: -40, right: -20, width: 150, height: 150, background: "radial-gradient(circle,rgba(85,72,232,0.3) 0%,transparent 70%)" }} />
-                                    <h3 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff", marginBottom: 4, position: "relative", zIndex: 1 }}>🎓 {selectedCollege.name}</h3>
+                                    <h3 style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 4, position: "relative", zIndex: 1 }}>🎓 {selectedCollege.name}</h3>
                                     <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 16, position: "relative", zIndex: 1 }}>Active student marketplace</p>
 
                                     <div style={{ display: "flex", gap: 8, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
-                                        <div style={{ background: "var(--iy-primary-light)", color: "var(--iy-primary)", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 20 }}>📊 Analytics Mode Active</div>
-                                        <div style={{ background: "var(--iy-emerald-light)", color: "#007A55", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 20 }}>⚡ Live Rentals Supported</div>
+                                        <div style={{ background: "rgba(11,87,208,0.2)", color: "#8AB4F8", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 20 }}>📊 Analytics Mode Active</div>
+                                        <div style={{ background: "rgba(16,185,129,0.2)", color: "#10B981", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 20 }}>⚡ Live Rentals Supported</div>
                                     </div>
                                 </div>
                             </div>

@@ -10,6 +10,7 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { Listing } from "@/lib/types";
 import { Search, ArrowLeft, Package } from "lucide-react";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { useAllItems } from "@/lib/hooks/useAllItems";
 
 const MOCK_PRODUCTS = [
@@ -52,46 +53,41 @@ function SearchResults() {
     if (isItemsLoading) return;
     setLoading(true);
     
-    // Simulate slight filter animation delay
-    const timer = setTimeout(() => {
-      let filtered = [...realItems];
-      
-      if (category && category !== "all") {
-        filtered = filtered.filter(p => p.categoryId === category);
-      }
-      
-      if (q) {
-        const lowerQ = q.toLowerCase();
-        filtered = filtered.filter(p => 
-          p.itemName.toLowerCase().includes(lowerQ)
-        );
-      }
+    let filtered = [...realItems];
+    
+    if (category && category !== "all") {
+      filtered = filtered.filter(p => p.categoryId === category);
+    }
+    
+    if (q) {
+      const lowerQ = q.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.itemName.toLowerCase().includes(lowerQ)
+      );
+    }
 
-      // Always combine mock items so the search remains rich
-      let mockFiltered = MOCK_PRODUCTS;
-      if (category && category !== "all") {
-        mockFiltered = mockFiltered.filter(p => p.category === category);
+    // Always combine mock items so the search remains rich
+    let mockFiltered = MOCK_PRODUCTS;
+    if (category && category !== "all") {
+      mockFiltered = mockFiltered.filter(p => p.category === category);
+    }
+    if (q) {
+      const lowerQ = q.toLowerCase();
+      mockFiltered = mockFiltered.filter(p => 
+        p.itemName.toLowerCase().includes(lowerQ)
+      );
+    }
+
+    // Combine real items and mock items, avoiding duplicates if any IDs match
+    const combined = [...filtered];
+    mockFiltered.forEach((mockItem) => {
+      if (!combined.some((item) => item.id === mockItem.id)) {
+        combined.push(mockItem as any);
       }
-      if (q) {
-        const lowerQ = q.toLowerCase();
-        mockFiltered = mockFiltered.filter(p => 
-          p.itemName.toLowerCase().includes(lowerQ)
-        );
-      }
+    });
 
-      // Combine real items and mock items, avoiding duplicates if any IDs match
-      const combined = [...filtered];
-      mockFiltered.forEach((mockItem) => {
-        if (!combined.some((item) => item.id === mockItem.id)) {
-          combined.push(mockItem as any);
-        }
-      });
-
-      setResults(combined);
-      setLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
+    setResults(combined);
+    setLoading(false);
   }, [q, category, realItems, isItemsLoading]);
 
   const displayTitle = q ? `Results for "${q}"` : category ? `${category.charAt(0).toUpperCase() + category.slice(1)} Listings` : "Search Listings";
@@ -187,19 +183,10 @@ function SearchResults() {
       {/* Content */}
       <div style={{ padding: 16, flex: 1 }}>
         {(loading || isItemsLoading) ? (
-          /* Loading skeletons */
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          /* Loading skeletons matching the product grid layout */
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, justifyItems: "center" }}>
             {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "#fff",
-                  borderRadius: 20,
-                  height: 90,
-                  animation: "pulse 1.5s ease-in-out infinite",
-                  animationDelay: `${i * 0.1}s`,
-                }}
-              />
+              <SkeletonCard key={i} variant="grid" />
             ))}
           </div>
         ) : results.length === 0 ? (
