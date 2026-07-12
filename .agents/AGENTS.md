@@ -54,7 +54,7 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 **Time**: ~10 min
 **Test**: Open Near You page → search bar text should be dark, icons visible, submit button blue.
 
-### Phase 1D: Fix Price Display Default ⬜ NOT STARTED
+### Phase 1D: Fix Price Display Default ✅ DONE
 **Files**: `app/rentals/[id]/page.tsx`
 **Goal**: Default to 1-day rental (not 4 days). Hide "× 0 hours = ₹0" line. Show hourly rate prominently.
 **Time**: ~10 min

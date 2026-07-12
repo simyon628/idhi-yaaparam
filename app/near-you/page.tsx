@@ -5,7 +5,8 @@ import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { useRouter } from "next/navigation";
-import { MapPin } from "lucide-react";
+import { MapPin, SlidersHorizontal } from "lucide-react";
+import SearchTrigger from "@/components/search/SearchTrigger";
 
 const MOCK_DATA = [
   { id: "n1", itemName: "Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: 0.2, sellerUsername: "rahul_svec" },
@@ -17,15 +18,19 @@ const MOCK_DATA = [
 
 export default function NearYouPage() {
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeDepartment, setActiveDepartment] = useState("all");
 
-  const filteredItems = activeFilter === "all" ? MOCK_DATA : MOCK_DATA.filter(item => item.category === activeFilter);
+  const filteredItems = MOCK_DATA.filter(item => {
+    const catMatch = activeCategory === "all" || item.category === activeCategory;
+    const deptMatch = activeDepartment === "all" || item.branch.toLowerCase() === activeDepartment.toLowerCase();
+    return catMatch && deptMatch;
+  });
 
   const bands = [
-    { label: "Within 0.2 km", max: 0.2 },
     { label: "Within 0.5 km", max: 0.5 },
     { label: "Within 1 km", max: 1.0 },
-    { label: "Within 2 km", max: 2.0 },
+    { label: "Within 5 km", max: 5.0 },
   ];
 
   return (
@@ -35,53 +40,88 @@ export default function NearYouPage() {
         flexDirection: "column",
         minHeight: "100vh",
         paddingBottom: 96,
-        background: "var(--iy-surface, #f8faff)",
+        background: "#F8FAFC",
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
       <TopBar />
 
-      <div style={{ position: "sticky", top: 60, zIndex: 10, background: "#fff", borderBottom: "1px solid #f1f5f9" }}>
-        <div style={{ padding: "16px 20px 8px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-            <MapPin size={22} color="#00C48C" />
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#1e293b", fontFamily: "'Syne', sans-serif" }}>
+      <div style={{ position: "sticky", top: 60, zIndex: 10, background: "#fff", borderBottom: "1px solid #E2E8F0", paddingBottom: 12 }}>
+        <div style={{ padding: "16px 16px 8px" }}>
+          
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <MapPin size={22} color="#0B57D0" />
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#0F172A", fontFamily: "'Outfit', sans-serif" }}>
               Near You
             </div>
           </div>
 
-          {/* Filter Row */}
-          <div style={{ display: "flex", gap: 8, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 8 }}>
-            {[
-              { id: "all", label: "All" },
-              { id: "calculator", label: "Calculator" },
-              { id: "drafter", label: "Drafter" },
-              { id: "lab-coat", label: "Lab Coat" },
-              { id: "laptop", label: "Laptop" }
-            ].map(filter => (
-              <button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                style={{
-                  padding: "6px 14px",
-                  borderRadius: 20,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  whiteSpace: "nowrap",
-                  border: activeFilter === filter.id ? "none" : "1px solid #e2e8f0",
-                  background: activeFilter === filter.id ? "#00C48C" : "#fff",
-                  color: activeFilter === filter.id ? "#fff" : "#64748b",
-                  cursor: "pointer"
-                }}
-              >
-                {filter.label}
-              </button>
-            ))}
+          <div style={{ marginBottom: 16 }}>
+            <SearchTrigger />
           </div>
+
+          {/* Filters Area */}
+          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, background: "#F1F5F9", borderRadius: 10, flexShrink: 0 }}>
+              <SlidersHorizontal size={16} color="#64748B" />
+            </div>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, overflow: "hidden", flex: 1 }}>
+              {/* Category Filter */}
+              <div style={{ display: "flex", gap: 8, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4 }}>
+                {[
+                  { id: "all", label: "All Items" },
+                  { id: "calculator", label: "Calculators" },
+                  { id: "drafter", label: "Drafters" },
+                  { id: "lab-coat", label: "Lab Coats" },
+                  { id: "laptop", label: "Laptops" }
+                ].map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setActiveCategory(filter.id)}
+                    style={{
+                      padding: "6px 14px", borderRadius: 20, fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer", transition: "all 0.2s",
+                      border: activeCategory === filter.id ? "1px solid #0B57D0" : "1px solid #E2E8F0",
+                      background: activeCategory === filter.id ? "#0B57D0" : "#fff",
+                      color: activeCategory === filter.id ? "#fff" : "#475569"
+                    }}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Department Filter */}
+              <div style={{ display: "flex", gap: 8, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 4 }}>
+                {[
+                  { id: "all", label: "All Depts" },
+                  { id: "cse", label: "CSE" },
+                  { id: "mech", label: "Mech" },
+                  { id: "bio", label: "Bio" },
+                  { id: "it", label: "IT" },
+                  { id: "civil", label: "Civil" }
+                ].map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setActiveDepartment(filter.id)}
+                    style={{
+                      padding: "4px 12px", borderRadius: 16, fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", cursor: "pointer", transition: "all 0.2s",
+                      border: activeDepartment === filter.id ? "1px solid #1A73E8" : "1px solid #E2E8F0",
+                      background: activeDepartment === filter.id ? "#EEF2FF" : "#F8FAFC",
+                      color: activeDepartment === filter.id ? "#0B57D0" : "#64748B"
+                    }}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div style={{ padding: "16px 20px" }}>
+      <div style={{ padding: "20px 16px" }}>
         {bands.map((band, index) => {
           const prevMax = index === 0 ? 0 : bands[index - 1].max;
           const itemsInBand = filteredItems.filter(item => item.distance > prevMax && item.distance <= band.max);
@@ -89,14 +129,16 @@ export default function NearYouPage() {
           if (itemsInBand.length === 0) return null;
 
           return (
-            <div key={band.label} style={{ marginBottom: 24 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <span style={{ fontSize: 16 }}>📍</span>
-                <h3 style={{ fontSize: 14, fontWeight: 800, color: "#1e293b" }}>{band.label}</h3>
+            <div key={band.label} style={{ marginBottom: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#0B57D0" }} />
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: "#0F172A", margin: 0, letterSpacing: 0.2 }}>{band.label}</h3>
+                <div style={{ flex: 1, height: 1, background: "#E2E8F0", marginLeft: 8 }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, justifyItems: "center" }}>
+              
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
                 {itemsInBand.map(item => (
-                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%" }}>
+                  <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
                     <ProductCard
                       id={item.id}
                       itemName={item.itemName}
@@ -119,8 +161,14 @@ export default function NearYouPage() {
             </div>
           );
         })}
+        
         {filteredItems.length === 0 && (
-          <div style={{ textAlign: "center", padding: "40px 0", color: "#94a3b8" }}>No items found nearby for this category.</div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 20px", textAlign: "center", background: "#fff", borderRadius: 20, border: "1px dashed #CBD5E1", marginTop: 20 }}>
+            <MapPin size={32} color="#94A3B8" style={{ marginBottom: 12, opacity: 0.5 }} />
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: "#334155", marginBottom: 6 }}>No items found nearby</h3>
+            <p style={{ fontSize: 13, color: "#64748B", margin: 0, maxWidth: 200 }}>Try adjusting your filters or search for something else.</p>
+            <button onClick={() => { setActiveCategory("all"); setActiveDepartment("all"); }} style={{ marginTop: 16, background: "#EEF2FF", color: "#0B57D0", border: "none", padding: "8px 16px", borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Clear Filters</button>
+          </div>
         )}
       </div>
       <BottomNav />
