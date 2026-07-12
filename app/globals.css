@@ -33,7 +33,7 @@
   --iy-hdr-end: #F9FAFB;
 
   /* ── Responsive Layout Tokens ── */
-  --iy-page-padding: clamp(16px, 5vw, 24px);
+  --iy-page-padding: 16px;
   --iy-space-section: 24px;
   --iy-space-section-lg: 32px;
 

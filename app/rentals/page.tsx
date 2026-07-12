@@ -43,7 +43,7 @@ import { useActiveBanners, getBannerGradient } from "@/lib/hooks/useActiveBanner
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 
 // ── Responsive CSS variable shorthand ──
-const PP = "var(--iy-page-padding)";
+const PP = 16;
 
 // Category Data by Mode
 const CATEGORIES = {

@@ -36,7 +36,7 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 
 ## 📋 UX OVERHAUL — PHASE TRACKER
 
-### Phase 1A: Homepage Alignment Fix ⬜ NOT STARTED
+### Phase 1A: Homepage Alignment Fix ✅ DONE
 **Files**: `app/rentals/page.tsx`, `components/ui/ProductCard.tsx`
 **Goal**: Fix left alignment of categories, search bar, product shelves. Add "peek" effect on right side for scrollable cards.
 **Time**: ~15 min
