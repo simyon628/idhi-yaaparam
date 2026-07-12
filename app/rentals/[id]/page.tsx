@@ -31,19 +31,19 @@ const REPORT_REASONS: ReportReason[] = [
 
 // Fallback mock data so cards with fake IDs (n1, t1, a1…) open a real detail view
 const MOCK_ITEMS: Record<string, any> = {
-  n1: { id:"n1", itemName:"Casio fx-991EX", category:"calculator", pricePerHour:15, block:"A-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Rahul Verma", department:"CSE", rollNumber:"22CSE1001", isVerified:true, strikeCount:0, overallRating:4.8, college:"SVEC" } },
-  n2: { id:"n2", itemName:"Mini Drafter", category:"drafter", pricePerHour:20, block:"B-Block", condition:"Good", status:"available", listingType:"rent", icon:"📐", photoUrl:"https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Anil Kumar", department:"Mech", rollNumber:"22ME1042", isVerified:true, strikeCount:0, overallRating:4.5, college:"SVEC" } },
-  n3: { id:"n3", itemName:"Lab Coat White", category:"lab-coat", pricePerHour:15, block:"Bio-Lab", condition:"Good", status:"available", listingType:"rent", icon:"🥼", photoUrl:"https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Priya Sharma", department:"Bio", rollNumber:"22BIO3021", isVerified:true, strikeCount:0, overallRating:4.7, college:"SVEC" } },
-  n4: { id:"n4", itemName:"MacBook Air M1", category:"laptop", pricePerHour:100, block:"C-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"💻", photoUrl:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Sneha Reddy", department:"IT", rollNumber:"22IT2011", isVerified:true, strikeCount:0, overallRating:4.9, college:"SVEC" } },
-  n5: { id:"n5", itemName:"Geometry Box", category:"geometry", pricePerHour:10, block:"D-Block", condition:"Fair", status:"available", listingType:"rent", icon:"📏", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Vikas Singh", department:"Civil", rollNumber:"22CV4055", isVerified:false, strikeCount:0, overallRating:4.2, college:"SVEC" } },
-  t1: { id:"t1", itemName:"Casio fx-991EX", category:"calculator", pricePerHour:15, block:"A-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Rahul Verma", department:"CSE", rollNumber:"22CSE1001", isVerified:true, strikeCount:0, overallRating:4.8, college:"SVEC" } },
-  t2: { id:"t2", itemName:"DSLR Camera", category:"camera", pricePerHour:80, block:"Arts Block", condition:"Good", status:"available", listingType:"rent", icon:"📷", photoUrl:"https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Kiran Patel", department:"ECE", rollNumber:"22ECE5088", isVerified:true, strikeCount:0, overallRating:4.6, college:"SVEC" } },
-  t3: { id:"t3", itemName:"Geometry Box", category:"geometry", pricePerHour:10, block:"D-Block", condition:"Fair", status:"available", listingType:"rent", icon:"📏", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Vikas Singh", department:"Civil", rollNumber:"22CV4055", isVerified:false, strikeCount:0, overallRating:4.2, college:"SVEC" } },
-  a1: { id:"a1", itemName:"Engineering Drafter", category:"drafter", pricePerHour:25, block:"Mech-Lab", condition:"Good", status:"available", listingType:"rent", icon:"📐", photoUrl:"https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Vikas Rao", department:"Mech", rollNumber:"22ME2033", isVerified:true, strikeCount:0, overallRating:4.3, college:"SVEC" } },
-  a2: { id:"a2", itemName:"Lab Coat White L", category:"lab-coat", pricePerHour:20, block:"Bio-Lab", condition:"Good", status:"available", listingType:"rent", icon:"🥼", photoUrl:"https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Sita Devi", department:"Civil", rollNumber:"22CV1044", isVerified:true, strikeCount:0, overallRating:4.5, college:"SVEC" } },
-  a3: { id:"a3", itemName:"Geometry Box Set", category:"geometry", pricePerHour:10, block:"D-Block", condition:"Fair", status:"available", listingType:"rent", icon:"📏", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Ram Kumar", department:"Mech", rollNumber:"22ME3022", isVerified:false, strikeCount:0, overallRating:4.0, college:"SVEC" } },
-  c1: { id:"c1", itemName:"Scientific Calculator Casio", category:"calculator", pricePerHour:15, block:"A-Block", condition:"Excellent", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Rahul Verma", department:"CSE", rollNumber:"22CSE1001", isVerified:true, strikeCount:0, overallRating:4.8, college:"SVEC" } },
-  c2: { id:"c2", itemName:"Basic Calculator", category:"calculator", pricePerHour:5, block:"B-Block", condition:"Good", status:"available", listingType:"rent", icon:"🧮", photoUrl:"https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId:"mock", ownerInfo:{ name:"Priya Sharma", department:"Mech", rollNumber:"22ME1088", isVerified:false, strikeCount:0, overallRating:4.2, college:"SVEC" } },
+    n1: { id: "n1", itemName: "Casio fx-991EX", category: "calculator", pricePerHour: 15, block: "A-Block", condition: "Excellent", status: "available", listingType: "rent", icon: "🧮", photoUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Rahul Verma", department: "CSE", rollNumber: "22CSE1001", isVerified: true, strikeCount: 0, overallRating: 4.8, college: "SVEC" } },
+    n2: { id: "n2", itemName: "Mini Drafter", category: "drafter", pricePerHour: 20, block: "B-Block", condition: "Good", status: "available", listingType: "rent", icon: "📐", photoUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Anil Kumar", department: "Mech", rollNumber: "22ME1042", isVerified: true, strikeCount: 0, overallRating: 4.5, college: "SVEC" } },
+    n3: { id: "n3", itemName: "Lab Coat White", category: "lab-coat", pricePerHour: 15, block: "Bio-Lab", condition: "Good", status: "available", listingType: "rent", icon: "🥼", photoUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Priya Sharma", department: "Bio", rollNumber: "22BIO3021", isVerified: true, strikeCount: 0, overallRating: 4.7, college: "SVEC" } },
+    n4: { id: "n4", itemName: "MacBook Air M1", category: "laptop", pricePerHour: 100, block: "C-Block", condition: "Excellent", status: "available", listingType: "rent", icon: "💻", photoUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Sneha Reddy", department: "IT", rollNumber: "22IT2011", isVerified: true, strikeCount: 0, overallRating: 4.9, college: "SVEC" } },
+    n5: { id: "n5", itemName: "Geometry Box", category: "geometry", pricePerHour: 10, block: "D-Block", condition: "Fair", status: "available", listingType: "rent", icon: "📏", photoUrl: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Vikas Singh", department: "Civil", rollNumber: "22CV4055", isVerified: false, strikeCount: 0, overallRating: 4.2, college: "SVEC" } },
+    t1: { id: "t1", itemName: "Casio fx-991EX", category: "calculator", pricePerHour: 15, block: "A-Block", condition: "Excellent", status: "available", listingType: "rent", icon: "🧮", photoUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Rahul Verma", department: "CSE", rollNumber: "22CSE1001", isVerified: true, strikeCount: 0, overallRating: 4.8, college: "SVEC" } },
+    t2: { id: "t2", itemName: "DSLR Camera", category: "camera", pricePerHour: 80, block: "Arts Block", condition: "Good", status: "available", listingType: "rent", icon: "📷", photoUrl: "https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Kiran Patel", department: "ECE", rollNumber: "22ECE5088", isVerified: true, strikeCount: 0, overallRating: 4.6, college: "SVEC" } },
+    t3: { id: "t3", itemName: "Geometry Box", category: "geometry", pricePerHour: 10, block: "D-Block", condition: "Fair", status: "available", listingType: "rent", icon: "📏", photoUrl: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Vikas Singh", department: "Civil", rollNumber: "22CV4055", isVerified: false, strikeCount: 0, overallRating: 4.2, college: "SVEC" } },
+    a1: { id: "a1", itemName: "Engineering Drafter", category: "drafter", pricePerHour: 25, block: "Mech-Lab", condition: "Good", status: "available", listingType: "rent", icon: "📐", photoUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Vikas Rao", department: "Mech", rollNumber: "22ME2033", isVerified: true, strikeCount: 0, overallRating: 4.3, college: "SVEC" } },
+    a2: { id: "a2", itemName: "Lab Coat White L", category: "lab-coat", pricePerHour: 20, block: "Bio-Lab", condition: "Good", status: "available", listingType: "rent", icon: "🥼", photoUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Sita Devi", department: "Civil", rollNumber: "22CV1044", isVerified: true, strikeCount: 0, overallRating: 4.5, college: "SVEC" } },
+    a3: { id: "a3", itemName: "Geometry Box Set", category: "geometry", pricePerHour: 10, block: "D-Block", condition: "Fair", status: "available", listingType: "rent", icon: "📏", photoUrl: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Ram Kumar", department: "Mech", rollNumber: "22ME3022", isVerified: false, strikeCount: 0, overallRating: 4.0, college: "SVEC" } },
+    c1: { id: "c1", itemName: "Scientific Calculator Casio", category: "calculator", pricePerHour: 15, block: "A-Block", condition: "Excellent", status: "available", listingType: "rent", icon: "🧮", photoUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Rahul Verma", department: "CSE", rollNumber: "22CSE1001", isVerified: true, strikeCount: 0, overallRating: 4.8, college: "SVEC" } },
+    c2: { id: "c2", itemName: "Basic Calculator", category: "calculator", pricePerHour: 5, block: "B-Block", condition: "Good", status: "available", listingType: "rent", icon: "🧮", photoUrl: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80", ownerId: "mock", ownerInfo: { name: "Priya Sharma", department: "Mech", rollNumber: "22ME1088", isVerified: false, strikeCount: 0, overallRating: 4.2, college: "SVEC" } },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
@@ -82,9 +82,8 @@ function TimeRemaining({ expiry }: { expiry: string | Date | any }) {
     if (!timeLeft) return null;
 
     return (
-        <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-sm shadow-sm border ${
-            timeLeft === "OVERDUE" ? "bg-rose-50 text-rose-600 border-rose-100 animate-pulse" : "bg-amber-50 text-amber-600 border-amber-100"
-        }`}>
+        <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-sm shadow-sm border ${timeLeft === "OVERDUE" ? "bg-rose-50 text-rose-600 border-rose-100 animate-pulse" : "bg-amber-50 text-amber-600 border-amber-100"
+            }`}>
             <AlarmClock className={`w-4 h-4 ${timeLeft === "OVERDUE" ? "animate-bounce" : ""}`} />
             {timeLeft}
         </div>
@@ -142,7 +141,7 @@ export default function RentalDetailPage() {
         from: new Date(),
         to: addDays(new Date(), 4),
     });
-    
+
     // Convert current hour to string with leading zero
     const currentHourStr = new Date().getHours().toString().padStart(2, '0');
     const [selectedTime, setSelectedTime] = useState({
@@ -160,7 +159,7 @@ export default function RentalDetailPage() {
     if (selectedDateRange?.from) {
         let start = startOfDay(selectedDateRange.from);
         start.setHours(parseInt(selectedTime.hour), parseInt(selectedTime.minute));
-        
+
         let end = selectedDateRange.to ? startOfDay(selectedDateRange.to) : startOfDay(selectedDateRange.from);
         end.setHours(parseInt(selectedTime.hour), parseInt(selectedTime.minute));
 
@@ -174,12 +173,12 @@ export default function RentalDetailPage() {
         days = Math.floor(rentalDurationMinutes / (24 * 60));
         hours = Math.floor((rentalDurationMinutes % (24 * 60)) / 60);
     }
-    
+
     const timeSelections = {
-        hour: Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0')),
-        minute: Array.from({length: 60}, (_, i) => i.toString().padStart(2, '0'))
+        hour: Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')),
+        minute: Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'))
     };
-    
+
     // Generate an array of dates for the custom date strip starting from today
     const dateStripDates = Array.from({ length: 14 }, (_, i) => addDays(new Date(), i));
 
@@ -296,7 +295,7 @@ export default function RentalDetailPage() {
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 const { latitude, longitude } = pos.coords;
-                
+
                 if (lastCoordsRef.current) {
                     const dist = getDistanceInMeters(
                         lastCoordsRef.current.lat, lastCoordsRef.current.lng,
@@ -308,20 +307,20 @@ export default function RentalDetailPage() {
                         return;
                     }
                 }
-                
+
                 lastCoordsRef.current = { lat: latitude, lng: longitude };
                 const fieldName = isOwner ? "ownerLocation" : "renterLocation";
-                
+
                 updateDoc(doc(db as any, "rentals", id as string), {
                     [fieldName]: { lat: latitude, lng: longitude },
                     lastLocationUpdate: serverTimestamp()
                 }).catch(err => console.error("Firestore sync error:", err));
             },
             (err) => console.warn("GPS tracking error:", err),
-            { 
-                enableHighAccuracy: true, 
+            {
+                enableHighAccuracy: true,
                 maximumAge: 5000, // 5 seconds cache
-                timeout: 10000 
+                timeout: 10000
             }
         );
 
@@ -363,18 +362,18 @@ export default function RentalDetailPage() {
                 ...extraFields,
             });
             setRental(r => r ? { ...r, status: newStatus as any, ...extraFields } : r);
-        } catch (err) { 
-            toast.error("Action failed. Try again."); 
+        } catch (err) {
+            toast.error("Action failed. Try again.");
             throw err;
         }
         finally { setActionLoading(false); }
     };
 
     const handleRequest = async (durationStr: string) => {
-        if (!userId) { 
-            toast.error("Please sign in first"); 
+        if (!userId) {
+            toast.error("Please sign in first");
             router.push(`/login?redirect=/rentals/${id}`);
-            return; 
+            return;
         }
         try {
             // Check verification status
@@ -413,18 +412,18 @@ export default function RentalDetailPage() {
         try {
             await updateStatus("active", { approvedAt: serverTimestamp() });
 
-        // Fire notification to Renter
-        if (rental?.renterId) {
-            await addDoc(collection(db as any, "notifications"), {
-                userId: rental.renterId,
-                title: "Rental Approved!",
-                message: `You can now pick up the ${rental.itemName}. Check your chat for details!`,
-                type: "approval",
-                link: `/chat/${id}`,
-                isRead: false,
-                createdAt: serverTimestamp()
-            });
-        }
+            // Fire notification to Renter
+            if (rental?.renterId) {
+                await addDoc(collection(db as any, "notifications"), {
+                    userId: rental.renterId,
+                    title: "Rental Approved!",
+                    message: `You can now pick up the ${rental.itemName}. Check your chat for details!`,
+                    type: "approval",
+                    link: `/chat/${id}`,
+                    isRead: false,
+                    createdAt: serverTimestamp()
+                });
+            }
 
             toast.success("Rental approved!");
             // Send owner straight to the tracking map
@@ -438,15 +437,15 @@ export default function RentalDetailPage() {
         if (!rental) return;
         const now = new Date();
         const availableUntil = rental.availableUntil || rental.expiresAt ? new Date(rental.availableUntil || rental.expiresAt!) : null;
-        
+
         const isStillAvailable = !availableUntil || now <= availableUntil;
-        
+
         try {
-            await updateStatus(isStillAvailable ? "available" : "completed", { 
+            await updateStatus(isStillAvailable ? "available" : "completed", {
                 completedAt: serverTimestamp(),
                 ...(isStillAvailable ? { renterId: null } : {})
             });
-            
+
             toast.success(isStillAvailable ? "Item returned and is available again!" : "Rental marked as complete!");
             setShowRatingModal(true);
         } catch (e) {
@@ -548,7 +547,7 @@ export default function RentalDetailPage() {
     const isRenter = rental?.renterId === userId;
     const isMock = rental?.ownerId === "mock";
     const owner = ownerInfo as any;
-    
+
     let totalPrice = 0;
     let timePrice = 0;
     let dayPrice = 0;
@@ -575,14 +574,14 @@ export default function RentalDetailPage() {
                 </div>
                 {/* dot indicators */}
                 <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 6 }}>
-                    {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: i === 0 ? "#fff" : "rgba(255,255,255,0.4)" }} />)}
+                    {[0, 1, 2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: i === 0 ? "#fff" : "rgba(255,255,255,0.4)" }} />)}
                 </div>
                 {/* Back */}
                 <button onClick={() => router.back()} style={{ position: "absolute", top: 16, left: 16, background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)", border: "none", borderRadius: 12, padding: "8px 10px", cursor: "pointer", display: "flex", alignItems: "center" }}>
                     <ChevronLeft className="w-5 h-5 text-slate-700" />
                 </button>
                 {/* Share */}
-                <button onClick={() => { const msg=`Borrow ${rental?.itemName} for ₹${rental?.pricePerHour}/hr — ${window.location.href}`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank"); }} style={{ position: "absolute", top: 16, right: 16, background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)", border: "none", borderRadius: 12, padding: "8px 10px", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                <button onClick={() => { const msg = `Borrow ${rental?.itemName} for ₹${rental?.pricePerHour}/hr — ${window.location.href}`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank"); }} style={{ position: "absolute", top: 16, right: 16, background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)", border: "none", borderRadius: 12, padding: "8px 10px", cursor: "pointer", display: "flex", alignItems: "center" }}>
                     <Share2 className="w-5 h-5 text-slate-700" />
                 </button>
             </div>
@@ -633,7 +632,7 @@ export default function RentalDetailPage() {
                 {/* ── Premium Rental Schedule Card ── */}
                 {rental?.status === "available" && !isOwner && (
                     <div style={{ background: "#fff", border: "1px solid #ECECF2", borderRadius: 24, padding: 20, marginBottom: 16, boxShadow: "0 8px 30px rgba(0,0,0,0.04)" }}>
-                        
+
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                             <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", margin: 0 }}>Rental Schedule</p>
                             <button onClick={() => setIsCalendarOpen(true)} style={{ background: "none", border: "none", padding: 8, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -647,7 +646,7 @@ export default function RentalDetailPage() {
                                 const isSelectedStart = selectedDateRange?.from && isSameDay(date, selectedDateRange.from);
                                 const isSelectedEnd = selectedDateRange?.to && isSameDay(date, selectedDateRange.to);
                                 const isSelected = isSelectedStart || isSelectedEnd || (selectedDateRange?.from && selectedDateRange?.to && date >= selectedDateRange.from && date <= selectedDateRange.to);
-                                
+
                                 return (
                                     <div key={idx} onClick={() => {
                                         // Simple tap logic for strip: start a new selection or complete it
@@ -662,7 +661,7 @@ export default function RentalDetailPage() {
                                         }
                                     }} style={{ position: "relative", minWidth: 54, height: 56, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", margin: "0 2px" }}>
                                         {isSelected && (
-                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #0B57D0, #1A73E8)", borderRadius: 40, boxShadow: "0 18px 40px rgba(11, 87, 208, 0.35)", zIndex: 1 }} />
+                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #6C4DFF, #9B82FF)", borderRadius: 40, boxShadow: "0 18px 40px rgba(108, 77, 255, 0.35)", zIndex: 1 }} />
                                         )}
                                         <span style={{ fontSize: 12, fontWeight: 700, color: isSelected ? "rgba(255,255,255,0.9)" : "#6B7280", zIndex: 2, textTransform: "uppercase", marginBottom: 2 }}>{format(date, 'EEE')}</span>
                                         <span style={{ fontSize: 18, fontWeight: 800, color: isSelected ? "#fff" : "#0f172a", zIndex: 2 }}>{format(date, 'dd')}</span>
@@ -681,15 +680,15 @@ export default function RentalDetailPage() {
                                 {selectedDateRange?.to ? format(selectedDateRange.to, 'd MMM') : (selectedDateRange?.from ? format(selectedDateRange.from, 'd MMM') : 'End')}
                             </span>
                             <span style={{ fontSize: 12, color: "#94a3b8" }}>↓</span>
-                            <span style={{ fontSize: 14, fontWeight: 800, color: "#0B57D0" }}>
+                            <span style={{ fontSize: 14, fontWeight: 800, color: "#6C4DFF" }}>
                                 {selectedTime.hour}:{selectedTime.minute}
                             </span>
                         </div>
-                        
+
                         <div style={{ height: 1, background: "#ECECF2", margin: "0 0 20px 0" }} />
 
                         <p style={{ fontSize: 13, fontWeight: 700, color: "#6B7280", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>Pickup Time</p>
-                        
+
                         {/* Time Card */}
                         <button onClick={() => setIsTimePickerOpen(true)} style={{ width: "100%", height: 56, background: "#F8F8FC", border: "1px solid #ECECF2", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", cursor: "pointer", transition: "background 0.2s" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -700,29 +699,29 @@ export default function RentalDetailPage() {
                         </button>
                     </div>
                 )}
-                
+
                 {/* ── Premium Price Summary Card ── */}
                 {rental?.status === "available" && !isOwner && (
                     <div style={{ background: "#fff", border: "1px solid #ECECF2", borderRadius: 24, padding: 20, marginBottom: 16, boxShadow: "0 8px 30px rgba(0,0,0,0.04)" }}>
                         <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", marginBottom: 16 }}>Price Summary</p>
-                        
+
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                             <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>₹{rental.pricePerHour}/hour × {hours} hours</span>
                             <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>₹{timePrice}</span>
                         </div>
-                        
+
                         <div style={{ height: 1, background: "#ECECF2", margin: "12px 0" }} />
-                        
+
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                             <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>{days} Rental Days</span>
                             <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>₹{dayPrice}</span>
                         </div>
-                        
+
                         <div style={{ height: 1, background: "#ECECF2", margin: "12px 0 16px" }} />
-                        
+
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <span style={{ fontSize: 18, fontWeight: 800, color: "#0f172a" }}>Total</span>
-                            <span style={{ fontSize: 32, fontWeight: 800, color: "#0B57D0", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
+                            <span style={{ fontSize: 32, fontWeight: 800, color: "#6C4DFF", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
                         </div>
                     </div>
                 )}
@@ -792,7 +791,7 @@ export default function RentalDetailPage() {
                         <button
                             onClick={() => handleRequest(`${days}d ${hours}h`)}
                             disabled={actionLoading}
-                            style={{ flex: 1, height: 60, background: "#0B57D0", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(11, 87, 208, 0.4)", position: "relative", overflow: "hidden" }}
+                            style={{ flex: 1, height: 60, background: "#6C4DFF", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(108, 77, 255, 0.4)", position: "relative", overflow: "hidden" }}
                         >
                             {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Borrow Now</>}
                         </button>
@@ -802,7 +801,7 @@ export default function RentalDetailPage() {
                         <span style={{ fontSize: 13, fontWeight: 700, color: "#D97706", background: "#FEF3C7", borderRadius: 20, padding: "8px 20px" }}>⏳ Awaiting owner approval…</span>
                     </div>
                 ) : isRenter && rental?.status === "active" ? (
-                    <button onClick={() => { 
+                    <button onClick={() => {
                         if (!rental?.pricePerHour || !rental?.requestedDuration) {
                             handleMarkReturned();
                             return;
@@ -810,11 +809,11 @@ export default function RentalDetailPage() {
                         const durationStr = rental.requestedDuration;
                         const duration = durationStr.includes('h') ? parseInt(durationStr) : 0.25;
                         const amount = rental.pricePerHour * duration;
-                        initiatePayment({ 
-                            amount, 
-                            entityId: id as string, 
-                            entityType: 'rental', 
-                            onSuccess: () => handleMarkReturned() 
+                        initiatePayment({
+                            amount,
+                            entityId: id as string,
+                            entityType: 'rental',
+                            onSuccess: () => handleMarkReturned()
                         });
                     }} style={{ width: "100%", height: 52, background: "#16A34A", color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                         <CreditCard className="w-5 h-5" /> Pay & Return
@@ -854,7 +853,7 @@ export default function RentalDetailPage() {
                         <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 4 }}>Rate Transaction</h3>
                         <p style={{ fontSize: 13, color: "#64748b", marginBottom: 16 }}>How was your experience?</p>
                         <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
-                            {[1,2,3,4,5].map(star => (
+                            {[1, 2, 3, 4, 5].map(star => (
                                 <button key={star} onClick={() => setRating(star)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 36 }}>
                                     {star <= rating ? "⭐" : "☆"}
                                 </button>
@@ -883,12 +882,12 @@ export default function RentalDetailPage() {
                                 }}
                                 style={{ margin: 0, fontFamily: "inherit" }}
                                 modifiersStyles={{
-                                    selected: { backgroundColor: "#0B57D0", color: "white" }
+                                    selected: { backgroundColor: "#6C4DFF", color: "white" }
                                 }}
                             />
                             <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
                                 <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
-                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#0B57D0", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
                             </div>
                         </div>
                     </Drawer.Content>
@@ -903,7 +902,7 @@ export default function RentalDetailPage() {
                         <div style={{ width: 40, height: 5, background: "#E2E8F0", borderRadius: 99, margin: "0 auto 20px" }} />
                         <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <p style={{ fontSize: 20, fontWeight: 800, marginBottom: 20 }}>Select Pickup Time</p>
-                            
+
                             <div style={{ width: "100%", height: 200, position: "relative" }}>
                                 <Picker
                                     value={selectedTime}
@@ -937,7 +936,7 @@ export default function RentalDetailPage() {
 
                             <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
                                 <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
-                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#0B57D0", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
                             </div>
                         </div>
                     </Drawer.Content>
@@ -946,4 +945,4 @@ export default function RentalDetailPage() {
         </div>
     );
 }
-
+

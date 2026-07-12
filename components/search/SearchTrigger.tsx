@@ -105,10 +105,10 @@ export default function SearchTrigger() {
         display: "flex",
         alignItems: "center",
         gap: 10,
-        background: isOpen ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.10)",
+        background: isOpen ? "#FFFFFF" : "#F8FAFC",
         border: isOpen
           ? "1.5px solid rgba(11,87,208,0.5)"
-          : "1px solid rgba(255,255,255,0.14)",
+          : "1px solid #E2E8F0",
         borderRadius: isOpen ? "14px 14px 0 0" : 14,
         padding: "11px 14px",
         transition: "border 0.15s, background 0.15s, border-radius 0.15s",
@@ -125,7 +125,7 @@ export default function SearchTrigger() {
       <Search
         size={17}
         style={{
-          color: isOpen ? "rgba(180,172,255,0.9)" : "rgba(255,255,255,0.4)",
+          color: isOpen ? "#0B57D0" : "#64748B",
           flexShrink: 0,
           transition: "color 0.15s",
         }}
@@ -152,7 +152,7 @@ export default function SearchTrigger() {
           background: "transparent",
           fontFamily: "'DM Sans', sans-serif",
           fontSize: 14,
-          color: "#fff",
+          color: "#0F172A",
           caretColor: "#0B57D0",
           minWidth: 0,
         }}
@@ -171,8 +171,8 @@ export default function SearchTrigger() {
               style={{
                 width: 28,
                 height: 28,
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                background: "#F1F5F9",
+                border: "1px solid #E2E8F0",
                 borderRadius: 8,
                 display: "flex",
                 alignItems: "center",
@@ -181,7 +181,7 @@ export default function SearchTrigger() {
                 flexShrink: 0,
               }}
             >
-              <Camera size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
+              <Camera size={14} style={{ color: "#64748B" }} />
             </button>
             {/* Mic */}
             <button
@@ -190,8 +190,8 @@ export default function SearchTrigger() {
               style={{
                 width: 28,
                 height: 28,
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                background: "#F1F5F9",
+                border: "1px solid #E2E8F0",
                 borderRadius: 8,
                 display: "flex",
                 alignItems: "center",
@@ -200,7 +200,7 @@ export default function SearchTrigger() {
                 flexShrink: 0,
               }}
             >
-              <Mic size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
+              <Mic size={14} style={{ color: "#64748B" }} />
             </button>
           </>
         )}
@@ -212,7 +212,7 @@ export default function SearchTrigger() {
             style={{
               width: 22,
               height: 22,
-              background: "rgba(255,255,255,0.15)",
+              background: "#F1F5F9",
               border: "none",
               borderRadius: "50%",
               display: "flex",
@@ -222,7 +222,7 @@ export default function SearchTrigger() {
               flexShrink: 0,
             }}
           >
-            <X size={12} style={{ color: "rgba(255,255,255,0.7)" }} />
+            <X size={12} style={{ color: "#64748B" }} />
           </button>
         )}
 
