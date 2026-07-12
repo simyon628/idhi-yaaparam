@@ -42,6 +42,9 @@ import { theme } from "@/lib/theme.config";
 import { useActiveBanners, getBannerGradient } from "@/lib/hooks/useActiveBanners";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 
+// ── Responsive CSS variable shorthand ──
+const PP = "var(--iy-page-padding)";
+
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
@@ -92,6 +95,9 @@ const MOCK_CALCULATORS = [
     { id: "mc1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
     { id: "mc2", itemName: "Casio fx-82MS Scientific Calculator", pricePerHour: 8, category: "calculator", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec" },
     { id: "mc3", itemName: "Financial Calculator HP 10bII", pricePerHour: 20, category: "calculator", branch: "MBA", distance: "0.7 km", sellerUsername: "priya_svec" },
+    { id: "mc4", itemName: "Casio fx-991CW Advanced Scientific", pricePerHour: 18, category: "calculator", branch: "ECE", distance: "0.3 km", sellerUsername: "deepak_svec" },
+    { id: "mc5", itemName: "TI-84 Plus Graphing Calculator", pricePerHour: 25, category: "calculator", branch: "CSE", distance: "1.1 km", sellerUsername: "mohan_svec" },
+    { id: "mc6", itemName: "Casio FX-CG50 Color Graphing", pricePerHour: 30, category: "calculator", branch: "Mech", distance: "0.6 km", sellerUsername: "lakshmi_svec" },
 ];
 
 const MOCK_ELECTRONICS = [
@@ -99,18 +105,26 @@ const MOCK_ELECTRONICS = [
     { id: "me2", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
     { id: "me3", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec" },
     { id: "me4", itemName: "Arduino Uno Ultimate Starter Kit", pricePerHour: 15, category: "electronics", branch: "ECE", distance: "0.5 km", sellerUsername: "vijay_svec" },
+    { id: "me5", itemName: "Raspberry Pi 4 Model B 8GB", pricePerHour: 20, category: "electronics", branch: "CSE", distance: "0.4 km", sellerUsername: "suresh_svec" },
+    { id: "me6", itemName: "USB-C Hub 7-in-1 Adapter", pricePerHour: 10, category: "accessories", branch: "CSE", distance: "0.2 km", sellerUsername: "karthik_svec" },
 ];
 
 const MOCK_BOOKS = [
     { id: "mb1", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec" },
     { id: "mb2", itemName: "Introduction to Algorithms (CLRS)", pricePerHour: 12, category: "books", branch: "CSE", distance: "0.2 km", sellerUsername: "kiran_svec" },
     { id: "mb3", itemName: "Engineering Physics Textbook", pricePerHour: 8, category: "books", branch: "First Year", distance: "0.6 km", sellerUsername: "meena_svec" },
+    { id: "mb4", itemName: "Data Structures & Algorithms Made Easy", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.3 km", sellerUsername: "naveen_svec" },
+    { id: "mb5", itemName: "Operating Systems Concepts (Galvin)", pricePerHour: 12, category: "books", branch: "CSE", distance: "0.7 km", sellerUsername: "ravi_svec" },
+    { id: "mb6", itemName: "Engineering Mathematics Vol 1 & 2", pricePerHour: 8, category: "books", branch: "First Year", distance: "0.4 km", sellerUsername: "priya2_svec" },
 ];
 
 const MOCK_HOSTEL = [
     { id: "mh1", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec" },
     { id: "mh2", itemName: "Electric Kettle 1.5L", pricePerHour: 12, category: "hostel-essentials", branch: "Mech", distance: "0.4 km", sellerUsername: "prasad_svec" },
     { id: "mh3", itemName: "Pedestal Fan 3-Speed", pricePerHour: 15, category: "hostel-essentials", branch: "ECE", distance: "0.6 km", sellerUsername: "swetha_svec" },
+    { id: "mh4", itemName: "Iron Box Steam Press", pricePerHour: 10, category: "hostel-essentials", branch: "CSE", distance: "0.2 km", sellerUsername: "ganesh_svec" },
+    { id: "mh5", itemName: "Induction Cooktop Portable", pricePerHour: 18, category: "hostel-essentials", branch: "Mech", distance: "0.5 km", sellerUsername: "harish_svec" },
+    { id: "mh6", itemName: "Mini Fridge 45L Compact", pricePerHour: 25, category: "hostel-essentials", branch: "ECE", distance: "0.8 km", sellerUsername: "pooja_svec" },
 ];
 
 function ProductShelf({
@@ -136,9 +150,19 @@ function ProductShelf({
     });
 
     return (
-        <section style={{ marginBottom: 32, overflow: 'hidden' }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, padding: "0 20px" }}>
-                <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
+        <section style={{ overflow: 'hidden' }}>
+            {/* Section header — aligned to page padding */}
+            <div style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                marginBottom: 12,
+                paddingLeft: PP, paddingRight: PP,
+            }}>
+                <div style={{
+                    fontFamily: "var(--font-outfit), 'Outfit', sans-serif",
+                    fontSize: "var(--iy-section-title, 18px)",
+                    fontWeight: 700,
+                    color: "#1e293b"
+                }}>
                     {emoji && <span style={{ marginRight: 6 }}>{emoji}</span>}
                     {title}
                 </div>
@@ -146,7 +170,7 @@ function ProductShelf({
                     onClick={() => router.push(seeAllUrl)}
                     style={{
                         fontFamily: "var(--font-dm), 'DM Sans', sans-serif",
-                        fontSize: 12,
+                        fontSize: 13,
                         fontWeight: 700,
                         color: "#0B57D0",
                         background: "none",
@@ -161,17 +185,18 @@ function ProductShelf({
                     See all →
                 </button>
             </div>
+            {/* Product scroll row — left padding aligned, right bleeds to edge */}
             <div
                 style={{
                     display: "flex",
-                    gap: 12,
+                    gap: "clamp(10px, 3vw, 14px)",
                     overflowX: "auto",
                     scrollbarWidth: "none",
                     scrollSnapType: "x mandatory",
                     scrollBehavior: "smooth",
                     WebkitOverflowScrolling: "touch",
-                    padding: "0 20px 4px",
-                    margin: "0 -20px"
+                    paddingLeft: PP,
+                    paddingBottom: 4,
                 }}
                 className="no-scrollbar"
             >
@@ -321,19 +346,17 @@ export default function RentalsMarketplace() {
             style={{ background: "#ffffff", fontFamily: "'DM Sans', sans-serif" }}
         >
             {/* ══════════════════════════════════════════════════════════════
-                PURPLE GRADIENT HEADER — Brand Identity Section
-                Matches reference screenshot: logo, bell, college chip,
-                three mode tabs, search bar — all on purple gradient.
+                HEADER SECTION — All elements start from --iy-page-padding
             ══════════════════════════════════════════════════════════════ */}
             <div style={{
                 position: "relative",
                 background: "#ffffff",
                 paddingBottom: 0,
             }}>
-                {/* Hero Fading Background - Ultra Smooth Natural Light Fade */}
+                {/* Hero Fading Background — extended & smoother fade */}
                 <div style={{
-                    position: "absolute", top: 0, left: 0, right: 0, height: 320,
-                    background: `linear-gradient(180deg, ${theme.header.background} 0%, rgba(255,255,255,0.85) 75%, #ffffff 100%)`,
+                    position: "absolute", top: 0, left: 0, right: 0, height: 400,
+                    background: `linear-gradient(180deg, ${theme.header.background} 0%, rgba(248,250,252,0.5) 55%, rgba(255,255,255,0) 100%)`,
                     zIndex: 0, pointerEvents: "none",
                 }}>
                     {/* Subtle white radial glow */}
@@ -343,10 +366,12 @@ export default function RentalsMarketplace() {
                         background: "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%)",
                     }} />
                 </div>
-                {/* ── Three Mode Tabs (At the very top) ── */}
+
+                {/* ── Three Mode Tabs ── */}
                 <div style={{
                     display: "flex", gap: 8,
-                    padding: "14px 20px 0",
+                    paddingTop: 14,
+                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                 }}>
                     {TABS.map((tab) => {
@@ -377,7 +402,9 @@ export default function RentalsMarketplace() {
                 {/* ── Top Row: Logo + Bell + College Chip ── */}
                 <div style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
-                    padding: "16px 20px 10px", position: "relative", zIndex: 2,
+                    paddingTop: 16, paddingBottom: 10,
+                    paddingLeft: PP, paddingRight: PP,
+                    position: "relative", zIndex: 2,
                 }}>
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/rentals")}>
                         <div style={{
@@ -415,7 +442,11 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── Search Bar ── */}
-                <div style={{ padding: "0 20px", position: "relative", zIndex: 2, marginBottom: 24 }}>
+                <div style={{
+                    paddingLeft: PP, paddingRight: PP,
+                    position: "relative", zIndex: 2,
+                    marginBottom: "var(--iy-space-section)",
+                }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
                         border: "1px solid #E5E7EB",
@@ -441,19 +472,18 @@ export default function RentalsMarketplace() {
                     </form>
                 </div>
 
-                {/* ── CATEGORY SECTION ── */}
-                <section style={{ padding: '0 20px 0', position: "relative", zIndex: 2 }}>
+                {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
+                <section style={{ position: "relative", zIndex: 2, marginBottom: "var(--iy-space-section)" }}>
                     <div style={{
                         display: "flex",
-                        gap: 12,
+                        gap: "var(--iy-cat-gap)",
                         overflowX: "auto",
                         scrollbarWidth: "none",
                         scrollSnapType: "x mandatory",
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
+                        paddingLeft: PP,
                         paddingBottom: 4,
-                        margin: "0 -20px",
-                        padding: "0 20px"
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
                             <div
@@ -463,24 +493,39 @@ export default function RentalsMarketplace() {
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "center",
-                                    gap: 8,
+                                    gap: 6,
                                     cursor: "pointer",
                                     flexShrink: 0,
-                                    width: 68,
+                                    width: "var(--iy-cat-size)",
                                     scrollSnapAlign: "start"
                                 }}
                             >
-                                <div style={{ width: 50, height: 50, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#475569", boxShadow: "0 4px 18px rgba(0,0,0,0.05)" }}>
+                                <div style={{
+                                    width: "var(--iy-cat-icon)",
+                                    height: "var(--iy-cat-icon)",
+                                    borderRadius: "50%",
+                                    background: cat.bg,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#475569",
+                                    boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
+                                    flexShrink: 0,
+                                }}>
                                     {cat.icon}
                                 </div>
-                                <span style={{ fontSize: 11, fontWeight: 600, color: "#111827", textAlign: "center", lineHeight: 1.1, width: "100%", wordWrap: "break-word" }}>{cat.name}</span>
+                                <span className="cat-label">{cat.name}</span>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* ── DYNAMIC CAROUSEL ── */}
-                <div style={{ padding: "0 20px", marginTop: 24, marginBottom: 24, position: "relative", zIndex: 2 }}>
+                {/* ── DYNAMIC CAROUSEL — aligned to page padding ── */}
+                <div style={{
+                    paddingLeft: PP, paddingRight: PP,
+                    marginBottom: "var(--iy-space-section)",
+                    position: "relative", zIndex: 2,
+                }}>
                     <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 18 }}>
                         {banners.map((banner, index) => {
                             const isCurrent = index === carouselIndex;
@@ -506,7 +551,7 @@ export default function RentalsMarketplace() {
                                 </div>
                             );
                         })}
-                        <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20">
+                        <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20" style={{ bottom: 12 }}>
                             {banners.map((_, i) => (
                                 <button key={i} onClick={() => setCarouselIndex(i)} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === carouselIndex ? "w-5 bg-white" : "bg-white/40"}`} />
                             ))}
@@ -538,11 +583,11 @@ export default function RentalsMarketplace() {
                 </div>
             )}
 
-            {/* ── MAIN CONTENT ── */}
-            <div style={{ flex: 1, padding: "0", display: "flex", flexDirection: "column", gap: 24 }}>
+            {/* ── MAIN CONTENT — sections with consistent spacing ── */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "var(--iy-space-section-lg)" }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
-                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column" }}>
+                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: "var(--iy-space-section-lg)" }}>
                         {/* 1. Trending Shelf */}
                         <ProductShelf
                             title="Trending"
@@ -594,7 +639,12 @@ export default function RentalsMarketplace() {
                         />
 
                         {/* Social Proof row */}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#F8FAFC", borderRadius: 16, padding: "14px 16px", border: "1px solid #E5E7EB", marginBottom: 32, marginLeft: 20, marginRight: 20 }}>
+                        <div style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            background: "#F8FAFC", borderRadius: 16, padding: "14px 16px",
+                            border: "1px solid #E5E7EB",
+                            marginLeft: PP, marginRight: PP,
+                        }}>
                             <div style={{ display: "flex" }}>
                                 {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
                                     <div key={av.l} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#fff", marginRight: -8, fontFamily: "var(--font-outfit), 'Outfit', sans-serif", background: av.bg }}>{av.l}</div>
@@ -608,8 +658,8 @@ export default function RentalsMarketplace() {
                         </div>
 
                         {/* How It Works */}
-                        <div style={{ marginBottom: 32, paddingLeft: 20, paddingRight: 20 }}>
-                            <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: 16, color: "#1e293b", marginBottom: 12 }}>How It Works</div>
+                        <div style={{ paddingLeft: PP, paddingRight: PP }}>
+                            <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b", marginBottom: 12 }}>How It Works</div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                                 {[
                                     { n: "1", ic: "🔍", lb: "Find what you need" },
@@ -627,9 +677,9 @@ export default function RentalsMarketplace() {
 
                         {/* Campus For You */}
                         {selectedCollege && (
-                            <div style={{ marginBottom: 32, paddingLeft: 20, paddingRight: 20 }}>
+                            <div style={{ paddingLeft: PP, paddingRight: PP }}>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                                    <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: 16, color: "#1e293b" }}>Campus Stats</div>
+                                    <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b" }}>Campus Stats</div>
                                 </div>
                                 <div style={{ background: "#13131F", color: "#fff", padding: "20px", borderRadius: 24, position: "relative", overflow: "hidden" }}>
                                     <div style={{ position: "absolute", top: -40, right: -20, width: 150, height: 150, background: "radial-gradient(circle,rgba(85,72,232,0.3) 0%,transparent 70%)" }} />
@@ -667,7 +717,7 @@ export default function RentalsMarketplace() {
 /* ── Writing Section ── */
 function WritingSection({ router }: { router: any }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-5">
+        <div className="iy-fu1 flex flex-col gap-5" style={{ paddingLeft: PP, paddingRight: PP }}>
             {/* Earn card */}
             <div
                 style={{
@@ -730,12 +780,12 @@ function WritingSection({ router }: { router: any }) {
 /* ── Buy & Sell Section ── */
 function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-4">
+        <div className="iy-fu1 flex flex-col gap-4" style={{ paddingLeft: PP, paddingRight: PP }}>
 
             {/* Browse categories for buy/sell */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)" }}>Browse Items</div>
-                <button onClick={() => router.push("/search")} style={{ fontSize: 12, fontWeight: 700, color: "var(--iy-primary)", background: "none", border: "none", cursor: "pointer" }}>
+                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)" }}>Browse Items</div>
+                <button onClick={() => router.push("/search")} style={{ fontSize: 13, fontWeight: 700, color: "var(--iy-primary)", background: "none", border: "none", cursor: "pointer" }}>
                     View all →
                 </button>
             </div>
@@ -745,10 +795,10 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
             {/* Real items for sale grid */}
             {sellItems.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
-                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 4 }}>Available on Campus 💰</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, justifyItems: "center" }}>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4 }}>Available on Campus 💰</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "clamp(10px, 3vw, 14px)" }}>
                         {sellItems.map(item => (
-                            <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
+                            <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
                                 <ProductCard
                                     id={item.id}
                                     itemName={item.itemName}
@@ -767,7 +817,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
             ) : (
                 /* Empty/placeholder state — sell */
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
-                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 4 }}>Your Listings</div>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4 }}>Your Listings</div>
                     <div style={{ background: "#fff", borderRadius: 24, boxShadow: "var(--iy-sh-card)", padding: "32px 20px", textAlign: "center" as const }}>
                         <div style={{ fontSize: 42, marginBottom: 12 }}>📦</div>
                         <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, color: "var(--iy-text1)", marginBottom: 6 }}>No Listings Yet</div>
@@ -786,7 +836,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
 
             {/* How to sell */}
             <div style={{ marginTop: 12 }}>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 17, color: "var(--iy-text1)", marginBottom: 12 }}>How to Sell</div>
+                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 12 }}>How to Sell</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     {[
                         { n: "1", ic: "📷", lb: "Click a photo" },

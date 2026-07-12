@@ -13,6 +13,8 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { useAllItems } from "@/lib/hooks/useAllItems";
 
+const PP = "var(--iy-page-padding)";
+
 const MOCK_PRODUCTS = [
   { id: "p_001", itemName: "Calculator", category: "calculator", icon: "🖩", pricePerHour: 10, block: "Block A", condition: "Good" },
   { id: "p_002", itemName: "Casio fx-991EX", category: "calculator", icon: "🔢", pricePerHour: 15, block: "Block B", condition: "Excellent" },
@@ -44,14 +46,13 @@ function SearchResults() {
   const { selectedCollege } = useCollege();
 
   const [results, setResults] = useState<Listing[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   // Fetch real-time available listings for selected college
   const { data: realItems = [], isLoading: isItemsLoading } = useAllItems(selectedCollege?.id);
 
   useEffect(() => {
     if (isItemsLoading) return;
-    setLoading(true);
     
     let filtered = [...realItems];
     
@@ -87,8 +88,10 @@ function SearchResults() {
     });
 
     setResults(combined);
-    setLoading(false);
+    setHasInitialized(true);
   }, [q, category, realItems, isItemsLoading]);
+
+  const loading = isItemsLoading || !hasInitialized;
 
   const displayTitle = q ? `Results for "${q}"` : category ? `${category.charAt(0).toUpperCase() + category.slice(1)} Listings` : "Search Listings";
 
@@ -99,7 +102,7 @@ function SearchResults() {
         flexDirection: "column",
         minHeight: "100vh",
         paddingBottom: 96,
-        background: "var(--iy-surface, #f8faff)",
+        background: "#ffffff",
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
@@ -108,7 +111,8 @@ function SearchResults() {
       {/* Results header */}
       <div
         style={{
-          padding: "16px 20px 12px",
+          paddingTop: 16, paddingBottom: 12,
+          paddingLeft: PP, paddingRight: PP,
           background: "#fff",
           borderBottom: "1px solid #f1f5f9",
           display: "flex",
@@ -123,7 +127,7 @@ function SearchResults() {
           <ArrowLeft size={20} style={{ color: "#64748b" }} />
         </button>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
+          <div style={{ fontSize: "var(--iy-section-title, 18px)", fontWeight: 700, color: "#1e293b" }}>
             {q ? (
               <>
                 Results for &ldquo;<span style={{ color: "#5548E8" }}>{q}</span>&rdquo;
@@ -132,7 +136,7 @@ function SearchResults() {
               displayTitle
             )}
           </div>
-          {(!loading && !isItemsLoading) && (
+          {!loading && (
             <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>
               {results.length} listing{results.length !== 1 ? "s" : ""} found
             </div>
@@ -146,7 +150,8 @@ function SearchResults() {
           display: "flex", 
           gap: 8, 
           overflowX: "auto", 
-          padding: "12px 20px", 
+          paddingTop: 12, paddingBottom: 12,
+          paddingLeft: PP, paddingRight: PP,
           background: "#fff", 
           borderBottom: "1px solid #f1f5f9",
           scrollbarWidth: "none",
@@ -181,10 +186,10 @@ function SearchResults() {
       </div>
 
       {/* Content */}
-      <div style={{ padding: 16, flex: 1 }}>
-        {(loading || isItemsLoading) ? (
+      <div style={{ paddingLeft: PP, paddingRight: PP, paddingTop: 16, paddingBottom: 16, flex: 1 }}>
+        {loading ? (
           /* Loading skeletons matching the product grid layout */
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, justifyItems: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "clamp(10px, 3vw, 14px)" }}>
             {[...Array(4)].map((_, i) => (
               <SkeletonCard key={i} variant="grid" />
             ))}
@@ -218,10 +223,10 @@ function SearchResults() {
             </button>
           </div>
         ) : (
-          /* Results grid */
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, justifyItems: "center" }}>
+          /* Results grid — responsive with minmax */
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "clamp(10px, 3vw, 14px)" }}>
             {results.map((item: any) => (
-              <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
+              <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
                 <ProductCard 
                   id={item.id}
                   itemName={item.itemName}
@@ -248,13 +253,6 @@ function SearchResults() {
       </div>
 
       <BottomNav />
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.45; }
-        }
-      `}</style>
     </div>
   );
 }
