@@ -662,7 +662,7 @@ export default function RentalDetailPage() {
                                         }
                                     }} style={{ position: "relative", minWidth: 54, height: 56, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", margin: "0 2px" }}>
                                         {isSelected && (
-                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #6C4DFF, #9B82FF)", borderRadius: 40, boxShadow: "0 18px 40px rgba(108, 77, 255, 0.35)", zIndex: 1 }} />
+                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #0B57D0, #1A73E8)", borderRadius: 40, boxShadow: "0 18px 40px rgba(11, 87, 208, 0.35)", zIndex: 1 }} />
                                         )}
                                         <span style={{ fontSize: 12, fontWeight: 700, color: isSelected ? "rgba(255,255,255,0.9)" : "#6B7280", zIndex: 2, textTransform: "uppercase", marginBottom: 2 }}>{format(date, 'EEE')}</span>
                                         <span style={{ fontSize: 18, fontWeight: 800, color: isSelected ? "#fff" : "#0f172a", zIndex: 2 }}>{format(date, 'dd')}</span>
@@ -681,7 +681,7 @@ export default function RentalDetailPage() {
                                 {selectedDateRange?.to ? format(selectedDateRange.to, 'd MMM') : (selectedDateRange?.from ? format(selectedDateRange.from, 'd MMM') : 'End')}
                             </span>
                             <span style={{ fontSize: 12, color: "#94a3b8" }}>↓</span>
-                            <span style={{ fontSize: 14, fontWeight: 800, color: "#6C4DFF" }}>
+                            <span style={{ fontSize: 14, fontWeight: 800, color: "#0B57D0" }}>
                                 {selectedTime.hour}:{selectedTime.minute}
                             </span>
                         </div>
@@ -722,7 +722,7 @@ export default function RentalDetailPage() {
                         
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <span style={{ fontSize: 18, fontWeight: 800, color: "#0f172a" }}>Total</span>
-                            <span style={{ fontSize: 32, fontWeight: 800, color: "#6C4DFF", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
+                            <span style={{ fontSize: 32, fontWeight: 800, color: "#0B57D0", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
                         </div>
                     </div>
                 )}
@@ -792,7 +792,7 @@ export default function RentalDetailPage() {
                         <button
                             onClick={() => handleRequest(`${days}d ${hours}h`)}
                             disabled={actionLoading}
-                            style={{ flex: 1, height: 60, background: "#6C4DFF", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(108, 77, 255, 0.4)", position: "relative", overflow: "hidden" }}
+                            style={{ flex: 1, height: 60, background: "#0B57D0", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(11, 87, 208, 0.4)", position: "relative", overflow: "hidden" }}
                         >
                             {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Borrow Now</>}
                         </button>
@@ -883,12 +883,12 @@ export default function RentalDetailPage() {
                                 }}
                                 style={{ margin: 0, fontFamily: "inherit" }}
                                 modifiersStyles={{
-                                    selected: { backgroundColor: "#6C4DFF", color: "white" }
+                                    selected: { backgroundColor: "#0B57D0", color: "white" }
                                 }}
                             />
                             <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
                                 <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
-                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#0B57D0", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
                             </div>
                         </div>
                     </Drawer.Content>
@@ -937,7 +937,7 @@ export default function RentalDetailPage() {
 
                             <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
                                 <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
-                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#0B57D0", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
                             </div>
                         </div>
                     </Drawer.Content>

@@ -107,7 +107,7 @@ export default function SearchTrigger() {
         gap: 10,
         background: isOpen ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.10)",
         border: isOpen
-          ? "1.5px solid rgba(121,107,255,0.7)"
+          ? "1.5px solid rgba(11,87,208,0.5)"
           : "1px solid rgba(255,255,255,0.14)",
         borderRadius: isOpen ? "14px 14px 0 0" : 14,
         padding: "11px 14px",
@@ -153,7 +153,7 @@ export default function SearchTrigger() {
           fontFamily: "'DM Sans', sans-serif",
           fontSize: 14,
           color: "#fff",
-          caretColor: "#7B72FF",
+          caretColor: "#0B57D0",
           minWidth: 0,
         }}
       />
@@ -233,7 +233,7 @@ export default function SearchTrigger() {
           style={{
             height: 28,
             padding: "0 12px",
-            background: "linear-gradient(135deg,#5548E8,#7B72FF)",
+            background: "linear-gradient(135deg,#0B57D0,#1A73E8)",
             border: "none",
             borderRadius: 8,
             fontSize: 12,
@@ -243,7 +243,7 @@ export default function SearchTrigger() {
             fontFamily: "'DM Sans', sans-serif",
             letterSpacing: 0.3,
             flexShrink: 0,
-            boxShadow: "0 2px 8px rgba(85,72,232,0.35)",
+            boxShadow: "0 2px 8px rgba(11,87,208,0.35)",
           }}
         >
           Search
