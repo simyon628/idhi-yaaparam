@@ -48,7 +48,7 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 **Time**: ~10 min
 **Test**: Check rental detail page (date picker, price), search trigger button — all should be blue, zero purple.
 
-### Phase 1C: Fix SearchTrigger for Light Background ⬜ NOT STARTED
+### Phase 1C: Fix SearchTrigger for Light Background ✅ DONE
 **Files**: `components/search/SearchTrigger.tsx`
 **Goal**: SearchTrigger was designed for dark header. Fix colors for white background.
 **Time**: ~10 min

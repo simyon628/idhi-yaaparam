@@ -139,7 +139,7 @@ export default function RentalDetailPage() {
 
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>({
         from: new Date(),
-        to: addDays(new Date(), 4),
+        to: addDays(new Date(), 1),
     });
 
     // Convert current hour to string with leading zero
@@ -703,14 +703,23 @@ export default function RentalDetailPage() {
                 {/* ── Premium Price Summary Card ── */}
                 {rental?.status === "available" && !isOwner && (
                     <div style={{ background: "#fff", border: "1px solid #ECECF2", borderRadius: 24, padding: 20, marginBottom: 16, boxShadow: "0 8px 30px rgba(0,0,0,0.04)" }}>
-                        <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", marginBottom: 16 }}>Price Summary</p>
-
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                            <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>₹{rental.pricePerHour}/hour × {hours} hours</span>
-                            <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>₹{timePrice}</span>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", margin: 0 }}>Price Summary</p>
+                            <div style={{ background: "#EEF2FF", padding: "4px 10px", borderRadius: 12 }}>
+                                <span style={{ fontSize: 16, fontWeight: 800, color: "#0B57D0" }}>₹{rental.pricePerHour}</span>
+                                <span style={{ fontSize: 12, fontWeight: 700, color: "#6366F1" }}>/hr</span>
+                            </div>
                         </div>
 
-                        <div style={{ height: 1, background: "#ECECF2", margin: "12px 0" }} />
+                        {hours > 0 && (
+                            <>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                                    <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>₹{rental.pricePerHour}/hour × {hours} hours</span>
+                                    <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>₹{timePrice}</span>
+                                </div>
+                                <div style={{ height: 1, background: "#ECECF2", margin: "12px 0" }} />
+                            </>
+                        )}
 
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                             <span style={{ fontSize: 15, color: "#6B7280", fontWeight: 500 }}>{days} Rental Days</span>
@@ -721,7 +730,7 @@ export default function RentalDetailPage() {
 
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <span style={{ fontSize: 18, fontWeight: 800, color: "#0f172a" }}>Total</span>
-                            <span style={{ fontSize: 32, fontWeight: 800, color: "#6C4DFF", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
+                            <span style={{ fontSize: 32, fontWeight: 800, color: "#0B57D0", transition: "all 0.3s ease" }}>₹{totalPrice}</span>
                         </div>
                     </div>
                 )}
