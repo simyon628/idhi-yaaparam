@@ -48,15 +48,14 @@ const PP = 16;
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
-        { id: "calculator", name: "Academic Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
-        { id: "geometry", name: "Geometry Kits", bg: "#FAEEDA", icon: <Ruler size={24} /> },
-        { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} /> },
-        { id: "accessories", name: "Laptop Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
-        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
+        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
+        { id: "drafter", name: "Drafters", bg: "#FAEEDA", icon: <Ruler size={24} /> },
+        { id: "lab-coat", name: "Lab Coats", bg: "#E1F5EE", icon: <Shirt size={24} /> },
         { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
-        { id: "hostel-essentials", name: "Hostel Essentials", bg: "#FAEEDA", icon: <Package size={24} /> },
-        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: <Laptop size={24} /> },
-        { id: "others", name: "Others", bg: "#EEF0FF", icon: <Package size={24} /> },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
+        { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} /> },
+        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
+        { id: "writing", name: "Writing", bg: "#FAEEDA", icon: <FileText size={24} /> },
     ],
     buy: [
         { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: <FileText size={24} /> },
@@ -129,6 +128,7 @@ const MOCK_HOSTEL = [
 
 function ProductShelf({
     title,
+    subtitle,
     emoji = "",
     seeAllUrl,
     items,
@@ -136,6 +136,7 @@ function ProductShelf({
     router
 }: {
     title: string;
+    subtitle?: string;
     emoji?: string;
     seeAllUrl: string;
     items: any[];
@@ -157,14 +158,19 @@ function ProductShelf({
                 marginBottom: 12,
                 paddingLeft: PP, paddingRight: PP,
             }}>
-                <div style={{
-                    fontFamily: "var(--font-outfit), 'Outfit', sans-serif",
-                    fontSize: "var(--iy-section-title, 18px)",
-                    fontWeight: 700,
-                    color: "#1e293b"
-                }}>
-                    {emoji && <span style={{ marginRight: 6 }}>{emoji}</span>}
-                    {title}
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{
+                        fontFamily: "var(--font-outfit), 'Outfit', sans-serif",
+                        fontSize: "var(--iy-section-title, 18px)",
+                        fontWeight: 700,
+                        color: "#1e293b"
+                    }}>
+                        {emoji && <span style={{ marginRight: 6 }}>{emoji}</span>}
+                        {title}
+                    </div>
+                    {subtitle && (
+                        <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>{subtitle}</div>
+                    )}
                 </div>
                 <button
                     onClick={() => router.push(seeAllUrl)}
@@ -445,7 +451,7 @@ export default function RentalsMarketplace() {
                 <div style={{
                     paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
-                    marginBottom: "var(--iy-space-section)",
+                    marginBottom: 20,
                 }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
@@ -473,7 +479,7 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
-                <section style={{ position: "relative", zIndex: 2, marginBottom: "var(--iy-space-section)" }}>
+                <section style={{ position: "relative", zIndex: 2, marginBottom: 20 }}>
                     <div style={{
                         display: "flex",
                         gap: "var(--iy-cat-gap)",
@@ -514,7 +520,7 @@ export default function RentalsMarketplace() {
                                 }}>
                                     {cat.icon}
                                 </div>
-                                <span className="cat-label">{cat.name}</span>
+                                <span style={{ fontSize: 12, fontWeight: 600, color: "#1e293b", textAlign: "center", lineHeight: 1.2, width: "100%", whiteSpace: "normal", wordBreak: "break-word" }}>{cat.name}</span>
                             </div>
                         ))}
                     </div>
@@ -523,7 +529,7 @@ export default function RentalsMarketplace() {
                 {/* ── DYNAMIC CAROUSEL — aligned to page padding ── */}
                 <div style={{
                     paddingLeft: PP, paddingRight: PP,
-                    marginBottom: "var(--iy-space-section)",
+                    marginBottom: 24,
                     position: "relative", zIndex: 2,
                 }}>
                     <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 18 }}>
@@ -584,13 +590,14 @@ export default function RentalsMarketplace() {
             )}
 
             {/* ── MAIN CONTENT — sections with consistent spacing ── */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "var(--iy-space-section-lg)" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 28 }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
-                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: "var(--iy-space-section-lg)" }}>
+                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
                         {/* 1. Trending Shelf */}
                         <ProductShelf
                             title="Trending"
+                            subtitle="Most popular rentals today"
                             emoji="🔥"
                             seeAllUrl="/search"
                             items={rentItems}
@@ -601,7 +608,7 @@ export default function RentalsMarketplace() {
                         {/* 2. Academic Calculators */}
                         <ProductShelf
                             title="Academic Calculators"
-                            emoji="🖩"
+                            emoji="🧮"
                             seeAllUrl="/search?category=calculator"
                             items={rentItems.filter(item => item.categoryId === "calculator" || (item as any).category === "calculator")}
                             mockItems={MOCK_CALCULATORS}
@@ -611,14 +618,24 @@ export default function RentalsMarketplace() {
                         {/* 3. Electronic Gadgets */}
                         <ProductShelf
                             title="Electronic Gadgets"
-                            emoji="⚡"
+                            emoji="💻"
                             seeAllUrl="/search?category=electronics"
-                            items={rentItems.filter(item => ["electronics", "laptop", "camera", "accessories"].includes(item.categoryId || (item as any).category || ""))}
-                            mockItems={MOCK_ELECTRONICS}
+                            items={rentItems.filter(item => ["electronics", "laptop", "accessories"].includes(item.categoryId || (item as any).category || ""))}
+                            mockItems={MOCK_ELECTRONICS.filter(item => item.category !== "camera")}
+                            router={router}
+                        />
+                        
+                        {/* 4. Cameras */}
+                        <ProductShelf
+                            title="Cameras"
+                            emoji="📷"
+                            seeAllUrl="/search?category=camera"
+                            items={rentItems.filter(item => item.categoryId === "camera" || (item as any).category === "camera")}
+                            mockItems={MOCK_ELECTRONICS.filter(item => item.category === "camera")}
                             router={router}
                         />
 
-                        {/* 4. Books */}
+                        {/* 5. Books */}
                         <ProductShelf
                             title="Books"
                             emoji="📚"
@@ -628,12 +645,22 @@ export default function RentalsMarketplace() {
                             router={router}
                         />
 
-                        {/* 5. Hostel Essentials */}
+                        {/* 6. Writing Services */}
                         <ProductShelf
-                            title="Hostel Essentials"
-                            emoji="📦"
-                            seeAllUrl="/search?category=others"
-                            items={rentItems.filter(item => item.categoryId === "hostel-essentials" || (item as any).category === "hostel-essentials")}
+                            title="Writing Services"
+                            emoji="✍️"
+                            seeAllUrl="/search?category=writing"
+                            items={rentItems.filter(item => item.categoryId === "writing" || (item as any).category === "writing")}
+                            mockItems={[]}
+                            router={router}
+                        />
+                        
+                        {/* 7. Recently Added */}
+                        <ProductShelf
+                            title="Recently Added"
+                            emoji="🕒"
+                            seeAllUrl="/search"
+                            items={rentItems}
                             mockItems={MOCK_HOSTEL}
                             router={router}
                         />

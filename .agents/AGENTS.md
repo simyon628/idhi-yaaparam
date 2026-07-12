@@ -60,7 +60,7 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 **Time**: ~10 min
 **Test**: Open any rental detail → price should show ~₹360 (1 day at ₹15/hr), not ₹1440.
 
-### Phase 2A: Near You Page — Layout + Filters ⬜ NOT STARTED
+### Phase 2A: Near You Page — Layout + Filters ✅ DONE
 **Files**: `app/near-you/page.tsx`
 **Goal**: Add department filter, fix empty bands, improve grid layout, reduce white space.
 **Time**: ~20 min
