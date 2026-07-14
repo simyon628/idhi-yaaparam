@@ -44,7 +44,7 @@ import { useActiveBanners, getBannerGradient } from "@/lib/hooks/useActiveBanner
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
 
 // ── Responsive CSS variable shorthand ──
-const PP = 16;
+const PP = 20;
 
 // Category Data by Mode
 const CATEGORIES = {
@@ -403,7 +403,7 @@ export default function RentalsMarketplace() {
                 {/* ── Top Row: Logo + Bell + College Chip ── */}
                 <div style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
-                    paddingTop: 16, paddingBottom: 10,
+                    paddingTop: 16, paddingBottom: 0,
                     paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                 }}>
@@ -446,7 +446,8 @@ export default function RentalsMarketplace() {
                 <div style={{
                     paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
-                    marginBottom: "var(--iy-space-section)",
+                    marginTop: 16,
+                    marginBottom: 20,
                 }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
@@ -474,17 +475,17 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
-                <section style={{ position: "relative", zIndex: 2, marginBottom: "var(--iy-space-section)" }}>
+                <section style={{ position: "relative", zIndex: 2, marginBottom: 20 }}>
                     <div style={{
                         display: "flex",
-                        gap: "var(--iy-cat-gap)",
+                        gap: 12,
                         overflowX: "auto",
                         scrollbarWidth: "none",
                         scrollSnapType: "x mandatory",
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
                         paddingLeft: PP,
-                        paddingRight: 0,
+                        paddingRight: PP,
                         paddingBottom: 4,
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
@@ -498,7 +499,7 @@ export default function RentalsMarketplace() {
                                     gap: 6,
                                     cursor: "pointer",
                                     flexShrink: 0,
-                                    width: "var(--iy-cat-size)",
+                                    width: "calc((min(100vw, 448px) - 80px) / 5.5)",
                                     scrollSnapAlign: "start"
                                 }}
                             >
@@ -522,7 +523,7 @@ export default function RentalsMarketplace() {
                 {/* ── DYNAMIC CAROUSEL — aligned to page padding ── */}
                 <div style={{
                     paddingLeft: PP, paddingRight: PP,
-                    marginBottom: "var(--iy-space-section)",
+                    marginBottom: 24,
                     position: "relative", zIndex: 2,
                 }}>
                     <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 18 }}>
