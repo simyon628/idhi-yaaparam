@@ -113,7 +113,7 @@ export function BottomNav() {
 
     return (
         <nav
-            className="fixed bottom-0 left-0 right-0 z-50 w-full"
+            className="fixed bottom-0 left-0 right-0 z-50 w-full max-w-md mx-auto"
             style={{ fontFamily: "'DM Sans', sans-serif", height: 80 }}
         >
             <div

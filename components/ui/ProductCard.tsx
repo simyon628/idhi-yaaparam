@@ -72,7 +72,7 @@ function ProductCardComponent({
     <div
       className="pc-card"
       style={{
-        width: variant === 'scroll' ? 'clamp(148px, 42vw, 175px)' : '100%',
+        width: variant === 'scroll' ? 'clamp(130px, 35vw, 140px)' : '100%',
         borderRadius: 'var(--iy-card-radius, 14px)',
         overflow: "hidden",
         border: "1px solid #F0F0F0",
@@ -92,6 +92,8 @@ function ProductCardComponent({
         backgroundColor: "#f1f5f9",
         flexShrink: 0,
         overflow: 'hidden',
+        borderTopLeftRadius: 'inherit',
+        borderTopRightRadius: 'inherit',
       }}>
         {/* Available badge - top left */}
         <span style={{
@@ -156,7 +158,7 @@ function ProductCardComponent({
       </div>
 
       {/* INFO AREA — flex column with auto-push for price/button */}
-      <div style={{ padding: 10, flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <div style={{ padding: 8, flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         {/* Title — fixed 2-line height via CSS class */}
         <p className="pc-title">
           {itemName}
@@ -183,7 +185,7 @@ function ProductCardComponent({
         
         {/* BORROW BUTTON — always at the very bottom */}
         <button style={{
-          width: '100%', height: 34,
+          width: '100%', height: 30,
           background: getButtonBg(), color: '#fff',
           border: 'none', borderRadius: 10,
           fontSize: 13, fontWeight: 700,

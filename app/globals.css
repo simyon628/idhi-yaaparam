@@ -32,20 +32,20 @@
   --iy-hdr-start: #FFFFFF;
   --iy-hdr-end: #F9FAFB;
 
-  /* ── Responsive Layout Tokens ── */
+  /* ✨ Responsive Layout Tokens ✨ */
   --iy-page-padding: 16px;
-  --iy-space-section: 24px;
-  --iy-space-section-lg: 32px;
+  --iy-space-section: 16px;
+  --iy-space-section-lg: 20px;
 
   /* ── Card System ── */
   --iy-card-radius: 14px;
   --iy-card-shadow: 0 2px 12px rgba(0,0,0,0.06);
   --iy-card-border: 1px solid #F0F0F0;
 
-  /* ── Category Items (responsive) ── */
-  --iy-cat-size: 76px;
-  --iy-cat-icon: 56px;
-  --iy-cat-gap: 16px;
+  /* ✨ Category Items (responsive) ✨ */
+  --iy-cat-size: 60px;
+  --iy-cat-icon: 44px;
+  --iy-cat-gap: 8px;
 
   /* ── Section Title (responsive) ── */
   --iy-section-title: clamp(16px, 4.5vw, 20px);
@@ -477,4 +477,4 @@
   color: #111827;
   text-align: center;
   width: 100%;
-}
+}

@@ -4,7 +4,7 @@ export function SkeletonCard({ variant = 'grid' }: { variant?: 'grid' | 'scroll'
   return (
     <div
       style={{
-        width: variant === 'scroll' ? 'clamp(140px, 42vw, 170px)' : '100%',
+        width: variant === 'scroll' ? 'clamp(130px, 35vw, 140px)' : '100%',
         borderRadius: 'var(--iy-card-radius, 14px)',
         overflow: "hidden",
         border: "1px solid #F0F0F0",
@@ -26,7 +26,7 @@ export function SkeletonCard({ variant = 'grid' }: { variant?: 'grid' | 'scroll'
       }} />
       
       {/* Info shimmer — matches ProductCard layout */}
-      <div style={{ padding: 10, flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+      <div style={{ padding: 8, flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
         {/* Title - 2 lines */}
         <div style={{ height: 14, background: "#f1f5f9", borderRadius: 4, width: "90%", animation: "shimmer 1.4s 0.1s infinite", backgroundSize: "200% 100%" }} />
         <div style={{ height: 14, background: "#f1f5f9", borderRadius: 4, width: "60%", animation: "shimmer 1.4s 0.12s infinite", backgroundSize: "200% 100%" }} />
@@ -40,7 +40,7 @@ export function SkeletonCard({ variant = 'grid' }: { variant?: 'grid' | 'scroll'
           <div style={{ height: 12, background: "#f1f5f9", borderRadius: 4, width: "18%", animation: "shimmer 1.4s 0.22s infinite", backgroundSize: "200% 100%" }} />
         </div>
         {/* Button */}
-        <div style={{ height: 34, background: "#f1f5f9", borderRadius: 10, width: "100%", animation: "shimmer 1.4s 0.25s infinite", backgroundSize: "200% 100%", marginTop: 8 }} />
+        <div style={{ height: 30, background: "#f1f5f9", borderRadius: 10, width: "100%", animation: "shimmer 1.4s 0.25s infinite", backgroundSize: "200% 100%", marginTop: 8 }} />
       </div>
     </div>
   );

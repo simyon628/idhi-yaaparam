@@ -26,7 +26,9 @@ import {
     Presentation,
     Smartphone,
     Headset,
-    Package
+    Package,
+    Triangle,
+    BedDouble
 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -48,64 +50,66 @@ const PP = 16;
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
-        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
-        { id: "drafter", name: "Drafters", bg: "#FAEEDA", icon: <Ruler size={24} /> },
-        { id: "lab-coat", name: "Lab Coats", bg: "#E1F5EE", icon: <Shirt size={24} /> },
-        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
-        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
-        { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} /> },
-        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
-        { id: "writing", name: "Writing", bg: "#FAEEDA", icon: <FileText size={24} /> },
+        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={20} strokeWidth={1.75} /> },
+        { id: "drafter", name: "Drafters", bg: "#FAEEDA", icon: <Ruler size={20} strokeWidth={1.75} /> },
+        { id: "geometry-kits", name: "Geometry Kits", bg: "#E1F5EE", icon: <Triangle size={20} strokeWidth={1.75} /> },
+        { id: "hostel-essentials", name: "Hostel Essentials", bg: "#FEF3C7", icon: <BedDouble size={20} strokeWidth={1.75} /> },
+        { id: "books", name: "Books", bg: "#E6F1FB", icon: <BookOpen size={20} strokeWidth={1.75} /> },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={20} strokeWidth={1.75} /> },
+        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={20} strokeWidth={1.75} /> },
+        { id: "lab-coat", name: "Lab Coats", bg: "#E1F5EE", icon: <Shirt size={20} strokeWidth={1.75} /> },
+        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={20} strokeWidth={1.75} /> },
+        { id: "writing", name: "Writing", bg: "#FAEEDA", icon: <FileText size={20} strokeWidth={1.75} /> },
     ],
     buy: [
-        { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: <FileText size={24} /> },
-        { id: "records", name: "Records", bg: "#EAF3DE", icon: <ClipboardList size={24} /> },
-        { id: "notes", name: "Notes", bg: "#E6F1FB", icon: <Book size={24} /> },
-        { id: "lab-manuals", name: "Lab Manuals", bg: "#FAEEDA", icon: <Notebook size={24} /> },
-        { id: "printouts", name: "Printouts", bg: "#FBEAF0", icon: <Printer size={24} /> },
-        { id: "resume-writing", name: "Resume", bg: "#E1F5EE", icon: <FileDown size={24} /> },
-        { id: "mini-projects", name: "Mini Projects", bg: "#E6F1FB", icon: <Laptop size={24} /> },
-        { id: "ppt-design", name: "PPT Design", bg: "#EEF0FF", icon: <Presentation size={24} /> },
+        { id: "assignments", name: "Assignments", bg: "#EEF0FF", icon: <FileText size={20} /> },
+        { id: "records", name: "Records", bg: "#EAF3DE", icon: <ClipboardList size={20} /> },
+        { id: "notes", name: "Notes", bg: "#E6F1FB", icon: <Book size={20} /> },
+        { id: "lab-manuals", name: "Lab Manuals", bg: "#FAEEDA", icon: <Notebook size={20} /> },
+        { id: "printouts", name: "Printouts", bg: "#FBEAF0", icon: <Printer size={20} /> },
+        { id: "resume-writing", name: "Resume", bg: "#E1F5EE", icon: <FileDown size={20} /> },
+        { id: "mini-projects", name: "Mini Projects", bg: "#E6F1FB", icon: <Laptop size={20} /> },
+        { id: "ppt-design", name: "PPT Design", bg: "#EEF0FF", icon: <Presentation size={20} /> },
     ],
     sell: [
-        { id: "mobiles", name: "Mobiles", bg: "#EEF0FF", icon: <Smartphone size={24} /> },
-        { id: "laptops", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
-        { id: "books", name: "Books", bg: "#EAF3DE", icon: <Book size={24} /> },
-        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: <Package size={24} /> },
-        { id: "furniture", name: "Furniture", bg: "#E1F5EE", icon: <Package size={24} /> },
-        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: <Laptop size={24} /> },
-        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
-        { id: "hostel-essentials", name: "Hostel Needs", bg: "#FAEEDA", icon: <Package size={24} /> },
+        { id: "mobiles", name: "Mobiles", bg: "#EEF0FF", icon: <Smartphone size={20} /> },
+        { id: "laptops", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={20} /> },
+        { id: "books", name: "Books", bg: "#EAF3DE", icon: <Book size={20} /> },
+        { id: "bikes", name: "Bikes", bg: "#FAEEDA", icon: <Package size={20} /> },
+        { id: "furniture", name: "Furniture", bg: "#E1F5EE", icon: <Package size={20} /> },
+        { id: "electronics", name: "Electronics", bg: "#FBEAF0", icon: <Laptop size={20} /> },
+        { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={20} /> },
+        { id: "hostel-essentials", name: "Hostel Needs", bg: "#FAEEDA", icon: <Package size={20} /> },
     ]
 };
 
 const MOCK_TRENDING = [
-    { id: "t1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&q=80" },
-    { id: "t2", itemName: "Engineering Drafter set", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&q=80" },
-    { id: "t3", itemName: "Lab Coat White Large size", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=400&q=80" },
-    { id: "t4", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec", imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" },
-    { id: "t5", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" },
+    { id: "t1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "/images/products/calculator.jpg" },
+    { id: "t2", itemName: "Engineering Drafter set", pricePerHour: 25, category: "drafter", branch: "Mech", distance: "1.2 km", sellerUsername: "vikas_svec", imageUrl: "/images/products/drafter.jpg" },
+    { id: "t3", itemName: "Lab Coat White Large size", pricePerHour: 20, category: "lab-coat", branch: "Civil", distance: "0.5 km", sellerUsername: "sita_svec", imageUrl: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&q=80" },
+    { id: "t4", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec", imageUrl: "/images/products/laptop.jpg" },
+    { id: "t5", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec", imageUrl: "/images/products/camera.jpg" },
     { id: "t6", itemName: "Hostel Study Lamp LED", pricePerHour: 8, category: "hostel-essentials", branch: "CSE", distance: "0.3 km", sellerUsername: "divya_svec", imageUrl: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80" },
     { id: "t7", itemName: "Gate CSE Preparation Book Set", pricePerHour: 10, category: "books", branch: "CSE", distance: "0.5 km", sellerUsername: "arun_svec", imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80" },
     { id: "t8", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec", imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" }
 ];
 
 const MOCK_CALCULATORS = [
-    { id: "mc1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec" },
-    { id: "mc2", itemName: "Casio fx-82MS Scientific Calculator", pricePerHour: 8, category: "calculator", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec" },
-    { id: "mc3", itemName: "Financial Calculator HP 10bII", pricePerHour: 20, category: "calculator", branch: "MBA", distance: "0.7 km", sellerUsername: "priya_svec" },
-    { id: "mc4", itemName: "Casio fx-991CW Advanced Scientific", pricePerHour: 18, category: "calculator", branch: "ECE", distance: "0.3 km", sellerUsername: "deepak_svec" },
-    { id: "mc5", itemName: "TI-84 Plus Graphing Calculator", pricePerHour: 25, category: "calculator", branch: "CSE", distance: "1.1 km", sellerUsername: "mohan_svec" },
-    { id: "mc6", itemName: "Casio FX-CG50 Color Graphing", pricePerHour: 30, category: "calculator", branch: "Mech", distance: "0.6 km", sellerUsername: "lakshmi_svec" },
+    { id: "mc1", itemName: "Scientific Calculator Casio fx-991EX", pricePerHour: 15, category: "calculator", branch: "CSE", distance: "0.2 km", sellerUsername: "rahul_svec", imageUrl: "/images/products/calculator.jpg" },
+    { id: "mc2", itemName: "Casio fx-82MS Scientific Calculator", pricePerHour: 8, category: "calculator", branch: "Mech", distance: "0.4 km", sellerUsername: "anil_svec", imageUrl: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=80" },
+    { id: "mc3", itemName: "Financial Calculator HP 10bII", pricePerHour: 20, category: "calculator", branch: "MBA", distance: "0.7 km", sellerUsername: "priya_svec", imageUrl: "https://images.unsplash.com/photo-1564473185935-5a9adf66ff1b?w=400&q=80" },
+    { id: "mc4", itemName: "Casio fx-991CW Advanced Scientific", pricePerHour: 18, category: "calculator", branch: "ECE", distance: "0.3 km", sellerUsername: "deepak_svec", imageUrl: "/images/products/calculator.jpg" },
+    { id: "mc5", itemName: "TI-84 Plus Graphing Calculator", pricePerHour: 25, category: "calculator", branch: "CSE", distance: "1.1 km", sellerUsername: "mohan_svec", imageUrl: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=80" },
+    { id: "mc6", itemName: "Casio FX-CG50 Color Graphing", pricePerHour: 30, category: "calculator", branch: "Mech", distance: "0.6 km", sellerUsername: "lakshmi_svec", imageUrl: "https://images.unsplash.com/photo-1564473185935-5a9adf66ff1b?w=400&q=80" },
 ];
 
 const MOCK_ELECTRONICS = [
-    { id: "me1", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec" },
-    { id: "me2", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec" },
-    { id: "me3", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec" },
-    { id: "me4", itemName: "Arduino Uno Ultimate Starter Kit", pricePerHour: 15, category: "electronics", branch: "ECE", distance: "0.5 km", sellerUsername: "vijay_svec" },
-    { id: "me5", itemName: "Raspberry Pi 4 Model B 8GB", pricePerHour: 20, category: "electronics", branch: "CSE", distance: "0.4 km", sellerUsername: "suresh_svec" },
-    { id: "me6", itemName: "USB-C Hub 7-in-1 Adapter", pricePerHour: 10, category: "accessories", branch: "CSE", distance: "0.2 km", sellerUsername: "karthik_svec" },
+    { id: "me1", itemName: "MacBook Pro M2 16GB", pricePerHour: 120, category: "laptop", branch: "CSE", distance: "0.8 km", sellerUsername: "ram_svec", imageUrl: "/images/products/laptop.jpg" },
+    { id: "me2", itemName: "Canon DSLR Camera 80D", pricePerHour: 60, category: "camera", branch: "ECE", distance: "1.0 km", sellerUsername: "anil_svec", imageUrl: "/images/products/camera.jpg" },
+    { id: "me3", itemName: "Bluetooth Headphones Noise Cancelling", pricePerHour: 30, category: "accessories", branch: "ECE", distance: "0.9 km", sellerUsername: "sanjay_svec", imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
+    { id: "me4", itemName: "Arduino Uno Ultimate Starter Kit", pricePerHour: 15, category: "electronics", branch: "ECE", distance: "0.5 km", sellerUsername: "vijay_svec", imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" },
+    { id: "me5", itemName: "Raspberry Pi 4 Model B 8GB", pricePerHour: 20, category: "electronics", branch: "CSE", distance: "0.4 km", sellerUsername: "suresh_svec", imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" },
+    { id: "me6", itemName: "USB-C Hub 7-in-1 Adapter", pricePerHour: 10, category: "accessories", branch: "CSE", distance: "0.2 km", sellerUsername: "karthik_svec", imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
 ];
 
 const MOCK_BOOKS = [
@@ -151,12 +155,12 @@ function ProductShelf({
     });
 
     return (
-        <section style={{ overflow: 'hidden' }}>
+        <section style={{ overflow: 'hidden', margin: "0 -20px" }}>
             {/* Section header — aligned to page padding */}
             <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
                 marginBottom: 12,
-                paddingLeft: PP, paddingRight: PP,
+                paddingLeft: 20, paddingRight: 20,
             }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{
@@ -195,13 +199,15 @@ function ProductShelf({
             <div
                 style={{
                     display: "flex",
-                    gap: "clamp(10px, 3vw, 14px)",
+                    gap: 12,
                     overflowX: "auto",
                     scrollbarWidth: "none",
                     scrollSnapType: "x mandatory",
                     scrollBehavior: "smooth",
                     WebkitOverflowScrolling: "touch",
-                    paddingLeft: PP,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                    scrollPaddingLeft: 20,
                     paddingBottom: 4,
                 }}
                 className="no-scrollbar"
@@ -348,8 +354,8 @@ export default function RentalsMarketplace() {
 
     return (
         <div
-            className="flex flex-col min-h-screen pb-28"
-            style={{ background: "#ffffff", fontFamily: "'DM Sans', sans-serif" }}
+            className="flex flex-col min-h-screen pb-28 mx-auto w-full max-w-[480px] relative bg-white shadow-xl overflow-x-hidden px-[20px]"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
         >
             {/* ══════════════════════════════════════════════════════════════
                 HEADER SECTION — All elements start from --iy-page-padding
@@ -377,7 +383,6 @@ export default function RentalsMarketplace() {
                 <div style={{
                     display: "flex", gap: 8,
                     paddingTop: 14,
-                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                 }}>
                     {TABS.map((tab) => {
@@ -409,7 +414,6 @@ export default function RentalsMarketplace() {
                 <div style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                     paddingTop: 16, paddingBottom: 10,
-                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                 }}>
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/rentals")}>
@@ -422,7 +426,7 @@ export default function RentalsMarketplace() {
                         </div>
                         <div>
                             <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: theme.header.textColor, lineHeight: 1 }}>Idhi Yaaparam</div>
-                            <div style={{ fontSize: 10, color: theme.header.subtextColor, letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Student Platform</div>
+                            <div style={{ fontSize: 12, color: theme.header.subtextColor, letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Student Platform</div>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -449,9 +453,8 @@ export default function RentalsMarketplace() {
 
                 {/* ── Search Bar ── */}
                 <div style={{
-                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
-                    marginBottom: 20,
+                    marginBottom: 16,
                 }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
@@ -479,7 +482,7 @@ export default function RentalsMarketplace() {
                 </div>
 
                 {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
-                <section style={{ position: "relative", zIndex: 2, marginBottom: 20 }}>
+                <section style={{ position: "relative", zIndex: 2, marginBottom: 16, margin: "0 -20px" }}>
                     <div style={{
                         display: "flex",
                         gap: "var(--iy-cat-gap)",
@@ -488,8 +491,15 @@ export default function RentalsMarketplace() {
                         scrollSnapType: "x mandatory",
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
-                        paddingLeft: PP,
+                        scrollPaddingLeft: 20,
+                        paddingLeft: 20,
+                        paddingRight: 20,
                         paddingBottom: 4,
+                        /* 5 full items + half-6th peek:
+                           (5 × 60px) + (5 × 8px gap) + 30px half-item = 370px
+                           At 375px viewport this clips the 6th item at exactly ~50% */
+                        width: "calc(5 * 60px + 5 * 8px + 30px + 20px)", /* 390px: includes left padding */
+                        maxWidth: "100%",
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
                             <div
@@ -520,7 +530,7 @@ export default function RentalsMarketplace() {
                                 }}>
                                     {cat.icon}
                                 </div>
-                                <span style={{ fontSize: 12, fontWeight: 600, color: "#1e293b", textAlign: "center", lineHeight: 1.2, width: "100%", whiteSpace: "normal", wordBreak: "break-word" }}>{cat.name}</span>
+                                <span style={{ fontSize: 10, fontWeight: 600, color: "#1e293b", textAlign: "center", lineHeight: 1.1, width: "100%", whiteSpace: "normal", wordBreak: "break-word" }}>{cat.name}</span>
                             </div>
                         ))}
                     </div>
@@ -528,8 +538,7 @@ export default function RentalsMarketplace() {
 
                 {/* ── DYNAMIC CAROUSEL — aligned to page padding ── */}
                 <div style={{
-                    paddingLeft: PP, paddingRight: PP,
-                    marginBottom: 24,
+                    marginBottom: 16,
                     position: "relative", zIndex: 2,
                 }}>
                     <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 18 }}>
@@ -590,10 +599,10 @@ export default function RentalsMarketplace() {
             )}
 
             {/* ── MAIN CONTENT — sections with consistent spacing ── */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 28 }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 16 }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
-                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                         {/* 1. Trending Shelf */}
                         <ProductShelf
                             title="Trending"
@@ -670,7 +679,7 @@ export default function RentalsMarketplace() {
                             display: "flex", alignItems: "center", gap: 10,
                             background: "#F8FAFC", borderRadius: 16, padding: "14px 16px",
                             border: "1px solid #E5E7EB",
-                            marginLeft: PP, marginRight: PP,
+                            position: "relative",
                         }}>
                             <div style={{ display: "flex" }}>
                                 {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
@@ -685,7 +694,7 @@ export default function RentalsMarketplace() {
                         </div>
 
                         {/* How It Works */}
-                        <div style={{ paddingLeft: PP, paddingRight: PP }}>
+                        <div>
                             <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b", marginBottom: 12 }}>How It Works</div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                                 {[
@@ -704,7 +713,7 @@ export default function RentalsMarketplace() {
 
                         {/* Campus For You */}
                         {selectedCollege && (
-                            <div style={{ paddingLeft: PP, paddingRight: PP }}>
+                            <div>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                                     <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b" }}>Campus Stats</div>
                                 </div>
@@ -744,7 +753,7 @@ export default function RentalsMarketplace() {
 /* ── Writing Section ── */
 function WritingSection({ router }: { router: any }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-5" style={{ paddingLeft: PP, paddingRight: PP }}>
+        <div className="iy-fu1 flex flex-col gap-5">
             {/* Earn card */}
             <div
                 style={{
@@ -762,7 +771,7 @@ function WritingSection({ router }: { router: any }) {
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(0,196,140,.14)", border: "1px solid rgba(0,196,140,.22)", borderRadius: 20, padding: "4px 11px", fontSize: 11, fontWeight: 700, color: "#00C48C", letterSpacing: ".5px", marginBottom: 12, position: "relative", zIndex: 1 }}>
                     ✨ EARN MONEY
                 </div>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", lineHeight: 1.2, marginBottom: 8, position: "relative", zIndex: 1 }}>
+                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", lineHeight: 1.1, marginBottom: 8, position: "relative", zIndex: 1 }}>
                     Write & <span style={{ color: "#00C48C" }}>Earn</span><br />on Free Time
                 </div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,.48)", lineHeight: 1.55, marginBottom: 18, position: "relative", zIndex: 1 }}>
@@ -776,7 +785,7 @@ function WritingSection({ router }: { router: any }) {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
                     <div>
                         <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 20, fontWeight: 700, color: "#00C48C" }}>₹200–500 <span style={{ fontSize: 12, fontWeight: 400, color: "rgba(255,255,255,.4)", fontFamily: "'DM Sans',sans-serif" }}>/job</span></div>
-                        <div style={{ fontSize: 10, color: "rgba(255,255,255,.3)", marginTop: 3 }}>⭐⭐⭐⭐⭐ 4.9 · 180 active writers</div>
+                        <div style={{ fontSize: 12, color: "rgba(255,255,255,.3)", marginTop: 3 }}>⭐⭐⭐⭐⭐ 4.9 · 180 active writers</div>
                     </div>
                 </div>
                 <button
@@ -807,7 +816,7 @@ function WritingSection({ router }: { router: any }) {
 /* ── Buy & Sell Section ── */
 function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-4" style={{ paddingLeft: PP, paddingRight: PP }}>
+        <div className="iy-fu1 flex flex-col gap-4">
 
             {/* Browse categories for buy/sell */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
