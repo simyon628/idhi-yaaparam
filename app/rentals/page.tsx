@@ -30,6 +30,7 @@ import {
     Triangle,
     BedDouble
 } from "lucide-react";
+import Image from "next/image";
 import { auth, db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -50,13 +51,13 @@ const PP = 16;
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
-        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={20} strokeWidth={1.75} /> },
-        { id: "drafter", name: "Drafters", bg: "#FAEEDA", icon: <Ruler size={20} strokeWidth={1.75} /> },
-        { id: "geometry-kits", name: "Geometry Kits", bg: "#E1F5EE", icon: <Triangle size={20} strokeWidth={1.75} /> },
-        { id: "hostel-essentials", name: "Hostel Essentials", bg: "#FEF3C7", icon: <BedDouble size={20} strokeWidth={1.75} /> },
-        { id: "books", name: "Books", bg: "#E6F1FB", icon: <BookOpen size={20} strokeWidth={1.75} /> },
-        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={20} strokeWidth={1.75} /> },
-        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={20} strokeWidth={1.75} /> },
+        { id: "calculator", name: "Calculators", bg: "#EEF0FF", imgSrc: "/images/categories/calculators.jpg" },
+        { id: "drafter", name: "Drafters", bg: "#FAEEDA", imgSrc: "/images/categories/drafters.jpg" },
+        { id: "geometry-kits", name: "Geometry Kits", bg: "#E1F5EE", imgSrc: "/images/categories/geometry.jpg" },
+        { id: "hostel-essentials", name: "Hostel Essentials", bg: "#FEF3C7", imgSrc: "/images/categories/hostel.jpg" },
+        { id: "books", name: "Books", bg: "#E6F1FB", imgSrc: "/images/categories/books.jpg" },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", imgSrc: "/images/categories/cameras.jpg" },
+        { id: "laptop", name: "Laptops", bg: "#E6F1FB", imgSrc: "/images/categories/laptops.jpg" },
         { id: "lab-coat", name: "Lab Coats", bg: "#E1F5EE", icon: <Shirt size={20} strokeWidth={1.75} /> },
         { id: "accessories", name: "Accessories", bg: "#E6F1FB", icon: <Headset size={20} strokeWidth={1.75} /> },
         { id: "writing", name: "Writing", bg: "#FAEEDA", icon: <FileText size={20} strokeWidth={1.75} /> },
@@ -481,8 +482,15 @@ export default function RentalsMarketplace() {
                     </form>
                 </div>
 
-                {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
-                <section style={{ position: "relative", zIndex: 2, marginBottom: 16, margin: "0 -20px" }}>
+                {/* ── CATEGORY SECTION — 5-full + half-6th peek ── */}
+                <section style={{
+                    position: "relative",
+                    zIndex: 2,
+                    marginBottom: 16,
+                    /* Bleed to screen edges, clip overflow for peek effect */
+                    margin: "0 -20px",
+                    overflow: "hidden",
+                }}>
                     <div style={{
                         display: "flex",
                         gap: "var(--iy-cat-gap)",
@@ -493,13 +501,13 @@ export default function RentalsMarketplace() {
                         WebkitOverflowScrolling: "touch",
                         scrollPaddingLeft: 20,
                         paddingLeft: 20,
-                        paddingRight: 20,
-                        paddingBottom: 4,
-                        /* 5 full items + half-6th peek:
-                           (5 × 60px) + (5 × 8px gap) + 30px half-item = 370px
-                           At 375px viewport this clips the 6th item at exactly ~50% */
-                        width: "calc(5 * 60px + 5 * 8px + 30px + 20px)", /* 390px: includes left padding */
-                        maxWidth: "100%",
+                        /* Right padding = 30px so 6th item peeks ~half before being clipped */
+                        paddingRight: 30,
+                        paddingBottom: 8,
+                        paddingTop: 4,
+                        /* No explicit width — overflow:hidden on section does the clipping.
+                           5 full items (60px × 5) + 5 gaps (8px × 5) + 20px left pad + 30px = 390px
+                           The section overflows the 480px container on the right, clipping the 6th item */
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
                             <div
@@ -527,9 +535,20 @@ export default function RentalsMarketplace() {
                                     color: "#475569",
                                     boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
                                     flexShrink: 0,
+                                    overflow: "hidden",
+                                    outline: `2.5px solid ${cat.bg}`,
+                                    outlineOffset: "1px",
                                 }}>
-                                    {cat.icon}
-                                </div>
+                                    {(cat as any).imgSrc ? (
+                                        <Image
+                                            src={(cat as any).imgSrc}
+                                            alt={cat.name}
+                                            width={44}
+                                            height={44}
+                                            style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "50%" }}
+                                            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                                        />
+                                    ) : (cat as any).icon}</div>
                                 <span style={{ fontSize: 10, fontWeight: 600, color: "#1e293b", textAlign: "center", lineHeight: 1.1, width: "100%", whiteSpace: "normal", wordBreak: "break-word" }}>{cat.name}</span>
                             </div>
                         ))}
