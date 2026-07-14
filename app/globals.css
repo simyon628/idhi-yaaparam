@@ -34,7 +34,7 @@
 
   /* ✨ Responsive Layout Tokens ✨ */
   --iy-page-padding: 16px;
-  --iy-space-section: 16px;
+  --iy-space-section: 20px;
   --iy-space-section-lg: 20px;
 
   /* ── Card System ── */
@@ -43,9 +43,9 @@
   --iy-card-border: 1px solid #F0F0F0;
 
   /* ✨ Category Items (responsive) ✨ */
-  --iy-cat-size: clamp(64px, 18vw, 88px);
-  --iy-cat-icon: clamp(44px, 12vw, 52px);
-  --iy-cat-gap: clamp(10px, 3vw, 16px);
+  --iy-cat-size: clamp(44px, 12.8vw, 59px);
+  --iy-cat-icon: 24px;
+  --iy-cat-gap: 8px;
 
   /* ── Section Title (responsive) ── */
   --iy-section-title: clamp(16px, 4.5vw, 20px);

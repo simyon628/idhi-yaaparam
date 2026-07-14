@@ -4,7 +4,7 @@ export function SkeletonCard({ variant = 'grid' }: { variant?: 'grid' | 'scroll'
   return (
     <div
       style={{
-        width: variant === 'scroll' ? 'clamp(130px, 35vw, 140px)' : '100%',
+        width: variant === 'scroll' ? 'clamp(120px, 33.1vw, 151px)' : '100%',
         borderRadius: 'var(--iy-card-radius, 14px)',
         overflow: "hidden",
         border: "1px solid #F0F0F0",

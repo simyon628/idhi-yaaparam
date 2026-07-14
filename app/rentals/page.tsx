@@ -49,13 +49,13 @@ const PP = 16;
 // Category Data by Mode
 const CATEGORIES = {
     rent: [
-        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={24} />, imgSrc: "/images/categories/calculators.jpg" },
-        { id: "drafter", name: "Drafters", bg: "#FAEEDA", icon: <Ruler size={24} />, imgSrc: "/images/categories/drafters.jpg" },
-        { id: "geometry", name: "Geometry Kits", bg: "#FAEEDA", icon: <Ruler size={24} />, imgSrc: "/images/categories/geometry.jpg" },
-        { id: "hostel", name: "Hostel Essentials", bg: "#FAEEDA", icon: <Package size={24} />, imgSrc: "/images/categories/hostel.jpg" },
-        { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} />, imgSrc: "/images/categories/books.jpg" },
-        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} />, imgSrc: "/images/categories/cameras.jpg" },
-        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} />, imgSrc: "/images/categories/laptops.jpg" },
+        { id: "calculator", name: "Calculators", bg: "#EEF0FF", icon: <Calculator size={24} /> },
+        { id: "drafter", name: "Drafters", bg: "#FAEEDA", icon: <Ruler size={24} /> },
+        { id: "lab-coat", name: "Lab Coats", bg: "#E1F5EE", icon: <Shirt size={24} /> },
+        { id: "laptop", name: "Laptops", bg: "#E6F1FB", icon: <Laptop size={24} /> },
+        { id: "camera", name: "Cameras", bg: "#FBEAF0", icon: <CameraIcon size={24} /> },
+        { id: "books", name: "Books", bg: "#E1F5EE", icon: <BookOpen size={24} /> },
+        { id: "hostel", name: "Hostel Essentials", bg: "#FAEEDA", icon: <Package size={24} /> },
         { id: "accessories", name: "Laptop Accessories", bg: "#E6F1FB", icon: <Headset size={24} /> },
     ],
     buy: [
@@ -189,13 +189,14 @@ function ProductShelf({
             <div
                 style={{
                     display: "flex",
-                    gap: "clamp(10px, 3vw, 14px)",
+                    gap: 12,
                     overflowX: "auto",
                     scrollbarWidth: "none",
                     scrollSnapType: "x mandatory",
                     scrollBehavior: "smooth",
                     WebkitOverflowScrolling: "touch",
                     paddingLeft: PP,
+                    paddingRight: 0,
                     paddingBottom: 4,
                 }}
                 className="no-scrollbar"
@@ -483,6 +484,7 @@ export default function RentalsMarketplace() {
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
                         paddingLeft: PP,
+                        paddingRight: 0,
                         paddingBottom: 4,
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
@@ -503,28 +505,13 @@ export default function RentalsMarketplace() {
                                 <div style={{
                                     width: "var(--iy-cat-icon)",
                                     height: "var(--iy-cat-icon)",
-                                    borderRadius: "50%",
-                                    background: cat.bg,
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    color: "#475569",
-                                    boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
+                                    color: "#4B5563",
                                     flexShrink: 0,
-                                    overflow: "hidden",
-                                    outline: `2.5px solid ${cat.bg}`,
-                                    outlineOffset: "1px",
                                 }}>
-                                    {(cat as any).imgSrc ? (
-                                        <Image
-                                            src={(cat as any).imgSrc}
-                                            alt={cat.name}
-                                            width={44}
-                                            height={44}
-                                            style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "50%" }}
-                                            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                                        />
-                                    ) : (cat as any).icon}
+                                    {cat.icon}
                                 </div>
                                 <span className="cat-label">{cat.name}</span>
                             </div>
@@ -817,7 +804,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
                         paddingLeft: PP,
-                        paddingRight: 30, // Peek allowance
+                        paddingRight: 0,
                         paddingBottom: 8
                     }} className="no-scrollbar">
                         {sellItems.map(item => (
