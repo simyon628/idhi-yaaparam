@@ -851,22 +851,39 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
             {sellItems.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
                     <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4 }}>Available on Campus 💰</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "clamp(10px, 3vw, 14px)" }}>
-                        {sellItems.map(item => (
-                            <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer" }}>
-                                <ProductCard
-                                    id={item.id}
-                                    itemName={item.itemName}
-                                    pricePerHour={item.pricePerHour}
-                                    category={item.categoryId || "others"}
-                                    branch={item.department || "CSE"}
-                                    sellerUsername="member"
-                                    distance={item.block || "Campus"}
-                                    imageUrl={item.photoUrl}
-                                    variant="grid"
-                                />
-                            </div>
-                        ))}
+                    <div style={{ margin: "0 -20px", overflow: "hidden" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: 12,
+                                overflowX: "auto",
+                                scrollbarWidth: "none",
+                                scrollSnapType: "x mandatory",
+                                scrollBehavior: "smooth",
+                                WebkitOverflowScrolling: "touch",
+                                paddingLeft: 20,
+                                paddingRight: 20,
+                                scrollPaddingLeft: 20,
+                                paddingBottom: 4,
+                            }}
+                            className="no-scrollbar"
+                        >
+                            {sellItems.map(item => (
+                                <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", flexShrink: 0, scrollSnapAlign: "start" }}>
+                                    <ProductCard
+                                        id={item.id}
+                                        itemName={item.itemName}
+                                        pricePerHour={item.pricePerHour}
+                                        category={item.categoryId || "others"}
+                                        branch={item.department || "CSE"}
+                                        sellerUsername="member"
+                                        distance={item.block || "Campus"}
+                                        imageUrl={item.photoUrl}
+                                        variant="scroll"
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             ) : (
