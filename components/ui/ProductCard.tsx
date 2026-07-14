@@ -72,7 +72,7 @@ function ProductCardComponent({
     <div
       className="pc-card"
       style={{
-        width: variant === 'scroll' ? 'clamp(120px, 33.1vw, 151px)' : '100%',
+        width: variant === 'scroll' ? 'calc((min(100vw, 448px) - 44px) / 2.7)' : '100%',
         borderRadius: 'var(--iy-card-radius, 14px)',
         overflow: "hidden",
         border: "1px solid #F0F0F0",

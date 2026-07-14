@@ -13,15 +13,26 @@ export const CATEGORIES = [
 
 export function CategoryGrid() {
     return (
-        <div className="w-full overflow-x-auto no-scrollbar py-2 flex gap-2 px-4 snap-x">
+        <div 
+            className="w-full overflow-x-auto no-scrollbar py-2 flex"
+            style={{
+                gap: 12,
+                paddingLeft: 20,
+                paddingRight: 20,
+                scrollbarWidth: "none",
+            }}
+        >
             {CATEGORIES.map((cat) => (
                 <Link
                     key={cat.id}
                     href={`/search?category=${cat.id}`}
-                    className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-full shadow-sm hover:bg-gray-50 transition-colors shrink-0 snap-start"
+                    className="flex items-center justify-center gap-1 bg-white border border-gray-200 py-1.5 rounded-full shadow-sm hover:bg-gray-50 transition-colors shrink-0"
+                    style={{
+                        width: "calc((min(100vw, 448px) - 80px) / 5.5)",
+                    }}
                 >
                     <span className="text-sm">{cat.icon}</span>
-                    <span className="text-xs font-semibold text-gray-800">{cat.name}</span>
+                    <span className="text-[10px] font-semibold text-gray-800 truncate">{cat.name}</span>
                 </Link>
             ))}
         </div>

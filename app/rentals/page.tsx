@@ -154,7 +154,7 @@ function ProductShelf({
             {/* Section header — aligned to page padding */}
             <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                marginBottom: 12,
+                marginBottom: 14,
                 paddingLeft: PP, paddingRight: PP,
             }}>
                 <div style={{
@@ -196,7 +196,7 @@ function ProductShelf({
                     scrollBehavior: "smooth",
                     WebkitOverflowScrolling: "touch",
                     paddingLeft: PP,
-                    paddingRight: 0,
+                    paddingRight: PP,
                     paddingBottom: 4,
                 }}
                 className="no-scrollbar"
@@ -584,10 +584,10 @@ export default function RentalsMarketplace() {
             )}
 
             {/* ── MAIN CONTENT — sections with consistent spacing ── */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "var(--iy-space-section-lg)" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 28 }}>
                 {/* Rentals tab content */}
                 {activeMode === "rent" && (
-                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: "var(--iy-space-section-lg)" }}>
+                    <div className="iy-fu1" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
                         {/* 1. Trending Shelf */}
                         <ProductShelf
                             title="Trending"
