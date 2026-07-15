@@ -252,7 +252,20 @@ export default function RentalsMarketplace() {
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [showCollegeModal, setShowCollegeModal] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [placeholderIndex, setPlaceholderIndex] = useState(0);
+    const [isFadingOut, setIsFadingOut] = useState(false);
     const userId = auth?.currentUser?.uid;
+
+    const SEARCH_PLACEHOLDERS = [
+        "Search \"Calculators\"",
+        "Search \"Engineering Drafters\"",
+        "Search \"Geometry Kits\"",
+        "Search \"Lab Coats\"",
+        "Search \"Books\"",
+        "Search \"Laptops\"",
+        "Search \"Scientific Calculator\"",
+        "Search \"Camera\""
+    ];
 
     // Notification count
     useEffect(() => {
@@ -285,6 +298,18 @@ export default function RentalsMarketplace() {
         }, 5000);
         return () => clearInterval(timer);
     }, [banners.length]);
+
+    // Rotating Search Placeholder
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsFadingOut(true);
+            setTimeout(() => {
+                setPlaceholderIndex((prev) => (prev + 1) % SEARCH_PLACEHOLDERS.length);
+                setIsFadingOut(false);
+            }, 300); // fade out duration
+        }, 3000); // 3s per word
+        return () => clearInterval(interval);
+    }, [SEARCH_PLACEHOLDERS.length]);
 
     // Warm cache immediately when home loads
     useEffect(() => {
@@ -322,11 +347,7 @@ export default function RentalsMarketplace() {
         }
     };
 
-    const getSearchPlaceholder = () => {
-        if (activeMode === "rent") return "Search calculators, lab coats, laptops...";
-        if (activeMode === "buy") return "Search assignments, records, notes...";
-        return "Search electronics, books, bikes...";
-    };
+    const currentPlaceholder = SEARCH_PLACEHOLDERS[placeholderIndex];
 
     /* ── Tab config ── */
     const TABS = [
@@ -391,78 +412,84 @@ export default function RentalsMarketplace() {
                     })}
                 </div>
 
-                {/* ── Top Row: Logo + Bell + College Chip ── */}
+                {/* ── Search + Notification Row ── */}
                 <div style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    paddingTop: 16, paddingBottom: 0,
-                    position: "relative", zIndex: 2,
-                    paddingRight: "15px",
-                }}>
-                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/rentals")}>
-                        <div style={{
-                            width: 38, height: 38, background: theme.logo.iconBg, borderRadius: 12,
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            fontSize: 20, boxShadow: theme.logo.iconShadow,
-                        }}>
-                            {theme.logo.emoji}
-                        </div>
-                        <div>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 16, color: theme.header.textColor, lineHeight: 1 }}>Idhi Yaaparam</div>
-                            <div style={{ fontSize: 10, color: theme.header.subtextColor, letterSpacing: "1.8px", textTransform: "uppercase", marginTop: 2 }}>Student Platform</div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => router.push("/notifications")} style={{
-                            width: 36, height: 36, background: theme.chip.bg, border: theme.chip.border,
-                            borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center",
-                            cursor: "pointer", position: "relative", fontSize: 16,
-                        }}>
-                            🔔
-                            {unreadCount > 0 && (
-                                <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, background: "#FF5F5F", borderRadius: "50%", border: `1.5px solid ${theme.brand.primary}` }} />
-                            )}
-                        </button>
-                        <button onClick={() => setShowCollegeModal(true)} style={{
-                            display: "flex", alignItems: "center", gap: 5, background: theme.chip.bg,
-                            border: theme.chip.border, borderRadius: 20, padding: "6px 11px", cursor: "pointer",
-                        }}>
-                            <span className="iy-pulse-dot" style={{ width: 8, height: 8, borderRadius: "50%", background: theme.chip.dotColor, flexShrink: 0, display: "inline-block" }} />
-                            <span style={{ fontSize: 11, color: theme.chip.text, fontWeight: 600 }}>{collegeName}</span>
-                            <ChevronDown style={{ width: 12, height: 12, color: "rgba(255,255,255,0.5)" }} />
-                        </button>
-                    </div>
-                </div>
-
-                {/* ── Search Bar ── */}
-                <div style={{
-                    position: "relative", zIndex: 2,
+                    display: "flex", alignItems: "center", gap: 12,
                     marginTop: 16,
-                    marginBottom: 20,
+                    marginBottom: 16,
+                    position: "relative", zIndex: 2,
                     paddingRight: "15px",
                 }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
                         border: "1px solid #E5E7EB",
-                        borderRadius: 18, height: 48, boxShadow: "0 2px 10px rgba(0,0,0,0.05)", overflow: "hidden", paddingRight: 4,
+                        borderRadius: 28, height: 50, flex: 1, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", overflow: "hidden", paddingRight: 8,
+                        position: "relative"
                     }}>
                         <button type="submit" style={{ padding: "0 12px 0 16px", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}>
                             <SearchIcon style={{ width: 20, height: 20, color: "#4B5563" }} />
                         </button>
-                        <input
-                            type="text" value={searchInputVal}
-                            onChange={(e) => { setSearchInputVal(e.target.value); setQuery(e.target.value); }}
-                            onClick={openSearch} placeholder={getSearchPlaceholder()}
-                            style={{
-                                flex: 1, background: "transparent", border: "none", outline: "none",
-                                fontWeight: 500, fontSize: 14, color: theme.header.searchText,
-                                fontFamily: "'DM Sans', sans-serif",
-                            }}
-                        />
-                        <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+
+                        <div style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", height: "100%" }}>
+                            {!searchInputVal && (
+                                <div style={{
+                                    position: "absolute",
+                                    left: 0,
+                                    pointerEvents: "none",
+                                    color: "#9CA3AF",
+                                    fontWeight: 500, fontSize: 14,
+                                    fontFamily: "'DM Sans', sans-serif",
+                                    transition: "opacity 0.3s ease-in-out",
+                                    opacity: isFadingOut ? 0 : 1,
+                                    whiteSpace: "nowrap"
+                                }}>
+                                    {currentPlaceholder}
+                                </div>
+                            )}
+                            <input
+                                type="text" value={searchInputVal}
+                                onChange={(e) => { setSearchInputVal(e.target.value); setQuery(e.target.value); }}
+                                onClick={openSearch}
+                                style={{
+                                    width: "100%", background: "transparent", border: "none", outline: "none",
+                                    fontWeight: 500, fontSize: 14, color: theme.header.searchText,
+                                    fontFamily: "'DM Sans', sans-serif",
+                                    position: "relative", zIndex: 1
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: 2, zIndex: 2 }}>
                             <button type="button" style={{ padding: 8, background: "none", border: "none", cursor: "pointer" }}><Camera style={{ width: 16, height: 16, color: "#9CA3AF" }} /></button>
                             <button type="button" style={{ padding: 8, background: "none", border: "none", cursor: "pointer" }}><Mic style={{ width: 16, height: 16, color: "#9CA3AF" }} /></button>
                         </div>
                     </form>
+
+                    <button onClick={() => router.push("/notifications")} style={{
+                        width: 50, height: 50, background: "#FFFFFF", border: "1px solid #E5E7EB",
+                        borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: "pointer", position: "relative", fontSize: 20, flexShrink: 0,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                    }}>
+                        🔔
+                        {unreadCount > 0 && (
+                            <span style={{ position: "absolute", top: 12, right: 12, width: 8, height: 8, background: "#FF5F5F", borderRadius: "50%", border: `1.5px solid #FFFFFF` }} />
+                        )}
+                    </button>
+                </div>
+
+                {/* ── DYNAMIC CAROUSEL — aligned to page padding (15px) ── */}
+                <div style={{
+                    marginBottom: 16,
+                    position: "relative", zIndex: 2,
+                    paddingRight: "15px",
+                }}>
+                    <BannerCarousel images={[
+                      "/banners/promo1.png",
+                      "/banners/promo2.jpg",
+                      "/banners/promo3.jpg",
+                      "/banners/promo1.png"
+                    ]} />
                 </div>
 
                 {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
@@ -509,20 +536,6 @@ export default function RentalsMarketplace() {
                         ))}
                     </div>
                 </section>
-
-                {/* ── DYNAMIC CAROUSEL — aligned to page padding (15px) ── */}
-                <div style={{
-                    marginBottom: 24,
-                    position: "relative", zIndex: 2,
-                    paddingRight: "15px",
-                }}>
-                    <BannerCarousel images={[
-                      "/banners/promo1.png",
-                      "/banners/promo2.jpg",
-                      "/banners/promo3.jpg",
-                      "/banners/promo1.png"
-                    ]} />
-                </div>
             </div>
 
             {/* College Selection Modal */}

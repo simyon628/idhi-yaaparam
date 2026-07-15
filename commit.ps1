@@ -1,6 +1,9 @@
 param([string]$msg = "Minor update")
 
-# Check if there are any changes (staged or unstaged)
+# 1. Ensure script runs in the project directory (critical for Task Scheduler)
+Set-Location $PSScriptRoot
+
+# 2. Check if there are any changes (staged or unstaged)
 $status = git status --porcelain
 if ([string]::IsNullOrEmpty($status)) {
     Write-Host "No changes detected. Generating auto-commit entry to secure green square..." -ForegroundColor Yellow
@@ -12,7 +15,16 @@ Write-Host "Adding files..." -ForegroundColor Cyan
 git add .
 
 Write-Host "Committing with co-authors..." -ForegroundColor Cyan
-git commit -m "$msg" -m "Co-authored-by: karunajyothi2005 <karunajyothi20005@gmail.com>" -m "Co-authored-by: simyon628 <simyon628@gmail.com>"
+# Co-authored-by trailers MUST be on consecutive lines with NO blank lines between them, 
+# and separated by a single blank line from the commit description.
+$commitMessage = @"
+$msg
+
+Co-authored-by: karunajyothi2005 <karunajyothi20005@gmail.com>
+Co-authored-by: simyon628 <simyon628@gmail.com>
+"@
+
+git commit -m $commitMessage
 
 Write-Host "Pushing to GitHub..." -ForegroundColor Cyan
 git push
