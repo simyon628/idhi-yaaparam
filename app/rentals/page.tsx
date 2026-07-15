@@ -42,6 +42,7 @@ import { CategoryGrid } from "@/components/ui/CategoryGrid";
 import { theme } from "@/lib/theme.config";
 import { useActiveBanners, getBannerGradient } from "@/lib/hooks/useActiveBanners";
 import { InlineCollegeSelection } from "@/components/ui/InlineCollegeSelection";
+import { BannerCarousel } from "@/components/ui/BannerCarousel";
 
 // ── Responsive CSS variable shorthand ──
 const PP = 20;
@@ -155,6 +156,7 @@ function ProductShelf({
             <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
                 marginBottom: 14,
+                paddingRight: "15px",
             }}>
                 <div style={{
                     fontFamily: "var(--font-outfit), 'Outfit', sans-serif",
@@ -195,6 +197,7 @@ function ProductShelf({
                     scrollBehavior: "smooth",
                     WebkitOverflowScrolling: "touch",
                     paddingBottom: 4,
+                    paddingRight: "15px",
                 }}
                 className="no-scrollbar"
             >
@@ -344,37 +347,24 @@ export default function RentalsMarketplace() {
             style={{
                 background: "#ffffff",
                 fontFamily: "'DM Sans', sans-serif",
-                paddingLeft: "20px",
+                paddingLeft: "15px",
                 paddingRight: "0px"
             }}
         >
             {/* ══════════════════════════════════════════════════════════════
-                HEADER SECTION — All elements start from --iy-page-padding
+                HEADER SECTION — All elements start from --iy-page-padding (15px)
             ══════════════════════════════════════════════════════════════ */}
             <div style={{
                 position: "relative",
                 background: "#ffffff",
                 paddingBottom: 0,
             }}>
-                {/* Hero Fading Background — extended & smoother fade */}
-                <div style={{
-                    position: "absolute", top: 0, left: 0, right: 0, height: 400,
-                    background: `linear-gradient(180deg, ${theme.header.background} 0%, rgba(248,250,252,0.5) 55%, rgba(255,255,255,0) 100%)`,
-                    zIndex: 0, pointerEvents: "none",
-                }}>
-                    {/* Subtle white radial glow */}
-                    <div style={{
-                        position: "absolute", top: -50, left: "50%", transform: "translateX(-50%)",
-                        width: 600, height: 600,
-                        background: "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%)",
-                    }} />
-                </div>
-
                 {/* ── Three Mode Tabs ── */}
                 <div style={{
                     display: "flex", gap: 8,
                     paddingTop: 14,
                     position: "relative", zIndex: 2,
+                    paddingRight: "15px",
                 }}>
                     {TABS.map((tab) => {
                         const isOn = activeMode === tab.id;
@@ -406,6 +396,7 @@ export default function RentalsMarketplace() {
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                     paddingTop: 16, paddingBottom: 0,
                     position: "relative", zIndex: 2,
+                    paddingRight: "15px",
                 }}>
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/rentals")}>
                         <div style={{
@@ -447,6 +438,7 @@ export default function RentalsMarketplace() {
                     position: "relative", zIndex: 2,
                     marginTop: 16,
                     marginBottom: 20,
+                    paddingRight: "15px",
                 }}>
                     <form onSubmit={handleSearchSubmit} style={{
                         display: "flex", alignItems: "center", background: "#FFFFFF",
@@ -484,6 +476,7 @@ export default function RentalsMarketplace() {
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
                         paddingBottom: 4,
+                        paddingRight: "15px",
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
                             <div
@@ -517,42 +510,18 @@ export default function RentalsMarketplace() {
                     </div>
                 </section>
 
-                {/* ── DYNAMIC CAROUSEL — aligned to page padding ── */}
+                {/* ── DYNAMIC CAROUSEL — aligned to page padding (15px) ── */}
                 <div style={{
                     marginBottom: 24,
                     position: "relative", zIndex: 2,
+                    paddingRight: "15px",
                 }}>
-                    <div className="relative overflow-hidden shadow-lg" style={{ height: 200, width: "100%", borderRadius: 18 }}>
-                        {banners.map((banner, index) => {
-                            const isCurrent = index === carouselIndex;
-                            return (
-                                <div key={banner.id} className="absolute inset-0 flex flex-col justify-between text-white transition-opacity duration-700 ease-in-out"
-                                    style={{
-                                        background: banner.imageUrl ? `url(${banner.imageUrl}) center/cover no-repeat` : getBannerGradient(index),
-                                        opacity: isCurrent ? 1 : 0, pointerEvents: isCurrent ? "auto" : "none", zIndex: isCurrent ? 10 : 0,
-                                    }}>
-                                    {banner.imageUrl && <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 100%)", zIndex: 0 }} />}
-                                    <div style={{ position: "relative", zIndex: 1, padding: "20px 24px" }}>
-                                        <div className="space-y-1.5">
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-300">Special Offer</span>
-                                            <h3 className="font-extrabold text-xl tracking-tight text-white leading-tight" style={{ fontFamily: "'Syne', sans-serif" }}>{banner.title}</h3>
-                                            <p className="text-[11px] text-white/90 font-medium">{banner.subtitle}</p>
-                                        </div>
-                                        <div style={{ marginTop: 16 }}>
-                                            <button onClick={() => banner.ctaLink && router.push(banner.ctaLink)} className="bg-white/25 backdrop-blur-md hover:bg-white/35 transition-colors text-white font-extrabold text-[11px] px-5 py-2 rounded-xl flex items-center gap-1.5 shadow-sm border border-white/20">
-                                                {banner.ctaText} <ArrowRight className="w-3.5 h-3.5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                        <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-20" style={{ bottom: 12 }}>
-                            {banners.map((_, i) => (
-                                <button key={i} onClick={() => setCarouselIndex(i)} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === carouselIndex ? "w-5 bg-white" : "bg-white/40"}`} />
-                            ))}
-                        </div>
-                    </div>
+                    <BannerCarousel images={[
+                      "/banners/promo1.png",
+                      "/banners/promo2.jpg",
+                      "/banners/promo3.jpg",
+                      "/banners/promo1.png"
+                    ]} />
                 </div>
             </div>
 
@@ -639,6 +608,7 @@ export default function RentalsMarketplace() {
                             display: "flex", alignItems: "center", gap: 10,
                             background: "#F8FAFC", borderRadius: 16, padding: "14px 16px",
                             border: "1px solid #E5E7EB",
+                            marginRight: "15px",
                         }}>
                             <div style={{ display: "flex" }}>
                                 {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
@@ -653,7 +623,7 @@ export default function RentalsMarketplace() {
                         </div>
 
                         {/* How It Works */}
-                        <div>
+                        <div style={{ paddingRight: "15px" }}>
                             <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b", marginBottom: 12 }}>How It Works</div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                                 {[
@@ -672,7 +642,7 @@ export default function RentalsMarketplace() {
 
                         {/* Campus For You */}
                         {selectedCollege && (
-                            <div>
+                            <div style={{ paddingRight: "15px" }}>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                                     <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b" }}>Campus Stats</div>
                                 </div>
@@ -712,7 +682,7 @@ export default function RentalsMarketplace() {
 /* ── Writing Section ── */
 function WritingSection({ router }: { router: any }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-5">
+        <div className="iy-fu1 flex flex-col gap-5" style={{ paddingRight: "15px" }}>
             {/* Earn card */}
             <div
                 style={{
@@ -778,19 +748,21 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
         <div className="iy-fu1 flex flex-col gap-4">
 
             {/* Browse categories for buy/sell */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4, paddingRight: "15px" }}>
                 <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)" }}>Browse Items</div>
                 <button onClick={() => router.push("/search")} style={{ fontSize: 13, fontWeight: 700, color: "var(--iy-primary)", background: "none", border: "none", cursor: "pointer" }}>
                     View all →
                 </button>
             </div>
 
-            <CategoryGrid />
+            <div style={{ paddingRight: "15px" }}>
+                <CategoryGrid />
+            </div>
 
             {/* Real items for sale grid */}
             {sellItems.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
-                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4 }}>Available on Campus 💰</div>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4, paddingRight: "15px" }}>Available on Campus 💰</div>
                     <div style={{
                         display: "flex",
                         gap: 12,
@@ -799,7 +771,8 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
                         scrollSnapType: "x mandatory",
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
-                        paddingBottom: 8
+                        paddingBottom: 8,
+                        paddingRight: "15px",
                     }} className="no-scrollbar">
                         {sellItems.map(item => (
                             <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} style={{ cursor: "pointer", flexShrink: 0, scrollSnapAlign: "start" }}>
@@ -820,7 +793,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
                 </div>
             ) : (
                 /* Empty/placeholder state — sell */
-                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12, paddingRight: "15px" }}>
                     <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4 }}>Your Listings</div>
                     <div style={{ background: "#fff", borderRadius: 24, boxShadow: "var(--iy-sh-card)", padding: "32px 20px", textAlign: "center" as const }}>
                         <div style={{ fontSize: 42, marginBottom: 12 }}>📦</div>
@@ -839,7 +812,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
             )}
 
             {/* How to sell */}
-            <div style={{ marginTop: 12 }}>
+            <div style={{ marginTop: 12, paddingRight: "15px" }}>
                 <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 12 }}>How to Sell</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     {[
