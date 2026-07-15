@@ -17,8 +17,6 @@ export function CategoryGrid() {
             className="w-full overflow-x-auto no-scrollbar py-2 flex"
             style={{
                 gap: 12,
-                paddingLeft: 20,
-                paddingRight: 20,
                 scrollbarWidth: "none",
             }}
         >

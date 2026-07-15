@@ -155,7 +155,6 @@ function ProductShelf({
             <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
                 marginBottom: 14,
-                paddingLeft: PP, paddingRight: PP,
             }}>
                 <div style={{
                     fontFamily: "var(--font-outfit), 'Outfit', sans-serif",
@@ -195,8 +194,6 @@ function ProductShelf({
                     scrollSnapType: "x mandatory",
                     scrollBehavior: "smooth",
                     WebkitOverflowScrolling: "touch",
-                    paddingLeft: PP,
-                    paddingRight: PP,
                     paddingBottom: 4,
                 }}
                 className="no-scrollbar"
@@ -344,7 +341,12 @@ export default function RentalsMarketplace() {
     return (
         <div
             className="flex flex-col min-h-screen pb-28"
-            style={{ background: "#ffffff", fontFamily: "'DM Sans', sans-serif" }}
+            style={{
+                background: "#ffffff",
+                fontFamily: "'DM Sans', sans-serif",
+                paddingLeft: "20px",
+                paddingRight: "0px"
+            }}
         >
             {/* ══════════════════════════════════════════════════════════════
                 HEADER SECTION — All elements start from --iy-page-padding
@@ -372,7 +374,6 @@ export default function RentalsMarketplace() {
                 <div style={{
                     display: "flex", gap: 8,
                     paddingTop: 14,
-                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                 }}>
                     {TABS.map((tab) => {
@@ -404,7 +405,6 @@ export default function RentalsMarketplace() {
                 <div style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                     paddingTop: 16, paddingBottom: 0,
-                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                 }}>
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/rentals")}>
@@ -444,7 +444,6 @@ export default function RentalsMarketplace() {
 
                 {/* ── Search Bar ── */}
                 <div style={{
-                    paddingLeft: PP, paddingRight: PP,
                     position: "relative", zIndex: 2,
                     marginTop: 16,
                     marginBottom: 20,
@@ -484,8 +483,6 @@ export default function RentalsMarketplace() {
                         scrollSnapType: "x mandatory",
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
-                        paddingLeft: PP,
-                        paddingRight: PP,
                         paddingBottom: 4,
                     }} className="no-scrollbar">
                         {CATEGORIES[activeMode].map(cat => (
@@ -522,7 +519,6 @@ export default function RentalsMarketplace() {
 
                 {/* ── DYNAMIC CAROUSEL — aligned to page padding ── */}
                 <div style={{
-                    paddingLeft: PP, paddingRight: PP,
                     marginBottom: 24,
                     position: "relative", zIndex: 2,
                 }}>
@@ -643,7 +639,6 @@ export default function RentalsMarketplace() {
                             display: "flex", alignItems: "center", gap: 10,
                             background: "#F8FAFC", borderRadius: 16, padding: "14px 16px",
                             border: "1px solid #E5E7EB",
-                            marginLeft: PP, marginRight: PP,
                         }}>
                             <div style={{ display: "flex" }}>
                                 {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
@@ -658,7 +653,7 @@ export default function RentalsMarketplace() {
                         </div>
 
                         {/* How It Works */}
-                        <div style={{ paddingLeft: PP, paddingRight: PP }}>
+                        <div>
                             <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b", marginBottom: 12 }}>How It Works</div>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                                 {[
@@ -677,7 +672,7 @@ export default function RentalsMarketplace() {
 
                         {/* Campus For You */}
                         {selectedCollege && (
-                            <div style={{ paddingLeft: PP, paddingRight: PP }}>
+                            <div>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                                     <div style={{ fontFamily: "var(--font-outfit), 'Outfit', sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "#1e293b" }}>Campus Stats</div>
                                 </div>
@@ -717,7 +712,7 @@ export default function RentalsMarketplace() {
 /* ── Writing Section ── */
 function WritingSection({ router }: { router: any }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-5" style={{ paddingLeft: PP, paddingRight: PP }}>
+        <div className="iy-fu1 flex flex-col gap-5">
             {/* Earn card */}
             <div
                 style={{
@@ -780,7 +775,7 @@ function WritingSection({ router }: { router: any }) {
 /* ── Buy & Sell Section ── */
 function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }) {
     return (
-        <div className="iy-fu1 flex flex-col gap-4" style={{ paddingLeft: PP, paddingRight: PP }}>
+        <div className="iy-fu1 flex flex-col gap-4">
 
             {/* Browse categories for buy/sell */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
@@ -795,7 +790,7 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
             {/* Real items for sale grid */}
             {sellItems.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
-                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4, paddingLeft: PP, paddingRight: PP }}>Available on Campus 💰</div>
+                    <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: "var(--iy-section-title, 18px)", color: "var(--iy-text1)", marginBottom: 4 }}>Available on Campus 💰</div>
                     <div style={{
                         display: "flex",
                         gap: 12,
@@ -804,8 +799,6 @@ function BuySellSection({ router, sellItems }: { router: any; sellItems: any[] }
                         scrollSnapType: "x mandatory",
                         scrollBehavior: "smooth",
                         WebkitOverflowScrolling: "touch",
-                        paddingLeft: PP,
-                        paddingRight: 0,
                         paddingBottom: 8
                     }} className="no-scrollbar">
                         {sellItems.map(item => (
