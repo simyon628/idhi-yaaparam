@@ -2,7 +2,7 @@
 
 When asked to commit, ALWAYS include the following Co-authored-by trailers at the end of the commit message to ensure both users get credit:
 
-Co-authored-by: karunajyothi2005 <karunajyothi20005@gmail.com>
+Co-authored-by: karunajyothi2005 <karunajyothi2005@gmail.com>
 Co-authored-by: simyon628 <simyon628@gmail.com>
 
 ---

@@ -20,7 +20,7 @@ Write-Host "Committing with co-authors..." -ForegroundColor Cyan
 $commitMessage = @"
 $msg
 
-Co-authored-by: karunajyothi2005 <karunajyothi20005@gmail.com>
+Co-authored-by: karunajyothi2005 <karunajyothi2005@gmail.com>
 Co-authored-by: simyon628 <simyon628@gmail.com>
 "@
 
