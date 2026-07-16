@@ -115,23 +115,23 @@ export default function ImportCollegesPage() {
                 {status === "idle" && (
                     <button
                         onClick={handleImport}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-4 rounded-xl shadow-indigo transition-all"
+                        className="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-4 rounded-xl shadow-blue transition-all"
                     >
                         Seed Colleges to Database
                     </button>
                 )}
 
                 {status === "importing" && (
-                    <div className="flex flex-col items-center bg-indigo-50 w-full p-6 rounded-2xl border border-indigo-100">
-                        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin mb-3" />
-                        <h3 className="font-bold text-indigo-900">Import started...</h3>
-                        <p className="text-sm font-semibold text-indigo-600 mt-2">
+                    <div className="flex flex-col items-center bg-blue-50 w-full p-6 rounded-2xl border border-blue-100">
+                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-3" />
+                        <h3 className="font-bold text-blue-900">Import started...</h3>
+                        <p className="text-sm font-semibold text-blue-600 mt-2">
                             Processed {progress.current} of {progress.total}
                         </p>
                         {/* Progress Bar */}
-                        <div className="w-full bg-indigo-200 h-2 rounded-full mt-4 overflow-hidden">
+                        <div className="w-full bg-blue-200 h-2 rounded-full mt-4 overflow-hidden">
                             <div
-                                className="bg-indigo-600 h-full transition-all duration-300"
+                                className="bg-blue-600 h-full transition-all duration-300"
                                 style={{ width: `${progress.total > 0 ? (progress.current / progress.total) * 100 : 0}%` }}
                             />
                         </div>

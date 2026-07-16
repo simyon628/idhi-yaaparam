@@ -130,7 +130,7 @@ function SearchResults() {
           <div style={{ fontSize: "var(--iy-section-title, 18px)", fontWeight: 700, color: "#1e293b" }}>
             {q ? (
               <>
-                Results for &ldquo;<span style={{ color: "#5548E8" }}>{q}</span>&rdquo;
+                Results for &ldquo;<span style={{ color: "#0B57D0" }}>{q}</span>&rdquo;
               </>
             ) : (
               displayTitle
@@ -171,7 +171,7 @@ function SearchResults() {
               borderRadius: 20,
               fontSize: 12,
               fontWeight: 700,
-              background: (category === cat || (!category && cat === "all")) ? "linear-gradient(135deg,#5548E8,#7B72FF)" : "#f1f5f9",
+              background: (category === cat || (!category && cat === "all")) ? "linear-gradient(135deg,#0B57D0,#0B57D0)" : "#f1f5f9",
               color: (category === cat || (!category && cat === "all")) ? "#fff" : "#64748b",
               border: "none",
               cursor: "pointer",
@@ -209,7 +209,7 @@ function SearchResults() {
               style={{
                 marginTop: 24,
                 padding: "12px 28px",
-                background: "linear-gradient(135deg,#5548E8,#7B72FF)",
+                background: "linear-gradient(135deg,#0B57D0,#0B57D0)",
                 color: "#fff",
                 border: "none",
                 borderRadius: 14,

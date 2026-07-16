@@ -23,7 +23,7 @@ interface LeaderUser {
 
 const BADGE_CONFIG = [
     { minRentals: 20, label: "🏆 Campus Legend", color: "bg-amber-100 text-amber-800 border-amber-200" },
-    { minRentals: 10, label: "⭐ Lab Master", color: "bg-indigo-100 text-indigo-800 border-indigo-200" },
+    { minRentals: 10, label: "⭐ Lab Master", color: "bg-blue-100 text-blue-800 border-blue-200" },
     { minRentals: 5,  label: "🌟 Trusted Lender", color: "bg-emerald-100 text-emerald-800 border-emerald-200" },
     { minRentals: 1,  label: "✨ New Lender", color: "bg-slate-100 text-slate-600 border-slate-200" },
 ];
@@ -74,18 +74,18 @@ export default function LeaderboardPage() {
             <main className="px-5 pt-[85px] animate-page-enter">
 
                 {/* Hero */}
-                <div className="relative bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl p-6 mb-6 overflow-hidden shadow-indigo">
+                <div className="relative bg-gradient-to-br from-blue-600 to-blue-600 rounded-3xl p-6 mb-6 overflow-hidden shadow-blue">
                     <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/5 -translate-x-8 -translate-y-8" />
                     <div className="absolute bottom-0 left-0 w-28 h-28 rounded-full bg-white/5 translate-x-4 translate-y-4" />
                     <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-2">
                             <Trophy className="w-6 h-6 text-amber-300" />
-                            <span className="text-[10px] font-black text-indigo-200 uppercase tracking-widest">Hall of Fame</span>
+                            <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest">Hall of Fame</span>
                         </div>
                         <h1 className="text-2xl font-black text-white leading-none mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
                             Campus Trust<br />Leaderboard
                         </h1>
-                        <p className="text-indigo-200 text-xs font-semibold">
+                        <p className="text-blue-200 text-xs font-semibold">
                             Top lenders in {selectedCollege?.name || "your campus"}
                         </p>
                     </div>
@@ -103,7 +103,7 @@ export default function LeaderboardPage() {
                 {/* List */}
                 {loading ? (
                     <div className="flex justify-center py-16">
-                        <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
                     </div>
                 ) : users.length === 0 ? (
                     <div className="text-center py-16">
@@ -158,7 +158,7 @@ export default function LeaderboardPage() {
                                         <span className="text-[10px] font-bold text-slate-400">
                                             {user.reviewCount ?? 0} reviews
                                         </span>
-                                        <div className="flex items-center gap-1 text-[10px] font-black text-indigo-600">
+                                        <div className="flex items-center gap-1 text-[10px] font-black text-blue-600">
                                             <Zap className="w-3 h-3" />
                                             {user.completedRentals ?? 0} lent
                                         </div>

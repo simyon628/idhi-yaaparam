@@ -51,7 +51,7 @@ export default function CampusMap({ center, items }: CampusMapProps) {
                             <Popup>
                                 <div className="p-0.5 min-w-[140px] font-sans">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-lg overflow-hidden shrink-0">
+                                        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-lg overflow-hidden shrink-0">
                                             {item.photoUrl ? (
                                                 <img src={item.photoUrl} className="w-full h-full object-cover" alt="" />
                                             ) : (
@@ -67,13 +67,13 @@ export default function CampusMap({ center, items }: CampusMapProps) {
                                     </div>
                                     
                                     <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2 mt-2">
-                                        <div className="flex items-center gap-0.5 font-black text-indigo-600 text-[11px]">
+                                        <div className="flex items-center gap-0.5 font-black text-blue-600 text-[11px]">
                                             <IndianRupee className="w-2.5 h-2.5" />
                                             {item.pricePerHour}
                                         </div>
                                         <button 
                                             onClick={() => router.push(`/rentals/${item.id}`)}
-                                            className="px-2 py-1 bg-indigo-600 text-white text-[9px] font-black rounded-lg uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
+                                            className="px-2 py-1 bg-blue-600 text-white text-[9px] font-black rounded-lg uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
                                         >
                                             View
                                         </button>

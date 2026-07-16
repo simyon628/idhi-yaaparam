@@ -170,7 +170,7 @@ export function GlobalFAB() {
                   </label>
                   <div 
                       onClick={() => fileInputRef.current?.click()}
-                      className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${imagePreview ? "border-transparent bg-transparent cursor-pointer" : "border-indigo-100 bg-slate-50/50 hover:bg-slate-50 hover:border-indigo-300 cursor-pointer overflow-hidden"}`}
+                      className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${imagePreview ? "border-transparent bg-transparent cursor-pointer" : "border-blue-100 bg-slate-50/50 hover:bg-slate-50 hover:border-blue-300 cursor-pointer overflow-hidden"}`}
                   >
                       {imagePreview ? (
                           <div className="relative w-full h-full">
@@ -185,7 +185,7 @@ export function GlobalFAB() {
                       ) : (
                           <div className="flex flex-col items-center gap-3">
                               <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-sm border border-slate-100">
-                                  <Camera className="w-6 h-6 text-indigo-500" />
+                                  <Camera className="w-6 h-6 text-blue-500" />
                               </div>
                               <div className="text-center">
                                   <p className="text-sm font-bold text-slate-700">Tap to add photo</p>
@@ -203,7 +203,7 @@ export function GlobalFAB() {
                     <select
                         value={category}
                         onChange={e => setCategory(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:bg-white rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none transition-all"
+                        className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 focus:bg-white rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none transition-all"
                     >
                         <option value="" disabled>Select Category</option>
                         <option value="Calculator">Calculator</option>
@@ -223,14 +223,14 @@ export function GlobalFAB() {
               {/* Item Name */}
               <div className="space-y-2">
                 <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Item Name *</label>
-                <input value={itemName} onChange={e => setItemName(e.target.value)} type="text" placeholder="e.g. Casio fx-991EX" className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:bg-white rounded-2xl h-14 px-4 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all" />
+                <input value={itemName} onChange={e => setItemName(e.target.value)} type="text" placeholder="e.g. Casio fx-991EX" className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 focus:bg-white rounded-2xl h-14 px-4 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all" />
               </div>
 
               {/* Price */}
               <div className="space-y-2">
                 <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Price per hour (₹) *</label>
-                <div className="flex items-center gap-2 bg-slate-50 rounded-2xl border border-slate-200 focus-within:border-indigo-400 focus-within:bg-white h-14 px-4 transition-all">
-                    <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
+                <div className="flex items-center gap-2 bg-slate-50 rounded-2xl border border-slate-200 focus-within:border-blue-400 focus-within:bg-white h-14 px-4 transition-all">
+                    <IndianRupee className="w-5 h-5 text-blue-500 shrink-0" />
                     <input
                         value={price}
                         onChange={e => setPrice(e.target.value)}
@@ -253,7 +253,7 @@ export function GlobalFAB() {
                         className={`flex-1 py-3 rounded-2xl text-xs font-black border transition-all ${
                             condition === cond
                                 ? cond === "Excellent" ? "bg-emerald-500 text-white border-emerald-500" :
-                                  cond === "Good" ? "bg-indigo-500 text-white border-indigo-500" :
+                                  cond === "Good" ? "bg-blue-500 text-white border-blue-500" :
                                   "bg-amber-500 text-white border-amber-500"
                                 : "bg-slate-50 text-slate-500 border-slate-200"
                         }`}
@@ -264,7 +264,7 @@ export function GlobalFAB() {
                 </div>
               </div>
 
-              <button disabled={loading} onClick={handleSubmit} className="w-full h-14 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-black text-base shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-50 mt-2">
+              <button disabled={loading} onClick={handleSubmit} className="w-full h-14 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-600 text-white font-black text-base shadow-lg shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-50 mt-2">
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "List Item"}
               </button>
             </div>

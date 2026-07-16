@@ -140,7 +140,7 @@ export function BottomNav() {
                     transform: "translateX(-50%)",
                     width: 76,
                     height: 76,
-                    backgroundColor: theme.surface, // #F5F7FA
+                    backgroundColor: pathname === '/rentals' || pathname === '/writing' ? '#ffffff' : pathname === '/near-you' ? '#F8FAFC' : theme.surface,
                     borderRadius: "50%",
                     zIndex: 1,
                 }} />

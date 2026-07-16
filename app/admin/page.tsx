@@ -114,12 +114,12 @@ export default function AdminPanel() {
 
     if (loading) return (
         <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50">
-            <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
+            <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
         </div>
     );
 
     const STATS = [
-        { label: "Total Rentals", value: totalRentals, icon: Package, color: "bg-indigo-50 text-indigo-600 border border-indigo-100" },
+        { label: "Total Rentals", value: totalRentals, icon: Package, color: "bg-blue-50 text-blue-600 border border-blue-100" },
         { label: "Reports Filed", value: reports.length, icon: AlertTriangle, color: "bg-amber-50 text-amber-600 border border-amber-100" },
         { label: "Users Blocked", value: blockedUsers.length, icon: UserX, color: "bg-rose-50 text-rose-600 border border-rose-100" },
         { label: "Status", value: "Live", icon: BarChart3, color: "bg-emerald-50 text-emerald-600 border border-emerald-100" },
@@ -130,7 +130,7 @@ export default function AdminPanel() {
         "Item damaged": "bg-rose-50 text-rose-600 border border-rose-100",
         "No-show": "bg-amber-50 text-amber-600 border border-amber-100",
         "Fraud": "bg-rose-50 text-rose-600 border border-rose-100",
-        "Other": "bg-indigo-50 text-indigo-600 border border-indigo-100",
+        "Other": "bg-blue-50 text-blue-600 border border-blue-100",
     };
 
     return (
@@ -141,12 +141,12 @@ export default function AdminPanel() {
 
             <div className="relative z-10 w-full max-w-md mx-auto">
                 {/* Header */}
-                <div className="px-6 pt-12 pb-6 bg-gradient-to-b from-indigo-50/80 to-transparent sticky top-0 backdrop-blur-md z-20 border-b border-indigo-100/50">
+                <div className="px-6 pt-12 pb-6 bg-gradient-to-b from-blue-50/80 to-transparent sticky top-0 backdrop-blur-md z-20 border-b border-blue-100/50">
                     <div className="flex items-center gap-2 mb-3">
-                        <div className="p-1.5 bg-indigo-100/50 rounded-lg border border-indigo-200/50">
-                            <Lock className="w-4 h-4 text-indigo-600" />
+                        <div className="p-1.5 bg-blue-100/50 rounded-lg border border-blue-200/50">
+                            <Lock className="w-4 h-4 text-blue-600" />
                         </div>
-                        <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest bg-white/60 px-2 py-0.5 rounded-full shadow-sm border border-indigo-50">Admin Panel</span>
+                        <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-white/60 px-2 py-0.5 rounded-full shadow-sm border border-blue-50">Admin Panel</span>
                     </div>
                     <h1 className="text-4xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>
                         Trust &amp; Safety
@@ -199,7 +199,7 @@ export default function AdminPanel() {
                                                 {report.notes ? `"${report.notes.slice(0, 60)}..."` : "No additional notes"}
                                             </p>
                                         </div>
-                                        <span className={`text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl shadow-inner ${REASON_COLOR[report.reason] || "bg-indigo-50 text-indigo-600 border border-indigo-100"}`}>
+                                        <span className={`text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl shadow-inner ${REASON_COLOR[report.reason] || "bg-blue-50 text-blue-600 border border-blue-100"}`}>
                                             {report.status}
                                         </span>
                                     </div>

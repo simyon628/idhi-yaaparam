@@ -300,10 +300,10 @@ function NewRentalForm() {
     if (isReady && !selectedCollege) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center min-h-screen text-center px-6 bg-slate-50">
-                <span className="text-5xl text-indigo-200 mb-6 drop-shadow-sm">🎓</span>
+                <span className="text-5xl text-blue-200 mb-6 drop-shadow-sm">🎓</span>
                 <h2 className="text-2xl font-black text-slate-800 mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>Select a Campus</h2>
                 <p className="text-sm font-semibold text-slate-500 mb-8 max-w-[280px]">You must select a college from the home page top bar to list an item.</p>
-                <button onClick={() => router.push("/home")} className="gradient-indigo text-white px-8 py-3.5 rounded-2xl font-bold shadow-indigo hover:-translate-y-0.5 transition-transform active:scale-95">Go to Home</button>
+                <button onClick={() => router.push("/home")} className="gradient-blue text-white px-8 py-3.5 rounded-2xl font-bold shadow-blue hover:-translate-y-0.5 transition-transform active:scale-95">Go to Home</button>
             </div>
         )
     }
@@ -315,16 +315,16 @@ function NewRentalForm() {
             <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float" style={{ animationDelay: "2s" }} />
 
             {/* Header */}
-            <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-indigo-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
+            <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-blue-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
                 <button
                     onClick={() => router.back()}
-                    className="p-2.5 bg-white border border-indigo-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-indigo-600 shadow-sm"
+                    className="p-2.5 bg-white border border-blue-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-blue-600 shadow-sm"
                 >
                     <ChevronLeft className="w-5 h-5" />
                 </button>
                 <div>
                     <h1 className="text-2xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>{formConfig.title}</h1>
-                    <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1.5">{formConfig.subtitle}</p>
+                    <p className="text-[11px] font-black text-blue-500 uppercase tracking-widest mt-1.5">{formConfig.subtitle}</p>
                 </div>
             </header>
 
@@ -337,7 +337,7 @@ function NewRentalForm() {
                     </label>
                     <div 
                         onClick={() => document.getElementById("photo-upload")?.click()}
-                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${preview ? "border-transparent bg-transparent cursor-pointer" : "border-indigo-100 bg-white/70 hover:bg-white hover:border-indigo-300 shadow-inner cursor-pointer overflow-hidden"}`}
+                        className={`relative w-full aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center transition-all ${preview ? "border-transparent bg-transparent cursor-pointer" : "border-blue-100 bg-white/70 hover:bg-white hover:border-blue-300 shadow-inner cursor-pointer overflow-hidden"}`}
                     >
                         {preview ? (
                             <div style={{position:'relative',marginTop:8, width: '100%'}}>
@@ -384,8 +384,8 @@ function NewRentalForm() {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center gap-3">
-                                <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center shadow-inner">
-                                    <Camera className="w-8 h-8 text-indigo-500" />
+                                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center shadow-inner">
+                                    <Camera className="w-8 h-8 text-blue-500" />
                                 </div>
                                 <div className="text-center">
                                     <p className="text-sm font-bold text-slate-700">Tap to upload or take a photo</p>
@@ -411,7 +411,7 @@ function NewRentalForm() {
                         <select
                             value={category}
                             onChange={e => setCategory(e.target.value)}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                            className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                         >
                             <option value="" disabled>Select Category</option>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -430,7 +430,7 @@ function NewRentalForm() {
                     <input
                         type="text"
                         placeholder="Enter item name"
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -439,8 +439,8 @@ function NewRentalForm() {
                 {/* 4. Price per hour */}
                 <div className="space-y-2.5">
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">{formConfig.priceLabel}</label>
-                    <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
-                        <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
+                    <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-blue-50 focus-within:border-blue-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-100 h-14 px-4 shadow-inner transition-all">
+                        <IndianRupee className="w-5 h-5 text-blue-500 shrink-0" />
                         <input
                             type="number"
                             placeholder="20"
@@ -454,7 +454,7 @@ function NewRentalForm() {
                         <button
                             type="button"
                             onClick={() => setPrice(String(suggestedPrice))}
-                            className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-500 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full"
+                            className="flex items-center gap-1.5 text-[11px] font-bold text-blue-500 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full"
                         >
                             <Lightbulb className="w-3 h-3" /> Price Tip: Avg ₹{suggestedPrice} per hour at campus — use
                         </button>
@@ -473,7 +473,7 @@ function NewRentalForm() {
                                 className={`flex-1 py-3 rounded-2xl text-sm font-black border transition-all active:scale-95 ${
                                     condition === c
                                         ? c === "Excellent" ? "bg-emerald-500 text-white border-emerald-500 shadow-md" :
-                                          c === "Good" ? "bg-indigo-500 text-white border-indigo-500 shadow-md" :
+                                          c === "Good" ? "bg-blue-500 text-white border-blue-500 shadow-md" :
                                           "bg-amber-500 text-white border-amber-500 shadow-md"
                                         : "bg-white/70 text-slate-500 border-slate-200 hover:border-slate-300"
                                 }`}
@@ -492,7 +492,7 @@ function NewRentalForm() {
                     <select
                         value={department}
                         onChange={e => setDepartment(e.target.value)}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                     >
                         {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
@@ -508,7 +508,7 @@ function NewRentalForm() {
                         placeholder="Enter your block"
                         value={block}
                         onChange={e => setBlock(e.target.value)}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
                     />
                 </div>
 
@@ -523,7 +523,7 @@ function NewRentalForm() {
                                 type="button"
                                 key={days}
                                 onClick={() => setExpiresInDays(days)}
-                                className={`flex-1 py-3 rounded-xl border text-xs font-bold transition-all ${expiresInDays === days ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200"}`}
+                                className={`flex-1 py-3 rounded-xl border text-xs font-bold transition-all ${expiresInDays === days ? "bg-blue-600 text-white border-blue-600" : "bg-white text-slate-600 border-slate-200"}`}
                             >
                                 {days}d
                             </button>
@@ -547,7 +547,7 @@ function NewRentalForm() {
                             <button
                                 type="button"
                                 onClick={() => document.getElementById("extra-photo-input")?.click()}
-                                className="w-20 h-20 rounded-xl border-2 border-dashed border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-400"
+                                className="w-20 h-20 rounded-xl border-2 border-dashed border-blue-200 bg-blue-50 flex items-center justify-center text-blue-400"
                             >
                                 <Plus className="w-6 h-6" />
                             </button>
@@ -561,12 +561,12 @@ function NewRentalForm() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full h-16 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
+                        className="w-full h-16 rounded-2xl gradient-blue text-white font-black text-base shadow-blue flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
                     >
                         {loading ? <Loader2 className="animate-spin w-6 h-6" /> : formConfig.submitLabel}
                     </button>
                     <p className="text-center text-[10px] text-slate-400 mt-5 uppercase tracking-widest font-black">
-                        By listing, you agree to the <span className="text-indigo-400">2-Strike Campus Policy</span>
+                        By listing, you agree to the <span className="text-blue-400">2-Strike Campus Policy</span>
                     </p>
                 </div>
             </form>
@@ -576,7 +576,7 @@ function NewRentalForm() {
 
 export default function NewRentalPage() {
     return (
-        <Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>}>
+        <Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-400" /></div>}>
             <NewRentalForm />
         </Suspense>
     );

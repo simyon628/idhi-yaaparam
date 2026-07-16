@@ -93,7 +93,7 @@ export default function HistoryPage() {
     }
 
     if (loading) {
-        return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
+        return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-400" /></div>;
     }
 
     return (
@@ -143,7 +143,7 @@ export default function HistoryPage() {
                                                 <div>
                                                     <h3 className="text-[15px] font-black text-slate-800 leading-tight mb-0.5">{item.itemName}</h3>
                                                     <div className="flex items-center gap-1.5 opacity-80 mt-1">
-                                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-widest ${isOwner ? "bg-amber-100 text-amber-700" : "bg-indigo-100 text-indigo-700"}`}>
+                                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-widest ${isOwner ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"}`}>
                                                             {isOwner ? "Listed" : "Borrowed"}
                                                         </span>
                                                     </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Search, SlidersHorizontal, Plus, X } from "lucide-react";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useInfiniteItems } from "@/lib/hooks/useInfiniteItems";
 import { useCollege } from "@/contexts/CollegeContext";
 import { useSearchStore } from "@/stores/searchStore";
@@ -215,28 +216,13 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             {[1, 2, 3, 4, 5, 6].map(i => <SkeletonCard key={i} variant="grid" />)}
           </div>
         ) : sorted.length === 0 ? (
-          // Empty state
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 300, textAlign: "center", padding: "40px 20px" }}>
-            <div style={{ fontSize: 64, marginBottom: 16 }}>📦</div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: "#0f172a", marginBottom: 8, fontFamily: "'Outfit', sans-serif" }}>
-              No {displayTitle}s Available
-            </h2>
-            <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, marginBottom: 20, maxWidth: 260 }}>
-              Be the first student to list a {displayTitle.toLowerCase()} and start earning!
-            </p>
-            <button
-              onClick={() => router.push(`/rentals/new?category=${slug}`)}
-              style={{
-                background: "linear-gradient(135deg, #0B57D0, #1A73E8)",
-                color: "#fff", border: "none",
-                borderRadius: 14, padding: "12px 28px",
-                fontSize: 14, fontWeight: 800, cursor: "pointer",
-                boxShadow: "0 6px 20px rgba(91,76,219,0.35)",
-              }}
-            >
-              + List Yours
-            </button>
-          </div>
+          <EmptyState
+            title={`No ${displayTitle}s Available`}
+            description={`Be the first student to list a ${displayTitle.toLowerCase()} and start earning!`}
+            emoji="📦"
+            actionLabel="+ List Yours"
+            actionHref={`/rentals/new?category=${slug}`}
+          />
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {sorted.map((item: any) => (

@@ -38,7 +38,7 @@ export default function RecentList() {
             onClick={clearRecent}
             style={{
               fontSize: 11,
-              color: "#5548E8",
+              color: "#0B57D0",
               fontWeight: 600,
               background: "none",
               border: "none",

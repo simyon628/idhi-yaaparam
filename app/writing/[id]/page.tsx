@@ -14,7 +14,7 @@ import { useRazorpay } from "@/hooks/useRazorpay";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
     open: { label: "Open Bounty", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-    assigned: { label: "In Progress", color: "bg-indigo-100 text-indigo-700 border-indigo-200" },
+    assigned: { label: "In Progress", color: "bg-blue-100 text-blue-700 border-blue-200" },
     completed: { label: "Completed", color: "bg-slate-100 text-slate-600 border-slate-200" },
     cancelled: { label: "Cancelled", color: "bg-rose-100 text-rose-700 border-rose-200" },
 };
@@ -106,7 +106,7 @@ export default function WritingJobDetailPage() {
         router.push("/writing");
     };
 
-    if (loading) return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
+    if (loading) return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-400" /></div>;
 
     const isPoster = job?.posterId === userId;
     const isWorker = job?.workerId === userId;
@@ -118,7 +118,7 @@ export default function WritingJobDetailPage() {
         <div className="flex-1 flex flex-col min-h-screen pb-24 bg-slate-50 relative">
 
             {/* Minimal Background Art */}
-            <div className="absolute top-0 left-0 w-full h-64 bg-indigo-600 z-0 overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-64 bg-blue-600 z-0 overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[150%] bg-pink-500/20 blob rounded-full mix-blend-screen filter blur-3xl animate-float" />
                 <div className="absolute top-[20%] right-[-10%] w-[40%] h-[120%] bg-blue-400/20 blob rounded-full mix-blend-screen filter blur-3xl animate-float" style={{ animationDelay: "2s" }} />
             </div>
@@ -143,13 +143,13 @@ export default function WritingJobDetailPage() {
                 <div className="flex items-start justify-between mb-8">
                     <div className="pr-4 flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">{job?.type}</span>
+                            <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">{job?.type}</span>
                         </div>
                         <h1 className="text-2xl font-black text-slate-800 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
                             {job?.title}
                         </h1>
                         {job?.department && (
-                            <div className="flex items-center gap-1.5 mt-2 text-indigo-500 font-semibold text-sm">
+                            <div className="flex items-center gap-1.5 mt-2 text-blue-500 font-semibold text-sm">
                                 <GraduationCap className="w-4 h-4" /> {job.department}
                             </div>
                         )}
@@ -175,7 +175,7 @@ export default function WritingJobDetailPage() {
                 {/* Description */}
                 <div className="bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white shadow-sm mb-8">
                     <div className="flex items-center gap-2 mb-3">
-                        <BookOpen className="w-4 h-4 text-indigo-400" />
+                        <BookOpen className="w-4 h-4 text-blue-400" />
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Requirements</p>
                     </div>
                     <p className="text-slate-600 text-sm leading-relaxed font-medium whitespace-pre-wrap">
@@ -185,9 +185,9 @@ export default function WritingJobDetailPage() {
 
                 {/* Poster Profile */}
                 {posterInfo && (
-                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-indigo-50 shadow-sm flex items-center justify-between mb-8">
+                    <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-blue-50 shadow-sm flex items-center justify-between mb-8">
                         <div className="flex items-center gap-3 relative">
-                            <div className="w-12 h-12 rounded-full gradient-indigo flex items-center justify-center text-white font-black text-lg shadow-indigo shrink-0">
+                            <div className="w-12 h-12 rounded-full gradient-blue flex items-center justify-center text-white font-black text-lg shadow-blue shrink-0">
                                 {posterInfo.name.charAt(0).toUpperCase()}
                             </div>
                             {posterInfo.strikeCount === 0 && posterInfo.isVerified && (
@@ -198,7 +198,7 @@ export default function WritingJobDetailPage() {
                             <div>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Posted By</p>
                                 <p className="text-[15px] font-bold text-slate-800 leading-tight">{posterInfo.name}</p>
-                                <p className="text-[11px] font-semibold text-indigo-500">{posterInfo.department}</p>
+                                <p className="text-[11px] font-semibold text-blue-500">{posterInfo.department}</p>
                             </div>
                         </div>
                     </div>
@@ -206,7 +206,7 @@ export default function WritingJobDetailPage() {
             </div>
 
             {/* Fixed Action Bar */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-indigo-50 px-5 py-4 w-full z-50 pb-safe">
+            <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-blue-50 px-5 py-4 w-full z-50 pb-safe">
                 {isPoster ? (
                     <div className="space-y-3">
                         {job?.status === "open" ? (
@@ -226,9 +226,9 @@ export default function WritingJobDetailPage() {
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => router.push(`/chat/${id}`)}
-                                    className="h-14 w-14 shrink-0 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 hover:bg-indigo-100 transition-colors shadow-sm"
+                                    className="h-14 w-14 shrink-0 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 hover:bg-blue-100 transition-colors shadow-sm"
                                 >
-                                    <MessageSquare className="w-5 h-5 fill-indigo-100" />
+                                    <MessageSquare className="w-5 h-5 fill-blue-100" />
                                 </button>
                                 <button
                                     onClick={handleMarkCompleted}
@@ -248,18 +248,18 @@ export default function WritingJobDetailPage() {
                     <button
                         onClick={handleAcceptJob}
                         disabled={actionLoading}
-                        className="w-full h-14 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:-translate-y-0.5"
+                        className="w-full h-14 rounded-2xl gradient-blue text-white font-black text-base shadow-blue flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition-all hover:-translate-y-0.5"
                     >
                         {actionLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <><PenTool className="w-4 h-4" /> ACCEPT BOUNTY</>}
                     </button>
                 ) : isWorker && job?.status === "assigned" ? (
                     <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-center px-2 mb-1">
-                            <p className="text-[10px] uppercase font-black tracking-widest text-indigo-500">You are assigned</p>
+                            <p className="text-[10px] uppercase font-black tracking-widest text-blue-500">You are assigned</p>
                         </div>
                         <button
                             onClick={() => router.push(`/chat/${id}`)}
-                            className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:-translate-y-0.5"
+                            className="w-full h-14 rounded-2xl bg-blue-600 text-white font-black text-base shadow-blue flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:-translate-y-0.5"
                         >
                             <MessageSquare className="w-5 h-5" /> OPEN CHAT
                         </button>

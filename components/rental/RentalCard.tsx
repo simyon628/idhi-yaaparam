@@ -29,7 +29,7 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
         return (
             <>
                 {item.itemName.slice(0, startIdx)}
-                <span className="text-indigo-600 font-black decoration-indigo-200 decoration-2 underline-offset-2">
+                <span className="text-blue-600 font-black decoration-blue-200 decoration-2 underline-offset-2">
                     {item.itemName.slice(startIdx, startIdx + highlight.length)}
                 </span>
                 {item.itemName.slice(startIdx + highlight.length)}
@@ -73,7 +73,7 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
     return (
         <button
             onClick={() => router.push(`/rentals/${item.id}`)}
-            className="w-full h-full bg-white rounded-2xl overflow-hidden flex flex-col border border-slate-100 hover:border-indigo-200 active:scale-[0.97] transition-all text-left shadow-sm group hover:shadow-md hover:-translate-y-0.5 duration-200"
+            className="w-full h-full bg-white rounded-2xl overflow-hidden flex flex-col border border-slate-100 hover:border-blue-200 active:scale-[0.97] transition-all text-left shadow-sm group hover:shadow-md hover:-translate-y-0.5 duration-200"
         >
             {/* Image Area */}
             <div className="aspect-square bg-slate-50 flex items-center justify-center relative overflow-hidden w-full">
@@ -103,7 +103,7 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
 
                 {/* New Badge */}
                 {isNew && (
-                    <div className="absolute top-2 right-2 flex items-center gap-0.5 bg-indigo-500 text-white px-1.5 py-0.5 rounded-full shadow-sm">
+                    <div className="absolute top-2 right-2 flex items-center gap-0.5 bg-blue-500 text-white px-1.5 py-0.5 rounded-full shadow-sm">
                         <Zap className="w-2.5 h-2.5" />
                         <span className="text-[8px] font-black uppercase tracking-widest">New</span>
                     </div>
@@ -114,7 +114,7 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
             <div className="p-3 flex flex-col flex-1 gap-2">
                 <div className="flex justify-between items-start gap-2">
                     <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-slate-800 text-xs truncate leading-tight group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{renderTitle()}</h3>
+                        <h3 className="font-bold text-slate-800 text-xs truncate leading-tight group-hover:text-blue-600 transition-colors uppercase tracking-tight">{renderTitle()}</h3>
                         <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                             <MapPin className="w-2.5 h-2.5" />
                             <span className="truncate">{item.block || "Campus"}</span>
@@ -148,7 +148,7 @@ export function RentalCard({ item, highlight }: RentalCardProps) {
                 {/* CTA */}
                 <div className={`w-full py-2 mt-1 rounded-xl transition-all duration-200 flex items-center justify-center text-[10px] font-black uppercase tracking-widest ${
                     item.status === "available" 
-                        ? "bg-indigo-50 text-indigo-600 group-hover:bg-indigo-500 group-hover:text-white" 
+                        ? "bg-blue-50 text-blue-600 group-hover:bg-blue-500 group-hover:text-white" 
                         : "bg-slate-100 text-slate-400 cursor-not-allowed"
                 }`}>
                     {item.status === "available" ? "Borrow Now" : "Already Booked"}

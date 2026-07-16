@@ -65,7 +65,7 @@ export default function NotificationsPage() {
 
     const getIcon = (type: string) => {
         switch (type) {
-            case "request": return <ArrowRight className="w-5 h-5 text-indigo-500" />;
+            case "request": return <ArrowRight className="w-5 h-5 text-blue-500" />;
             case "approval": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
             case "warning": return <AlertTriangle className="w-5 h-5 text-rose-500" />;
             case "message": return <MessageSquare className="w-5 h-5 text-blue-500" />;
@@ -82,12 +82,12 @@ export default function NotificationsPage() {
     }
 
     if (loading) {
-        return <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 relative pb-24"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
+        return <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 relative pb-24"><Loader2 className="w-8 h-8 animate-spin text-blue-400" /></div>;
     }
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative pb-24">
-            <header className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-indigo-100 px-5 pt-12 pb-4 shadow-sm flex items-center justify-between">
+            <header className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-blue-100 px-5 pt-12 pb-4 shadow-sm flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <button onClick={() => router.back()} className="p-2 bg-slate-50 border border-slate-200 rounded-xl active:scale-95 transition-all text-slate-500">
                         <ChevronLeft className="w-5 h-5" />
@@ -125,7 +125,7 @@ export default function NotificationsPage() {
                                                 onClick={() => {
                                                     if (notif.link) router.push(notif.link);
                                                 }}
-                                                className={`p-4 rounded-2xl border transition-all ${notif.isRead ? "bg-white border-slate-100 shadow-sm" : "bg-indigo-50 border-indigo-100 shadow-md"} ${notif.link ? "cursor-pointer active:scale-[0.98] hover:shadow-lg" : ""}`}
+                                                className={`p-4 rounded-2xl border transition-all ${notif.isRead ? "bg-white border-slate-100 shadow-sm" : "bg-blue-50 border-blue-100 shadow-md"} ${notif.link ? "cursor-pointer active:scale-[0.98] hover:shadow-lg" : ""}`}
                                             >
                                                 <div className="flex gap-4 items-start">
                                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.isRead ? "bg-slate-50" : "bg-white shadow-sm"}`}>

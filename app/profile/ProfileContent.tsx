@@ -132,17 +132,17 @@ export default function ProfileContent() {
     if (!userId && !loading) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-50 px-5 text-center">
-                <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mb-5">
-                    <User className="w-10 h-10 text-indigo-300" />
+                <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center mb-5">
+                    <User className="w-10 h-10 text-blue-300" />
                 </div>
                 <h2 className="text-xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>You are not logged in</h2>
                 <p className="text-sm font-semibold text-slate-500 mt-2 mb-8">Sign in to view your campus profile</p>
-                <button onClick={() => router.push("/login")} className="h-14 px-8 rounded-2xl gradient-indigo text-white font-black shadow-indigo active:scale-95 transition-all">Sign In Now</button>
+                <button onClick={() => router.push("/login")} className="h-14 px-8 rounded-2xl gradient-blue text-white font-black shadow-blue active:scale-95 transition-all">Sign In Now</button>
             </div>
         );
     }
 
-    if (loading) return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>;
+    if (loading) return <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-blue-400" /></div>;
 
     const strikes = userProfile?.strikeCount || 0;
 
@@ -169,11 +169,11 @@ export default function ProfileContent() {
             <main className="flex-1 px-5 pt-[40px] space-y-5">
                 {/* Profile Header Card */}
                 <div className="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
 
                     <div className="flex items-center gap-4 relative z-10">
                         {/* Avatar */}
-                        <div className="w-16 h-16 rounded-full gradient-indigo flex items-center justify-center text-white font-black text-2xl shadow-indigo shrink-0">
+                        <div className="w-16 h-16 rounded-full gradient-blue flex items-center justify-center text-white font-black text-2xl shadow-blue shrink-0">
                             {userProfile?.name?.charAt(0)?.toUpperCase() || "?"}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -182,7 +182,7 @@ export default function ProfileContent() {
                             </h1>
                             <div className="flex flex-wrap items-center gap-1.5 mt-1">
                                 {userProfile?.department && (
-                                    <span className="text-[10px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md uppercase tracking-widest border border-indigo-100">
+                                    <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md uppercase tracking-widest border border-blue-100">
                                         {userProfile.department}
                                     </span>
                                 )}
@@ -214,14 +214,14 @@ export default function ProfileContent() {
                                 </div>
 
                                 <div className="space-y-2 flex-1">
-                                    <button onClick={() => { setShowMenu(false); router.push("/profile/edit"); }} className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-indigo-50 transition-colors">
-                                        <User className="w-4 h-4 text-indigo-500" /> Edit Profile
+                                    <button onClick={() => { setShowMenu(false); router.push("/profile/edit"); }} className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-blue-50 transition-colors">
+                                        <User className="w-4 h-4 text-blue-500" /> Edit Profile
                                     </button>
-                                    <button onClick={() => { setShowMenu(false); router.push("/profile/history"); }} className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-indigo-50 transition-colors">
-                                        <Clock className="w-4 h-4 text-indigo-500" /> Transaction History
+                                    <button onClick={() => { setShowMenu(false); router.push("/profile/history"); }} className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-blue-50 transition-colors">
+                                        <Clock className="w-4 h-4 text-blue-500" /> Transaction History
                                     </button>
-                                    <button className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-indigo-50 transition-colors opacity-50">
-                                        <ShieldCheck className="w-4 h-4 text-indigo-500" /> Security
+                                    <button className="w-full flex items-center gap-3 p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-700 hover:bg-blue-50 transition-colors opacity-50">
+                                        <ShieldCheck className="w-4 h-4 text-blue-500" /> Security
                                     </button>
                                 </div>
 
@@ -254,7 +254,7 @@ export default function ProfileContent() {
                             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Mode:</span>
                             <button
                                 onClick={() => setMode(mode === "rentals" ? "writing" : "rentals")}
-                                className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border transition-all ${mode === "writing" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-indigo-100 text-indigo-700 border-indigo-200"}`}
+                                className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border transition-all ${mode === "writing" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-blue-100 text-blue-700 border-blue-200"}`}
                             >
                                 {mode === "writing" ? "✍️ Writing" : "📦 Rentals"}
                             </button>
@@ -268,7 +268,7 @@ export default function ProfileContent() {
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-black rounded-xl transition-all ${activeTab === tab.id ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-black rounded-xl transition-all ${activeTab === tab.id ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
                         >
                             <tab.icon className="w-3.5 h-3.5" />
                             {tab.label}
@@ -291,12 +291,12 @@ export default function ProfileContent() {
                                 <div className="space-y-2">
                                     {myBorrowing.filter(i => i.status === "active").map(item => (
                                         <div key={item.id} onClick={() => router.push(`/rentals/${item.id}`)} className="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-all shadow-sm">
-                                            <div className="text-2xl w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">{item.icon}</div>
+                                            <div className="text-2xl w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">{item.icon}</div>
                                             <div className="flex-1">
                                                 <p className="font-black text-slate-800 text-sm">{item.itemName}</p>
-                                                <p className="text-xs text-indigo-500 font-bold">{item.block}</p>
+                                                <p className="text-xs text-blue-500 font-bold">{item.block}</p>
                                             </div>
-                                            <span className="text-[9px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md">Active</span>
+                                            <span className="text-[9px] font-black uppercase tracking-widest bg-blue-50 text-blue-600 px-2 py-1 rounded-md">Active</span>
                                         </div>
                                     ))}
                                 </div>
@@ -308,7 +308,7 @@ export default function ProfileContent() {
                             <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Quick Actions</h2>
                             <div className="grid grid-cols-2 gap-3">
                                 <button onClick={() => router.push("/profile/history")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
-                                    <Clock className="w-5 h-5 text-indigo-500" />
+                                    <Clock className="w-5 h-5 text-blue-500" />
                                     <span className="text-sm font-black text-slate-800">Transaction History</span>
                                 </button>
                                 <button onClick={() => router.push("/rentals/new")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
@@ -322,7 +322,7 @@ export default function ProfileContent() {
                                     </button>
                                 )}
                                 <button onClick={() => router.push("/leaderboard")} className="bg-white rounded-2xl p-4 border border-slate-100 flex flex-col gap-2 text-left shadow-sm active:scale-[0.97] transition-all">
-                                    <Star className="w-5 h-5 text-violet-500" />
+                                    <Star className="w-5 h-5 text-blue-500" />
                                     <span className="text-sm font-black text-slate-800">Campus Leaderboard</span>
                                 </button>
                             </div>
@@ -335,7 +335,7 @@ export default function ProfileContent() {
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">My Listings ({myListings.length})</h2>
-                            <button onClick={() => router.push("/rentals/new")} className="text-[10px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-xl hover:bg-indigo-100 transition-colors">+ List Item</button>
+                            <button onClick={() => router.push("/rentals/new")} className="text-[10px] font-black text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-xl hover:bg-blue-100 transition-colors">+ List Item</button>
                         </div>
                         
                         <div className="flex gap-2">
@@ -343,7 +343,7 @@ export default function ProfileContent() {
                                 <button
                                     key={f}
                                     onClick={() => setListFilter(f)}
-                                    className={`px-4 py-1.5 text-[11px] font-black uppercase tracking-widest rounded-full transition-all ${listFilter === f ? "bg-indigo-600 text-white shadow-sm" : "bg-slate-200 text-slate-500 hover:bg-slate-300"}`}
+                                    className={`px-4 py-1.5 text-[11px] font-black uppercase tracking-widest rounded-full transition-all ${listFilter === f ? "bg-blue-600 text-white shadow-sm" : "bg-slate-200 text-slate-500 hover:bg-slate-300"}`}
                                 >
                                     {f === "all" ? "All" : f === "active" ? "Active" : "Sold/Borrowed"}
                                 </button>
@@ -365,8 +365,8 @@ export default function ProfileContent() {
                                         <div className="flex-1">
                                             <p className="text-sm font-black text-slate-800 leading-tight truncate">{item.itemName}</p>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-xs font-bold text-indigo-600">₹{item.pricePerHour}</span>
-                                                <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" : item.status === "active" ? "bg-indigo-50 text-indigo-600" : item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
+                                                <span className="text-xs font-bold text-blue-600">₹{item.pricePerHour}</span>
+                                                <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md ${item.status === "available" ? "bg-emerald-50 text-emerald-600" : item.status === "active" ? "bg-blue-50 text-blue-600" : item.status === "requested" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"}`}>
                                                     {item.status}
                                                 </span>
                                             </div>
@@ -377,7 +377,7 @@ export default function ProfileContent() {
                                     <div className="flex gap-2 border-t border-slate-50 pt-3">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); router.push(`/rentals/edit/${item.id}`); }}
-                                            className="flex-1 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 transition-colors"
+                                            className="flex-1 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest hover:bg-blue-100 transition-colors"
                                         >
                                             Edit
                                         </button>
@@ -407,7 +407,7 @@ export default function ProfileContent() {
                 {activeTab === "stats" && (
                     <div className="space-y-4">
                         {/* Earnings banner */}
-                        <div className="gradient-indigo rounded-[2rem] p-6 text-white shadow-indigo relative overflow-hidden">
+                        <div className="gradient-blue rounded-[2rem] p-6 text-white shadow-blue relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />
                             <p className="text-[11px] font-black uppercase tracking-widest opacity-80">Estimated Earnings</p>
                             <p className="text-4xl font-black mt-1">₹{totalEarnings}</p>
@@ -417,10 +417,10 @@ export default function ProfileContent() {
                         {/* 4 stat cards */}
                         <div className="grid grid-cols-2 gap-3">
                             {[
-                                { label: "Total Listed", value: myListings.length, icon: Package, color: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+                                { label: "Total Listed", value: myListings.length, icon: Package, color: "bg-blue-50 text-blue-600 border-blue-100" },
                                 { label: "Active Now", value: activeRentals, icon: TrendingUp, color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
                                 { label: "Requests", value: totalRequests, icon: Eye, color: "bg-amber-50 text-amber-600 border-amber-100" },
-                                { label: "Completed", value: completedCount, icon: Star, color: "bg-violet-50 text-violet-600 border-violet-100" },
+                                { label: "Completed", value: completedCount, icon: Star, color: "bg-blue-50 text-blue-600 border-blue-100" },
                             ].map(s => (
                                 <div key={s.label} className={`bg-white rounded-[1.5rem] border p-4 shadow-sm space-y-2 ${s.color.split(" ")[2]}`}>
                                     <div className="flex items-center justify-between">
@@ -434,7 +434,7 @@ export default function ProfileContent() {
 
                         <button onClick={() => setActiveTab("my-items")} className="w-full bg-white border border-slate-100 rounded-2xl p-4 flex items-center justify-between text-slate-700 shadow-sm active:scale-[0.98] transition-all">
                             <div className="flex items-center gap-2 text-sm font-black">
-                                <Package className="w-4 h-4 text-indigo-500" />
+                                <Package className="w-4 h-4 text-blue-500" />
                                 View All My Listings
                             </div>
                             <ChevronRight className="w-4 h-4 text-slate-400" />

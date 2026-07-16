@@ -26,7 +26,8 @@ import {
     Presentation,
     Smartphone,
     Headset,
-    Package
+    Package,
+    SlidersHorizontal
 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -495,6 +496,20 @@ export default function RentalsMarketplace() {
                 {/* ── CATEGORY SECTION — left-aligned, scrolls to edge ── */}
                 <section style={{ position: "relative", zIndex: 2, marginBottom: 20 }}>
                     <div style={{
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        marginBottom: 14,
+                        paddingRight: "15px",
+                    }}>
+                        <div style={{
+                            fontFamily: "var(--font-outfit), 'Outfit', sans-serif",
+                            fontSize: "var(--iy-section-title, 18px)",
+                            fontWeight: 700,
+                            color: "#1e293b"
+                        }}>
+                            Categories
+                        </div>
+                    </div>
+                    <div style={{
                         display: "flex",
                         gap: 12,
                         overflowX: "auto",
@@ -505,35 +520,58 @@ export default function RentalsMarketplace() {
                         paddingBottom: 4,
                         paddingRight: "15px",
                     }} className="no-scrollbar">
-                        {CATEGORIES[activeMode].map(cat => (
-                            <div
-                                key={cat.id}
-                                onClick={() => router.push(`/category/${cat.id}`)}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    gap: 6,
-                                    cursor: "pointer",
-                                    flexShrink: 0,
-                                    width: "calc((min(100vw, 448px) - 80px) / 5.5)",
-                                    scrollSnapAlign: "start"
-                                }}
-                            >
-                                <div style={{
-                                    width: "var(--iy-cat-icon)",
-                                    height: "var(--iy-cat-icon)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    color: "#4B5563",
-                                    flexShrink: 0,
-                                }}>
-                                    {cat.icon}
+                        {[{ id: "all", name: "All", icon: <SlidersHorizontal size={24} /> }, ...CATEGORIES[activeMode]].map(cat => {
+                            const isActive = cat.id === "all";
+                            return (
+                                <div
+                                    key={cat.id}
+                                    onClick={() => {
+                                        if (cat.id !== "all") {
+                                            router.push(`/category/${cat.id}`);
+                                        }
+                                    }}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        gap: 6,
+                                        cursor: "pointer",
+                                        flexShrink: 0,
+                                        width: "calc((min(100vw, 448px) - 80px) / 5.5)",
+                                        scrollSnapAlign: "start",
+                                        position: "relative"
+                                    }}
+                                >
+                                    <div style={{
+                                        width: "var(--iy-cat-icon)",
+                                        height: "var(--iy-cat-icon)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        color: isActive ? "#0B57D0" : "#4B5563",
+                                        flexShrink: 0,
+                                        transform: isActive ? "scale(1.1)" : "scale(1)",
+                                        transition: "all 0.2s ease"
+                                    }}>
+                                        {cat.icon}
+                                    </div>
+                                    <span className="cat-label" style={{ 
+                                        color: isActive ? "#0B57D0" : "#111827", 
+                                        fontWeight: isActive ? 800 : 600 
+                                    }}>{cat.name}</span>
+                                    {isActive && (
+                                        <div style={{
+                                            position: "absolute",
+                                            bottom: -8,
+                                            width: 24,
+                                            height: 3,
+                                            background: "#0B57D0",
+                                            borderRadius: 2
+                                        }} />
+                                    )}
                                 </div>
-                                <span className="cat-label">{cat.name}</span>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </section>
             </div>
@@ -624,7 +662,7 @@ export default function RentalsMarketplace() {
                             marginRight: "15px",
                         }}>
                             <div style={{ display: "flex" }}>
-                                {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
+                                {[{ l: "S", bg: "linear-gradient(135deg,#0B57D0,#0B57D0)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
                                     <div key={av.l} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#fff", marginRight: -8, fontFamily: "var(--font-outfit), 'Outfit', sans-serif", background: av.bg }}>{av.l}</div>
                                 ))}
                             </div>
@@ -741,7 +779,7 @@ function WritingSection({ router }: { router: any }) {
             {/* Social Proof for Writing */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#fff", borderRadius: 16, padding: "14px 16px", boxShadow: "var(--iy-sh-card)" }}>
                 <div style={{ display: "flex" }}>
-                    {[{ l: "S", bg: "linear-gradient(135deg,#5548E8,#7B72FF)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
+                    {[{ l: "S", bg: "linear-gradient(135deg,#0B57D0,#0B57D0)" }, { l: "R", bg: "linear-gradient(135deg,#00C48C,#00A876)" }, { l: "A", bg: "linear-gradient(135deg,#FF9500,#FF7A00)" }, { l: "K", bg: "linear-gradient(135deg,#FF6B6B,#FF4444)" }].map(av => (
                         <div key={av.l} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#fff", marginRight: -8, fontFamily: "'Syne',sans-serif", background: av.bg }}>{av.l}</div>
                     ))}
                 </div>

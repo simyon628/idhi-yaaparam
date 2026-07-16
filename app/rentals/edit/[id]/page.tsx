@@ -176,7 +176,7 @@ export default function EditListingPage() {
             <AlertTriangle className="w-12 h-12 text-rose-300 mb-4" />
             <h2 className="text-xl font-black text-slate-800">Listing not found</h2>
             <p className="text-sm text-slate-400 mt-2 mb-6">It may have been deleted.</p>
-            <button onClick={() => router.push("/profile")} className="h-12 px-8 rounded-2xl gradient-indigo text-white font-black">
+            <button onClick={() => router.push("/profile")} className="h-12 px-8 rounded-2xl gradient-blue text-white font-black">
                 Go to Profile
             </button>
         </div>
@@ -187,7 +187,7 @@ export default function EditListingPage() {
             <AlertTriangle className="w-12 h-12 text-amber-300 mb-4" />
             <h2 className="text-xl font-black text-slate-800">Not your listing</h2>
             <p className="text-sm text-slate-400 mt-2 mb-6">You can only edit your own items.</p>
-            <button onClick={() => router.push("/profile")} className="h-12 px-8 rounded-2xl gradient-indigo text-white font-black">
+            <button onClick={() => router.push("/profile")} className="h-12 px-8 rounded-2xl gradient-blue text-white font-black">
                 Go to Profile
             </button>
         </div>
@@ -195,7 +195,7 @@ export default function EditListingPage() {
 
     if (fetchLoading) return (
         <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
         </div>
     );
 
@@ -203,10 +203,10 @@ export default function EditListingPage() {
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
             {/* Header */}
-            <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-indigo-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
+            <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-blue-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
                 <button
                     onClick={() => router.back()}
-                    className="p-2.5 bg-white border border-indigo-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-indigo-600 shadow-sm"
+                    className="p-2.5 bg-white border border-blue-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-blue-600 shadow-sm"
                 >
                     <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -214,7 +214,7 @@ export default function EditListingPage() {
                     <h1 className="text-2xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>
                         Edit Listing
                     </h1>
-                    <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1.5">
+                    <p className="text-[11px] font-black text-blue-500 uppercase tracking-widest mt-1.5">
                         Update your item details
                     </p>
                 </div>
@@ -227,20 +227,20 @@ export default function EditListingPage() {
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Item Photo</label>
                     <div
                         onClick={() => document.getElementById("edit-photo-input")?.click()}
-                        className="aspect-[4/3] rounded-[2rem] border-2 border-dashed border-indigo-200 bg-white/50 flex flex-col items-center justify-center relative overflow-hidden group active:scale-[0.99] transition-all cursor-pointer hover:border-indigo-400 shadow-inner"
+                        className="aspect-[4/3] rounded-[2rem] border-2 border-dashed border-blue-200 bg-white/50 flex flex-col items-center justify-center relative overflow-hidden group active:scale-[0.99] transition-all cursor-pointer hover:border-blue-400 shadow-inner"
                     >
                         {preview ? (
                             <>
                                 <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-white/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                     <div className="p-4 bg-white rounded-full shadow-lg">
-                                        <Camera className="w-8 h-8 text-indigo-600" />
+                                        <Camera className="w-8 h-8 text-blue-600" />
                                     </div>
                                 </div>
                             </>
                         ) : (
                             <div className="flex flex-col items-center gap-4 p-6 text-center">
-                                <div className="p-4 bg-indigo-50 rounded-2xl text-indigo-400">
+                                <div className="p-4 bg-blue-50 rounded-2xl text-blue-400">
                                     <Camera className="w-8 h-8" />
                                 </div>
                                 <p className="text-[15px] font-bold text-slate-700">Tap to change photo</p>
@@ -256,7 +256,7 @@ export default function EditListingPage() {
                     <input
                         type="text"
                         placeholder="e.g. Casio fx-991EX"
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -273,8 +273,8 @@ export default function EditListingPage() {
                                 onClick={() => setListingType(t)}
                                 className={`flex-1 py-3 rounded-2xl text-sm font-black border transition-all active:scale-95 ${
                                     listingType === t
-                                        ? t === "rent" ? "bg-indigo-500 text-white border-indigo-500 shadow-md"
-                                                       : "bg-purple-500 text-white border-purple-500 shadow-md"
+                                        ? t === "rent" ? "bg-blue-500 text-white border-blue-500 shadow-md"
+                                                       : "bg-blue-500 text-white border-blue-500 shadow-md"
                                         : "bg-white/70 text-slate-500 border-slate-200"
                                 }`}
                             >
@@ -291,7 +291,7 @@ export default function EditListingPage() {
                         <select
                             value={category}
                             onChange={e => setCategory(e.target.value)}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                            className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                         >
                             <option value="" disabled>Select Category</option>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -301,8 +301,8 @@ export default function EditListingPage() {
                         <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">
                             {listingType === "sell" ? "Selling Price (₹)" : "Price per hour (₹)"}
                         </label>
-                        <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
-                            <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
+                        <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-blue-50 focus-within:border-blue-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-100 h-14 px-4 shadow-inner transition-all">
+                            <IndianRupee className="w-5 h-5 text-blue-500 shrink-0" />
                             <input
                                 type="number"
                                 placeholder="20"
@@ -327,7 +327,7 @@ export default function EditListingPage() {
                                 className={`flex-1 py-3 rounded-2xl text-sm font-black border transition-all active:scale-95 ${
                                     condition === c
                                         ? c === "Excellent" ? "bg-emerald-500 text-white border-emerald-500 shadow-md"
-                                          : c === "Good" ? "bg-indigo-500 text-white border-indigo-500 shadow-md"
+                                          : c === "Good" ? "bg-blue-500 text-white border-blue-500 shadow-md"
                                           : "bg-amber-500 text-white border-amber-500 shadow-md"
                                         : "bg-white/70 text-slate-500 border-slate-200 hover:border-slate-300"
                                 }`}
@@ -346,7 +346,7 @@ export default function EditListingPage() {
                     <select
                         value={department}
                         onChange={e => setDepartment(e.target.value)}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                     >
                         {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
@@ -363,7 +363,7 @@ export default function EditListingPage() {
                             placeholder="e.g. Main Block, Library..."
                             value={block}
                             onChange={e => setBlock(e.target.value)}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
+                            className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
                         />
                         {block && dynamicBlocks.some(b => b.toLowerCase().includes(block.toLowerCase()) && b.toLowerCase() !== block.toLowerCase()) && (
                             <div className="absolute top-full left-0 right-0 mt-2 z-30 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
@@ -391,7 +391,7 @@ export default function EditListingPage() {
                     <button
                         type="submit"
                         disabled={saveLoading}
-                        className="w-full h-16 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
+                        className="w-full h-16 rounded-2xl gradient-blue text-white font-black text-base shadow-blue flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
                     >
                         {saveLoading
                             ? <Loader2 className="animate-spin w-6 h-6" />

@@ -43,14 +43,14 @@ export default function RequestsPage() {
 
             <main className="mt-[80px] px-5 py-4 space-y-6">
                 <header className="animate-page-enter">
-                    <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">Campus Needs</p>
+                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">Campus Needs</p>
                     <h1 className="text-3xl font-black text-slate-800 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Requests</h1>
                     <p className="text-xs font-bold text-slate-500 mt-1">Help fellow students and earn trust coins</p>
                 </header>
 
                 <div className="space-y-4">
                     {loading ? (
-                        <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-indigo-400" /></div>
+                        <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-blue-400" /></div>
                     ) : requests.length === 0 ? (
                         <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm px-6">
                             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -82,7 +82,7 @@ export default function RequestsPage() {
                                         </span>
                                     </div>
                                     <div className="flex-1 min-w-0 pr-6">
-                                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">{req.categoryName}</p>
+                                        <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">{req.categoryName}</p>
                                         <h3 className="text-[15px] font-bold text-slate-800 leading-tight truncate">{req.title}</h3>
                                         <div className="flex items-center gap-2 mt-2">
                                             <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
@@ -98,12 +98,12 @@ export default function RequestsPage() {
 
                                 <div className="flex items-center justify-between pt-4 border-t border-slate-50">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-6 h-6 rounded-full bg-indigo-50 flex items-center justify-center text-[10px] font-bold text-indigo-600">
+                                        <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-[10px] font-bold text-blue-600">
                                             {req.department?.charAt(0)}
                                         </div>
                                         <span className="text-[10px] font-black text-slate-500 uppercase">{req.department}</span>
                                     </div>
-                                    <button className="flex items-center gap-1.5 text-[11px] font-black text-indigo-600 uppercase tracking-widest group-hover:gap-3 transition-all">
+                                    <button className="flex items-center gap-1.5 text-[11px] font-black text-blue-600 uppercase tracking-widest group-hover:gap-3 transition-all">
                                         Help Now <ArrowRight className="w-3.5 h-3.5" />
                                     </button>
                                 </div>
@@ -116,7 +116,7 @@ export default function RequestsPage() {
             {/* Floating FAB for new request */}
             <button
                 onClick={() => router.push("/requests/new")}
-                className="fixed bottom-24 right-5 z-40 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white py-4 px-6 rounded-2xl shadow-indigo transition-all flex items-center gap-2 ring-4 ring-indigo-600/20"
+                className="fixed bottom-24 right-5 z-40 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white py-4 px-6 rounded-2xl shadow-blue transition-all flex items-center gap-2 ring-4 ring-blue-600/20"
             >
                 <Plus className="w-5 h-5 shrink-0" />
                 <span className="font-black text-xs uppercase tracking-widest">Post Request</span>

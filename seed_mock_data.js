@@ -16,8 +16,8 @@ const db = getFirestore(app);
 
 const MOCK_CATEGORIES = [
     { id: "cat-bikes", name: "Bikes & Scooters", icon: "🚲", color: "bg-blue-50 text-blue-600" },
-    { id: "cat-books", name: "Textbooks", icon: "📚", color: "bg-indigo-50 text-indigo-600" },
-    { id: "cat-electronics", name: "Electronics", icon: "💻", color: "bg-purple-50 text-purple-600" },
+    { id: "cat-books", name: "Textbooks", icon: "📚", color: "bg-blue-50 text-blue-600" },
+    { id: "cat-electronics", name: "Electronics", icon: "💻", color: "bg-blue-50 text-blue-600" },
     { id: "cat-tools", name: "Lab Tools (ED, Drafter)", icon: "📐", color: "bg-orange-50 text-orange-600" },
 ];
 

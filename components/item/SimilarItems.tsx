@@ -52,7 +52,7 @@ function SimilarCard({ item }: { item: Listing }) {
                 
                 {/* listing_type badge */}
                 <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md w-fit border ${
-                    item.listingType === "sell" ? "bg-purple-50 text-purple-600 border-purple-100"
+                    item.listingType === "sell" ? "bg-blue-50 text-blue-600 border-blue-100"
                     : item.listingType === "free" ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                     : "bg-teal-50 text-teal-600 border-teal-100"
                 }`}>

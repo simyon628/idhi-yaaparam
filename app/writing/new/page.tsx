@@ -77,7 +77,7 @@ export default function NewWritingJobPage() {
     if (isReady && !selectedCollege) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center min-h-screen text-center px-6">
-                <button onClick={() => router.push("/")} className="gradient-indigo text-white px-8 py-3.5 rounded-2xl font-bold">Go to Home</button>
+                <button onClick={() => router.push("/")} className="gradient-blue text-white px-8 py-3.5 rounded-2xl font-bold">Go to Home</button>
             </div>
         )
     }
@@ -87,28 +87,28 @@ export default function NewWritingJobPage() {
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
-            <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-indigo-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
+            <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-blue-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
                 <button
                     onClick={() => router.back()}
-                    className="p-2.5 bg-white border border-indigo-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-indigo-600 shadow-sm"
+                    className="p-2.5 bg-white border border-blue-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-blue-600 shadow-sm"
                 >
                     <ChevronLeft className="w-5 h-5" />
                 </button>
                 <div>
                     <h1 className="text-2xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>Post a Bounty</h1>
-                    <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1.5">Get your work done</p>
+                    <p className="text-[11px] font-black text-blue-500 uppercase tracking-widest mt-1.5">Get your work done</p>
                 </div>
             </header>
 
             <form onSubmit={handleSubmit} className="flex-1 px-5 py-8 pb-16 space-y-7 max-w-md mx-auto w-full relative z-10">
                 {/* College Read-only */}
-                <div className="flex items-center gap-4 p-5 bg-white/70 backdrop-blur-xl rounded-3xl border border-indigo-50 shadow-sm relative overflow-hidden">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 shadow-inner">
-                        <PenTool className="w-5 h-5 text-indigo-500" />
+                <div className="flex items-center gap-4 p-5 bg-white/70 backdrop-blur-xl rounded-3xl border border-blue-50 shadow-sm relative overflow-hidden">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 shadow-inner">
+                        <PenTool className="w-5 h-5 text-blue-500" />
                     </div>
                     <div>
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Posting to Campus</p>
-                        <p className="text-[15px] font-bold text-indigo-700 mt-0.5">{selectedCollege?.name}</p>
+                        <p className="text-[15px] font-bold text-blue-700 mt-0.5">{selectedCollege?.name}</p>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@ export default function NewWritingJobPage() {
                     <input
                         type="text"
                         placeholder="e.g. 3rd Year OS Lab Record"
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         maxLength={50}
@@ -132,7 +132,7 @@ export default function NewWritingJobPage() {
                         <select
                             value={type}
                             onChange={e => setType(e.target.value)}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                            className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                         >
                             {WRITING_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
@@ -142,7 +142,7 @@ export default function NewWritingJobPage() {
                         <select
                             value={department}
                             onChange={e => setDepartment(e.target.value)}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                            className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                         >
                             {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                         </select>
@@ -157,7 +157,7 @@ export default function NewWritingJobPage() {
                     </label>
                     <textarea
                         placeholder="Explain the requirements, page count, language, etc."
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl p-5 text-sm text-slate-800 placeholder-slate-400 font-semibold outline-none transition-all shadow-inner resize-none h-32 leading-relaxed"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl p-5 text-sm text-slate-800 placeholder-slate-400 font-semibold outline-none transition-all shadow-inner resize-none h-32 leading-relaxed"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         maxLength={300}
@@ -168,8 +168,8 @@ export default function NewWritingJobPage() {
                 <div className="flex gap-4">
                     <div className="space-y-2.5 w-1/2">
                         <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Bounty Price *</label>
-                        <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-indigo-50 focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100 h-14 px-4 shadow-inner transition-all">
-                            <IndianRupee className="w-5 h-5 text-indigo-500 shrink-0" />
+                        <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-blue-50 focus-within:border-blue-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-100 h-14 px-4 shadow-inner transition-all">
+                            <IndianRupee className="w-5 h-5 text-blue-500 shrink-0" />
                             <input
                                 type="number"
                                 placeholder="350"
@@ -187,7 +187,7 @@ export default function NewWritingJobPage() {
                         <input
                             type="date"
                             min={today}
-                            className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none shadow-inner transition-all"
+                            className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none shadow-inner transition-all"
                             value={deadlineDate}
                             onChange={(e) => setDeadlineDate(e.target.value)}
                         />
@@ -198,12 +198,12 @@ export default function NewWritingJobPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full h-16 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
+                        className="w-full h-16 rounded-2xl gradient-blue text-white font-black text-base shadow-blue flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:-translate-y-1 transition-all"
                     >
                         {loading ? <Loader2 className="animate-spin w-6 h-6" /> : "Publish Job"}
                     </button>
                     <p className="text-center text-[10px] text-slate-400 mt-5 uppercase tracking-widest font-black">
-                        Only pay the worker when the <span className="text-indigo-400">physical handover</span> is complete.
+                        Only pay the worker when the <span className="text-blue-400">physical handover</span> is complete.
                     </p>
                 </div>
             </form>

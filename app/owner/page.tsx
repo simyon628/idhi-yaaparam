@@ -55,7 +55,7 @@ export default function OwnerDashboard() {
     const STAT_CARDS = [
         { label: "Total Users", value: stats.totalUsers, icon: Users, color: "#3B82F6", bg: "#EFF6FF" },
         { label: "Active Items", value: stats.activeRentals, icon: ShoppingBag, color: "#10B981", bg: "#ECFDF5" },
-        { label: "Today's Signups", value: stats.newSignupsToday, icon: TrendingUp, color: "#8B5CF6", bg: "#F5F3FF" },
+        { label: "Today's Signups", value: stats.newSignupsToday, icon: TrendingUp, color: "#0B57D0", bg: "#F5F3FF" },
         { label: "Pending Reports", value: stats.pendingReports, icon: AlertTriangle, color: "#F59E0B", bg: "#FFFBEB" },
     ];
 
@@ -103,7 +103,7 @@ export default function OwnerDashboard() {
 
                     <Link href="/owner/users" className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between no-underline">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100">
                                 <span className="text-lg">🧑‍🎓</span>
                             </div>
                             <div>
@@ -124,7 +124,7 @@ export default function OwnerDashboard() {
                         Current Header Gradient
                     </div>
                     <p className="text-xs font-medium text-slate-600 leading-relaxed">
-                        The core brand colors and gradients are centralized in code. To rebrand the application (e.g., for a festival), ask your developer to modify <code className="bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600 font-bold">lib/theme.config.ts</code>.
+                        The core brand colors and gradients are centralized in code. To rebrand the application (e.g., for a festival), ask your developer to modify <code className="bg-slate-100 px-1.5 py-0.5 rounded text-blue-600 font-bold">lib/theme.config.ts</code>.
                     </p>
                 </div>
             </div>

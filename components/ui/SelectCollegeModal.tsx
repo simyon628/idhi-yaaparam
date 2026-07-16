@@ -150,10 +150,10 @@ export function SelectCollegeModal({
 
     return (
         <div className="fixed inset-0 z-50 flex flex-col justify-end bg-slate-900/40 backdrop-blur-sm mx-auto w-full md:max-w-md">
-            <div className="bg-white w-full flex flex-col animate-in slide-in-from-bottom-full duration-300 shadow-2xl h-full rounded-none md:h-[85vh] md:rounded-t-3xl md:border-t md:border-indigo-100">
+            <div className="bg-white w-full flex flex-col animate-in slide-in-from-bottom-full duration-300 shadow-2xl h-full rounded-none md:h-[85vh] md:rounded-t-3xl md:border-t md:border-blue-100">
 
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-5 border-b border-indigo-50 mt-8 md:mt-0 shrink-0">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-blue-50 mt-8 md:mt-0 shrink-0">
                     <h2 className="text-2xl font-black text-slate-800" style={{ fontFamily: "Outfit, sans-serif" }}>
                         Select your campus
                     </h2>
@@ -169,10 +169,10 @@ export function SelectCollegeModal({
 
                     {/* ── State 1: Still detecting in background ── */}
                     {isStillDetecting && (
-                        <div className="flex flex-col items-center justify-center py-8 gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl animate-in fade-in">
-                            <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
-                            <p className="text-indigo-800 font-bold text-center px-4">Detecting your college…</p>
-                            <p className="text-indigo-400 text-xs font-medium px-6 text-center">Just a moment</p>
+                        <div className="flex flex-col items-center justify-center py-8 gap-3 bg-blue-50 border border-blue-100 rounded-2xl animate-in fade-in">
+                            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                            <p className="text-blue-800 font-bold text-center px-4">Detecting your college…</p>
+                            <p className="text-blue-400 text-xs font-medium px-6 text-center">Just a moment</p>
                         </div>
                     )}
 
@@ -197,13 +197,13 @@ export function SelectCollegeModal({
                             <div className="flex flex-col gap-2">
                                 <button
                                     onClick={confirmAutoDetected}
-                                    className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition-all active:scale-95"
+                                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-sm transition-all active:scale-95"
                                 >
                                     ✓ Yes, this is my college
                                 </button>
                                 <button
                                     onClick={openManualSearch}
-                                    className="w-full py-2 text-slate-500 text-sm font-bold rounded-xl hover:text-indigo-600 transition-colors"
+                                    className="w-full py-2 text-slate-500 text-sm font-bold rounded-xl hover:text-blue-600 transition-colors"
                                 >
                                     This is not my college →
                                 </button>
@@ -227,7 +227,7 @@ export function SelectCollegeModal({
                                     <label className="text-slate-700 font-bold text-sm ml-1 block mb-1.5">Enter your college manually</label>
                                 )}
                                 <div className="relative">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-300" />
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
                                     <input
                                         ref={searchInputRef}
                                         type="text"
@@ -235,7 +235,7 @@ export function SelectCollegeModal({
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
                                         disabled={isFetchingList}
-                                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all outline-none"
+                                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all outline-none"
                                     />
                                 </div>
                             </div>
@@ -247,7 +247,7 @@ export function SelectCollegeModal({
                 <div className="flex-1 overflow-y-auto px-5 pb-10">
                     {isFetchingList ? (
                         <div className="flex justify-center mt-8">
-                            <Loader2 className="w-6 h-6 animate-spin text-indigo-300" />
+                            <Loader2 className="w-6 h-6 animate-spin text-blue-300" />
                         </div>
                     ) : searchQuery.trim() !== "" && filteredColleges.length === 0 ? (
                         <p className="text-center text-slate-500 mt-10 text-sm font-medium">
@@ -259,13 +259,13 @@ export function SelectCollegeModal({
                                 <button
                                     key={college.id}
                                     onClick={() => handleManualSelect(college)}
-                                    className="w-full text-left p-4 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-indigo-400 transition-all flex items-center gap-3 active:scale-95 group"
+                                    className="w-full text-left p-4 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-3 active:scale-95 group"
                                 >
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-indigo-50 text-indigo-600 font-black group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50 text-blue-600 font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                         <span className="text-base">{college.name.charAt(0)}</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-slate-700 group-hover:text-indigo-900 transition-colors">{college.name}</p>
+                                        <p className="font-bold text-slate-700 group-hover:text-blue-900 transition-colors">{college.name}</p>
                                         <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
                                             <span>{college.city || "India"}</span>
                                             {college.state && (

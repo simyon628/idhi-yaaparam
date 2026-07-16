@@ -55,14 +55,14 @@ const SuggestionRow = memo(function SuggestionRow({
         gap: 12,
         background: isActive ? "#f8faff" : "transparent",
         transition: "background 0.1s",
-        borderLeft: isActive ? "3px solid #5548E8" : "3px solid transparent",
+        borderLeft: isActive ? "3px solid #0B57D0" : "3px solid transparent",
       }}
     >
-      {/* Icon */}
+      {/* Icon / Image */}
       <div
         style={{
-          width: 32,
-          height: 32,
+          width: 40,
+          height: 40,
           borderRadius: 10,
           background: isActive ? "#EEE9FF" : "#f1f5f9",
           display: "flex",
@@ -70,9 +70,14 @@ const SuggestionRow = memo(function SuggestionRow({
           justifyContent: "center",
           flexShrink: 0,
           transition: "background 0.1s",
+          overflow: "hidden"
         }}
       >
-        <Search size={14} style={{ color: isActive ? "#5548E8" : "#94a3b8" }} />
+        {item.image ? (
+          <img src={item.image} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : (
+          <Search size={16} style={{ color: isActive ? "#0B57D0" : "#94a3b8" }} />
+        )}
       </div>
 
       {/* Name and Category */}
@@ -82,26 +87,33 @@ const SuggestionRow = memo(function SuggestionRow({
             fontSize: 14,
             color: "#334155",
             fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 500,
+            fontWeight: 600,
           }}
         >
           <HighlightMatch text={item.name} query={query} />
         </span>
         <span
           style={{
-            fontSize: 11,
+            fontSize: 12,
             color: "#94a3b8",
             fontFamily: "'DM Sans', sans-serif",
             fontWeight: 500,
             marginTop: 2,
           }}
         >
-          {item.category}
+          {item.category} {item.distance ? `• ${item.distance} km` : ""}
         </span>
       </div>
 
+      {/* Price */}
+      {item.price !== undefined && (
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#10B981" }}>
+          ₹{item.price}/hr
+        </div>
+      )}
+
       {/* Arrow */}
-      <ArrowRight size={14} style={{ color: "#cbd5e1" }} />
+      <ArrowRight size={14} style={{ color: "#cbd5e1", marginLeft: 4 }} />
     </div>
   );
 });

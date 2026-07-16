@@ -129,7 +129,7 @@ export default function ManageBanners() {
         }
     };
 
-    if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+    if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
 
     if (isFormOpen) {
         return (
@@ -147,7 +147,7 @@ export default function ManageBanners() {
                         <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1 mb-2 block">Banner Image * (Ratio 25:8)</label>
                         <div 
                             onClick={() => fileInputRef.current?.click()}
-                            className="relative w-full aspect-[25/8] rounded-[16px] border-2 border-dashed border-indigo-200 bg-indigo-50/50 flex flex-col items-center justify-center cursor-pointer overflow-hidden group"
+                            className="relative w-full aspect-[25/8] rounded-[16px] border-2 border-dashed border-blue-200 bg-blue-50/50 flex flex-col items-center justify-center cursor-pointer overflow-hidden group"
                         >
                             {imagePreview ? (
                                 <>
@@ -158,8 +158,8 @@ export default function ManageBanners() {
                                 </>
                             ) : (
                                 <div className="text-center">
-                                    <UploadCloud className="w-6 h-6 text-indigo-400 mx-auto mb-2" />
-                                    <p className="text-xs font-bold text-indigo-600">Tap to upload image</p>
+                                    <UploadCloud className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                                    <p className="text-xs font-bold text-blue-600">Tap to upload image</p>
                                     <p className="text-[10px] font-medium text-slate-400 mt-1">Wide images work best</p>
                                 </div>
                             )}
@@ -170,33 +170,33 @@ export default function ManageBanners() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Title (Overlay)</label>
-                            <input value={title} onChange={e=>setTitle(e.target.value)} required placeholder="e.g. Diwali Sale" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white" />
+                            <input value={title} onChange={e=>setTitle(e.target.value)} required placeholder="e.g. Diwali Sale" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-400 focus:bg-white" />
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Subtitle</label>
-                            <input value={subtitle} onChange={e=>setSubtitle(e.target.value)} placeholder="e.g. 20% off all calculators" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white" />
+                            <input value={subtitle} onChange={e=>setSubtitle(e.target.value)} placeholder="e.g. 20% off all calculators" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-400 focus:bg-white" />
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Button Text</label>
-                            <input value={ctaText} onChange={e=>setCtaText(e.target.value)} placeholder="e.g. Shop Now" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white" />
+                            <input value={ctaText} onChange={e=>setCtaText(e.target.value)} placeholder="e.g. Shop Now" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-400 focus:bg-white" />
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Button Link</label>
-                            <input value={ctaLink} onChange={e=>setCtaLink(e.target.value)} placeholder="e.g. /rentals?type=sell" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white" />
+                            <input value={ctaLink} onChange={e=>setCtaLink(e.target.value)} placeholder="e.g. /rentals?type=sell" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-400 focus:bg-white" />
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-[11px] font-black uppercase tracking-widest text-slate-500 pl-1">Display Order</label>
-                            <input value={displayOrder} onChange={e=>setDisplayOrder(e.target.value)} type="number" min="1" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white" />
+                            <input value={displayOrder} onChange={e=>setDisplayOrder(e.target.value)} type="number" min="1" className="w-full bg-slate-50 border border-slate-200 rounded-xl h-12 px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-400 focus:bg-white" />
                         </div>
                         <div className="space-y-1.5 flex items-end pb-1">
                             <label className="flex items-center gap-2 cursor-pointer p-3 bg-slate-50 rounded-xl border border-slate-200 flex-1">
-                                <input type="checkbox" checked={isActive} onChange={e=>setIsActive(e.target.checked)} className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                                <input type="checkbox" checked={isActive} onChange={e=>setIsActive(e.target.checked)} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
                                 <span className="text-sm font-bold text-slate-700">Active (Visible in Carousel)</span>
                             </label>
                         </div>
                     </div>
 
-                    <button disabled={isSaving} type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-black text-sm shadow-md flex items-center justify-center gap-2 mt-2 disabled:opacity-50">
+                    <button disabled={isSaving} type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-blue-600 text-white font-black text-sm shadow-md flex items-center justify-center gap-2 mt-2 disabled:opacity-50">
                         {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         {isSaving ? "Saving..." : "Save Banner"}
                     </button>
@@ -212,7 +212,7 @@ export default function ManageBanners() {
                     resetForm();
                     setIsFormOpen(true);
                 }}
-                className="w-full h-14 rounded-[20px] bg-white border-2 border-dashed border-indigo-200 text-indigo-600 font-black text-sm flex items-center justify-center gap-2 hover:bg-indigo-50 transition-colors"
+                className="w-full h-14 rounded-[20px] bg-white border-2 border-dashed border-blue-200 text-blue-600 font-black text-sm flex items-center justify-center gap-2 hover:bg-blue-50 transition-colors"
             >
                 <Plus className="w-5 h-5" /> Add New Banner
             </button>
@@ -245,7 +245,7 @@ export default function ManageBanners() {
                             <div className="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                                 <div className="text-xs font-bold text-slate-500 flex items-center gap-2">
                                     <span className="bg-slate-200 px-2 py-1 rounded-md text-[10px]">Order: {banner.displayOrder}</span>
-                                    {banner.ctaLink && <span className="text-indigo-500 truncate max-w-[100px]">{banner.ctaLink}</span>}
+                                    {banner.ctaLink && <span className="text-blue-500 truncate max-w-[100px]">{banner.ctaLink}</span>}
                                 </div>
                                 <div className="flex gap-2">
                                     <button onClick={() => toggleActive(banner.id, banner.isActive)} className={`p-2 rounded-lg transition-colors ${banner.isActive ? 'bg-amber-100 text-amber-600 hover:bg-amber-200' : 'bg-emerald-100 text-emerald-600 hover:bg-emerald-200'}`}>

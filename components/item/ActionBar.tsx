@@ -36,12 +36,12 @@ function BorrowMessageSheet({
                     value={msg}
                     onChange={e => setMsg(e.target.value)}
                     placeholder="Hi! I need this for my practicals…"
-                    className="w-full h-28 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 resize-none"
+                    className="w-full h-28 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:ring-4 focus:ring-blue-50 resize-none"
                 />
                 <button
                     onClick={() => onSend(msg)}
                     disabled={loading}
-                    className="mt-3 w-full h-12 rounded-2xl bg-indigo-600 text-white font-black text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all disabled:opacity-60"
+                    className="mt-3 w-full h-12 rounded-2xl bg-blue-600 text-white font-black text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all disabled:opacity-60"
                 >
                     {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Send Request"}
                 </button>
@@ -95,7 +95,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-100 px-4 py-3 flex gap-3">
                 <button
                     onClick={() => router.push(`/rentals/edit/${item.id}`)}
-                    className="flex-1 h-12 rounded-2xl border border-indigo-200 text-indigo-700 text-xs font-black uppercase tracking-widest hover:bg-indigo-50 transition-colors"
+                    className="flex-1 h-12 rounded-2xl border border-blue-200 text-blue-700 text-xs font-black uppercase tracking-widest hover:bg-blue-50 transition-colors"
                 >
                     Edit
                 </button>
@@ -128,7 +128,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-100 px-4 py-3">
                 <button
                     onClick={() => router.push(`/login?redirect=/rentals/${item.id}`)}
-                    className="w-full h-12 rounded-2xl bg-indigo-600 text-white text-sm font-black uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-md active:scale-95"
+                    className="w-full h-12 rounded-2xl bg-blue-600 text-white text-sm font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-md active:scale-95"
                 >
                     Login to Contact Seller →
                 </button>
@@ -168,7 +168,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
                                 if (!currentUserId) { router.push(`/login?redirect=/rentals/${item.id}`); return; }
                                 setShowSheet(true);
                             }}
-                            className="flex-1 h-12 rounded-2xl bg-indigo-600 text-white font-black text-sm uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-md active:scale-95"
+                            className="flex-1 h-12 rounded-2xl bg-blue-600 text-white font-black text-sm uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-md active:scale-95"
                         >
                             Request to Borrow →
                         </button>
@@ -176,7 +176,7 @@ export function ActionBar({ item, isOwner, currentUserId, isSaved, onToggleSave,
                 ) : (
                     <button
                         onClick={handleMessageSeller}
-                        className="flex-1 h-12 rounded-2xl bg-indigo-600 text-white font-black text-sm uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-md active:scale-95 flex items-center justify-center gap-2"
+                        className="flex-1 h-12 rounded-2xl bg-blue-600 text-white font-black text-sm uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-md active:scale-95 flex items-center justify-center gap-2"
                     >
                         <MessageSquare className="w-4 h-4" />
                         Message Seller →

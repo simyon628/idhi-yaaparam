@@ -65,7 +65,7 @@ export default function UserDatabase() {
     const DEPARTMENTS = ["CSE", "ECE", "MECH", "CIVIL", "EEE", "IT", "AI/ML", "MBA"];
 
     if (loading && !selectedCollege && !selectedDept) {
-        return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+        return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
     }
 
     return (
@@ -84,13 +84,13 @@ export default function UserDatabase() {
 
             {/* Breadcrumb Navigation */}
             <div className="flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-100 px-4 py-2 rounded-xl">
-                <button onClick={() => { setSelectedCollege(null); setSelectedDept(null); }} className={`hover:text-indigo-600 ${!selectedCollege ? 'text-indigo-600' : ''}`}>
+                <button onClick={() => { setSelectedCollege(null); setSelectedDept(null); }} className={`hover:text-blue-600 ${!selectedCollege ? 'text-blue-600' : ''}`}>
                     All Colleges
                 </button>
                 {selectedCollege && (
                     <>
                         <ChevronRight className="w-3 h-3" />
-                        <button onClick={() => setSelectedDept(null)} className={`hover:text-indigo-600 ${!selectedDept ? 'text-indigo-600' : ''}`}>
+                        <button onClick={() => setSelectedDept(null)} className={`hover:text-blue-600 ${!selectedDept ? 'text-blue-600' : ''}`}>
                             {selectedCollege.acronym || "College"}
                         </button>
                     </>
@@ -98,7 +98,7 @@ export default function UserDatabase() {
                 {selectedDept && (
                     <>
                         <ChevronRight className="w-3 h-3" />
-                        <span className="text-indigo-600">{selectedDept}</span>
+                        <span className="text-blue-600">{selectedDept}</span>
                     </>
                 )}
             </div>
@@ -110,7 +110,7 @@ export default function UserDatabase() {
                         <div 
                             key={c.id} 
                             onClick={() => setSelectedCollege(c)}
-                            className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-indigo-200 transition-colors"
+                            className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-blue-200 transition-colors"
                         >
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-black text-lg" style={{ background: theme.brand.gradient }}>
@@ -134,7 +134,7 @@ export default function UserDatabase() {
                         <div 
                             key={dept} 
                             onClick={() => setSelectedDept(dept)}
-                            className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-indigo-200 transition-colors"
+                            className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between cursor-pointer hover:border-blue-200 transition-colors"
                         >
                             <span className="font-extrabold text-slate-700 text-sm">{dept}</span>
                             <ChevronRight className="w-4 h-4 text-slate-300" />
@@ -147,7 +147,7 @@ export default function UserDatabase() {
             {selectedCollege && selectedDept && (
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     {loading ? (
-                        <div className="p-10 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-indigo-500" /></div>
+                        <div className="p-10 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-blue-500" /></div>
                     ) : students.length === 0 ? (
                         <div className="p-10 text-center text-slate-500 font-bold text-sm">No students found in this department.</div>
                     ) : (
@@ -177,7 +177,7 @@ export default function UserDatabase() {
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-xs font-black text-indigo-600">{s.overallRating ? `⭐ ${s.overallRating}` : "New"}</div>
+                                        <div className="text-xs font-black text-blue-600">{s.overallRating ? `⭐ ${s.overallRating}` : "New"}</div>
                                         <div className="text-[10px] font-medium text-slate-400 mt-0.5">{s.reviewCount || 0} reviews</div>
                                     </div>
                                 </div>

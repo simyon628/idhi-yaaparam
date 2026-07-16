@@ -7,6 +7,8 @@ export interface SearchSuggestion {
   name: string;
   category: string;
   image?: string;
+  price?: number;
+  distance?: string;
 }
 
 export interface RecentSearchItem {

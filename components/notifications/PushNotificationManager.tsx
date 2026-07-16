@@ -33,7 +33,7 @@ export default function PushNotificationManager() {
             const unsubscribe = onMessage(messaging, (payload) => {
                 toast(payload.notification?.title || 'New Notification', {
                     description: payload.notification?.body,
-                    icon: <Bell className="w-4 h-4 text-indigo-500" />,
+                    icon: <Bell className="w-4 h-4 text-blue-500" />,
                 });
             });
             return () => unsubscribe();
@@ -76,9 +76,9 @@ export default function PushNotificationManager() {
                     transition={{ type: "spring", stiffness: 400, damping: 35, delay: 2 }}
                     className="absolute top-[68px] left-3 right-3 z-30"
                 >
-                    <div className="bg-white/95 backdrop-blur-md border border-indigo-100 rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3">
-                        <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
-                            <Bell className="w-4 h-4 text-indigo-500" />
+                    <div className="bg-white/95 backdrop-blur-md border border-blue-100 rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3">
+                        <div className="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                            <Bell className="w-4 h-4 text-blue-500" />
                         </div>
                         <div className="flex-1 min-w-0">
                             <p className="text-[11px] font-black text-slate-700">Enable borrow alerts?</p>
@@ -86,7 +86,7 @@ export default function PushNotificationManager() {
                         </div>
                         <button
                             onClick={requestPermission}
-                            className="shrink-0 px-3 py-1.5 bg-indigo-600 text-white text-[10px] font-black rounded-xl uppercase tracking-wider active:scale-95 transition-all shadow-indigo"
+                            className="shrink-0 px-3 py-1.5 bg-blue-600 text-white text-[10px] font-black rounded-xl uppercase tracking-wider active:scale-95 transition-all shadow-blue"
                         >
                             Enable
                         </button>

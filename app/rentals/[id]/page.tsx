@@ -49,7 +49,7 @@ const MOCK_ITEMS: Record<string, any> = {
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
     available: { label: "Available", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
     requested: { label: "Pending", color: "bg-amber-100 text-amber-700 border-amber-200" },
-    active: { label: "Active", color: "bg-indigo-100 text-indigo-700 border-indigo-200" },
+    active: { label: "Active", color: "bg-blue-100 text-blue-700 border-blue-200" },
     completed: { label: "Completed", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
     cancelled: { label: "Cancelled", color: "bg-rose-100 text-rose-700 border-rose-200" },
 };
@@ -539,7 +539,7 @@ export default function RentalDetailPage() {
 
     if (loading) return (
         <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
         </div>
     );
 
@@ -604,7 +604,7 @@ export default function RentalDetailPage() {
                 <p style={{ fontSize: 13, color: "#64748b", margin: "0 0 16px" }}>{rental?.categoryId?.charAt(0).toUpperCase()}{rental?.categoryId?.slice(1)} · {rental?.block}</p>
 
                 {/* ── Seller Info Card (Flipkart-style) ── */}
-                <div style={{ background: "linear-gradient(135deg, #f8faff 0%, #eef0ff 100%)", border: "1px solid #c7d2fe", borderRadius: 16, padding: 14, marginBottom: 16 }}>
+                <div style={{ background: "linear-gradient(135deg, #f8faff 0%, #eef0ff 100%)", border: "1px solid rgba(11,87,208,0.2)", borderRadius: 16, padding: 14, marginBottom: 16 }}>
                     <p style={{ fontSize: 10, fontWeight: 800, color: "#0B57D0", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Owner / Lender</p>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                         <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg, #0B57D0, #1A73E8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
@@ -661,7 +661,7 @@ export default function RentalDetailPage() {
                                         }
                                     }} style={{ position: "relative", minWidth: 54, height: 56, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", margin: "0 2px" }}>
                                         {isSelected && (
-                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #6C4DFF, #9B82FF)", borderRadius: 40, boxShadow: "0 18px 40px rgba(108, 77, 255, 0.35)", zIndex: 1 }} />
+                                            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #0B57D0, #1A73E8)", borderRadius: 40, boxShadow: "0 18px 40px rgba(11, 87, 208, 0.35)", zIndex: 1 }} />
                                         )}
                                         <span style={{ fontSize: 12, fontWeight: 700, color: isSelected ? "rgba(255,255,255,0.9)" : "#6B7280", zIndex: 2, textTransform: "uppercase", marginBottom: 2 }}>{format(date, 'EEE')}</span>
                                         <span style={{ fontSize: 18, fontWeight: 800, color: isSelected ? "#fff" : "#0f172a", zIndex: 2 }}>{format(date, 'dd')}</span>
@@ -680,7 +680,7 @@ export default function RentalDetailPage() {
                                 {selectedDateRange?.to ? format(selectedDateRange.to, 'd MMM') : (selectedDateRange?.from ? format(selectedDateRange.from, 'd MMM') : 'End')}
                             </span>
                             <span style={{ fontSize: 12, color: "#94a3b8" }}>↓</span>
-                            <span style={{ fontSize: 14, fontWeight: 800, color: "#6C4DFF" }}>
+                            <span style={{ fontSize: 14, fontWeight: 800, color: "#0B57D0" }}>
                                 {selectedTime.hour}:{selectedTime.minute}
                             </span>
                         </div>
@@ -707,7 +707,7 @@ export default function RentalDetailPage() {
                             <p style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", margin: 0 }}>Price Summary</p>
                             <div style={{ background: "#EEF2FF", padding: "4px 10px", borderRadius: 12 }}>
                                 <span style={{ fontSize: 16, fontWeight: 800, color: "#0B57D0" }}>₹{rental.pricePerHour}</span>
-                                <span style={{ fontSize: 12, fontWeight: 700, color: "#6366F1" }}>/hr</span>
+                                <span style={{ fontSize: 12, fontWeight: 700, color: "#0B57D0" }}>/hr</span>
                             </div>
                         </div>
 
@@ -752,7 +752,7 @@ export default function RentalDetailPage() {
                 <div style={{ background: "#f8faff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 14, marginBottom: 16 }}>
                     <p style={{ fontSize: 10, fontWeight: 800, color: "#0B57D0", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Pickup Location</p>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <MapPin className="w-4 h-4 text-indigo-500" />
+                        <MapPin className="w-4 h-4 text-blue-500" />
                         <span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>{rental?.block || "Campus Block"}</span>
                     </div>
                     <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>Meet at the pickup block. Confirm with owner via chat after approval.</p>
@@ -776,7 +776,7 @@ export default function RentalDetailPage() {
                         {rental?.status === "active" && (
                             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                                    <button onClick={() => router.push(`/tracking/${id}`)} style={{ height: 52, background: "#EEF2FF", color: "#4F46E5", border: "1px solid #C7D2FE", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>📍 Live Tracking</button>
+                                    <button onClick={() => router.push(`/tracking/${id}`)} style={{ height: 52, background: "#EEF2FF", color: "#0B57D0", border: "1px solid #C7D2FE", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>📍 Live Tracking</button>
                                     <button onClick={handleMarkReturned} disabled={actionLoading} style={{ height: 52, background: "#F0FDF4", color: "#16A34A", border: "1px solid #BBF7D0", borderRadius: 12, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>{actionLoading ? "..." : "✓ Mark Returned"}</button>
                                 </div>
                                 <button onClick={() => { setReportReason("Item not returned"); setShowReportModal(true); }} style={{ background: "none", border: "none", color: "#94a3b8", fontSize: 11, fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}>Report issue (Not returned)</button>
@@ -800,7 +800,7 @@ export default function RentalDetailPage() {
                         <button
                             onClick={() => handleRequest(`${days}d ${hours}h`)}
                             disabled={actionLoading}
-                            style={{ flex: 1, height: 60, background: "#6C4DFF", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(108, 77, 255, 0.4)", position: "relative", overflow: "hidden" }}
+                            style={{ flex: 1, height: 60, background: "#0B57D0", color: "#fff", border: "none", borderRadius: 18, fontSize: 16, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 10px 25px rgba(11, 87, 208, 0.4)", position: "relative", overflow: "hidden" }}
                         >
                             {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Borrow Now</>}
                         </button>
@@ -891,12 +891,12 @@ export default function RentalDetailPage() {
                                 }}
                                 style={{ margin: 0, fontFamily: "inherit" }}
                                 modifiersStyles={{
-                                    selected: { backgroundColor: "#6C4DFF", color: "white" }
+                                    selected: { backgroundColor: "#0B57D0", color: "white" }
                                 }}
                             />
                             <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
                                 <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
-                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                                <button onClick={() => setIsCalendarOpen(false)} style={{ flex: 1, height: 56, background: "#0B57D0", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
                             </div>
                         </div>
                     </Drawer.Content>
@@ -945,7 +945,7 @@ export default function RentalDetailPage() {
 
                             <div style={{ display: "flex", gap: 12, width: "100%", marginTop: 20 }}>
                                 <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#F1F5F9", color: "#475569", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Cancel</button>
-                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#6C4DFF", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
+                                <button onClick={() => setIsTimePickerOpen(false)} style={{ flex: 1, height: 56, background: "#0B57D0", color: "#fff", borderRadius: 18, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer" }}>Done</button>
                             </div>
                         </div>
                     </Drawer.Content>

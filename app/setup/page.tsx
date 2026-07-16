@@ -11,7 +11,7 @@ const CATEGORIES_SEED = [
     { id: 'cat-calculator',  name: 'Calculator',    icon: 'Calculator', color: 'bg-blue-50 text-blue-600',   keywords: ['calculator','casio','scientific','fx-991'] },
     { id: 'cat-drafter',    name: 'Drafter',        icon: 'Ruler',      color: 'bg-orange-50 text-orange-600', keywords: ['drafter','drawing board','drafting','mini drafter'] },
     { id: 'cat-labcoat',    name: 'Lab Coat',       icon: 'Shirt',      color: 'bg-green-50 text-green-600',  keywords: ['lab coat','labcoat','apron','white coat'] },
-    { id: 'cat-geometry',   name: 'Geometry Set',   icon: 'Triangle',   color: 'bg-purple-50 text-purple-600', keywords: ['geometry','compass','protractor','set square'] },
+    { id: 'cat-geometry',   name: 'Geometry Set',   icon: 'Triangle',   color: 'bg-blue-50 text-blue-600', keywords: ['geometry','compass','protractor','set square'] },
     { id: 'cat-books',      name: 'Books/Notes',    icon: 'BookOpen',   color: 'bg-yellow-50 text-yellow-600', keywords: ['book','notes','textbook','notebook','guide'] },
     { id: 'cat-electronics',name: 'Electronics',    icon: 'Laptop',     color: 'bg-red-50 text-red-600',      keywords: ['laptop','phone','charger','earphone','powerbank','electronic','gadget'] },
     { id: 'cat-tools',      name: 'Tools',          icon: 'Wrench',     color: 'bg-gray-50 text-gray-600',    keywords: ['tool','wrench','hammer','screwdriver'] },
@@ -58,7 +58,7 @@ export default function SetupPage() {
 
                 <div className="bg-white rounded-[2rem] border border-slate-200 p-6 shadow-sm space-y-6">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600">
+                        <div className="p-2 bg-blue-50 rounded-xl text-blue-600">
                             <DatabaseZap className="w-6 h-6" />
                         </div>
                         <div>
@@ -79,7 +79,7 @@ export default function SetupPage() {
                     <button
                         onClick={handleSeedCategories}
                         disabled={seeding}
-                        className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-indigo-600 text-white font-black uppercase tracking-widest disabled:opacity-50 active:scale-95 transition-all shadow-md shadow-indigo-100"
+                        className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-blue-600 text-white font-black uppercase tracking-widest disabled:opacity-50 active:scale-95 transition-all shadow-md shadow-blue-100"
                     >
                         {seeding ? <Loader2 className="w-4 h-4 animate-spin" /> : <DatabaseZap className="w-4 h-4" />}
                         {seeding ? 'Seeding...' : 'Seed All Now'}

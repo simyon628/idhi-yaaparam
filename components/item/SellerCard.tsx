@@ -76,7 +76,7 @@ export function SellerCard({ owner }: SellerCardProps) {
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Seller</p>
             <div className="flex items-center gap-3 mb-4">
                 {/* Avatar */}
-                <div className="w-11 h-11 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-lg shrink-0 shadow-sm">
+                <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-lg shrink-0 shadow-sm">
                     {owner.name.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0 space-y-1">
@@ -104,7 +104,7 @@ export function SellerCard({ owner }: SellerCardProps) {
 
             <button
                 onClick={() => router.push(`/profile/${owner.id}`)}
-                className="w-full py-2.5 rounded-xl border border-indigo-100 text-indigo-600 text-xs font-black uppercase tracking-widest hover:bg-indigo-50 transition-colors"
+                className="w-full py-2.5 rounded-xl border border-blue-100 text-blue-600 text-xs font-black uppercase tracking-widest hover:bg-blue-50 transition-colors"
             >
                 View Profile →
             </button>

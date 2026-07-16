@@ -46,7 +46,7 @@ function StatusBadge({ status }: { status: string }) {
     const cfg: Record<string, { label: string; cls: string }> = {
         available: { label: "Available", cls: "bg-emerald-50 text-emerald-700 border-emerald-100" },
         requested: { label: "Requested", cls: "bg-amber-50 text-amber-700 border-amber-100" },
-        active:    { label: "Borrowed", cls: "bg-indigo-50 text-indigo-700 border-indigo-100" },
+        active:    { label: "Borrowed", cls: "bg-blue-50 text-blue-700 border-blue-100" },
         completed: { label: "Returned", cls: "bg-slate-100 text-slate-600 border-slate-200" },
         cancelled: { label: "Cancelled", cls: "bg-rose-50 text-rose-700 border-rose-100" },
     };
@@ -61,7 +61,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function TypeBadge({ type }: { type?: string }) {
     if (!type || type === "rent") return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border bg-teal-50 text-teal-700 border-teal-100">For Rent</span>;
-    if (type === "sell") return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border bg-purple-50 text-purple-700 border-purple-100">For Sale</span>;
+    if (type === "sell") return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border bg-blue-50 text-blue-700 border-blue-100">For Sale</span>;
     return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-100">Free</span>;
 }
 
@@ -85,7 +85,7 @@ function Description({ text }: { text?: string }) {
                 {isLong && !expanded ? text.slice(0, 150) + "…" : text}
             </p>
             {isLong && (
-                <button onClick={() => setExpanded(e => !e)} className="text-xs font-bold text-indigo-500 mt-1 hover:underline">
+                <button onClick={() => setExpanded(e => !e)} className="text-xs font-bold text-blue-500 mt-1 hover:underline">
                     {expanded ? "Show less" : "Read more"}
                 </button>
             )}

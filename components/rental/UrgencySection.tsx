@@ -26,10 +26,10 @@ export function UrgencySection() {
                     </div>
                     <div>
                         <h2 className="text-base font-black text-white" style={{ fontFamily: "Outfit, sans-serif" }}>Need it NOW?</h2>
-                        <p className="text-[10px] text-indigo-300/60 font-medium">Nearest available items</p>
+                        <p className="text-[10px] text-blue-300/60 font-medium">Nearest available items</p>
                     </div>
                 </div>
-                <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">URGENT</span>
+                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">URGENT</span>
             </div>
 
             {/* Items */}
@@ -44,7 +44,7 @@ export function UrgencySection() {
                             <span className="text-2xl w-9 text-center">{item.icon}</span>
                             <div>
                                 <p className="font-bold text-white text-sm">{item.name}</p>
-                                <div className="flex items-center gap-1 text-indigo-300/60 text-[10px] mt-0.5">
+                                <div className="flex items-center gap-1 text-blue-300/60 text-[10px] mt-0.5">
                                     <MapPin className="w-2.5 h-2.5" />
                                     <span>{item.location} · {item.distance}</span>
                                 </div>

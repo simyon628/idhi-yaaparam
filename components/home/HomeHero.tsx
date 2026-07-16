@@ -10,8 +10,8 @@ export function HomeHero() {
             title: "Rent Lab Coat",
             subtitle: "Starting at ₹20/hr",
             icon: Calculator,
-            color: "bg-indigo-50",
-            iconColor: "text-indigo-600",
+            color: "bg-blue-50",
+            iconColor: "text-blue-600",
         },
         {
             id: "write",

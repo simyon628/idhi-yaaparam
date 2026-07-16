@@ -42,7 +42,7 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 **Time**: ~15 min
 **Test**: Open homepage → categories, search bar, banner, product rows should all start at same left edge. Right side of product rows should show a partial card.
 
-### Phase 1B: Kill Purple — Enforce Brand Blue ⬜ NOT STARTED
+### Phase 1B: Kill Purple — Enforce Brand Blue ✅ DONE
 **Files**: `lib/theme.config.ts`, `components/search/SearchTrigger.tsx`, `app/rentals/[id]/page.tsx`
 **Goal**: Replace ALL purple/violet colors with brand blue `#0B57D0`
 **Time**: ~10 min
@@ -60,13 +60,13 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 **Time**: ~10 min
 **Test**: Open any rental detail → price should show ~₹360 (1 day at ₹15/hr), not ₹1440.
 
-### Phase 2A: Near You Page — Layout + Filters ✅ DONE
+### Phase 2A: Near You Page — Layout + Filters ⬜ NOT STARTED
 **Files**: `app/near-you/page.tsx`
 **Goal**: Add department filter, fix empty bands, improve grid layout, reduce white space.
 **Time**: ~20 min
 **Test**: Filter by department → shows relevant items or "No items" message. No massive white gaps.
 
-### Phase 2B: Category Page — Inline Filters + Search ⬜ NOT STARTED
+### Phase 2B: Category Page — Inline Filters + Search ✅ DONE
 **Files**: `app/category/[slug]/page.tsx`
 **Goal**: Add visible search bar, separate sort/branch into inline chips, fix empty state.
 **Time**: ~20 min
@@ -90,7 +90,7 @@ Each phase lists EXACTLY which files it touches. Do NOT touch files outside that
 **Time**: ~15 min
 **Test**: Filter to a category with 0 items → see a rich message, not white space.
 
-### Phase 3C: Bottom Nav Notch Fix ⬜ NOT STARTED
+### Phase 3C: Bottom Nav Notch Fix ✅ DONE
 **Files**: `components/layout/BottomNav.tsx`
 **Goal**: Fix the notch circle background to match page background.
 **Time**: ~5 min

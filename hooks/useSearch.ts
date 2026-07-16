@@ -4,63 +4,104 @@ import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchStore } from "@/stores/searchStore";
 import { SearchSuggestion } from "@/stores/searchStore";
+import { db } from "@/lib/firebase";
+import {
+  collection,
+  query as firestoreQuery,
+  where,
+  getDocs,
+  limit,
+} from "firebase/firestore";
 
 // ── useSuggestions ────────────────────────────────────────────────────────────
-// Watches query in store, debounces 250ms, fetches /api/v1/suggestions
+// Watches the search query in Zustand store, debounces 250ms, queries Firestore
+// items in-memory-filtered for matching name/category.
 
 export function useSuggestions() {
-  const { query, setSuggestions, setStatus } = useSearchStore();
+  // Renamed store's `query` → `searchText` to avoid shadowing Firestore `query`
+  const { query: searchText, setSuggestions, setStatus } = useSearchStore();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const controllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    // Clear previous timer & abort previous fetch
     if (timerRef.current) clearTimeout(timerRef.current);
-    if (controllerRef.current) controllerRef.current.abort();
 
-    if (!query.trim()) {
+    if (!searchText.trim()) {
       setStatus("idle");
       setSuggestions([]);
       return;
     }
 
-    // Debounce 150ms
     timerRef.current = setTimeout(async () => {
-      const controller = new AbortController();
-      controllerRef.current = controller;
-
       setStatus("loading");
 
       try {
-        const res = await fetch(
-          `/api/v1/suggestions?q=${encodeURIComponent(query)}&limit=8`,
-          { signal: controller.signal }
-        );
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const suggestions: SearchSuggestion[] = data.suggestions ?? [];
-        setSuggestions(suggestions);
-      } catch (err: any) {
-        if (err?.name !== "AbortError") {
-          setStatus("error");
+        if (!db) {
+          setStatus("idle");
+          return;
         }
+
+        const itemsRef = collection(db as any, "items");
+
+        // Fetch active items (up to 80) then filter client-side.
+        // For production scale, wire Algolia/Typesense here.
+        const q = firestoreQuery(
+          itemsRef,
+          where("status", "==", "active"),
+          limit(80)
+        );
+        const snapshot = await getDocs(q);
+
+        const lowerText = searchText.toLowerCase().trim();
+        const results: SearchSuggestion[] = [];
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const itemName = (data.itemName || "").toLowerCase();
+          const category = (
+            data.categoryId ||
+            data.category ||
+            ""
+          ).toLowerCase();
+
+          if (itemName.includes(lowerText) || category.includes(lowerText)) {
+            results.push({
+              id: doc.id,
+              name: data.itemName || "Unnamed Item",
+              category: data.categoryId || data.category || "others",
+              image: data.photoUrl || data.imageUrl || undefined,
+              price: data.pricePerHour ?? data.price,
+              distance: data.distance || data.block || undefined,
+            });
+          }
+        });
+
+        setSuggestions(results.slice(0, 8));
+        setStatus("success");
+      } catch (err: any) {
+        console.error("[useSuggestions] Firestore error:", err);
+        setStatus("error");
       }
     }, 250);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      if (controllerRef.current) controllerRef.current.abort();
     };
-  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchText]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 // ── useKeyboardNav ────────────────────────────────────────────────────────────
-// Returns a handleKeyDown to attach to the search input
+// Returns a handleKeyDown to attach to the search input for A11Y keyboard nav.
 
 export function useKeyboardNav(itemCount: number) {
   const router = useRouter();
-  const { activeIndex, setActiveIndex, suggestions, query, executeSearch, close } =
-    useSearchStore();
+  const {
+    activeIndex,
+    setActiveIndex,
+    suggestions,
+    query: searchText,
+    executeSearch,
+    close,
+  } = useSearchStore();
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     switch (e.key) {
@@ -76,8 +117,8 @@ export function useKeyboardNav(itemCount: number) {
         e.preventDefault();
         if (activeIndex >= 0 && suggestions[activeIndex]) {
           executeSearch(suggestions[activeIndex].name, router);
-        } else if (query.trim()) {
-          executeSearch(query, router);
+        } else if (searchText.trim()) {
+          executeSearch(searchText, router);
         }
         break;
       case "Escape":

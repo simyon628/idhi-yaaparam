@@ -65,7 +65,7 @@ export default function ItemLoading() {
             </div>
 
             {/* Fixed Action Bar Skeleton */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-indigo-50 px-5 py-4 max-w-md mx-auto z-50 pb-safe">
+            <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-blue-50 px-5 py-4 max-w-md mx-auto z-50 pb-safe">
                 <div className="w-full h-14 bg-slate-200 rounded-2xl" />
             </div>
         </div>

@@ -13,8 +13,8 @@ export function ContextBar({ block, labTime, userRoll }: ContextBarProps) {
         <div className="fixed top-0 left-0 right-0 z-50 glass border-b border-slate-700/50 px-5 py-3.5 flex items-center justify-between max-w-md mx-auto">
             {/* Left: Location */}
             <div className="flex items-center gap-2.5">
-                <div className="bg-indigo-500/15 border border-indigo-500/25 p-2 rounded-xl">
-                    <MapPin className="w-4 h-4 text-indigo-400" />
+                <div className="bg-blue-500/15 border border-blue-500/25 p-2 rounded-xl">
+                    <MapPin className="w-4 h-4 text-blue-400" />
                 </div>
                 <div>
                     <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Location</p>

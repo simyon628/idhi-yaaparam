@@ -78,7 +78,7 @@ export default function SearchDropdownContent() {
                 <button
                   key={sug.label}
                   onClick={() => { close(); router.push(sug.href); }}
-                  className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 transition-colors text-left"
+                  className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 transition-colors text-left"
                 >
                   <sug.icon className="w-4 h-4 text-gray-400" />
                   <span className="text-sm font-semibold">{sug.label}</span>
@@ -99,7 +99,7 @@ export default function SearchDropdownContent() {
                   onClick={() => { close(); router.push(cat.href); }}
                   className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 text-gray-700 transition-colors text-left w-full"
                 >
-                  <div className="bg-indigo-50 p-1.5 rounded-lg text-indigo-600">
+                  <div className="bg-blue-50 p-1.5 rounded-lg text-blue-600">
                     <Grid className="w-4 h-4" />
                   </div>
                   <span className="text-sm font-semibold flex-1">{cat.label}</span>

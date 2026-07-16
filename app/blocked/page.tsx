@@ -32,7 +32,7 @@ export default function BlockedPage() {
                 <div className="pt-4 border-t border-rose-50/50">
                     <Link
                         href="/login"
-                        className="block text-indigo-500 text-[13px] font-bold hover:text-indigo-600 transition-colors"
+                        className="block text-blue-500 text-[13px] font-bold hover:text-blue-600 transition-colors"
                     >
                         Sign in with a different registered number
                     </Link>

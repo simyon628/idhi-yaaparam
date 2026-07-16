@@ -37,7 +37,7 @@ const categories = [
     id: 'cat-geometry',
     name: 'Geometry Set',
     icon: 'Triangle',
-    color: 'bg-purple-50 text-purple-600',
+    color: 'bg-blue-50 text-blue-600',
     keywords: ['geometry', 'compass', 'protractor', 'set square'],
   },
   {

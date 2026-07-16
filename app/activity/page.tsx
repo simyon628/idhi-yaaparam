@@ -24,10 +24,10 @@ interface ActivityItem {
 }
 
 const EVENT_CONFIG = {
-    listed: { label: "just listed", icon: Tag, color: "bg-indigo-50 text-indigo-600 border-indigo-100", dot: "bg-indigo-500" },
+    listed: { label: "just listed", icon: Tag, color: "bg-blue-50 text-blue-600 border-blue-100", dot: "bg-blue-500" },
     borrowed: { label: "is borrowing", icon: Package, color: "bg-amber-50 text-amber-600 border-amber-100", dot: "bg-amber-500" },
     returned: { label: "returned", icon: RefreshCw, color: "bg-emerald-50 text-emerald-600 border-emerald-100", dot: "bg-emerald-500" },
-    completed: { label: "completed rental for", icon: CheckCircle2, color: "bg-violet-50 text-violet-600 border-violet-100", dot: "bg-violet-500" },
+    completed: { label: "completed rental for", icon: CheckCircle2, color: "bg-blue-50 text-blue-600 border-blue-100", dot: "bg-blue-500" },
 };
 
 function timeAgo(ts: Timestamp | Date): string {
@@ -110,7 +110,7 @@ export default function ActivityFeedPage() {
                 {/* Feed */}
                 {loading ? (
                     <div className="flex justify-center py-16">
-                        <Loader2 className="w-7 h-7 animate-spin text-indigo-400" />
+                        <Loader2 className="w-7 h-7 animate-spin text-blue-400" />
                     </div>
                 ) : events.length === 0 ? (
                     <div className="text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-sm">
@@ -149,7 +149,7 @@ export default function ActivityFeedPage() {
                                                         <span className={`font-bold text-[11px] px-1.5 py-0.5 rounded-full border ${config.color}`}>
                                                             {config.label}
                                                         </span>{" "}
-                                                        <span className="text-indigo-600">{event.itemName}</span>
+                                                        <span className="text-blue-600">{event.itemName}</span>
                                                     </p>
                                                     <div className="flex items-center gap-1.5 mt-1.5">
                                                         <Clock className="w-3 h-3 text-slate-300" />
@@ -161,7 +161,7 @@ export default function ActivityFeedPage() {
                                                 {event.rentalId && (
                                                     <Link
                                                         href={`/rentals/${event.rentalId}`}
-                                                        className="shrink-0 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[9px] font-black text-slate-500 uppercase tracking-wider hover:border-indigo-200 hover:text-indigo-600 transition-colors active:scale-95"
+                                                        className="shrink-0 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[9px] font-black text-slate-500 uppercase tracking-wider hover:border-blue-200 hover:text-blue-600 transition-colors active:scale-95"
                                                     >
                                                         View
                                                     </Link>

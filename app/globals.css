@@ -12,8 +12,8 @@
   --iy-surface: #F3F4F6; /* Soft Gray */
   --iy-card: #FFFFFF;
   --iy-border: rgba(79, 70, 229, 0.08); /* Indigo border */
-  --iy-primary: #4F46E5; /* Deep Indigo */
-  --iy-primary-mid: #6366F1;
+  --iy-primary: #0B57D0; /* Deep Indigo */
+  --iy-primary-mid: #0B57D0;
   --iy-primary-light: #EEF2FF;
   --iy-amber: #F59E0B;
   --iy-amber-light: #FEF3C7;
@@ -21,8 +21,8 @@
   --iy-emerald-light: #D1FAE5;
   --iy-coral: #EF4444;
   --iy-coral-light: #FEE2E2;
-  --iy-violet: #8B5CF6; /* Secondary Violet */
-  --iy-violet-light: #EDE9FE;
+  --iy-blue: #0B57D0; /* Secondary Violet */
+  --iy-blue-light: #EDE9FE;
   --iy-text1: #111827;
   --iy-text2: #4B5563;
   --iy-text3: #9CA3AF;
@@ -264,7 +264,7 @@
 }
 
 /* Specific button gradients from reference image */
-.gradient-indigo {
+.gradient-blue {
   /* The "Sell" button / "Get Started" button (Purple/Blue) */
   background: linear-gradient(135deg, hsl(255, 85%, 70%) 0%, hsl(228, 80%, 64%) 100%);
 }
@@ -284,7 +284,7 @@
 }
 
 /* ─── Shadows ────────────────────────────────────────────────────────────── */
-.shadow-indigo {
+.shadow-blue {
   box-shadow: 0 8px 24px -6px rgba(110, 115, 200, 0.5);
 }
 
@@ -423,7 +423,7 @@
 /* ─── Badges ───────────────────────────────────────────────────────────────── */
 .badge-trust  { @apply bg-emerald-100 text-emerald-700 border border-emerald-200; }
 .badge-amber  { @apply bg-orange-100 text-orange-700 border border-orange-200; }
-.badge-indigo { @apply bg-blue-100 text-blue-700 border border-blue-200; }
+.badge-blue { @apply bg-blue-100 text-blue-700 border border-blue-200; }
 .badge-rose   { @apply bg-rose-100 text-rose-700 border border-rose-200; }
 
 /* ─── Product Card Animations (defined once here, not per-card) ──────────── */

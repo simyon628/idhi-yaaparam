@@ -23,7 +23,7 @@ export default function GroupRentalsPage() {
                 </div>
 
                 {/* Explainer Banner */}
-                <div className="gradient-indigo rounded-[2rem] p-6 text-white relative overflow-hidden shadow-indigo">
+                <div className="gradient-blue rounded-[2rem] p-6 text-white relative overflow-hidden shadow-blue">
                     <div className="absolute top-0 right-0 w-28 h-28 bg-white/10 rounded-full blur-2xl -mr-8 -mt-8" />
                     <Users className="w-10 h-10 mb-3 opacity-80" />
                     <h2 className="text-lg font-black mb-2">Perfect for Lab Kits!</h2>
@@ -34,20 +34,20 @@ export default function GroupRentalsPage() {
 
                 <div className="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-sm space-y-4">
                     <div className="flex items-center gap-3 text-slate-700">
-                        <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                            <span className="font-black text-indigo-600 text-sm">1</span>
+                        <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                            <span className="font-black text-blue-600 text-sm">1</span>
                         </div>
                         <p className="text-sm font-bold">Owner posts the item as a Group Rental</p>
                     </div>
                     <div className="flex items-center gap-3 text-slate-700">
-                        <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                            <span className="font-black text-indigo-600 text-sm">2</span>
+                        <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                            <span className="font-black text-blue-600 text-sm">2</span>
                         </div>
                         <p className="text-sm font-bold">Up to 5 students can each request it for different time slots</p>
                     </div>
                     <div className="flex items-center gap-3 text-slate-700">
-                        <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                            <span className="font-black text-indigo-600 text-sm">3</span>
+                        <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                            <span className="font-black text-blue-600 text-sm">3</span>
                         </div>
                         <p className="text-sm font-bold">Each borrower returns directly to the next borrower in sequence</p>
                     </div>
@@ -71,7 +71,7 @@ export default function GroupRentalsPage() {
 
                 <button
                     onClick={() => router.push("/rentals/new")}
-                    className="w-full h-14 rounded-2xl gradient-indigo text-white font-black shadow-indigo flex items-center justify-center gap-2"
+                    className="w-full h-14 rounded-2xl gradient-blue text-white font-black shadow-blue flex items-center justify-center gap-2"
                 >
                     Post a Standard Rental Instead
                 </button>

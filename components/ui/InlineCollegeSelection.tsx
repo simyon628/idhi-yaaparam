@@ -139,25 +139,25 @@ export function InlineCollegeSelection() {
         <div className="w-full text-left animate-in fade-in slide-in-from-top-4 duration-500">
             {/* ── State 1: Still detecting in background ── */}
             {isStillDetecting && (
-                <div className="flex flex-col items-center justify-center py-6 gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                    <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
-                    <p className="text-indigo-800 font-bold text-center px-4">Detecting your college…</p>
+                <div className="flex flex-col items-center justify-center py-6 gap-3 bg-blue-50 border border-blue-100 rounded-2xl">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                    <p className="text-blue-800 font-bold text-center px-4">Detecting your college…</p>
                 </div>
             )}
 
             {/* ── State 2: Single Confirmation ── */}
             {showSingleConfirmation && decision?.mode === "single" && (
-                <div className="bg-white border-2 border-indigo-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-indigo-500/10 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+                <div className="bg-white border-2 border-blue-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-blue-500/10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
                     <div className="flex flex-col gap-3 relative z-10">
                         <div className="flex items-start gap-3">
-                            <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center shrink-0 border border-indigo-100 shadow-inner">
-                                <CheckCircle2 className="w-6 h-6 text-indigo-600" />
+                            <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0 border border-blue-100 shadow-inner">
+                                <CheckCircle2 className="w-6 h-6 text-blue-600" />
                             </div>
                             <div>
                                 <p className="text-sm font-bold text-slate-800 leading-tight mb-2">
                                     We found a college near you:<br />
-                                    <span className="text-indigo-600 font-black">{decision.college.name}</span> <br />
+                                    <span className="text-blue-600 font-black">{decision.college.name}</span> <br />
                                     <span className="text-xs text-slate-500">{formatDistance(decision.college.distanceM)}</span>
                                 </p>
                             </div>
@@ -165,7 +165,7 @@ export function InlineCollegeSelection() {
                         <div className="flex flex-col gap-2 mt-2">
                             <button
                                 onClick={() => confirmAutoDetected(decision.college)}
-                                className="w-full py-4 gradient-indigo text-white font-black text-base rounded-2xl shadow-indigo transition-all active:scale-95"
+                                className="w-full py-4 gradient-blue text-white font-black text-base rounded-2xl shadow-blue transition-all active:scale-95"
                             >
                                 Confirm this is my college
                             </button>
@@ -182,10 +182,10 @@ export function InlineCollegeSelection() {
 
             {/* ── State 3: Multiple Confirmation ── */}
             {showMultipleConfirmation && decision?.mode === "multiple" && (
-                <div className="bg-white border-2 border-indigo-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-indigo-500/10 relative overflow-hidden">
+                <div className="bg-white border-2 border-blue-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-blue-500/10 relative overflow-hidden">
                     <div className="flex flex-col gap-3 relative z-10">
                         <div className="flex items-center gap-2 mb-2">
-                            <MapPin className="w-5 h-5 text-indigo-600" />
+                            <MapPin className="w-5 h-5 text-blue-600" />
                             <h3 className="font-bold text-slate-800">Colleges near you</h3>
                         </div>
 
@@ -194,9 +194,9 @@ export function InlineCollegeSelection() {
                                 <button
                                     key={col.id}
                                     onClick={() => confirmAutoDetected(col)}
-                                    className="text-left w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all group flex flex-col gap-1 active:scale-95"
+                                    className="text-left w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-300 hover:bg-blue-50/50 transition-all group flex flex-col gap-1 active:scale-95"
                                 >
-                                    <span className="font-bold text-slate-800 group-hover:text-indigo-700 leading-snug">{col.name}</span>
+                                    <span className="font-bold text-slate-800 group-hover:text-blue-700 leading-snug">{col.name}</span>
                                     <span className="text-xs font-semibold text-slate-500">{formatDistance(col.distanceM)}</span>
                                 </button>
                             ))}
@@ -230,7 +230,7 @@ export function InlineCollegeSelection() {
                     <div>
                         <label className="text-slate-700 font-black text-sm ml-1 block mb-2 uppercase tracking-wider">Search College</label>
                         <div className="relative">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-300" />
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
                             <input
                                 ref={searchInputRef}
                                 type="text"
@@ -238,7 +238,7 @@ export function InlineCollegeSelection() {
                                 value={searchQuery}
                                 onChange={e => setSearchQuery(e.target.value)}
                                 disabled={isFetchingList}
-                                className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all outline-none shadow-inner"
+                                className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all outline-none shadow-inner"
                             />
                         </div>
                     </div>
@@ -246,7 +246,7 @@ export function InlineCollegeSelection() {
                     {/* Inline Search Results */}
                     {isFetchingList ? (
                         <div className="flex justify-center py-4">
-                            <Loader2 className="w-6 h-6 animate-spin text-indigo-300" />
+                            <Loader2 className="w-6 h-6 animate-spin text-blue-300" />
                         </div>
                     ) : searchQuery.trim() !== "" && filteredColleges.length === 0 ? (
                         <p className="text-center text-slate-400 py-4 text-xs font-bold">
@@ -258,13 +258,13 @@ export function InlineCollegeSelection() {
                                 <button
                                     key={college.id}
                                     onClick={() => handleManualSelect(college)}
-                                    className="w-full text-left p-3 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-indigo-400 transition-all flex items-center gap-3 active:scale-[0.98] group"
+                                    className="w-full text-left p-3 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-3 active:scale-[0.98] group"
                                 >
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-indigo-50 text-indigo-600 font-black group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50 text-blue-600 font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                         <span className="text-base">{college.name.charAt(0)}</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-slate-700 text-sm group-hover:text-indigo-900 transition-colors line-clamp-1">{college.name}</p>
+                                        <p className="font-bold text-slate-700 text-sm group-hover:text-blue-900 transition-colors line-clamp-1">{college.name}</p>
                                         <div className="flex items-center gap-1 text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
                                             <span>{college.city || "Campus"}</span>
                                             {college.state && (

@@ -74,7 +74,7 @@ export default function NewReportPage() {
     if (!authChecked) {
         return (
             <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50">
-                <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
             </div>
         );
     }
@@ -86,10 +86,10 @@ export default function NewReportPage() {
             <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-pink-200/30 blob rounded-full mix-blend-multiply filter blur-3xl animate-float" style={{ animationDelay: "2s" }} />
 
             {/* Header */}
-            <header className="px-5 pt-12 pb-6 flex items-center gap-4 bg-white/60 backdrop-blur-md sticky top-0 z-20 border-b border-indigo-100 shadow-sm">
+            <header className="px-5 pt-12 pb-6 flex items-center gap-4 bg-white/60 backdrop-blur-md sticky top-0 z-20 border-b border-blue-100 shadow-sm">
                 <button
                     onClick={() => router.back()}
-                    className="p-2.5 bg-white border border-indigo-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-indigo-600 shadow-sm"
+                    className="p-2.5 bg-white border border-blue-100 rounded-xl active:scale-95 transition-all text-slate-500 hover:text-blue-600 shadow-sm"
                 >
                     <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -116,7 +116,7 @@ export default function NewReportPage() {
                     <input
                         type="text"
                         placeholder="E.g., Casio fx-991 from John"
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-rose-300 focus:ring-4 focus:ring-rose-50 rounded-2xl h-14 px-4 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-rose-300 focus:ring-4 focus:ring-rose-50 rounded-2xl h-14 px-4 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner transition-all"
                         value={targetName}
                         onChange={(e) => setTargetName(e.target.value)}
                     />
@@ -128,7 +128,7 @@ export default function NewReportPage() {
                     <select
                         value={reason}
                         onChange={e => setReason(e.target.value)}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-rose-300 focus:ring-4 focus:ring-rose-50 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-rose-300 focus:ring-4 focus:ring-rose-50 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner transition-all"
                     >
                         {REASONS.map(r => <option key={r} value={r}>{r}</option>)}
                     </select>
@@ -143,7 +143,7 @@ export default function NewReportPage() {
                     <textarea
                         placeholder="Explain what happened..."
                         rows={4}
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-rose-300 focus:ring-4 focus:ring-rose-50 rounded-2xl p-4 text-slate-800 placeholder-slate-400 font-medium outline-none shadow-inner transition-all resize-none"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-rose-300 focus:ring-4 focus:ring-rose-50 rounded-2xl p-4 text-slate-800 placeholder-slate-400 font-medium outline-none shadow-inner transition-all resize-none"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />

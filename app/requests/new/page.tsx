@@ -77,13 +77,13 @@ export default function NewRequestPage() {
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 relative">
-             <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-indigo-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
-                <button onClick={() => router.back()} className="p-2.5 bg-white border border-indigo-100 rounded-xl active:scale-95 transition-all text-slate-500 shadow-sm">
+             <header className="px-5 pt-12 pb-6 flex items-center gap-4 border-b border-blue-100 bg-white/60 backdrop-blur-md sticky top-0 z-20">
+                <button onClick={() => router.back()} className="p-2.5 bg-white border border-blue-100 rounded-xl active:scale-95 transition-all text-slate-500 shadow-sm">
                     <ChevronLeft className="w-5 h-5" />
                 </button>
                 <div>
                     <h1 className="text-2xl font-black text-slate-800 leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>Request Item</h1>
-                    <p className="text-[11px] font-black text-indigo-500 uppercase tracking-widest mt-1.5">Ask your college mates</p>
+                    <p className="text-[11px] font-black text-blue-500 uppercase tracking-widest mt-1.5">Ask your college mates</p>
                 </div>
             </header>
 
@@ -105,7 +105,7 @@ export default function NewRequestPage() {
                     <input
                         type="text"
                         placeholder="e.g. Need Casio fx-991 for M1 exam"
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none transition-all shadow-inner"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
@@ -121,7 +121,7 @@ export default function NewRequestPage() {
                                 type="button"
                                 onClick={() => setCategory(c.name)}
                                 className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[11px] font-black uppercase tracking-wider transition-all ${
-                                    category === c.name ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo/20" : "bg-white border-slate-100 text-slate-500 hover:border-indigo-200"
+                                    category === c.name ? "bg-blue-600 border-blue-600 text-white shadow-md shadow-blue/20" : "bg-white border-slate-100 text-slate-500 hover:border-blue-200"
                                 }`}
                             >
                                 <span className={`text-sm ${category === c.name ? "opacity-100" : "opacity-70 saturate-50"}`}>{c.icon}</span>
@@ -141,7 +141,7 @@ export default function NewRequestPage() {
                         value={block}
                         onChange={e => setBlock(e.target.value)}
                         placeholder="e.g. Main Block canteen, Library..."
-                        className="w-full bg-white/70 backdrop-blur-md border border-indigo-50 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner"
+                        className="w-full bg-white/70 backdrop-blur-md border border-blue-50 rounded-2xl h-14 px-5 text-slate-800 placeholder-slate-400 font-bold outline-none shadow-inner"
                     />
                     <div className="flex flex-wrap gap-1.5 mt-2">
                         {dynamicBlocks.slice(0, 4).map(b => (
@@ -163,7 +163,7 @@ export default function NewRequestPage() {
                                 onClick={() => setUrgency(u as any)}
                                 className={`flex-1 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all ${
                                     urgency === u 
-                                        ? u === "Urgent" ? "bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-200" : "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-200"
+                                        ? u === "Urgent" ? "bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-200" : "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200"
                                         : "bg-white border-slate-100 text-slate-400"
                                 }`}
                             >
@@ -179,7 +179,7 @@ export default function NewRequestPage() {
                     <select
                         value={department}
                         onChange={e => setDepartment(e.target.value)}
-                        className="w-full bg-white/70 border border-indigo-50 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner"
+                        className="w-full bg-white/70 border border-blue-50 rounded-2xl h-14 px-4 text-slate-700 font-bold outline-none appearance-none shadow-inner"
                     >
                         {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
@@ -190,7 +190,7 @@ export default function NewRequestPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full h-16 rounded-2xl gradient-indigo text-white font-black text-base shadow-indigo flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all"
+                        className="w-full h-16 rounded-2xl gradient-blue text-white font-black text-base shadow-blue flex items-center justify-center gap-2 disabled:opacity-50 active:scale-[0.98] transition-all"
                     >
                         {loading ? <Loader2 className="animate-spin w-6 h-6" /> : <><Send className="w-5 h-5" /> Post Request</>}
                     </button>
