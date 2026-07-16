@@ -15,10 +15,9 @@ import {
 
 // ── useSuggestions ────────────────────────────────────────────────────────────
 // Watches the search query in Zustand store, debounces 250ms, queries Firestore
-// items in-memory-filtered for matching name/category.
+// rentals in-memory-filtered for matching name/category.
 
 export function useSuggestions() {
-  // Renamed store's `query` → `searchText` to avoid shadowing Firestore `query`
   const { query: searchText, setSuggestions, setStatus } = useSearchStore();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -40,13 +39,12 @@ export function useSuggestions() {
           return;
         }
 
-        const itemsRef = collection(db as any, "items");
+        // The collection name is "rentals" and active items have status "available"
+        const rentalsRef = collection(db as any, "rentals");
 
-        // Fetch active items (up to 80) then filter client-side.
-        // For production scale, wire Algolia/Typesense here.
         const q = firestoreQuery(
-          itemsRef,
-          where("status", "==", "active"),
+          rentalsRef,
+          where("status", "==", "available"),
           limit(80)
         );
         const snapshot = await getDocs(q);
