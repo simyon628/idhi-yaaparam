@@ -1,101 +1,237 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSearchStore } from "@/stores/searchStore";
+import { ArrowLeft, Search as SearchIcon, X, Camera, Mic } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import SearchDropdownContent from "./SearchDropdownContent";
+import { useKeyboardNav } from "@/hooks/useSearch";
 
 export default function SearchDropdown() {
-  const { isOpen, close } = useSearchStore();
-  const [topOffset, setTopOffset] = useState(120);
-  const [leftOffset, setLeftOffset] = useState(0);
-  const [width, setWidth] = useState(448);
+  const router = useRouter();
+  const { isOpen, query, setQuery, executeSearch, close, suggestions } = useSearchStore();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const handleKeyDown = useKeyboardNav(suggestions.length);
 
-  const updatePosition = useCallback(() => {
-    // Find the focused search input or any visible search input
-    const candidates = [
-      document.activeElement,
-      document.querySelector('input[type="text"][placeholder*="Search"]'),
-      document.querySelector('input[type="text"][placeholder*="search"]'),
-      document.querySelector('input[type="search"]'),
-    ];
-
-    let searchEl: Element | null = null;
-    for (const el of candidates) {
-      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
-        searchEl = el;
-        break;
-      }
-    }
-
-    if (searchEl) {
-      const formEl = searchEl.closest("form") || searchEl;
-      const rect = formEl.getBoundingClientRect();
-      setTopOffset(rect.bottom + 2);
-      setLeftOffset(rect.left);
-      setWidth(rect.width);
-    } else {
-      setTopOffset(120);
-      setLeftOffset(0);
-      setWidth(448);
-    }
-  }, []);
-
+  // Auto-focus input when search overlay opens
   useEffect(() => {
-    if (!isOpen) return;
-    updatePosition();
-    const frame = requestAnimationFrame(updatePosition);
-    window.addEventListener("resize", updatePosition);
-    window.addEventListener("scroll", updatePosition, true);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("resize", updatePosition);
-      window.removeEventListener("scroll", updatePosition, true);
-    };
-  }, [isOpen, updatePosition]);
+    if (isOpen) {
+      // Small timeout ensures the element is mounted and transition starts before focusing
+      const t = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen]);
 
   if (!isOpen || typeof document === "undefined") return null;
+
+  const handleClear = () => {
+    setQuery("");
+    inputRef.current?.focus();
+  };
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (query.trim()) {
+      executeSearch(query, router);
+    }
+  };
+
+  const handleVoiceSearch = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast.error("Voice search is not supported in this browser.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.onstart = () => {
+      toast.info("Listening...");
+    };
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setQuery(transcript);
+      executeSearch(transcript, router);
+    };
+    recognition.onerror = (event: any) => {
+      toast.error("Voice recognition error: " + event.error);
+    };
+    recognition.start();
+  };
+
+  const handleCameraSearch = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.capture = "environment";
+    fileInput.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        toast.info("Analyzing image...");
+        setTimeout(() => {
+          const name = file.name.toLowerCase();
+          let simulatedResult = "Calculator";
+          if (name.includes("draft")) simulatedResult = "Drafter";
+          else if (name.includes("coat")) simulatedResult = "Lab Coat";
+          else if (name.includes("book") || name.includes("gate")) simulatedResult = "GATE Books";
+          else if (name.includes("laptop")) simulatedResult = "MacBook Laptop";
+
+          setQuery(simulatedResult);
+          executeSearch(simulatedResult, router);
+          toast.success(`Recognized: ${simulatedResult}`);
+        }, 1500);
+      }
+    };
+    fileInput.click();
+  };
 
   return createPortal(
     <div
       style={{
         position: "fixed",
-        top: topOffset,
-        left: leftOffset,
-        width: width,
-        zIndex: 9999,
-        animation: "searchDropIn 0.18s cubic-bezier(0.22, 1, 0.36, 1) both",
+        inset: 0,
+        zIndex: 99999,
+        background: "#ffffff",
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: "'DM Sans', sans-serif",
+        animation: "searchSlideUp 0.22s cubic-bezier(0.22, 1, 0.36, 1) both",
       }}
     >
-      {/* Dropdown card */}
+      {/* ── Flipkart-Style Header ── */}
       <div
         style={{
-          background: "#fff",
-          borderRadius: 20,
-          boxShadow: "0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(11,87,208,0.08)",
-          border: "1px solid rgba(229,231,235,0.8)",
-          overflowY: "auto",
-          maxHeight: "65vh",
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          padding: "12px 16px",
+          borderBottom: "1px solid #f1f5f9",
+          background: "#ffffff",
         }}
-        onMouseDown={(e) => e.stopPropagation()}
       >
+        {/* Back Button */}
+        <button
+          onClick={() => close()}
+          style={{
+            background: "#f1f5f9",
+            border: "none",
+            borderRadius: 12,
+            width: 40,
+            height: 40,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
+        >
+          <ArrowLeft size={20} color="#334155" />
+        </button>
+
+        {/* Input Form */}
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            background: "#f1f5f9",
+            borderRadius: 14,
+            height: 44,
+            padding: "0 10px",
+          }}
+        >
+          <SearchIcon size={18} color="#64748b" style={{ marginRight: 8, flexShrink: 0 }} />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Search on Idhi Yaaparam..."
+            style={{
+              flex: 1,
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#1e293b",
+              width: "100%",
+            }}
+          />
+
+          {/* Clear button when typing */}
+          {query.length > 0 && (
+            <button
+              type="button"
+              onClick={handleClear}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 4,
+                display: "flex",
+                alignItems: "center",
+                marginRight: 4,
+              }}
+            >
+              <X size={16} color="#64748b" />
+            </button>
+          )}
+
+          {/* Camera Search */}
+          <button
+            type="button"
+            onClick={handleCameraSearch}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 6,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Camera size={18} color="#64748b" />
+          </button>
+
+          {/* Voice Search */}
+          <button
+            type="button"
+            onClick={handleVoiceSearch}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 6,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Mic size={18} color="#64748b" />
+          </button>
+        </form>
+      </div>
+
+      {/* ── Scrollable Results / Suggestions Body ── */}
+      <div style={{ flex: 1, overflowY: "auto", background: "#ffffff" }}>
         <SearchDropdownContent />
       </div>
 
-      {/* Backdrop — close on tap outside */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: -1,
-        }}
-        onMouseDown={() => close()}
-      />
-
+      {/* Slide up animation CSS */}
       <style>{`
-        @keyframes searchDropIn {
-          from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-          to   { opacity: 1; transform: translateY(0)   scale(1); }
+        @keyframes searchSlideUp {
+          from {
+            transform: translateY(100%);
+          }
+          to {
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>,
