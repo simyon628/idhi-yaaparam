@@ -2,24 +2,24 @@
 
 import React, { useEffect, useRef } from "react";
 import { useSearchStore } from "@/stores/searchStore";
-import RecentList from "./RecentList";
-import SuggestionList from "./SuggestionList";
-import SearchSkeleton from "./SearchSkeleton";
-import { AlertCircle, User, List, Settings, MapPin, Grid } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Clock, X, Search, AlertCircle } from "lucide-react";
+import SuggestionList from "./SuggestionList";
+import TrendingList from "./TrendingList";
 
-const QUICK_SUGGESTIONS = [
-  { icon: User, label: "Profile", href: "/profile" },
-  { icon: List, label: "My Listings", href: "/profile" },
-  { icon: Settings, label: "Settings", href: "/profile" },
-  { icon: MapPin, label: "Near You", href: "/near-you" },
-];
-
-const QUICK_CATEGORIES = [
-  { label: "Rentals", href: "/rentals" },
-  { label: "Buy & Sell", href: "/rentals" },
-  { label: "Writing Services", href: "/writing" },
-];
+// ── Skeleton row ───────────────────────────────────────────────────────────
+function SkeletonRow() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px" }}>
+      <div style={{ width: 48, height: 48, borderRadius: 12, background: "#F1F5F9", flexShrink: 0 }} />
+      <div style={{ flex: 1 }}>
+        <div style={{ height: 14, background: "#F1F5F9", borderRadius: 6, marginBottom: 8, width: "70%" }} />
+        <div style={{ height: 10, background: "#F1F5F9", borderRadius: 6, width: "40%" }} />
+      </div>
+      <div style={{ width: 40, height: 36, background: "#F1F5F9", borderRadius: 8 }} />
+    </div>
+  );
+}
 
 export default function SearchDropdownContent() {
   const router = useRouter();
@@ -28,14 +28,17 @@ export default function SearchDropdownContent() {
     status,
     suggestions,
     activeIndex,
+    recentSearches,
     close,
     isOpen,
     executeSearch,
+    addRecent,
+    clearRecent,
   } = useSearchStore();
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Close on click outside
+  // Close on outside click
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: MouseEvent) => {
@@ -44,106 +47,180 @@ export default function SearchDropdownContent() {
       }
     };
     const t = setTimeout(() => document.addEventListener("mousedown", handler), 50);
-    return () => {
-      clearTimeout(t);
-      document.removeEventListener("mousedown", handler);
-    };
+    return () => { clearTimeout(t); document.removeEventListener("mousedown", handler); };
   }, [isOpen, close]);
 
   // Close on Escape
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, close]);
 
   const hasQuery = query.trim().length > 0;
+  const hasRecents = recentSearches.length > 0;
 
   return (
-    <div ref={contentRef} className="bg-white rounded-b-2xl shadow-xl border border-gray-100 overflow-hidden">
-      {/* Empty Query State: Command Center */}
+    <div ref={contentRef} style={{ background: "#fff", borderRadius: "0 0 20px 20px", overflow: "hidden" }}>
+
+      {/* ── EMPTY QUERY STATE: Recents + Trending ── */}
       {!hasQuery && (
-        <div className="py-2">
-          <RecentList />
-          <div className="h-px bg-gray-100 mx-4 my-2" />
-          
-          {/* Quick Suggestions */}
-          <div className="px-4 pb-2">
-            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Suggestions</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {QUICK_SUGGESTIONS.map((sug) => (
+        <>
+          {/* Recent Searches */}
+          {hasRecents && (
+            <div>
+              <div style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "12px 16px 6px",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <Clock size={11} style={{ color: "#94a3b8" }} />
+                  <span style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1.5px" }}>
+                    Recent Searches
+                  </span>
+                </div>
                 <button
-                  key={sug.label}
-                  onClick={() => { close(); router.push(sug.href); }}
-                  className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 transition-colors text-left"
+                  onClick={clearRecent}
+                  style={{ fontSize: 11, color: "#0B57D0", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}
                 >
-                  <sug.icon className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm font-semibold">{sug.label}</span>
+                  Clear all
                 </button>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          <div className="h-px bg-gray-100 mx-4 my-2" />
-
-          {/* Quick Categories */}
-          <div className="px-4 pb-2">
-            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Categories</h3>
-            <div className="flex flex-col gap-1">
-              {QUICK_CATEGORIES.map((cat) => (
-                <button
-                  key={cat.label}
-                  onClick={() => { close(); router.push(cat.href); }}
-                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 text-gray-700 transition-colors text-left w-full"
+              {recentSearches.slice(0, 5).map((r) => (
+                <div
+                  key={r.id}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    padding: "9px 16px", cursor: "pointer",
+                  }}
+                  onClick={() => executeSearch(r.query, router)}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.background = "#F8FAFF")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.background = "transparent")}
                 >
-                  <div className="bg-blue-50 p-1.5 rounded-lg text-blue-600">
-                    <Grid className="w-4 h-4" />
+                  <div style={{
+                    width: 32, height: 32, borderRadius: 10, background: "#F1F5F9",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  }}>
+                    <Clock size={14} style={{ color: "#94a3b8" }} />
                   </div>
-                  <span className="text-sm font-semibold flex-1">{cat.label}</span>
-                </button>
+                  <span style={{ flex: 1, fontSize: 14, color: "#334155", fontWeight: 500, fontFamily: "'DM Sans', sans-serif" }}>
+                    {r.query}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Remove just this item
+                      const next = recentSearches.filter((x) => x.id !== r.id);
+                      useSearchStore.setState({ recentSearches: next });
+                    }}
+                    style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}
+                  >
+                    <X size={12} style={{ color: "#CBD5E1" }} />
+                  </button>
+                </div>
               ))}
+
+              <div style={{ height: 1, background: "#F1F5F9", margin: "4px 0" }} />
+            </div>
+          )}
+
+          {/* Trending + Categories */}
+          <TrendingList />
+        </>
+      )}
+
+      {/* ── LOADING: Skeleton rows ── */}
+      {hasQuery && status === "loading" && (
+        <div>
+          {[1, 2, 3, 4].map((i) => <SkeletonRow key={i} />)}
+        </div>
+      )}
+
+      {/* ── SUCCESS: Results ── */}
+      {hasQuery && status === "success" && suggestions.length > 0 && (
+        <div>
+          {/* Results header */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "10px 16px 4px",
+          }}>
+            <span style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1.5px" }}>
+              {suggestions.length} result{suggestions.length !== 1 ? "s" : ""}
+            </span>
+            <button
+              onClick={() => executeSearch(query, router)}
+              style={{
+                fontSize: 11, fontWeight: 700, color: "#0B57D0",
+                background: "none", border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 3,
+              }}
+            >
+              See all <Search size={10} />
+            </button>
+          </div>
+
+          <SuggestionList items={suggestions} activeIndex={activeIndex} query={query} />
+
+          {/* Search all footer */}
+          <div
+            onClick={() => executeSearch(query, router)}
+            style={{
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "12px 16px",
+              cursor: "pointer",
+              background: "#F8FAFF",
+              borderTop: "1px solid #EEF2FF",
+            }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.background = "#EEF2FF")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.background = "#F8FAFF")}
+          >
+            <div style={{
+              width: 36, height: 36, borderRadius: 10,
+              background: "linear-gradient(135deg, #0B57D0, #1A73E8)",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
+              <Search size={16} style={{ color: "#fff" }} />
+            </div>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#0B57D0", fontFamily: "'DM Sans', sans-serif" }}>
+                Search for &ldquo;{query}&rdquo;
+              </div>
+              <div style={{ fontSize: 11, color: "#94a3b8" }}>See all matching rentals</div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Loading: Skeleton */}
-      {hasQuery && status === "loading" && <SearchSkeleton count={5} />}
-
-      {/* Success with results */}
-      {hasQuery && status === "success" && suggestions.length > 0 && (
-        <div className="py-2">
-          <div className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-            {suggestions.length} result{suggestions.length !== 1 ? "s" : ""}
-          </div>
-          <SuggestionList
-            items={suggestions}
-            activeIndex={activeIndex}
-            query={query}
-          />
-        </div>
-      )}
-
-      {/* Success with no results */}
+      {/* ── NO RESULTS ── */}
       {hasQuery && status === "success" && suggestions.length === 0 && (
-        <div className="py-12 text-center px-6">
-          <div className="text-4xl mb-3">🔍</div>
-          <div className="text-base font-bold text-gray-900 mb-1">
+        <div style={{ padding: "32px 20px", textAlign: "center" }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#0f172a", marginBottom: 6, fontFamily: "'Syne', sans-serif" }}>
             No results for &ldquo;{query}&rdquo;
           </div>
-          <div className="text-sm text-gray-500">
-            Try searching for Calculator, Lab Coat, or Drafter
+          <div style={{ fontSize: 13, color: "#64748b", marginBottom: 20, lineHeight: 1.5 }}>
+            Try searching for Calculator, Lab Coat, Drafter or Books
           </div>
+          <button
+            onClick={() => executeSearch(query, router)}
+            style={{
+              background: "linear-gradient(135deg, #0B57D0, #1A73E8)",
+              color: "#fff", border: "none", borderRadius: 12,
+              padding: "10px 24px", fontSize: 13, fontWeight: 700,
+              cursor: "pointer", boxShadow: "0 4px 12px rgba(11,87,208,0.25)",
+            }}
+          >
+            Search anyway →
+          </button>
         </div>
       )}
 
-      {/* Error state */}
+      {/* ── ERROR ── */}
       {status === "error" && (
-        <div className="p-4 flex items-center gap-2 text-red-500 text-sm">
-          <AlertCircle className="w-4 h-4" />
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 16px", color: "#EF4444", fontSize: 13 }}>
+          <AlertCircle size={16} />
           Something went wrong. Please try again.
         </div>
       )}

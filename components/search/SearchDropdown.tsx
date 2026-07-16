@@ -1,44 +1,58 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useSearchStore } from "@/stores/searchStore";
 import SearchDropdownContent from "./SearchDropdownContent";
 
-// Portal mounts to document.body — escapes all parent overflow/z-index stacking
 export default function SearchDropdown() {
-  const { isOpen } = useSearchStore();
+  const { isOpen, close } = useSearchStore();
   const [topOffset, setTopOffset] = useState(120);
+  const [leftOffset, setLeftOffset] = useState(0);
+  const [width, setWidth] = useState(448);
+
+  const updatePosition = useCallback(() => {
+    // Find the focused search input or any visible search input
+    const candidates = [
+      document.activeElement,
+      document.querySelector('input[type="text"][placeholder*="Search"]'),
+      document.querySelector('input[type="text"][placeholder*="search"]'),
+      document.querySelector('input[type="search"]'),
+    ];
+
+    let searchEl: Element | null = null;
+    for (const el of candidates) {
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+        searchEl = el;
+        break;
+      }
+    }
+
+    if (searchEl) {
+      const formEl = searchEl.closest("form") || searchEl;
+      const rect = formEl.getBoundingClientRect();
+      setTopOffset(rect.bottom + 2);
+      setLeftOffset(rect.left);
+      setWidth(rect.width);
+    } else {
+      setTopOffset(120);
+      setLeftOffset(0);
+      setWidth(448);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
-
-    const updatePosition = () => {
-      const activeEl = document.activeElement;
-      const isSearchInput = activeEl && (activeEl.tagName === "INPUT" || activeEl.getAttribute("type") === "search" || activeEl.getAttribute("inputmode") === "search");
-      
-      const searchInput = isSearchInput 
-        ? activeEl 
-        : document.querySelector('input[type="search"]') || 
-          document.querySelector('input[type="text"][placeholder*="Search"]') ||
-          document.querySelector('input[placeholder*="Search"]');
-
-      if (searchInput) {
-        const formEl = searchInput.closest("form") || searchInput;
-        const rect = formEl.getBoundingClientRect();
-        setTopOffset(rect.bottom);
-      } else {
-        setTopOffset(120);
-      }
-    };
-
     updatePosition();
     const frame = requestAnimationFrame(updatePosition);
-    
     window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
     };
-  }, [isOpen]);
+  }, [isOpen, updatePosition]);
 
   if (!isOpen || typeof document === "undefined") return null;
 
@@ -47,48 +61,43 @@ export default function SearchDropdown() {
       style={{
         position: "fixed",
         top: topOffset,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        left: leftOffset,
+        width: width,
         zIndex: 9999,
-        pointerEvents: "none", // let clicks through except on the card
+        animation: "searchDropIn 0.18s cubic-bezier(0.22, 1, 0.36, 1) both",
       }}
     >
-      {/* The actual dropdown card — centered like the rest of your max-w-md app */}
+      {/* Dropdown card */}
       <div
         style={{
-          maxWidth: 448,
-          margin: "0 auto",
-          pointerEvents: "auto",
-          padding: "0 20px", // Align with px-5 in TopBar
+          background: "#fff",
+          borderRadius: 20,
+          boxShadow: "0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(11,87,208,0.08)",
+          border: "1px solid rgba(229,231,235,0.8)",
+          overflowY: "auto",
+          maxHeight: "65vh",
         }}
+        onMouseDown={(e) => e.stopPropagation()}
       >
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: "0 0 20px 20px",
-            boxShadow: "0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(85,72,232,0.08)",
-            border: "1px solid rgba(229,231,235,0.8)",
-            borderTop: "none",
-            overflowY: "auto",
-            maxHeight: "60vh", // Prevent covering bottom nav
-          }}
-          // Stop clicks from bubbling to the transparent outer div
-          onMouseDown={(e) => e.stopPropagation()}
-        >
-          <SearchDropdownContent />
-        </div>
+        <SearchDropdownContent />
       </div>
 
-      {/* Transparent click-blocker below the card closes search on tap */}
+      {/* Backdrop — close on tap outside */}
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           inset: 0,
           zIndex: -1,
         }}
-        onMouseDown={() => useSearchStore.getState().close()}
+        onMouseDown={() => close()}
       />
+
+      <style>{`
+        @keyframes searchDropIn {
+          from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+          to   { opacity: 1; transform: translateY(0)   scale(1); }
+        }
+      `}</style>
     </div>,
     document.body
   );
