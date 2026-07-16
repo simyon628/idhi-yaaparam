@@ -135,7 +135,15 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
 
   // Merge real + mock items, prioritizing real
   const mockFallback = MOCK_ITEMS[slug] || [];
-  let allItems = firestoreItems.length > 0 ? firestoreItems : (isLoading ? [] : mockFallback) as any[];
+  const combined = [...firestoreItems];
+  if (!isLoading) {
+    mockFallback.forEach((mock) => {
+      if (!combined.some((item: any) => item.id === mock.id || item.itemName === mock.itemName)) {
+        combined.push(mock);
+      }
+    });
+  }
+  let allItems = combined;
 
   // Filter by branch
   if (activeBranch !== 'All') {
