@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSearchStore } from "@/stores/searchStore";
 import { ArrowLeft, Search as SearchIcon, X, Camera, Mic } from "lucide-react";
@@ -14,10 +14,12 @@ export default function SearchDropdown() {
   const { isOpen, query, setQuery, executeSearch, close, suggestions } = useSearchStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const handleKeyDown = useKeyboardNav(suggestions.length);
+  const [isClosing, setIsClosing] = useState(false);
 
   // Auto-focus input when search overlay opens
   useEffect(() => {
     if (isOpen) {
+      setIsClosing(false);
       const t = setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
@@ -26,6 +28,14 @@ export default function SearchDropdown() {
   }, [isOpen]);
 
   if (!isOpen || typeof document === "undefined") return null;
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      close();
+      setIsClosing(false);
+    }, 200); // matches animation duration
+  };
 
   const handleClear = () => {
     setQuery("");
@@ -98,8 +108,9 @@ export default function SearchDropdown() {
         backdropFilter: "blur(2px)",
         display: "flex",
         justifyContent: "center",
+        animation: isClosing ? "searchFadeOut 0.2s ease forwards" : "searchFadeIn 0.2s ease forwards",
       }}
-      onClick={() => close()}
+      onClick={handleClose}
     >
       <div
         onClick={(e) => e.stopPropagation()} // prevent clicking overlay from closing when clicking inside
@@ -116,7 +127,9 @@ export default function SearchDropdown() {
           flexDirection: "column",
           fontFamily: "'DM Sans', sans-serif",
           boxShadow: "0 0 40px rgba(0,0,0,0.15)",
-          animation: "searchSlideUpMobile 0.22s cubic-bezier(0.22, 1, 0.36, 1) both",
+          animation: isClosing
+            ? "searchFadeOutZoom 0.2s cubic-bezier(0.16, 1, 0.3, 1) both"
+            : "searchFadeInZoom 0.2s cubic-bezier(0.16, 1, 0.3, 1) both",
         }}
       >
         {/* ── Flipkart-Style Header ── */}
@@ -132,7 +145,7 @@ export default function SearchDropdown() {
         >
           {/* Back Button */}
           <button
-            onClick={() => close()}
+            onClick={handleClose}
             style={{
               background: "#f1f5f9",
               border: "none",
@@ -241,14 +254,34 @@ export default function SearchDropdown() {
         </div>
       </div>
 
-      {/* Slide up animation CSS */}
+      {/* Fade & Zoom transitions */}
       <style>{`
-        @keyframes searchSlideUpMobile {
+        @keyframes searchFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes searchFadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+        @keyframes searchFadeInZoom {
           from {
-            transform: translate(-50%, 100%);
+            opacity: 0;
+            transform: translate(-50%, 20px) scale(0.96);
           }
           to {
-            transform: translate(-50%, 0);
+            opacity: 1;
+            transform: translate(-50%, 0) scale(1);
+          }
+        }
+        @keyframes searchFadeOutZoom {
+          from {
+            opacity: 1;
+            transform: translate(-50%, 0) scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: translate(-50%, 20px) scale(0.96);
           }
         }
       `}</style>
