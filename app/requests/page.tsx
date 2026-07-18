@@ -39,9 +39,9 @@ export default function RequestsPage() {
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 pb-24">
-            <TopBar />
+            <TopBar hideSearch={true} />
 
-            <main className="mt-[80px] px-5 py-4 space-y-6">
+            <main className="mt-4 px-5 py-4 space-y-6">
                 <header className="animate-page-enter">
                     <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">Campus Needs</p>
                     <h1 className="text-3xl font-black text-slate-800 leading-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Requests</h1>

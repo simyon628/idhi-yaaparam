@@ -90,8 +90,8 @@ export default function ActivityFeedPage() {
 
     return (
         <div className="flex-1 flex flex-col min-h-screen bg-slate-50 pb-28">
-            <TopBar />
-            <main className="px-4 pt-[85px] animate-page-enter">
+            <TopBar hideSearch={true} />
+            <main className="px-4 pt-4 animate-page-enter">
 
                 {/* Header */}
                 <div className="mb-5">

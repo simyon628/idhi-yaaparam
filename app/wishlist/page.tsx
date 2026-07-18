@@ -23,7 +23,7 @@ export default function WishlistPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "#f8fafc", fontFamily: "'DM Sans', sans-serif", paddingBottom: 96 }}>
-      <TopBar />
+      <TopBar hideSearch={true} />
       
       <div style={{ padding: "16px 20px", background: "#fff", borderBottom: "1px solid #f1f5f9" }}>
         <h1 style={{ fontSize: 20, fontWeight: 800, color: "#1e293b", fontFamily: "'Syne', sans-serif" }}>Wishlist ({items.size})</h1>

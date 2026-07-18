@@ -164,7 +164,7 @@ export default function ProfileContent() {
 
     return (
         <div className="flex-1 flex flex-col min-h-screen relative pb-28" style={{ background: theme.surface }}>
-            <TopBar />
+            <TopBar hideSearch={true} />
 
             <main className="flex-1 px-5 pt-[40px] space-y-5">
                 {/* Profile Header Card */}

@@ -47,7 +47,7 @@ export default function NearYouPage() {
     >
       <TopBar />
 
-      <div style={{ position: "sticky", top: 60, zIndex: 10, background: "#fff", borderBottom: "1px solid #f1f5f9" }}>
+      <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#fff", borderBottom: "1px solid #f1f5f9" }}>
         <div style={{ padding: "16px 20px 8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
             <MapPin size={22} color="#00C48C" />
