@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { Search, MapPin, X, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { College } from "@/lib/types";
 import { AutoDetectedCollege } from "@/lib/hooks/useBackgroundCollegeDetection";
+import topColleges from "@/lib/top_colleges.json";
 
 interface SelectCollegeModalProps {
     isOpen: boolean;
@@ -29,18 +28,21 @@ export function SelectCollegeModal({
 }: SelectCollegeModalProps) {
     const { setSelectedCollege } = useCollege();
 
-    // Manual search state
-    const [allColleges, setAllColleges] = useState<College[]>([]);
+    // Search state
     const [searchQuery, setSearchQuery] = useState("");
-    const [isFetchingList, setIsFetchingList] = useState(false);
+    const [displayedColleges, setDisplayedColleges] = useState<College[]>(topColleges as unknown as College[]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
     const [showManual, setShowManual] = useState(false);
 
-    // If still detecting when modal opens, wait up to 5s then fall through to manual
+    // Timer refs
     const [waitExpired, setWaitExpired] = useState(false);
     const waitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const listContainerRef = useRef<HTMLDivElement>(null);
 
-    // Start the 5-second fallback timer when modal opens while detecting
+    // Fallback timer when detecting
     useEffect(() => {
         if (!isOpen) {
             setWaitExpired(false);
@@ -57,52 +59,53 @@ export function SelectCollegeModal({
         };
     }, [isOpen, detectionStatus]);
 
-    // Load full Firestore list for manual search (once)
-    useEffect(() => {
-        if (!isOpen || allColleges.length > 0) return;
-
-        const fetchColleges = async () => {
-            if (!db) return;
-            setIsFetchingList(true);
-            try {
-                const q = query(collection(db, "colleges"), orderBy("name", "asc"));
-                const querySnapshot = await getDocs(q);
-
-                const fetchedColleges: College[] = [];
-                querySnapshot.forEach((doc) => {
-                    fetchedColleges.push({ id: doc.id, ...doc.data() } as College);
-                });
-
-                setAllColleges(fetchedColleges);
-            } catch (err) {
-                console.error("Failed to load colleges list from Firestore:", err);
-            } finally {
-                setIsFetchingList(false);
+    // Fast API fetch handler
+    const fetchSearchResults = useCallback(async (queryStr: string, pageNum: number, append: boolean = false) => {
+        setIsLoading(true);
+        try {
+            const res = await fetch(`/api/colleges/search?q=${encodeURIComponent(queryStr)}&page=${pageNum}&limit=50`);
+            if (res.ok) {
+                const data = await res.json();
+                if (append) {
+                    setDisplayedColleges(prev => [...prev, ...data.items]);
+                } else {
+                    setDisplayedColleges(data.items);
+                }
+                setHasMore(data.hasMore);
             }
-        };
+        } catch (err) {
+            console.error("Failed to search colleges:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
 
-        fetchColleges();
-    }, [isOpen, allColleges.length]);
+    // Instant search trigger on typing even 1 character
+    useEffect(() => {
+        if (!isOpen) return;
+
+        setPage(1);
+        // Instant search with debounce for API
+        const timer = setTimeout(() => {
+            fetchSearchResults(searchQuery, 1, false);
+        }, searchQuery ? 120 : 0);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery, isOpen, fetchSearchResults]);
+
+    // Infinite scroll observer
+    const handleScroll = useCallback(() => {
+        if (!listContainerRef.current || isLoading || !hasMore) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = listContainerRef.current;
+        if (scrollTop + clientHeight >= scrollHeight - 150) {
+            const nextPage = page + 1;
+            setPage(nextPage);
+            fetchSearchResults(searchQuery, nextPage, true);
+        }
+    }, [isLoading, hasMore, page, searchQuery, fetchSearchResults]);
 
     if (!isOpen) return null;
-
-    const filteredColleges: College[] = searchQuery.trim() === ""
-        ? []
-        : allColleges
-            .filter((c: College) => {
-                const searchLower = searchQuery.toLowerCase().trim();
-                const nameLower = c.name.toLowerCase();
-
-                // Exact substring match
-                if (nameLower.includes(searchLower)) return true;
-
-                // Acronym match (e.g., "SRKR" for "Sagi Rama Krishnam Raju Engineering College")
-                const acronym = nameLower.split(/[\s-]+/).map(word => word[0]).join('');
-                if (acronym.includes(searchLower)) return true;
-
-                return false;
-            })
-            .slice(0, 15);
 
     const closeAndReset = () => {
         setSearchQuery("");
@@ -113,14 +116,13 @@ export function SelectCollegeModal({
 
     const confirmAutoDetected = () => {
         if (!autoDetectedCollege) return;
-        // Try to find a match in our curated local CSV for a cleaner name
         const lower = autoDetectedCollege.name.toLowerCase();
-        const csvMatch = allColleges.find((col: College) => {
+        const match = (topColleges as unknown as College[]).find((col) => {
             const colLower = col.name.toLowerCase();
             return lower.includes(colLower) || colLower.includes(lower);
         });
 
-        const college: College = csvMatch ?? {
+        const college: College = match ?? {
             id: autoDetectedCollege.id,
             name: autoDetectedCollege.name,
             state: "",
@@ -143,7 +145,6 @@ export function SelectCollegeModal({
         setTimeout(() => searchInputRef.current?.focus(), 80);
     };
 
-    // ── Derive which content section to show ─────────────────────────────────
     const isStillDetecting = detectionStatus === "detecting" && !waitExpired;
     const showConfirmation = detectionStatus === "ready" && !!autoDetectedCollege && !showManual;
     const showManualSearch = showManual || detectionStatus === "failed" || (detectionStatus === "detecting" && waitExpired) || detectionStatus === "idle";
@@ -167,18 +168,17 @@ export function SelectCollegeModal({
                 {/* Content */}
                 <div className="px-5 pt-5 pb-3 flex flex-col gap-4 shrink-0">
 
-                    {/* ── State 1: Still detecting in background ── */}
+                    {/* State 1: Still detecting */}
                     {isStillDetecting && (
                         <div className="flex flex-col items-center justify-center py-8 gap-3 bg-blue-50 border border-blue-100 rounded-2xl animate-in fade-in">
                             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                             <p className="text-blue-800 font-bold text-center px-4">Detecting your college…</p>
-                            <p className="text-blue-400 text-xs font-medium px-6 text-center">Just a moment</p>
                         </div>
                     )}
 
-                    {/* ── State 2: Confirmation (single nearest detected) ── */}
+                    {/* State 2: Confirmation */}
                     {showConfirmation && (
-                        <div className="bg-green-50 border border-green-200 rounded-2xl p-5 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4">
+                        <div className="bg-green-50 border border-green-200 rounded-2xl p-5 flex flex-col gap-4 animate-in fade-in">
                             <div className="flex items-center gap-3">
                                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
                                     <CheckCircle2 className="w-6 h-6 text-green-600" />
@@ -211,7 +211,7 @@ export function SelectCollegeModal({
                         </div>
                     )}
 
-                    {/* ── State 3: Manual search (failed / expired / user chose it) ── */}
+                    {/* State 3: Search Input */}
                     {showManualSearch && (
                         <div className="flex flex-col gap-3">
                             {(detectionStatus === "failed" || waitExpired) && (
@@ -224,18 +224,17 @@ export function SelectCollegeModal({
                             )}
                             <div>
                                 {showManual && (
-                                    <label className="text-slate-700 font-bold text-sm ml-1 block mb-1.5">Enter your college manually</label>
+                                    <label className="text-slate-700 font-bold text-sm ml-1 block mb-1.5">Search your college</label>
                                 )}
                                 <div className="relative">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
                                     <input
                                         ref={searchInputRef}
                                         type="text"
-                                        placeholder="Search college name…"
+                                        placeholder="e.g. SRKR, SRM, IIT, or campus name…"
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
-                                        disabled={isFetchingList}
-                                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-medium focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all outline-none"
+                                        className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none"
                                     />
                                 </div>
                             </div>
@@ -243,34 +242,43 @@ export function SelectCollegeModal({
                     )}
                 </div>
 
-                {/* Scrollable manual search results */}
-                <div className="flex-1 overflow-y-auto px-5 pb-10">
-                    {isFetchingList ? (
-                        <div className="flex justify-center mt-8">
-                            <Loader2 className="w-6 h-6 animate-spin text-blue-300" />
-                        </div>
-                    ) : searchQuery.trim() !== "" && filteredColleges.length === 0 ? (
+                {/* Infinite Scrollable Results */}
+                <div
+                    ref={listContainerRef}
+                    onScroll={handleScroll}
+                    className="flex-1 overflow-y-auto px-5 pb-10 space-y-2"
+                >
+                    {displayedColleges.length === 0 && !isLoading ? (
                         <p className="text-center text-slate-500 mt-10 text-sm font-medium">
-                            No colleges found. Try a shorter keyword.
+                            No colleges found matching &quot;{searchQuery}&quot;. Try a different shortcut.
                         </p>
                     ) : (
-                        <div className="space-y-2">
-                            {filteredColleges.map(college => (
+                        <>
+                            {displayedColleges.map((college) => (
                                 <button
                                     key={college.id}
                                     onClick={() => handleManualSelect(college)}
-                                    className="w-full text-left p-4 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-3 active:scale-95 group"
+                                    className="w-full text-left p-4 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-blue-500 hover:shadow-md transition-all flex items-center gap-3 active:scale-95 group"
                                 >
                                     <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50 text-blue-600 font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                        <span className="text-base">{college.name.charAt(0)}</span>
+                                        <span className="text-base">{college.acronym ? college.acronym.slice(0, 3) : college.name.charAt(0)}</span>
                                     </div>
-                                    <div>
-                                        <p className="font-bold text-slate-700 group-hover:text-blue-900 transition-colors">{college.name}</p>
-                                        <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                                            <span>{college.city || "India"}</span>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2">
+                                            <p className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors truncate">
+                                                {college.name}
+                                            </p>
+                                            {college.acronym && (
+                                                <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-black rounded-md shrink-0">
+                                                    {college.acronym}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5 truncate">
+                                            <span>{college.city || "Campus"}</span>
                                             {college.state && (
                                                 <>
-                                                    <span className="w-1 h-1 rounded-full bg-slate-200" />
+                                                    <span className="w-1 h-1 rounded-full bg-slate-300" />
                                                     <span>{college.state}</span>
                                                 </>
                                             )}
@@ -278,7 +286,12 @@ export function SelectCollegeModal({
                                     </div>
                                 </button>
                             ))}
-                        </div>
+                            {isLoading && (
+                                <div className="flex justify-center py-4">
+                                    <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

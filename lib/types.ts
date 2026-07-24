@@ -61,9 +61,9 @@ export interface College {
     acronym?: string;
     city?: string;
     state?: string;
-    lat: number;
-    lng: number;
-    radiusMeters: number;
+    lat?: number;
+    lng?: number;
+    radiusMeters?: number;
 }
 
 export interface Block {

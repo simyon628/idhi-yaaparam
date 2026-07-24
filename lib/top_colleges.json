@@ -1,0 +1,6502 @@
+[
+  {
+    "id": "col-26469",
+    "name": "Nalanda Institute of Technology (NIT), Bhubaneswar",
+    "acronym": "NITB",
+    "state": "Odisha",
+    "city": "Khordha",
+    "address": "Budhist Villa, Chandaka, Bhubaneswar",
+    "website": "www.thenalanda.com",
+    "popularityScore": 930,
+    "aliases": [
+      "NITB"
+    ]
+  },
+  {
+    "id": "col-22971",
+    "name": "NIT Graduate school of Management, Katol Road",
+    "acronym": "NGSMKR",
+    "state": "Maharashtra",
+    "city": "Nagpur",
+    "address": "Survey No. 13/2, Katol Road,, Near Fetri, Mahurzari,, Nagpur",
+    "website": "www.nitmba.edu.in",
+    "popularityScore": 900,
+    "aliases": [
+      "NGSMKR"
+    ]
+  },
+  {
+    "id": "col-27507",
+    "name": "St. Soldier College of Education Behind REC (NIT) Jalandhar.",
+    "acronym": "SSCEBRJ",
+    "state": "Punjab",
+    "city": "Jalandhar",
+    "address": "St. Soldier College of Education Behind REC (NIT) Jalandhar, Jalandhar - Amritsar Bye pass, Jalandhar, Jalandhar",
+    "website": "www.ssced.in",
+    "popularityScore": 900,
+    "aliases": [
+      "SSCEBRJ"
+    ]
+  },
+  {
+    "id": "col-16472",
+    "name": "Indian Institute of Information Technology and Management-Kerala(IITM-K)",
+    "acronym": "IIITMK",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "IIITM-K Main Building, Technopark, Thriuvananthapuram",
+    "website": "www.iiitmk.ac.in",
+    "popularityScore": 880,
+    "aliases": [
+      "IIITMK"
+    ]
+  },
+  {
+    "id": "col-37126",
+    "name": "INDIAN INSTITUTE OF INFORMATION TECHNOLOGY VADODARA INTERNATIONAL CAMPUS DIU",
+    "acronym": "IIITVICD",
+    "state": "The Dadra and Nagar Haveli and Daman and Diu",
+    "city": "Diu",
+    "address": "Indian Institute of Information Technology Vadodara - International Campus Diu (IIITV-ICD), Education Hub, Kevdi, Diu (U.T) - 362520, Kevdi",
+    "website": "www.diu.iiitvadodara.ac.in",
+    "popularityScore": 880,
+    "aliases": [
+      "IIITVICD"
+    ]
+  },
+  {
+    "id": "col-13218",
+    "name": "Indian Institute of Information Technology, Dharwad",
+    "acronym": "IIITD",
+    "state": "Karnataka",
+    "city": "Dharwad",
+    "address": "",
+    "website": "",
+    "popularityScore": 880,
+    "aliases": [
+      "IIITD"
+    ]
+  },
+  {
+    "id": "col-1652",
+    "name": "Dr APJ Abdulkalam IIIT Ongole",
+    "acronym": "DAAIO",
+    "state": "Andhra Pradesh",
+    "city": "Prakasam",
+    "address": "Kurnool Road, Ongole, Santhanuthalapadu(V&M),",
+    "website": "",
+    "popularityScore": 850,
+    "aliases": [
+      "DAAIO"
+    ]
+  },
+  {
+    "id": "col-5619",
+    "name": "Birla Institute of Technology and Science Pilani",
+    "acronym": "BITSP",
+    "state": "Goa",
+    "city": "South Goa",
+    "address": "",
+    "website": "",
+    "popularityScore": 830,
+    "aliases": [
+      "BITSP"
+    ]
+  },
+  {
+    "id": "col-36525",
+    "name": "BIRLA INSTITUTE OF TECHNOLOGY AND SCIENCE PILANI,HYDERABAD CAMPUS",
+    "acronym": "BITSPHC",
+    "state": "Telangana",
+    "city": "Rangareddi",
+    "address": "",
+    "website": "",
+    "popularityScore": 830,
+    "aliases": [
+      "BITSPHC"
+    ]
+  },
+  {
+    "id": "col-20138",
+    "name": "BITS AND BYTES INSTITUTE OF INFO. TECH.",
+    "acronym": "BBIIT",
+    "state": "Madhya Pradesh",
+    "city": "Sheopur",
+    "address": "PALI ROAD, SHEOPUR, SHEOPUR",
+    "website": "",
+    "popularityScore": 800,
+    "aliases": [
+      "BBIIT"
+    ]
+  },
+  {
+    "id": "col-12760",
+    "name": "BITS HI-TECH COLLEGE",
+    "acronym": "BHTC",
+    "state": "Karnataka",
+    "city": "Chitradurga",
+    "address": "BITS COLLEGE, Opposite horticulture office, S NIjalingappa Road, V P Extension, Chitradurga",
+    "website": "www.bitshitech.com",
+    "popularityScore": 800,
+    "aliases": [
+      "BHTC"
+    ]
+  },
+  {
+    "id": "col-17887",
+    "name": "BITS INSTITUTE OF COMPUTER DAMOH",
+    "acronym": "BICD",
+    "state": "Madhya Pradesh",
+    "city": "Damoh",
+    "address": "",
+    "website": "",
+    "popularityScore": 800,
+    "aliases": [
+      "BICD"
+    ]
+  },
+  {
+    "id": "col-8585",
+    "name": "BITS LAW COLLEGE",
+    "acronym": "BLC",
+    "state": "Haryana",
+    "city": "Bhiwani",
+    "address": "VILLEGE - SARSA-GHOGRA TEHSIL AND DISTRICT BHIWANI, 10 K.M. STONE BHIWANI-ROHTAK-DELHI ROAD, BHIWANI",
+    "website": "www.bitsbhiwaniindia.org",
+    "popularityScore": 800,
+    "aliases": [
+      "BLC"
+    ]
+  },
+  {
+    "id": "col-35678",
+    "name": "SRM Institute of Medical Sciences & Technology, Karimnagar",
+    "acronym": "SIMSTK",
+    "state": "Telangana",
+    "city": "Karimnagar",
+    "address": "Mahabub Nagar Raod, Karimnagar, Karimnagar",
+    "website": "",
+    "popularityScore": 780,
+    "aliases": [
+      "SIMSTK"
+    ]
+  },
+  {
+    "id": "col-34398",
+    "name": "SRM TRP Engineering College",
+    "acronym": "STEC",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "IRUNGALUR, MANACHANALLUR, TRICHY",
+    "website": "www.trp.srmtrichy.ac.in",
+    "popularityScore": 780,
+    "aliases": [
+      "STEC"
+    ]
+  },
+  {
+    "id": "col-32272",
+    "name": "SRM Valliammai Engineering College",
+    "acronym": "SVEC",
+    "state": "Tamil Nadu",
+    "city": "CHENGALPATTU",
+    "address": "SRM Nagar, Kattankulathur, Potheri Village, Chennai",
+    "website": "www.srmvalliammai.ac.in",
+    "popularityScore": 780,
+    "aliases": [
+      "SVEC"
+    ]
+  },
+  {
+    "id": "col-2482",
+    "name": "SRKR Engineering College",
+    "acronym": "SEC",
+    "state": "Andhra Pradesh",
+    "city": "West Godavari",
+    "address": "Sagi Rama Krishnam Raju Engineering College, Chinna Amiram(PO), Bhimavaram",
+    "website": "http://www.srkrec.ac.in",
+    "popularityScore": 770,
+    "aliases": [
+      "SEC"
+    ]
+  },
+  {
+    "id": "col-26497",
+    "name": "Vedang Institute of Technology (VIT), Khurda, Bhubaneswar",
+    "acronym": "VITKB",
+    "state": "Odisha",
+    "city": "Khordha",
+    "address": "at-durgaprasad po-ramachandi",
+    "website": "www.vedang.in",
+    "popularityScore": 760,
+    "aliases": [
+      "VITKB"
+    ]
+  },
+  {
+    "id": "col-33241",
+    "name": "VELLORE INSTITUTE OF TECHNOLOGY, CHENNAI",
+    "acronym": "VITC",
+    "state": "Tamil Nadu",
+    "city": "Kanchipuram",
+    "address": "Vandalur Kelambakkam Road, Melakottaiyur, Chennai",
+    "website": "www.chennai.vit.ac.in",
+    "popularityScore": 760,
+    "aliases": [
+      "VITC"
+    ]
+  },
+  {
+    "id": "col-25775",
+    "name": "Vijayanjali Institute of Technology (VIT), Balasore",
+    "acronym": "VITB",
+    "state": "Odisha",
+    "city": "Baleshwar",
+    "address": "Gadavanga No-4, Khantapada, Balasore",
+    "website": "www.vitbalasore.com",
+    "popularityScore": 760,
+    "aliases": [
+      "VITB"
+    ]
+  },
+  {
+    "id": "col-34850",
+    "name": "Seventh Day Adventist Reform Movement (SRM) College of Education",
+    "acronym": "SDARMCE",
+    "state": "Tamil Nadu",
+    "city": "Vellore",
+    "address": "Chinnakallupalli Village, Kalandhira Post,, Vaniyambadi Taluk, Vaniyambadi",
+    "website": "www.sdarmcollege.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SDARMCE"
+    ]
+  },
+  {
+    "id": "col-33189",
+    "name": "SRM ARTS AND SCIENCE COLLEGE",
+    "acronym": "SASC",
+    "state": "Tamil Nadu",
+    "city": "Kanchipuram",
+    "address": "SRM NAGAR,, KATTANKULATHUR, POTHERI, CHENNAI",
+    "website": "www.srmasc.ac.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SASC"
+    ]
+  },
+  {
+    "id": "col-42965",
+    "name": "SRM BUSINESS SCHOOL, LUCKNOW",
+    "acronym": "SBSL",
+    "state": "Uttar Pradesh",
+    "city": "Lucknow",
+    "address": "NH 24 SITAPUR ROAD, BAKSHI KA TALAB, BHAISHAMAU",
+    "website": "www.srmbs.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SBSL"
+    ]
+  },
+  {
+    "id": "col-35790",
+    "name": "SRM DEGREE &PG COLLEGE, GEETHA BHAVAN CHOWRASTA, MUKARAMPURA, KARIMNAGAR",
+    "acronym": "SDPCGBCMK",
+    "state": "Telangana",
+    "city": "Karimnagar",
+    "address": "SRM NAGAR,CHINTHAKUNTA ROAD,KARIMNAGAR-505001, KARIMNAGAR",
+    "website": "www.srmcolleges.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SDPCGBCMK"
+    ]
+  },
+  {
+    "id": "col-36822",
+    "name": "SRM DEGREE COLLEGE, SHAMSHABAD",
+    "acronym": "SDCS",
+    "state": "Telangana",
+    "city": "Rangareddi",
+    "address": "Syndicate Bank Building, shamshabad, Rangareddy",
+    "website": "http://srmdegreecollege.ga",
+    "popularityScore": 750,
+    "aliases": [
+      "SDCS"
+    ]
+  },
+  {
+    "id": "col-39423",
+    "name": "SRM Govt Ayurvedic College and Hospital",
+    "acronym": "SGACH",
+    "state": "Uttar Pradesh",
+    "city": "Bareilly",
+    "address": "Bansmandi, Bareilly",
+    "website": "www.ayurvediccollegebareilly.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SGACH"
+    ]
+  },
+  {
+    "id": "col-35663",
+    "name": "SRM PG College(MBA)",
+    "acronym": "SPC",
+    "state": "Telangana",
+    "city": "Karimnagar",
+    "address": "SRMNAGAR,CHINTHAKUNTA ROAD, KARIMNAGAR",
+    "website": "www.srmcolleges.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SPC"
+    ]
+  },
+  {
+    "id": "col-35664",
+    "name": "SRM PG College(MCA)",
+    "acronym": "SPC",
+    "state": "Telangana",
+    "city": "Karimnagar",
+    "address": "SRMNAGAR,CHINTHAKUNTA ROAD, KARIMNAGAR",
+    "website": "www.srmcolleges.in",
+    "popularityScore": 750,
+    "aliases": [
+      "SPC"
+    ]
+  },
+  {
+    "id": "col-34432",
+    "name": "SRM TRICHY ARTS AND SCIENCE COLLEGE",
+    "acronym": "STASC",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "SRM NAGAR, TRICHY - CHENNAI HIGHWAY, NEAR SAMAYAPURAM, NEAR SAMAYAPURAM/TIRUCHIRAPPALLI/MANNACHANALLUR/IRUNGALUR",
+    "website": "asc.srmtrichy.edu.in",
+    "popularityScore": 750,
+    "aliases": [
+      "STASC"
+    ]
+  },
+  {
+    "id": "col-34468",
+    "name": "SRM TRICHY COLLEGE OF NURSING",
+    "acronym": "STCN",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "Trichy - Chennai NH-45 Main Road, Irungalu Village,, Manachanallur (TK)",
+    "website": "nc.srmtrichy.edu.in",
+    "popularityScore": 750,
+    "aliases": [
+      "STCN"
+    ]
+  },
+  {
+    "id": "col-34470",
+    "name": "TRICY SRM MEDICAL COLLEGE HOSPITAL AND RESERCH CENTRE (Inst. Code - 246), TRICHY",
+    "acronym": "TSMCHRCT",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "SRM Nagar - Trichy - Chennai high way, Irungalur, Mannachanallur, Tiruchirappalli",
+    "website": "www.mchrc.srmtrichy.edu.in",
+    "popularityScore": 750,
+    "aliases": [
+      "TSMCHRCT"
+    ]
+  },
+  {
+    "id": "col-14862",
+    "name": "Manipal Institute of Technology, Manipal",
+    "acronym": "MITM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "MIT, Manipal, 576104, Manipal",
+    "website": "https://manipal.edu/mit.html",
+    "popularityScore": 730,
+    "aliases": [
+      "MITM"
+    ]
+  },
+  {
+    "id": "col-32205",
+    "name": "Sikkim Manipal Institute of Technology (SMIT)",
+    "acronym": "SMIT",
+    "state": "Sikkim",
+    "city": "East District",
+    "address": "Majitar, Rangpo, Rangpo",
+    "website": "https://smu.edu.in/smit.html/",
+    "popularityScore": 730,
+    "aliases": [
+      "SMIT"
+    ]
+  },
+  {
+    "id": "col-43934",
+    "name": "VIT COLLEGE OF EDUCATION JATOLI, KANKER KHERA, SARDHANA, MEERUT",
+    "acronym": "VCEJKKSM",
+    "state": "Uttar Pradesh",
+    "city": "Meerut",
+    "address": "NH 58 JATOLI, MEERUT, MEERUT",
+    "website": "www.vitce.edu.in",
+    "popularityScore": 730,
+    "aliases": [
+      "VCEJKKSM"
+    ]
+  },
+  {
+    "id": "col-33243",
+    "name": "Amrita College of Engineering and Technology",
+    "acronym": "ACET",
+    "state": "Tamil Nadu",
+    "city": "Kanniyakumari",
+    "address": "Amritagiri, Erachakulam Post, Nagercoil, Nagercoil",
+    "website": "https://amrita.edu.in",
+    "popularityScore": 710,
+    "aliases": [
+      "ACET"
+    ]
+  },
+  {
+    "id": "col-1010",
+    "name": "Amrita Sai Institute of Science & Technology, Amrita Sai Nagar, Paritala (PO), Kanchikacherla (MD), PIN-521180 (CC-AJ)",
+    "acronym": "ASISTASNPKP5",
+    "state": "Andhra Pradesh",
+    "city": "Krishna",
+    "address": "Amrita Sai Nagar, Paritala (Po),, Kanchikacherla (Mdl), Vijayawada",
+    "website": "www.amritasai.org.in",
+    "popularityScore": 710,
+    "aliases": [
+      "ASISTASNPKP5"
+    ]
+  },
+  {
+    "id": "col-15734",
+    "name": "Amrita School of Biotechnology, Amritapuri, Kollam",
+    "acronym": "ASBAK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "",
+    "website": "",
+    "popularityScore": 710,
+    "aliases": [
+      "ASBAK"
+    ]
+  },
+  {
+    "id": "col-15735",
+    "name": "Amrita School of Engineering, Amritapuri, Kollam",
+    "acronym": "ASEAK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "",
+    "website": "",
+    "popularityScore": 710,
+    "aliases": [
+      "ASEAK"
+    ]
+  },
+  {
+    "id": "col-11190",
+    "name": "Amrita School of Engineering, Bangalore",
+    "acronym": "ASEB",
+    "state": "Karnataka",
+    "city": "Bengaluru Rural",
+    "address": "",
+    "website": "",
+    "popularityScore": 710,
+    "aliases": [
+      "ASEB"
+    ]
+  },
+  {
+    "id": "col-32520",
+    "name": "Amrita School of Engineering, Coimbatore",
+    "acronym": "ASEC",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "",
+    "website": "",
+    "popularityScore": 710,
+    "aliases": [
+      "ASEC"
+    ]
+  },
+  {
+    "id": "col-14855",
+    "name": "Kasturba Medical College, Manipal",
+    "acronym": "KMCM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Madhav Nagar, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "KMCM"
+    ]
+  },
+  {
+    "id": "col-14830",
+    "name": "Madhava Pai Memorial College, Manipal",
+    "acronym": "MPMCM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Madhava Pai Memorial College, VIDYA NAGAR, Manipal",
+    "website": "www.mpmcollege.org",
+    "popularityScore": 700,
+    "aliases": [
+      "MPMCM"
+    ]
+  },
+  {
+    "id": "col-11946",
+    "name": "MANIPAL ACADEMY OF HIGHER EDUCATION BANGALURU CAMPUS",
+    "acronym": "MAHEBC",
+    "state": "Karnataka",
+    "city": "Bengaluru Urban",
+    "address": "MANIPAL ACADEMY OF HIGHER EDUCATION (Off-Campus Centre at BENGALURU), GOVINDPURA VILLAGE, KENCHANAHALLI, YELAHANKA HOBLI",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MAHEBC"
+    ]
+  },
+  {
+    "id": "col-12984",
+    "name": "Manipal College of Dental Sciences, Mangalore",
+    "acronym": "MCDSM",
+    "state": "Karnataka",
+    "city": "Dakshin Kannad",
+    "address": "Light House Hill Road, Hampankatta, Mangaluru",
+    "website": "https://manipal.edu/mcods-mangalore.html",
+    "popularityScore": 700,
+    "aliases": [
+      "MCDSM"
+    ]
+  },
+  {
+    "id": "col-14856",
+    "name": "Manipal College of Dental Sciences, Manipal",
+    "acronym": "MCDSM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Madhav Nagar, Manipal , Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MCDSM"
+    ]
+  },
+  {
+    "id": "col-14857",
+    "name": "Manipal College of Health Professions, Manipal",
+    "acronym": "MCHPM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Allied Health Building, Tower 2,Near MCOPS, Manipal-576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MCHPM"
+    ]
+  },
+  {
+    "id": "col-14858",
+    "name": "Manipal College of Nursing, Manipal",
+    "acronym": "MCNM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Madhav Nagar, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MCNM"
+    ]
+  },
+  {
+    "id": "col-14859",
+    "name": "Manipal College of Pharmaceutical Sciences, Manipal",
+    "acronym": "MCPSM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Madhav Nagar, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MCPSM"
+    ]
+  },
+  {
+    "id": "col-14860",
+    "name": "Manipal Institute of Communication, Manipal",
+    "acronym": "MICM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Press corner, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MICM"
+    ]
+  },
+  {
+    "id": "col-14861",
+    "name": "Manipal Institute of Management, Manipal",
+    "acronym": "MIMM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "MIT Campus, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MIMM"
+    ]
+  },
+  {
+    "id": "col-11947",
+    "name": "Manipal Institute of Regenerative Medicine, Bangalore",
+    "acronym": "MIRMB",
+    "state": "Karnataka",
+    "city": "Bengaluru Urban",
+    "address": "Allalasandra, GKVK Post, Yelahanka, Bangalore - 560065, Bangalore",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MIRMB"
+    ]
+  },
+  {
+    "id": "col-14863",
+    "name": "Manipal Institute of Virology",
+    "acronym": "MIV",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Madhav Nagar, Manipal Academy of Higher Education, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MIV"
+    ]
+  },
+  {
+    "id": "col-14864",
+    "name": "Manipal School of Architecture and Planning",
+    "acronym": "MSAP",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Manipal School of Architecture and Planning, , Academic Block-2, MIT campus, Manipal Academy of Higher Education, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MSAP"
+    ]
+  },
+  {
+    "id": "col-14865",
+    "name": "Manipal School of Information Sciences, Manipal",
+    "acronym": "MSISM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "LG 02, Academic Block-5, MIT Campus, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MSISM"
+    ]
+  },
+  {
+    "id": "col-14866",
+    "name": "Manipal School of Life Sciences, Manipal",
+    "acronym": "MSLSM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Planetarium Complex, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu/msls",
+    "popularityScore": 700,
+    "aliases": [
+      "MSLSM"
+    ]
+  },
+  {
+    "id": "col-10449",
+    "name": "MANIPAL TATA MEDICAL COLLEGE",
+    "acronym": "MTMC",
+    "state": "Jharkhand",
+    "city": "East Singhbum",
+    "address": "Manipal TATA Medical College, Kadani Road, Baridih, Jamshedpur, Baridih",
+    "website": "https://manipal.edu/mtmc-jamshedpur.html",
+    "popularityScore": 700,
+    "aliases": [
+      "MTMC"
+    ]
+  },
+  {
+    "id": "col-14867",
+    "name": "MELAKA MANIPAL MEDICAL COLLEGE, MANIPAL",
+    "acronym": "MMMCM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Manipal, Pin-576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "MMMCM"
+    ]
+  },
+  {
+    "id": "col-14880",
+    "name": "MUNIYAL INSTITUTE OF YOGA AND NATUROPATHY MANIPAL",
+    "acronym": "MIYNM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "",
+    "website": "",
+    "popularityScore": 700,
+    "aliases": [
+      "MIYNM"
+    ]
+  },
+  {
+    "id": "col-32202",
+    "name": "Sikkim Manipal College of Nursing (SMCON)",
+    "acronym": "SMCN",
+    "state": "Sikkim",
+    "city": "East District",
+    "address": "Sikkim Manipal College of Nursing, CRH Building, Level II, 5th Mile ,Tadong, Gangtok, East Sikkim,737102, Sikkim Manipal College of Nursing, CRH Building, Level II, 5th Mile ,Tadong, Gangtok, East Sikkim,737102, Gangtok",
+    "website": "smcon.smu.edu.in",
+    "popularityScore": 700,
+    "aliases": [
+      "SMCN"
+    ]
+  },
+  {
+    "id": "col-32203",
+    "name": "Sikkim Manipal College of Physiotherapy (SMCOP)",
+    "acronym": "SMCP",
+    "state": "Sikkim",
+    "city": "East District",
+    "address": "5th Mile, Tadong, 5th Mile, Tadong, Gangtok",
+    "website": "http://www.smu.edu.in",
+    "popularityScore": 700,
+    "aliases": [
+      "SMCP"
+    ]
+  },
+  {
+    "id": "col-32204",
+    "name": "Sikkim Manipal Institute of Medical Sciences (SMIMS)",
+    "acronym": "SMIMS",
+    "state": "Sikkim",
+    "city": "East District",
+    "address": "5th Mile,Tadong, 5th Mile,Tadong, Gangtok",
+    "website": "smims.smu.edu.in",
+    "popularityScore": 700,
+    "aliases": [
+      "SMIMS"
+    ]
+  },
+  {
+    "id": "col-14869",
+    "name": "Welcomgroup Graduate School of Hotel Administration, Manipal",
+    "acronym": "WGSHAM",
+    "state": "Karnataka",
+    "city": "Udupi",
+    "address": "Fortune Inn Valley View, Manipal - 576104, Manipal",
+    "website": "www.manipal.edu",
+    "popularityScore": 700,
+    "aliases": [
+      "WGSHAM"
+    ]
+  },
+  {
+    "id": "col-32568",
+    "name": "PSG College of Technology",
+    "acronym": "PCT",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "Avinashi Road, Peelamedu, Coimbatore",
+    "website": "www.psgtech.edu",
+    "popularityScore": 690,
+    "aliases": [
+      "PCT"
+    ]
+  },
+  {
+    "id": "col-32569",
+    "name": "PSG INSTITUTE OF TECHNOLOGY AND APPLIED RESEARCH",
+    "acronym": "PITAR",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "AVINASHI ROAD, NEELAMBUR, COIMBATORE",
+    "website": "www.psgitech.ac.in",
+    "popularityScore": 690,
+    "aliases": [
+      "PITAR"
+    ]
+  },
+  {
+    "id": "col-15326",
+    "name": "Amrita Centre for Nanomedical Sciences, Kochi",
+    "acronym": "ACNSK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ACNSK"
+    ]
+  },
+  {
+    "id": "col-10599",
+    "name": "AMRITA COLLEGE OF NURSING",
+    "acronym": "ACN",
+    "state": "Jharkhand",
+    "city": "Ranchi",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ACN"
+    ]
+  },
+  {
+    "id": "col-15327",
+    "name": "Amrita College of Nursing, Kochi",
+    "acronym": "ACNK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ACNK"
+    ]
+  },
+  {
+    "id": "col-15732",
+    "name": "Amrita School of Arts and Sciences, Amritapuri, Kollam",
+    "acronym": "ASASAK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASASAK"
+    ]
+  },
+  {
+    "id": "col-15328",
+    "name": "Amrita School of Arts and Sciences, Kochi",
+    "acronym": "ASASK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASASK"
+    ]
+  },
+  {
+    "id": "col-14192",
+    "name": "Amrita School of Arts and Sciences, Mysore",
+    "acronym": "ASASM",
+    "state": "Karnataka",
+    "city": "Mysuru",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASASM"
+    ]
+  },
+  {
+    "id": "col-15733",
+    "name": "Amrita School of Ayurveda, Amritapuri, Kollam",
+    "acronym": "ASAAK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASAAK"
+    ]
+  },
+  {
+    "id": "col-32519",
+    "name": "Amrita School of Business, Coimbatore",
+    "acronym": "ASBC",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASBC"
+    ]
+  },
+  {
+    "id": "col-15329",
+    "name": "Amrita School of Dentistry, Kochi",
+    "acronym": "ASDK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASDK"
+    ]
+  },
+  {
+    "id": "col-14193",
+    "name": "Amrita School of Education, Mysore",
+    "acronym": "ASEM",
+    "state": "Karnataka",
+    "city": "Mysuru",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASEM"
+    ]
+  },
+  {
+    "id": "col-15330",
+    "name": "Amrita School of Medicine, Kochi",
+    "acronym": "ASMK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASMK"
+    ]
+  },
+  {
+    "id": "col-15331",
+    "name": "Amrita School of Pharmacy, Kochi",
+    "acronym": "ASPK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "ASPK"
+    ]
+  },
+  {
+    "id": "col-37928",
+    "name": "AMRITA SINGH MEMORIAL DEGRE COLLEGE,TEJPUR,JAVA,ALIGARH",
+    "acronym": "ASMDCTJA",
+    "state": "Uttar Pradesh",
+    "city": "Aligarh",
+    "address": "Anoopshahar Road, Tejpur, Jawan, Aligarh, Aligarh",
+    "website": "www.asmdegreecollege.com",
+    "popularityScore": 680,
+    "aliases": [
+      "ASMDCTJA"
+    ]
+  },
+  {
+    "id": "col-34263",
+    "name": "AMRITA VISHWA VIDYAPEETHAM CHENNAI CAMPUS",
+    "acronym": "AVVCC",
+    "state": "Tamil Nadu",
+    "city": "Thiruvallur",
+    "address": "",
+    "website": "",
+    "popularityScore": 680,
+    "aliases": [
+      "AVVCC"
+    ]
+  },
+  {
+    "id": "col-27726",
+    "name": "Dr Shyam Lal Thapar College of Nursing, Amritsar Barnala Bypass Road, Moga",
+    "acronym": "DSLTCNABBRM",
+    "state": "Punjab",
+    "city": "Moga",
+    "address": "DR.SHYAM LAL THAPAR NURSING HOME, GT ROAD MOGA., AMRITSAR BARNALA BYPASS ROAD NH71 MOGA 142001, MOGA",
+    "website": "www.drslten.in",
+    "popularityScore": 670,
+    "aliases": [
+      "DSLTCNABBRM"
+    ]
+  },
+  {
+    "id": "col-32651",
+    "name": "PSG College of Arts and Science",
+    "acronym": "PCAS",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "Civil Aerodrome Post, Avinashi Road, Coimbatore - 641 014",
+    "website": "www.psgcas.ac.in",
+    "popularityScore": 660,
+    "aliases": [
+      "PCAS"
+    ]
+  },
+  {
+    "id": "col-34035",
+    "name": "PSG College of Education",
+    "acronym": "PCE",
+    "state": "Tamil Nadu",
+    "city": "Salem",
+    "address": "Palanisamy Gounder Thottam,, Tiruchengode Road,, Sankari, Salem Dt-637 301.",
+    "website": "www.psginstitutions.com",
+    "popularityScore": 660,
+    "aliases": [
+      "PCE"
+    ]
+  },
+  {
+    "id": "col-32734",
+    "name": "PSG INSTITUTE OF MEDICAL SCIENCES AND RESEARCH (Inst. Code - 446), COIMBATORE",
+    "acronym": "PIMSRC",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "Post Box No 1674,Peelamedu, -, Coimbatore",
+    "website": "www.psgimsr.ac.in",
+    "popularityScore": 660,
+    "aliases": [
+      "PIMSRC"
+    ]
+  },
+  {
+    "id": "col-33969",
+    "name": "Siri PSG Arts & Science College for Women",
+    "acronym": "SPASCW",
+    "state": "Tamil Nadu",
+    "city": "Salem",
+    "address": "Palanisamy Gounder Thottam, Tiruchengode Road, Sankari - 637 301, Salem",
+    "website": "www.psginstitutions.com",
+    "popularityScore": 660,
+    "aliases": [
+      "SPASCW"
+    ]
+  },
+  {
+    "id": "col-18321",
+    "name": "\"Maharana Pratap College of Technology, Putli Ghar Road, Near Jiwaji University, Gwalior-474006\"",
+    "acronym": "MPCTPGRNJUG4",
+    "state": "Madhya Pradesh",
+    "city": "Gwalior",
+    "address": "Putlighar Road, Near Jiwaji University, Gwalior",
+    "website": "www.mpct.org",
+    "popularityScore": 80,
+    "aliases": [
+      "MPCTPGRNJUG4"
+    ]
+  },
+  {
+    "id": "col-1974",
+    "name": "Andhra University College of Engineering(A)",
+    "acronym": "AUCE",
+    "state": "Andhra Pradesh",
+    "city": "Visakhapatanam",
+    "address": "A U College of Engineering (A) Andhra University, waltair, visakhapatnam, Visakhapatnam",
+    "website": "https://www.andhrauniversity.edu.in/college/college-of-engineering/engineering-home.html",
+    "popularityScore": 80,
+    "aliases": [
+      "AUCE"
+    ]
+  },
+  {
+    "id": "col-23720",
+    "name": "Bharati Vidyapeeth (Deemed to be University) College of Engineering, Pune",
+    "acronym": "BVCEP",
+    "state": "Maharashtra",
+    "city": "Pune",
+    "address": "S. No. 26, 27, Pune-Satara Road, Dhankawadi, Pune",
+    "website": "www.bvucoepune.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "BVCEP"
+    ]
+  },
+  {
+    "id": "col-15258",
+    "name": "Cochin University College of Engineering",
+    "acronym": "CUCE",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "kuttanad, Pulincunnu, Alappuzha",
+    "website": "www.cucek.cusat.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "CUCE"
+    ]
+  },
+  {
+    "id": "col-19983",
+    "name": "FACULTY OF PHARMACY (COLLEGE OF PHARMACY, SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES, (SSSUTMS))",
+    "acronym": "FP",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "FP"
+    ]
+  },
+  {
+    "id": "col-19984",
+    "name": "FACULTY OF PHARMACY(POLYTECHNIC PHARMACY, SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES, (SSSUTMS))",
+    "acronym": "FP",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "FP"
+    ]
+  },
+  {
+    "id": "col-19985",
+    "name": "FACULTY OF PHARMACY(SCHOOL OF PHARMACY,SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES,(SSSUTMS))",
+    "acronym": "FP",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "FP"
+    ]
+  },
+  {
+    "id": "col-7194",
+    "name": "Ganpat University Institute of Computer Technology",
+    "acronym": "GUICT",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "www.ict.guni.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "GUICT"
+    ]
+  },
+  {
+    "id": "col-7196",
+    "name": "Ganpat University Institute of Technology",
+    "acronym": "GUIT",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "www.iot.guni.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "GUIT"
+    ]
+  },
+  {
+    "id": "col-7200",
+    "name": "Ganpat University U.V. Patel College of Engineering",
+    "acronym": "GUUVPCE",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, , Mehsana-Gandhinagar Highway,, Mehsana",
+    "website": "uvpce.guni.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "GUUVPCE"
+    ]
+  },
+  {
+    "id": "col-5674",
+    "name": "GUJARAT TECHNOLOGICAL UNIVERSITY- GRADUATE SCHOOL OF ENGINEERING AND TECHNOLOGY",
+    "acronym": "GTUGSET",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Academic Block - 5, GTU Campus, , Nr.Visat Three Roads, Chandkheda, Ahmedabad",
+    "website": "https://set.gtu.ac.in/",
+    "popularityScore": 80,
+    "aliases": [
+      "GTUGSET"
+    ]
+  },
+  {
+    "id": "col-5991",
+    "name": "Institute of Technology, Nirma University",
+    "acronym": "ITNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Technology, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "ITNU"
+    ]
+  },
+  {
+    "id": "col-8355",
+    "name": "ITM (SLS) BARODA UNIVERSITY- SCHOOL OF TECHNOLOGY & ENGINEERING",
+    "acronym": "IBUSTE",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "Dhanora Tank Road, Paladi Village, Halol Highway, Ta. Waghodiya, Dist: Vadodara, Vadodara",
+    "website": "www.itmbu.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "IBUSTE"
+    ]
+  },
+  {
+    "id": "col-36519",
+    "name": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING RAJANNA SIRCILLA",
+    "acronym": "JUCERS",
+    "state": "Telangana",
+    "city": "RAJANNA SIRCILLA",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "JUCERS"
+    ]
+  },
+  {
+    "id": "col-35122",
+    "name": "Kakatiya University College of Engineering and Technology",
+    "acronym": "KUCET",
+    "state": "Telangana",
+    "city": "HANUMAKONDA",
+    "address": "Kakatiya university Campus, Mucharla road, Hanamkonda",
+    "website": "www.kucet.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "KUCET"
+    ]
+  },
+  {
+    "id": "col-19986",
+    "name": "POLYTECHNIC ENGINEERING SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES",
+    "acronym": "PESSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "PESSSUTMS"
+    ]
+  },
+  {
+    "id": "col-27207",
+    "name": "Punjabi University Neighborhood Campus Rampura Phul ( Engineering College)",
+    "acronym": "PUNCRP",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Phul Road, Rampura Phul",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "PUNCRP"
+    ]
+  },
+  {
+    "id": "col-28051",
+    "name": "Punjabi University Regional Centre for Information Technology & Managment",
+    "acronym": "PURCITM",
+    "state": "Punjab",
+    "city": "S.A.S Nagar",
+    "address": "Residential Area Phase-7, Mohali, MOHALI",
+    "website": "www.purcitm.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "PURCITM"
+    ]
+  },
+  {
+    "id": "col-19664",
+    "name": "Rewa Engineering College, University Road, Rewa - 486001",
+    "acronym": "RECURR4",
+    "state": "Madhya Pradesh",
+    "city": "Rewa",
+    "address": "Rewa Engineering College,  University Road, Rewa  - 486001, Rewa Engineering College,  University Road, Rewa  - 486001, Rewa",
+    "website": "recrewa.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "RECURR4"
+    ]
+  },
+  {
+    "id": "col-26908",
+    "name": "Sambalpur University Institute of Information Technology (SUIIT)",
+    "acronym": "SUIIT",
+    "state": "Odisha",
+    "city": "Sambalpur",
+    "address": "JYOTI VIHAR, BURLA",
+    "website": "https://suiit.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "SUIIT"
+    ]
+  },
+  {
+    "id": "col-19987",
+    "name": "SCHOOL OF COMPUTER APPLICATION,SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES,(SSSUTMS)",
+    "acronym": "SCASSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SCASSSUTMS"
+    ]
+  },
+  {
+    "id": "col-19988",
+    "name": "SCHOOL OF DESIGN SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCE",
+    "acronym": "SDSSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SDSSSUTMS"
+    ]
+  },
+  {
+    "id": "col-19989",
+    "name": "SCHOOL OF ENGINEERING SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES,(SSSUTMS)",
+    "acronym": "SESSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SESSSUTMS"
+    ]
+  },
+  {
+    "id": "col-7783",
+    "name": "School of Engineering, RK University, Rajkot",
+    "acronym": "SERUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "BHAVNAGAR HIGHWAY, KASTURBADHAM, TRAMBA Ta. Rajkot, Ta .Rajkot  TRAMBA, RAJKOT",
+    "website": "http://www.rku.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "SERUR"
+    ]
+  },
+  {
+    "id": "col-19990",
+    "name": "SCHOOL OF HOMOEOPATHY SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES",
+    "acronym": "SHSSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "Bhopal-Indore Road, Opposite Oilfed Plant, Sehore",
+    "website": "http://sssutms-soh.in",
+    "popularityScore": 80,
+    "aliases": [
+      "SHSSSUTMS"
+    ]
+  },
+  {
+    "id": "col-19991",
+    "name": "SCHOOL OF HOTEL MANAGEMENT, SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES,(SSSUTMS)",
+    "acronym": "SHMSSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SHMSSSUTMS"
+    ]
+  },
+  {
+    "id": "col-19992",
+    "name": "SCHOOL OF LAW SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES",
+    "acronym": "SLSSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SLSSSUTMS"
+    ]
+  },
+  {
+    "id": "col-19993",
+    "name": "SCHOOL OF MANAGEMENT STUDIES, SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES (SSSUTMS)",
+    "acronym": "SMSSSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SMSSSSUTMS"
+    ]
+  },
+  {
+    "id": "col-19994",
+    "name": "SCHOOL OF NURSING SRI SATYA SAI UNIVERSITY OF TECHNOLOGY AND MEDICAL SCIENCES",
+    "acronym": "SNSSSUTMS",
+    "state": "Madhya Pradesh",
+    "city": "Sehore",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "SNSSSUTMS"
+    ]
+  },
+  {
+    "id": "col-37567",
+    "name": "SEEMANT INSTITUTE OF TECHNOLOGY (Constituent College of Uttarakhand technical University)",
+    "acronym": "SIT",
+    "state": "Uttarakhand",
+    "city": "Pithoragarh",
+    "address": "G.I.C. CAMPAS, VIKLANG BHAWAN,, PITHORAGARH, PITHORAGARH",
+    "website": "www.sitp.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "SIT"
+    ]
+  },
+  {
+    "id": "col-19810",
+    "name": "Swami Vivekanad Institute of Technology, Behind Dr. H.S. Gaur University, NH 26, Sironja, Sagar",
+    "acronym": "SVITBDHSGUN2SS",
+    "state": "Madhya Pradesh",
+    "city": "Sagar",
+    "address": "NH-26, NARSHINGHPUR ROAD, SIRONJA, SAGAR",
+    "website": "www.svnitmp.com",
+    "popularityScore": 80,
+    "aliases": [
+      "SVITBDHSGUN2SS"
+    ]
+  },
+  {
+    "id": "col-37596",
+    "name": "THDC Institute of Hydropower Engineering & Technology (Constituent College of Uttarakhand technical University)",
+    "acronym": "TIHET",
+    "state": "Uttarakhand",
+    "city": "Tehri Garhwal",
+    "address": "Bhagrathipuram, Tehri Garhwal",
+    "website": "http://www.thdcihet.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "TIHET"
+    ]
+  },
+  {
+    "id": "col-35593",
+    "name": "UNIVERSITY COLLEG OF TECHNOLOGY AUTONOMOUS OSMANIA UNIVERSITY",
+    "acronym": "UCTAOU",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UCTAOU"
+    ]
+  },
+  {
+    "id": "col-609",
+    "name": "University College of Engineering",
+    "acronym": "UCE",
+    "state": "Andhra Pradesh",
+    "city": "East Godavari",
+    "address": "Adikavi Nannaya University, Rajah Rajah Narendra Nagar, Rajahmundry",
+    "website": "www.aknu.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCE"
+    ]
+  },
+  {
+    "id": "col-872",
+    "name": "University College of Engineering & Technology",
+    "acronym": "UCET",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "ACHARYA NAGARJUNA UNIVERSITY, NAGARJUNA NAGAR, Guntur",
+    "website": "www.anu.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCET"
+    ]
+  },
+  {
+    "id": "col-10525",
+    "name": "UNIVERSITY COLLEGE OF ENGINEERING & TECHNOLOGY",
+    "acronym": "UCET",
+    "state": "Jharkhand",
+    "city": "Hazaribagh",
+    "address": "UCET, VINOBA BHAVE UNIVERSITY, RANCHI-PATNA ROAD, NH-33, HAZARIBAG",
+    "website": "www.ucetvbu.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCET"
+    ]
+  },
+  {
+    "id": "col-37067",
+    "name": "University College of Engineering & Technology for Women",
+    "acronym": "UCETW",
+    "state": "Telangana",
+    "city": "Warangal Rural",
+    "address": "Kakatiya University Campus, Vidyaranyapuri, Hanamkonda Warangal",
+    "website": "kakatiya.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCETW"
+    ]
+  },
+  {
+    "id": "col-976",
+    "name": "University College of Engineering JNTUK Narasaraopet",
+    "acronym": "UCEJN",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "Palnadu Road, Beside HP Petrol Bunk, Narasaraopet",
+    "website": "http://jntukucen.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEJN"
+    ]
+  },
+  {
+    "id": "col-35590",
+    "name": "University College of Engineering Osmania University Hyderabad",
+    "acronym": "UCEOUH",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEOUH"
+    ]
+  },
+  {
+    "id": "col-34662",
+    "name": "University College of Engineering, Arani",
+    "acronym": "UCEA",
+    "state": "Tamil Nadu",
+    "city": "Tiruvannamalai",
+    "address": "Arni to Devikapuram Road, Thatchur., Thatchur Post Arni Taluk, Arni",
+    "website": "www.aucearni.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEA"
+    ]
+  },
+  {
+    "id": "col-32231",
+    "name": "University College of Engineering, Ariyalur",
+    "acronym": "UCEA",
+    "state": "Tamil Nadu",
+    "city": "Ariyalur",
+    "address": "Kathankudikadu (Vil), Thelur (Post), Ariyalur",
+    "website": "https://www.auucea.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEA"
+    ]
+  },
+  {
+    "id": "col-28564",
+    "name": "UNIVERSITY COLLEGE OF ENGINEERING, BANSWARA",
+    "acronym": "UCEB",
+    "state": "Rajasthan",
+    "city": "Banswara",
+    "address": ", ,",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEB"
+    ]
+  },
+  {
+    "id": "col-34401",
+    "name": "University College of Engineering, BIT Campus, Tiruchirappalli",
+    "acronym": "UCEBCT",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "BIT Campus, Anna University, Tiruchirappalli",
+    "website": "www.aubit.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEBCT"
+    ]
+  },
+  {
+    "id": "col-32953",
+    "name": "University College of Engineering, Dindigul",
+    "acronym": "UCED",
+    "state": "Tamil Nadu",
+    "city": "Dindigul",
+    "address": "University College of Engineering- Dindigul, Mangarai Pirivu, Reddiyar Chattram, Dindigul",
+    "website": "www.auucedgl.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCED"
+    ]
+  },
+  {
+    "id": "col-698",
+    "name": "University College of Engineering, Kakinada (AUTONOMOUS)",
+    "acronym": "UCEK",
+    "state": "Andhra Pradesh",
+    "city": "East Godavari",
+    "address": "PITHAPURAM ROAD, JNTUK, KAKINADA",
+    "website": "www.jntucek.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEK"
+    ]
+  },
+  {
+    "id": "col-33173",
+    "name": "University College of Engineering, Kancheepuram",
+    "acronym": "UCEK",
+    "state": "Tamil Nadu",
+    "city": "Kanchipuram",
+    "address": "Ponnerikarai, Karaipettai (Village & Post), NH-4 , Chennai - Bangalore Highways, Kanchipuram-631 552",
+    "website": "www.aucek.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEK"
+    ]
+  },
+  {
+    "id": "col-16608",
+    "name": "University College of Engineering, Kariavattom",
+    "acronym": "UCEK",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "GOLDEN JUBILEE BUILDING, KERALA UNIVERSITY CAMPUS, KARIYAVATTOM",
+    "website": "www.ucek.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEK"
+    ]
+  },
+  {
+    "id": "col-15579",
+    "name": "University College of Engineering, Muttom, Thodupuzha, Idukki",
+    "acronym": "UCEMTI",
+    "state": "Kerala",
+    "city": "Idukki",
+    "address": "Muttom P O, Idukki Road, Thodupuzha",
+    "website": "www.ucet.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEMTI"
+    ]
+  },
+  {
+    "id": "col-33269",
+    "name": "University College of Engineering, Nagercoil",
+    "acronym": "UCEN",
+    "state": "Tamil Nadu",
+    "city": "Kanniyakumari",
+    "address": "Nagercoil Industrial Estate, Konam, Nagercoil 629 004",
+    "website": "www.ucen.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEN"
+    ]
+  },
+  {
+    "id": "col-32806",
+    "name": "University College of Engineering, Panruti",
+    "acronym": "UCEP",
+    "state": "Tamil Nadu",
+    "city": "Cuddalore",
+    "address": "CHENNAI KUMBAKONAM HIGHWAY, PANRUTI, PANNIKANKUPPAM,PANRUTI, CUDDALORE",
+    "website": "www.ucep.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEP"
+    ]
+  },
+  {
+    "id": "col-34139",
+    "name": "University College of Engineering, Pattukkottai",
+    "acronym": "UCEP",
+    "state": "Tamil Nadu",
+    "city": "Thanjavur",
+    "address": "ECR ROAD, RAJAMADAM POST -614701, PATTUKKOTTAI TALUK",
+    "website": "www.aucepkt.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEP"
+    ]
+  },
+  {
+    "id": "col-33891",
+    "name": "University College of Engineering, Ramanathapuram",
+    "acronym": "UCER",
+    "state": "Tamil Nadu",
+    "city": "Ramanathapuram",
+    "address": "Pullangudi, , Ramanathapuram - 623 513, Ramanathapuram",
+    "website": "www.aucermd.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCER"
+    ]
+  },
+  {
+    "id": "col-34885",
+    "name": "University College of Engineering, Tindivanam",
+    "acronym": "UCET",
+    "state": "Tamil Nadu",
+    "city": "Villupuram",
+    "address": "MELPAKKAM, 604307, TINDIVANAM",
+    "website": "WWW.ANNAUNIV.EDU",
+    "popularityScore": 80,
+    "aliases": [
+      "UCET"
+    ]
+  },
+  {
+    "id": "col-33581",
+    "name": "University College of Engineering, Tirukkuvalai",
+    "acronym": "UCET",
+    "state": "Tamil Nadu",
+    "city": "Nagapattinam",
+    "address": "Sattiyagudi Main Road, Kundaiyur, Thirukkuvalai",
+    "website": "www.aucetk.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCET"
+    ]
+  },
+  {
+    "id": "col-34886",
+    "name": "University College of Engineering, Villupuram",
+    "acronym": "UCEV",
+    "state": "Tamil Nadu",
+    "city": "Villupuram",
+    "address": "University College of Engineering, Villupuram, kakuppam,, Villupuram-605103., Villupuram",
+    "website": "aucev.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEV"
+    ]
+  },
+  {
+    "id": "col-2318",
+    "name": "University College of Engineering, Vizianagaram",
+    "acronym": "UCEV",
+    "state": "Andhra Pradesh",
+    "city": "Vizianagaram",
+    "address": "Dwarapudi (v), Via Contonment, Vizianagaram",
+    "website": "jntukucev.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEV"
+    ]
+  },
+  {
+    "id": "col-35923",
+    "name": "University college of Engineering,Kothagudam",
+    "acronym": "UCEK",
+    "state": "Telangana",
+    "city": "Khammam",
+    "address": "University College of Engineering, Kakatiya University, Kothagudem, UCE CHATHAKINDA, Kothagudem",
+    "website": "www.kuce.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCEK"
+    ]
+  },
+  {
+    "id": "col-610",
+    "name": "University College of Science and Technology",
+    "acronym": "UCST",
+    "state": "Andhra Pradesh",
+    "city": "East Godavari",
+    "address": "Adikavi Nannaya University, Rajah Rajah Narendra Nagar, Rajahmundry",
+    "website": "http://www.aknu.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UCST"
+    ]
+  },
+  {
+    "id": "col-9068",
+    "name": "UNIVERSITY INSTITUTE OF ENGG AND TECHNOLOGY",
+    "acronym": "UIET",
+    "state": "Haryana",
+    "city": "Kurukshetra",
+    "address": "Universiry Institute of Engineering & Technology, Kurukshetra University, Kurukshetra",
+    "website": "www.uietkuk.org",
+    "popularityScore": 80,
+    "aliases": [
+      "UIET"
+    ]
+  },
+  {
+    "id": "col-9864",
+    "name": "University Institute of Information and Technology, H.P.U, Shimla",
+    "acronym": "UIITHPUS",
+    "state": "Himachal Pradesh",
+    "city": "Shimla",
+    "address": "Silver Wood Estate, Nr, Police Chowki,, Gyan Path, H.P. University, Campus, Lower Summer HIll, Shimla",
+    "website": "www.uiit.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UIITHPUS"
+    ]
+  },
+  {
+    "id": "col-47489",
+    "name": "University Institute of Technology",
+    "acronym": "UIT",
+    "state": "West Bengal",
+    "city": "Purba Bardhaman",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UIT"
+    ]
+  },
+  {
+    "id": "col-15837",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY (UIT) ITTIVA",
+    "acronym": "UITI",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "REGIONAL CENTRE ITTIVA CHARIPPARAMBU, KADAKKAL, CHADAYAMANGALAM, KOLLAM, KADAKKAL",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITI"
+    ]
+  },
+  {
+    "id": "col-16611",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY KANJIRAMKULAM",
+    "acronym": "UITK",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "Panchayat Marketing Complex, Kanjiramkulam, Thiruvananthapuram",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITK"
+    ]
+  },
+  {
+    "id": "col-15323",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY MANNAR",
+    "acronym": "UITM",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "UNIVERSITY INSTITUTE OF TECHNOLOGY, MANNAR, ALAPPUZHA, MANNAR",
+    "website": "www.keralauniversity.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UITM"
+    ]
+  },
+  {
+    "id": "col-16613",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY REGIONAL CENTRE PALLICKAL VARKALA",
+    "acronym": "UITRCPV",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "PALLICKAL PALLICKAL P.O, PALLICKAL",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITRCPV"
+    ]
+  },
+  {
+    "id": "col-15835",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY REGIONAL CENTRE PARAVUR",
+    "acronym": "UITRCP",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "Ayiravally, Koonayil, PARAVUR",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITRCP"
+    ]
+  },
+  {
+    "id": "col-16614",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY REGIONAL CENTRE PIRAPPANCODE",
+    "acronym": "UITRCP",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "PIRAPPANCODE",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITRCP"
+    ]
+  },
+  {
+    "id": "col-16617",
+    "name": "University institute of technology vallakkadavu",
+    "acronym": "UITV",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITV"
+    ]
+  },
+  {
+    "id": "col-16442",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, ADOOR",
+    "acronym": "UITA",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "KAITHAVANA BUILDING, HIGH SCHOOL JUNCTION, ADOOR",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITA"
+    ]
+  },
+  {
+    "id": "col-15318",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, ALAPPUZHA",
+    "acronym": "UITA",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "UIT ALAPPUZHA, MOHAMMADANS CAMPUS, COLLECTRATE P.O, ALAPPUZHA",
+    "website": "www.uitalleppey.org",
+    "popularityScore": 80,
+    "aliases": [
+      "UITA"
+    ]
+  },
+  {
+    "id": "col-15319",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, Bharanikavu",
+    "acronym": "UITB",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "UIT BHARANICKAVU,PALLICKAL PO, BHARANICKAVU, KATTANAM",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITB"
+    ]
+  },
+  {
+    "id": "col-15320",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, CHARAMANGALAM",
+    "acronym": "UITC",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "Govt. Sanskrit High School, Kayippuram, Thannermukkom South, Muhamma",
+    "website": "www.uitcharamangalam@gmail.com",
+    "popularityScore": 80,
+    "aliases": [
+      "UITC"
+    ]
+  },
+  {
+    "id": "col-15321",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, KARUVATTA",
+    "acronym": "UITK",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "UIT, T.B Junction, Karuvatta P.O, Haripad",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITK"
+    ]
+  },
+  {
+    "id": "col-15833",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, KOTTRARAKARA",
+    "acronym": "UITK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "Government Girls High School Campus, Kottarakkara, Kottarakara",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITK"
+    ]
+  },
+  {
+    "id": "col-16612",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, KURAVANKONAM, THIRUVANANTHAPURAM",
+    "acronym": "UITKT",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "P.T.P SCHOOL CAMPUS, KURAVANKONAM, KOWDIAR P.O, THIRUVANANTHAPURAM",
+    "website": "keralauniversity.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UITKT"
+    ]
+  },
+  {
+    "id": "col-16443",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, MANNADY",
+    "acronym": "UITM",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "University Institute of Technology, Regional Centre, Near Mannady Devi Temple,, Mannady",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITM"
+    ]
+  },
+  {
+    "id": "col-15322",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, MANNANCHERRY REGIONAL CENTRE",
+    "acronym": "UITMRC",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "UNIVERSITY INSTITUTE OF TECHNOLOGY, MANNANCHERRY REGIONAL CENTRE, PANAYIL JUNCTION, MANNANCHERRY P.O., ALAPPUZHA, ALAPPUZHA",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITMRC"
+    ]
+  },
+  {
+    "id": "col-15324",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, MUTHUKULAM",
+    "acronym": "UITM",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "Higher Secondary School Campus, Muthukulam South, Muthukulam",
+    "website": "www.uitmuthukulam.com",
+    "popularityScore": 80,
+    "aliases": [
+      "UITM"
+    ]
+  },
+  {
+    "id": "col-15834",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, PATHANAPURAM",
+    "acronym": "UITP",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "UIT ROAD,CHELACODU, Near MOUNT TABORE TRAINING COLLEGE, Pathanapuram",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITP"
+    ]
+  },
+  {
+    "id": "col-17607",
+    "name": "University Institute of Technology, RGPV",
+    "acronym": "UITR",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "Narsinghgarh bypass road, GANDHI NAGAR, BHOPAL",
+    "website": "www.rgpv.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UITR"
+    ]
+  },
+  {
+    "id": "col-20087",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, RGPV, SHAHDOL",
+    "acronym": "UITRS",
+    "state": "Madhya Pradesh",
+    "city": "Shahdol",
+    "address": "UNIVERSITY INSTITUTE OF TECHNOLOGY (UIT), RGPV SHAHDOL, REWA ROAD, GRAM CHHATWAI",
+    "website": "http://uitshahdol.rgpv.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UITRS"
+    ]
+  },
+  {
+    "id": "col-15836",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, THENMALA",
+    "acronym": "UITT",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "Government Higher Secondary School,, Ottakkal. P. O, Thenmala, Punalur",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITT"
+    ]
+  },
+  {
+    "id": "col-16616",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, UNIVERSITY OF KERALA, NEYYATTINKARA REGIONAL CENTRE",
+    "acronym": "UITUKNRC",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "UNIVERSITY INSTITUTE OF TECHNOLOGY, NEYYATTINKARA CENTRE, ARALIMMOODU P O,, THIRUVANANTHAPURAM",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITUKNRC"
+    ]
+  },
+  {
+    "id": "col-16618",
+    "name": "UNIVERSITY INSTITUTE OF TECHNOLOGY, VELLARADA CENTRE",
+    "acronym": "UITVC",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "UNIVERSITY INSTITUTE OF TECHNOLOGY(UIT), VELLARADA CENTRE, ARATTUKUZHI, KOOTHALI P O, THIRUVANANTHAPURAM",
+    "website": "www.uitvellarada.edu.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UITVC"
+    ]
+  },
+  {
+    "id": "col-15838",
+    "name": "University Institute of Technology, Yeroor",
+    "acronym": "UITY",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "Yeroor P.O, Yeroor, Anchal",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITY"
+    ]
+  },
+  {
+    "id": "col-15325",
+    "name": "University Institute of Technology,Pathiyoor",
+    "acronym": "UITP",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "Keerikkad p.o, Kayamkulam",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITP"
+    ]
+  },
+  {
+    "id": "col-16615",
+    "name": "University Institute of Technology(UIT) Kallara",
+    "acronym": "UITK",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "paramukal, vellamkudy P O, kallara",
+    "website": "",
+    "popularityScore": 80,
+    "aliases": [
+      "UITK"
+    ]
+  },
+  {
+    "id": "col-34737",
+    "name": "University V.O.C College of Engineering,Tuticorin",
+    "acronym": "UVOCCET",
+    "state": "Tamil Nadu",
+    "city": "Tuticorin",
+    "address": "BRYANT NAGAR 7TH STREET, TUTICORIN",
+    "website": "www.auttvl.ac.in",
+    "popularityScore": 80,
+    "aliases": [
+      "UVOCCET"
+    ]
+  },
+  {
+    "id": "col-11533",
+    "name": "University Vishweshwaraya College of Engineering",
+    "acronym": "UVCE",
+    "state": "Karnataka",
+    "city": "Bengaluru Urban",
+    "address": "Dr Ambedkar veedi, K R Circle, Bengaluru",
+    "website": "www.uvcebangalore.org",
+    "popularityScore": 80,
+    "aliases": [
+      "UVCE"
+    ]
+  },
+  {
+    "id": "col-32052",
+    "name": "AISHWARIYA TEACHERS TRAINING COLLEGE, ADARSH NAGAR, UNIVERSITY ROAD",
+    "acronym": "ATTCANUR",
+    "state": "Rajasthan",
+    "city": "Udaipur",
+    "address": "RAJENDRA NAGAR,, NEAR RTO, CHITRAKOOT EXT, , BHUWANA",
+    "website": "www.aishwaryacollege.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ATTCANUR"
+    ]
+  },
+  {
+    "id": "col-33863",
+    "name": "ALAGAPPA UNIVERSITY EVENING COLLEGE, PARAMAKKUDI",
+    "acronym": "AUECP",
+    "state": "Tamil Nadu",
+    "city": "Ramanathapuram",
+    "address": "Sourastra Hr Sec School Campus, Madurai Rameshwaram Road, Paramakudi",
+    "website": "www.alueveningcolleges.in",
+    "popularityScore": 50,
+    "aliases": [
+      "AUECP"
+    ]
+  },
+  {
+    "id": "col-33864",
+    "name": "ALAGAPPA UNIVERSITY EVENING COLLEGE, RAMANATHAPURAM",
+    "acronym": "AUECR",
+    "state": "Tamil Nadu",
+    "city": "Ramanathapuram",
+    "address": "VELLIPATTINAM POST, VELLIPATTINAM POST, RAMANATHAPURAM",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "AUECR"
+    ]
+  },
+  {
+    "id": "col-34065",
+    "name": "ALAGAPPA UNIVERSITY EVENING COLLEGE, THIRUPPUVANAM",
+    "acronym": "AUECT",
+    "state": "Tamil Nadu",
+    "city": "Sivaganga",
+    "address": "1-3D west car street, St Mary's Matric Higher Secondary School Campus, Thiruppuvanam",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "AUECT"
+    ]
+  },
+  {
+    "id": "col-33865",
+    "name": "ALAGAPPA UNIVERSITY EVENING COLLEGE, THONDI",
+    "acronym": "AUECT",
+    "state": "Tamil Nadu",
+    "city": "Ramanathapuram",
+    "address": "OCEANOGRAPHY AND COSTAL AREA STUDIES, THONDI CAMPUS, THONDI",
+    "website": "WWW.ALU.IN",
+    "popularityScore": 50,
+    "aliases": [
+      "AUECT"
+    ]
+  },
+  {
+    "id": "col-33866",
+    "name": "ALAGAPPA UNIVERSITY MODEL CONSTITUENT COLLEGE OF ARTS AND SCIENCE, PARAMAKUDI",
+    "acronym": "AUMCCASP",
+    "state": "Tamil Nadu",
+    "city": "Ramanathapuram",
+    "address": "Mudukullathur Road,, Ponnaiyapuram, Paramakudi",
+    "website": "www.aluparamakudicollege.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "AUMCCASP"
+    ]
+  },
+  {
+    "id": "col-15334",
+    "name": "ALBERTAIN INSTITUTE OF SCIENCE & TECHNOLGY, TECHNICAL CAMPUS, ANGEL MARY NAGAR, COCHIN UNIVERSITY",
+    "acronym": "AISTTCAMNCU",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "AISAT Technical Campus, Archbishop Angel Mary Nagar, Kalamassery, Kochi",
+    "website": "www.aisat.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "AISTTCAMNCU"
+    ]
+  },
+  {
+    "id": "col-42868",
+    "name": "Amity University Uttar Pradesh Lucknow Campus",
+    "acronym": "AUUPLC",
+    "state": "Uttar Pradesh",
+    "city": "Lucknow",
+    "address": "Amity Univeristy Lucknow Campus, Malhaur Laulai Road, Lucknow",
+    "website": "amity.edu",
+    "popularityScore": 50,
+    "aliases": [
+      "AUUPLC"
+    ]
+  },
+  {
+    "id": "col-32527",
+    "name": "Anna University Regional Campus - Coimbatore",
+    "acronym": "AURCC",
+    "state": "Tamil Nadu",
+    "city": "Coimbatore",
+    "address": "Anna University Regional Campus Coimbatore, Navavoor, Coimbatore",
+    "website": "www.aurcc.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "AURCC"
+    ]
+  },
+  {
+    "id": "col-33453",
+    "name": "Anna University Regional Campus - Madurai",
+    "acronym": "AURCM",
+    "state": "Tamil Nadu",
+    "city": "Madurai",
+    "address": "Anna University Regional Campus Madurai, Keelakuyilkudi,  Madurai -625019, Keelakuyilkudi",
+    "website": "www.autmdu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "AURCM"
+    ]
+  },
+  {
+    "id": "col-34502",
+    "name": "Anna University Regional Campus - Tirunelveli",
+    "acronym": "AURCT",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "Regional Office,, Anna University : Regional Office, Tirunelveli",
+    "website": "www.auttvl.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "AURCT"
+    ]
+  },
+  {
+    "id": "col-27341",
+    "name": "Baba Namdev University College, Kishankot",
+    "acronym": "BNUCK",
+    "state": "Punjab",
+    "city": "Gurdaspur",
+    "address": "VPO KISHANKOT TEHSIL BATALA, KISHANKOT",
+    "website": "bnducollege.org",
+    "popularityScore": 50,
+    "aliases": [
+      "BNUCK"
+    ]
+  },
+  {
+    "id": "col-22847",
+    "name": "Bar S K Wankhede University College of Education Nagpur",
+    "acronym": "BSKWUCEN",
+    "state": "Maharashtra",
+    "city": "Nagpur",
+    "address": "Law College Campus Amravati Road Nagpur 440001, Amravati Road, Nagpur",
+    "website": "www.skwankhedecollege.org",
+    "popularityScore": 50,
+    "aliases": [
+      "BSKWUCEN"
+    ]
+  },
+  {
+    "id": "col-27539",
+    "name": "Bebe Nanaki University college for girls Fattu dhinga",
+    "acronym": "BNUCGFD",
+    "state": "Punjab",
+    "city": "Kapurthala",
+    "address": "VPO Fattu Dhinga, Near Mundi Morh, Kapurthala",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "BNUCGFD"
+    ]
+  },
+  {
+    "id": "col-27540",
+    "name": "Bebe Nanki University College, Vill. Mithra",
+    "acronym": "BNUCVM",
+    "state": "Punjab",
+    "city": "Kapurthala",
+    "address": "Principal, Bebe Nanaki University College, Village Mithra PO Nasirpur Dist. Kapurthala, Kapurthala",
+    "website": "www.gnducmithra.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BNUCVM"
+    ]
+  },
+  {
+    "id": "col-34146",
+    "name": "Bharathidasan University College, Orathanadu - 614 625",
+    "acronym": "BUCO66",
+    "state": "Tamil Nadu",
+    "city": "Thanjavur",
+    "address": "ORATHANADU - 614 625, THANJAVUR DISTRICT, THANJAVUR",
+    "website": "www.bdu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUCO66"
+    ]
+  },
+  {
+    "id": "col-34406",
+    "name": "Bharathidasan University Constituent Arts & Science College (Co-education), Inamkulathur, Tiruchirappalli",
+    "acronym": "BUCASCIT",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "Dindugal Main Road, Navalurkuttapattu, Trichirappalli",
+    "website": "bdu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUCASCIT"
+    ]
+  },
+  {
+    "id": "col-33586",
+    "name": "Bharathidasan University Constituent Arts & Science College (Co-education), Kaadambadi",
+    "acronym": "BUCASCK",
+    "state": "Tamil Nadu",
+    "city": "Nagapattinam",
+    "address": "Selluar Road, Nagapattinam, Nagapattinam",
+    "website": "bdu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUCASCK"
+    ]
+  },
+  {
+    "id": "col-34352",
+    "name": "Bharathidasan University Constituent Arts & Science College (Co-education), Nannilam, Thiruvarur District",
+    "acronym": "BUCASCNTD",
+    "state": "Tamil Nadu",
+    "city": "Thiruvarur",
+    "address": "Nannilam, Nannilam Thiruvarur Main Road, Nannilam",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "BUCASCNTD"
+    ]
+  },
+  {
+    "id": "col-34407",
+    "name": "Bharathidasan University Constituent College, Lalgudi - 621 601",
+    "acronym": "BUCCL66",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "address": "Kumulur ,Lalgudi, Lalgudi 621 712, Tiruchirappalli",
+    "website": "www.bdu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUCCL66"
+    ]
+  },
+  {
+    "id": "col-33768",
+    "name": "BHARATHIDASAN UNIVERSITY CONSTITUENT MODEL ARTS AND SCIENCE COLLEGE FOR WOMEN",
+    "acronym": "BUCMASCW",
+    "state": "Tamil Nadu",
+    "city": "Perambalur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "BUCMASCW"
+    ]
+  },
+  {
+    "id": "col-33812",
+    "name": "Bharathidasan University Model College, Aranthangi - 614 616",
+    "acronym": "BUMCA66",
+    "state": "Tamil Nadu",
+    "city": "Pudukkottai",
+    "address": "avadayar kovil road, perunavalur, aranthangi",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "BUMCA66"
+    ]
+  },
+  {
+    "id": "col-34353",
+    "name": "Bharathidasan University Model College, Thiruthuraipoondi - 614 713",
+    "acronym": "BUMCT67",
+    "state": "Tamil Nadu",
+    "city": "Thiruvarur",
+    "address": "THIRUVARUR MAIN ROAD, , THANDALAICHERRY, VELUR & POST",
+    "website": "www.bdu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUMCT67"
+    ]
+  },
+  {
+    "id": "col-33587",
+    "name": "Bharathidasan University Model College, Vedaranyam - 614 810",
+    "acronym": "BUMCV68",
+    "state": "Tamil Nadu",
+    "city": "Nagapattinam",
+    "address": "Near District Munsif Cum Judicial Magistrate Court, Nagai Road, Vedaranyam",
+    "website": "www.bdu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUMCV68"
+    ]
+  },
+  {
+    "id": "col-33769",
+    "name": "Bharathidasan University, Kurumbalur - 621 107",
+    "acronym": "BUK61",
+    "state": "Tamil Nadu",
+    "city": "Perambalur",
+    "address": "Thuraiyur Main Road, Kurumbalur, Perambalur",
+    "website": "www.gascp.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "BUK61"
+    ]
+  },
+  {
+    "id": "col-24964",
+    "name": "Bharati Vidyapeeth ( Deemed to be University) Dental College and Hospital, Navi Mumbai",
+    "acronym": "BVDCHNM",
+    "state": "Maharashtra",
+    "city": "Thane",
+    "address": "Sector 7, CBD Belapur, Navi Mumbai . Pin- 400614, Navi Mumbai.",
+    "website": "https://dchmumbai.bharatividyapeeth.edu",
+    "popularityScore": 50,
+    "aliases": [
+      "BVDCHNM"
+    ]
+  },
+  {
+    "id": "col-16797",
+    "name": "Calicut University Centre, Kadamat",
+    "acronym": "CUCK",
+    "state": "Lakshadweep",
+    "city": "Lakshadweep District",
+    "address": "Calicut University Centre, Kadamat, U.T.Of Lakshadweep, pin- 682556, same as above, Kadmat",
+    "website": "www.cuckadmat.com",
+    "popularityScore": 50,
+    "aliases": [
+      "CUCK"
+    ]
+  },
+  {
+    "id": "col-15996",
+    "name": "CALICUT UNIVERSITY REGIONAL CENTRE PERAMBRA",
+    "acronym": "CURCP",
+    "state": "Kerala",
+    "city": "Kozhikode",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "CURCP"
+    ]
+  },
+  {
+    "id": "col-15997",
+    "name": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE CALICUT",
+    "acronym": "CUTECC",
+    "state": "Kerala",
+    "city": "Kozhikode",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "CUTECC"
+    ]
+  },
+  {
+    "id": "col-16681",
+    "name": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE VALAPAD",
+    "acronym": "CUTECV",
+    "state": "Kerala",
+    "city": "Thrissur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "CUTECV"
+    ]
+  },
+  {
+    "id": "col-16142",
+    "name": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE-MANJERI",
+    "acronym": "CUTECM",
+    "state": "Kerala",
+    "city": "Malappuram",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "CUTECM"
+    ]
+  },
+  {
+    "id": "col-16680",
+    "name": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE, NATTIKA",
+    "acronym": "CUTECN",
+    "state": "Kerala",
+    "city": "Thrissur",
+    "address": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE, NEAR PRIVATE BUSTAND,CHALAKUDY, CHALAKUDY",
+    "website": "CUTEC.UOC.AC.IN/CHALAKKUDY",
+    "popularityScore": 50,
+    "aliases": [
+      "CUTECN"
+    ]
+  },
+  {
+    "id": "col-16774",
+    "name": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE, POOMALA, SULTHAN BATHERY",
+    "acronym": "CUTECPSB",
+    "state": "Kerala",
+    "city": "Wayanad",
+    "address": "CUTEC POOMALA, POOMALA(PO), SULTHANBATHERY",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "CUTECPSB"
+    ]
+  },
+  {
+    "id": "col-16773",
+    "name": "CALICUT UNIVERSITY TEACHER EDUCATION CENTRE,KANIYAMBETTA",
+    "acronym": "CUTECK",
+    "state": "Kerala",
+    "city": "Wayanad",
+    "address": "KANIYAMBETTA, Kaniyambetta",
+    "website": "www.universityofcalicut.info",
+    "popularityScore": 50,
+    "aliases": [
+      "CUTECK"
+    ]
+  },
+  {
+    "id": "col-16145",
+    "name": "CENTRE FOR COMPUTER SCIENCE AND IT, UNIVERSITY CAMPUS",
+    "acronym": "CCSIUC",
+    "state": "Kerala",
+    "city": "Malappuram",
+    "address": "CCSIT, Calicut University P.O, Tenjipalam",
+    "website": "https://www.uoc.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "CCSIUC"
+    ]
+  },
+  {
+    "id": "col-20914",
+    "name": "College of Social Work , opp Dept. of Chemistry , Dr.Babasaheb Ambedkar Marathwada University Aurangabad.",
+    "acronym": "CSWODCDBAMUA",
+    "state": "Maharashtra",
+    "city": "Aurangabad",
+    "address": "Aurangabad, Opp.Chemistry Department, Aurangabad",
+    "website": "www.bamu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "CSWODCDBAMUA"
+    ]
+  },
+  {
+    "id": "col-13513",
+    "name": "Constituent College of University of Mysore, Hetturu, Sakaleshapura 573123",
+    "acronym": "CCUMHS5",
+    "state": "Karnataka",
+    "city": "Hassan",
+    "address": "CONSTITUENT COLLEGE OF UNIVERSITY OF MYSORE, HETHUR, SAKALESHPUR TQ  HASSAN, HETHUR",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "CCUMHS5"
+    ]
+  },
+  {
+    "id": "col-26549",
+    "name": "DDCE,Utkal University",
+    "acronym": "DUU",
+    "state": "Odisha",
+    "city": "Khordha",
+    "address": "DDCE,  UTKAL  UNIVERSITY, VANIVIHAR,  KHORDHA, BHUBANESWAR",
+    "website": "www.ddceutkal.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "DUU"
+    ]
+  },
+  {
+    "id": "col-8254",
+    "name": "Department of Education, C. U. Shah University",
+    "acronym": "DECUSU",
+    "state": "Gujarat",
+    "city": "Surendranagar",
+    "address": "Department of Education Near Gebansah pir Dargah, Surendranagar, epartment of Education Near Gebansah pir Dargah, Surendranagar, Wadhwancity surendranagar",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "DECUSU"
+    ]
+  },
+  {
+    "id": "col-17615",
+    "name": "Department of Education, R.K.D.F University, Bhopal",
+    "acronym": "DERKDFUB",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "DERKDFUB"
+    ]
+  },
+  {
+    "id": "col-17616",
+    "name": "DEPARTMENT OF PHARMACY RAM KRISHNA DHARMARTH FOUNDATION UNIVERSITY",
+    "acronym": "DPRKDFU",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "DPRKDFU"
+    ]
+  },
+  {
+    "id": "col-42903",
+    "name": "Dr A P J ABDUL KALAM TECHNICAL UNIVERSITY FACULTY OF ARCHITECTURE, LUCKNOW",
+    "acronym": "DAPJAKTUFAL",
+    "state": "Uttar Pradesh",
+    "city": "Lucknow",
+    "address": "Faculty of Architecture, Dr. APJ Abdul Kalam Technical University,, Tagore Marg,, Lucknow",
+    "website": "http://foaaktu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "DAPJAKTUFAL"
+    ]
+  },
+  {
+    "id": "col-21972",
+    "name": "Dr.Babasaheb Ambedkar Marathwada University Model College of Ghansawangi",
+    "acronym": "DBAMUMCG",
+    "state": "Maharashtra",
+    "city": "Jalna",
+    "address": "Rajegaon road, Ghansawangi, Tal. Ghansawangi, Dist. Jalna, Ghansawangi",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "DBAMUMCG"
+    ]
+  },
+  {
+    "id": "col-24677",
+    "name": "Faculty of Dental Sciences (Krishna Institute of Medical Sciences Deemed to be University's School of Dental Sciences), Karad",
+    "acronym": "FDSK",
+    "state": "Maharashtra",
+    "city": "Satara",
+    "address": "Near Dhebewadi Road,Pune-Banglore National Highway NH4, Malkpaur, Karad, Malkapur, Karad",
+    "website": "www.kimskarad.in",
+    "popularityScore": 50,
+    "aliases": [
+      "FDSK"
+    ]
+  },
+  {
+    "id": "col-17619",
+    "name": "Faculty of Paramedical Sciences (RKDF University), Bhopal",
+    "acronym": "FPSB",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "FPSB"
+    ]
+  },
+  {
+    "id": "col-42688",
+    "name": "FACULTY OF PHARMACY JS UNIVERSITY",
+    "acronym": "FPJU",
+    "state": "Uttar Pradesh",
+    "city": "Kheri",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "FPJU"
+    ]
+  },
+  {
+    "id": "col-46270",
+    "name": "FoIRDM, Ramakrishna Mission Vivekananda University",
+    "acronym": "FRMVU",
+    "state": "West Bengal",
+    "city": "24 Paraganas South",
+    "address": "RKMR College, Narendrapur",
+    "website": "www.rkmvu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "FRMVU"
+    ]
+  },
+  {
+    "id": "col-7189",
+    "name": "Ganpat University A. M. Patel Institute of Computer Studies",
+    "acronym": "GUAMPICS",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "https://ampics.guni.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "GUAMPICS"
+    ]
+  },
+  {
+    "id": "col-7190",
+    "name": "Ganpat University B. S.Patel Polytechnic",
+    "acronym": "GUBSPP",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana Gandhinagar Highway, Mehsana",
+    "website": "bspp.guni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GUBSPP"
+    ]
+  },
+  {
+    "id": "col-7192",
+    "name": "Ganpat University Center for Management Studies and Research",
+    "acronym": "GUCMSR",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "www.cms.gnu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GUCMSR"
+    ]
+  },
+  {
+    "id": "col-7193",
+    "name": "Ganpat University Institute of Architecture",
+    "acronym": "GUIA",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "www.fadp.gnu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GUIA"
+    ]
+  },
+  {
+    "id": "col-7195",
+    "name": "GANPAT UNIVERSITY INSTITUTE OF NURSING",
+    "acronym": "GUIN",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GUIN"
+    ]
+  },
+  {
+    "id": "col-7197",
+    "name": "GANPAT UNIVERSITY KANTABEN KASHIRAM INSTITUTE OF AGRICULTURAL SCIENCES AND RESEARCH",
+    "acronym": "GUKKIASR",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GUKKIASR"
+    ]
+  },
+  {
+    "id": "col-7198",
+    "name": "Ganpat University Mehsana Urban Institute of Sciences",
+    "acronym": "GUMUIS",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "https://muis.guni.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "GUMUIS"
+    ]
+  },
+  {
+    "id": "col-7199",
+    "name": "Ganpat University S.K. Patel College of Pharmaceutical Education & Research",
+    "acronym": "GUSKPCPER",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat University, Mehsana - Gozaria Highway, Ganpat Vidyanagar",
+    "website": "www.skpcper.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GUSKPCPER"
+    ]
+  },
+  {
+    "id": "col-7201",
+    "name": "Ganpat University V.M. Patel College of Management Studies",
+    "acronym": "GUVMPCMS",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Mehsana",
+    "website": "https://vmpcms.guni.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "GUVMPCMS"
+    ]
+  },
+  {
+    "id": "col-7202",
+    "name": "Ganpat University V.M. Patel Institute of Management",
+    "acronym": "GUVMPIM",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat Vidyanagar, Mehsana-Gandhinagar Highway, Ganpat Vidyanagar, Mehsana",
+    "website": "www.vmpim.guni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GUVMPIM"
+    ]
+  },
+  {
+    "id": "col-7191",
+    "name": "Ganpat University-Center for Health and Applied Science",
+    "acronym": "GUCHAS",
+    "state": "Gujarat",
+    "city": "Mahesana",
+    "address": "Ganpat University, Mehsana-Gandhinagar Highway, Ganpat Vidyanagar",
+    "website": "https://chas.guni.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "GUCHAS"
+    ]
+  },
+  {
+    "id": "col-3004",
+    "name": "Gauhati University Law College",
+    "acronym": "GULC",
+    "state": "Assam",
+    "city": "Kamrup",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GULC"
+    ]
+  },
+  {
+    "id": "col-27479",
+    "name": "GND University College, Near Govt. College of Edu., Ladowali Rd.",
+    "acronym": "GUCNGCELR",
+    "state": "Punjab",
+    "city": "Jalandhar",
+    "address": "LADOWALI ROAD, JALANDHAR",
+    "website": "www.gnducjal.org",
+    "popularityScore": 50,
+    "aliases": [
+      "GUCNGCELR"
+    ]
+  },
+  {
+    "id": "col-27352",
+    "name": "Guru Nanak Dev University College Kalanaur",
+    "acronym": "GNDUCK",
+    "state": "Punjab",
+    "city": "Gurdaspur",
+    "address": "ITI Marge , Near boys govt. ITI , Kalanaur",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCK"
+    ]
+  },
+  {
+    "id": "col-27486",
+    "name": "Guru Nanak Dev University College Nakodar",
+    "acronym": "GNDUCN",
+    "state": "Punjab",
+    "city": "Jalandhar",
+    "address": ", ,",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCN"
+    ]
+  },
+  {
+    "id": "col-27487",
+    "name": "GURU NANAK DEV UNIVERSITY COLLEGE PHILLAUR",
+    "acronym": "GNDUCP",
+    "state": "Punjab",
+    "city": "Jalandhar",
+    "address": "VPO TEHANG, BARA PIND ROAD, PHILLAUR, , PHILLAUR",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCP"
+    ]
+  },
+  {
+    "id": "col-27776",
+    "name": "Guru Nanak Dev University College Sujanpur",
+    "acronym": "GNDUCS",
+    "state": "Punjab",
+    "city": "Pathankot",
+    "address": "Guru Nanak Dev University College, Sujanpur, Guru Nanak Dev University College, Sujanpur, Sujanpur",
+    "website": "gnducsujanpur.com",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCS"
+    ]
+  },
+  {
+    "id": "col-28144",
+    "name": "Guru Nanak Dev University College, Chung, Khemkaran Road, Near Bhikhiwind",
+    "acronym": "GNDUCCKRNB",
+    "state": "Punjab",
+    "city": "Tarn Taran",
+    "address": "Guru Nanak Dev University College, Village Chungh,, Post Office Bhagwanpura via Kacha Pakka, Tehsil Patti,Distt  Tarn-Taran, Village Chungh P.O. Bhagwanpura(Tarn Taran)",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCCKRNB"
+    ]
+  },
+  {
+    "id": "col-27353",
+    "name": "Guru Nanak Dev University College, Narot Jaimal Singh",
+    "acronym": "GNDUCNJS",
+    "state": "Punjab",
+    "city": "Gurdaspur",
+    "address": "Principal, Guru Nanak Dev University College, Narot Jaimal Singh, District Pathankot, Pathankot",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCNJS"
+    ]
+  },
+  {
+    "id": "col-27775",
+    "name": "Guru Nanak Dev University College, Pathankot",
+    "acronym": "GNDUCP",
+    "state": "Punjab",
+    "city": "Pathankot",
+    "address": "Guru Nanak Dev University College, Lamini, Pathankot, Pathankot",
+    "website": "gnducollegeptk.com",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCP"
+    ]
+  },
+  {
+    "id": "col-27092",
+    "name": "Guru Nanak Dev University College, Verka",
+    "acronym": "GNDUCV",
+    "state": "Punjab",
+    "city": "Amritsar",
+    "address": "Guru Nanak Dev University College, P.O. Verka, Amritsar",
+    "website": "https://online.gndu.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCV"
+    ]
+  },
+  {
+    "id": "col-28145",
+    "name": "GURU NANAK DEV UNIVERSITY COLLEGE,PATTI",
+    "acronym": "GNDUCP",
+    "state": "Punjab",
+    "city": "Tarn Taran",
+    "address": "OPP.PUNJAB ROADWAYS WORKSHOP, NEAR GRAIN MARKET PATTI, PATTI",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDUCP"
+    ]
+  },
+  {
+    "id": "col-27354",
+    "name": "Guru Nanak Dev University Regional Campus",
+    "acronym": "GNDURC",
+    "state": "Punjab",
+    "city": "Gurdaspur",
+    "address": "HARDOCHHANI ROAD, GURDASPUR, GURDASPUR",
+    "website": "gndu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDURC"
+    ]
+  },
+  {
+    "id": "col-27488",
+    "name": "Guru Nanak Dev University Regional Campus",
+    "acronym": "GNDURC",
+    "state": "Punjab",
+    "city": "Jalandhar",
+    "address": "Guru Nanak Dev University Regional Campus, Ladhewali, Jalandhar",
+    "website": "gndu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "GNDURC"
+    ]
+  },
+  {
+    "id": "col-9713",
+    "name": "H.P. University Regional Centre, Dharamshala",
+    "acronym": "HPURCD",
+    "state": "Himachal Pradesh",
+    "city": "Kangra",
+    "address": "H.P. University Regional Centre, Dharamshala, Village Mohli, Khaniyara, District Kangra, HP-176218, Dharamshala",
+    "website": "https://hpuniv.ac.in/university-detail/home.php?regional-center-dharamshala",
+    "popularityScore": 50,
+    "aliases": [
+      "HPURCD"
+    ]
+  },
+  {
+    "id": "col-9669",
+    "name": "HIMACHAL PRADESH TECHNICAL UNIVERSITY OFFCAMPUS BUSINESS SCHOOL",
+    "acronym": "HPTUOBS",
+    "state": "Himachal Pradesh",
+    "city": "Kangra",
+    "address": "Rajiv Gandhi Government Engineering College, Village Massal, P.O Nagrota Bagwan, Distt. Kangra, NAGROTA BAGWAN",
+    "website": "www.himtu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "HPTUOBS"
+    ]
+  },
+  {
+    "id": "col-9842",
+    "name": "HP University College of Business Studies, Ava Lodge, Shimla",
+    "acronym": "HUCBSALS",
+    "state": "Himachal Pradesh",
+    "city": "Shimla",
+    "address": "HP University College of Business Studies,, Ava Lodge,, Shimla",
+    "website": "www.ucbs.org",
+    "popularityScore": 50,
+    "aliases": [
+      "HUCBSALS"
+    ]
+  },
+  {
+    "id": "col-9843",
+    "name": "HP University Institute of Legal Studies, Ava Lodge, Shimla",
+    "acronym": "HUILSALS",
+    "state": "Himachal Pradesh",
+    "city": "Shimla",
+    "address": "AVA-LODGE CAMPUS, CHAURA-MAIDAN, SHIMLA-171004, SHIMLA",
+    "website": "www.hpuniv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "HUILSALS"
+    ]
+  },
+  {
+    "id": "col-28011",
+    "name": "I.K.Gujral punjab Technical University Mohali campus",
+    "acronym": "IKGPTUMC",
+    "state": "Punjab",
+    "city": "S.A.S Nagar",
+    "address": "C-102/B Industrial Area, Phase-7 SAS Nagar Mohali, Mohali",
+    "website": "http://mohali.ptu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IKGPTUMC"
+    ]
+  },
+  {
+    "id": "col-32295",
+    "name": "INDIAN MARITIME UNIVERSITY, CHENNAI",
+    "acronym": "IMUC",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "address": "East Coast Road, Uthandi, Chennai",
+    "website": "www.imu.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IMUC"
+    ]
+  },
+  {
+    "id": "col-15369",
+    "name": "INDIAN MARITIME UNIVERSITY, KOCHI",
+    "acronym": "IMUK",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "SER Area, NH-47A, Nr. Alexander Parambithara Bridge, Matsyapuri P. O., W. Island, KOCHI",
+    "website": "www.imu.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IMUK"
+    ]
+  },
+  {
+    "id": "col-46860",
+    "name": "INDIAN MARITIME UNIVERSITY, KOLKATA",
+    "acronym": "IMUK",
+    "state": "West Bengal",
+    "city": "Kolkata",
+    "address": "P-19 Taratala Road, CPT Colony, Alipore, kolkata",
+    "website": "www.merical.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IMUK"
+    ]
+  },
+  {
+    "id": "col-22344",
+    "name": "INDIAN MARITIME UNIVERSITY, MUMBAI PORT",
+    "acronym": "IMUMP",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "address": "Hay Bunder Road,, Sewri",
+    "website": "www.imumumbaiport.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IMUMP"
+    ]
+  },
+  {
+    "id": "col-2152",
+    "name": "INDIAN MARITIME UNIVERSITY, VISAKHAPATNAM",
+    "acronym": "IMUV",
+    "state": "Andhra Pradesh",
+    "city": "Visakhapatanam",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "IMUV"
+    ]
+  },
+  {
+    "id": "col-5984",
+    "name": "Institute of Architecture & Planning, Nirma University",
+    "acronym": "IAPNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Architecture & Planning, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IAPNU"
+    ]
+  },
+  {
+    "id": "col-5985",
+    "name": "Institute of Commerce, Nirma University",
+    "acronym": "ICNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Commerce, Nirma University, S. G. Highway, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ICNU"
+    ]
+  },
+  {
+    "id": "col-5986",
+    "name": "Institute of Diploma studies, Nirma University",
+    "acronym": "IDSNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Diploma Studies, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IDSNU"
+    ]
+  },
+  {
+    "id": "col-5987",
+    "name": "Institute of Law, Nirma University",
+    "acronym": "ILNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Law, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ILNU"
+    ]
+  },
+  {
+    "id": "col-5988",
+    "name": "Institute of Management, Nirma University",
+    "acronym": "IMNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Management, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IMNU"
+    ]
+  },
+  {
+    "id": "col-28137",
+    "name": "INSTITUTE OF NURSING, UNIVERSITY REGIONAL CENTRE, SRI GOINDWAL SAHIB",
+    "acronym": "INURCSGS",
+    "state": "Punjab",
+    "city": "Tarn Taran",
+    "address": "Near Focal Point, Phase II, Goindwal Sahib",
+    "website": "www.bfuhs.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "INURCSGS"
+    ]
+  },
+  {
+    "id": "col-5989",
+    "name": "Institute of Pharmacy, Nirma University",
+    "acronym": "IPNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Pharmacy, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IPNU"
+    ]
+  },
+  {
+    "id": "col-5990",
+    "name": "Institute of Science, Nirma University",
+    "acronym": "ISNU",
+    "state": "Gujarat",
+    "city": "Ahmadabad",
+    "address": "Institute of Science, Nirma University, S. G. Highway, PIN - 382481, Ahmedabad",
+    "website": "www.nirmauni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ISNU"
+    ]
+  },
+  {
+    "id": "col-8351",
+    "name": "ITM (SLS) BARODA UNIVERSITY- SCHOOL OF ARCHITECTURE, ART & DESIGN",
+    "acronym": "IBUSAAD",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "VILLAGE PALDI, NEAR JAROD, VADODARA HALOL HIGHWAY, TAL: WAGHODIA, DIST: VADODARA, TAL: WAGHODIA, DIST:VADODARA, VADODARA",
+    "website": "www.itmbu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IBUSAAD"
+    ]
+  },
+  {
+    "id": "col-8352",
+    "name": "ITM (SLS) BARODA UNIVERSITY- SCHOOL OF BUSINESS",
+    "acronym": "IBUSB",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "Dhanora Tank Road, Paldi Village, Halol Highway, Tal. Waghodia, Dist. Vadodara, Vadodara",
+    "website": "www.itmbu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IBUSB"
+    ]
+  },
+  {
+    "id": "col-8353",
+    "name": "ITM (SLS) BARODA UNIVERSITY- SCHOOL OF PHARMACY",
+    "acronym": "IBUSP",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "DHANORA TANK ROAD, VILLEGE PALDI,, NEAR JAROD, VADODARA HALOL HIGHWAY, TAL: WAGHODIA DIST: VADODARA, VADODARA",
+    "website": "www.itmbu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IBUSP"
+    ]
+  },
+  {
+    "id": "col-8354",
+    "name": "ITM (SLS) BARODA UNIVERSITY- SCHOOL OF SCIENCES",
+    "acronym": "IBUSS",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "Dhanora Tank Road, Paldi Villege, Halol Highway, Tal. Waghodia, Dist. Vadodara, Vadodara",
+    "website": "www.itmbu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "IBUSS"
+    ]
+  },
+  {
+    "id": "col-8832",
+    "name": "JAGAN NATH UNIVERSITY, JHAJJAR",
+    "acronym": "JNUJ",
+    "state": "Haryana",
+    "city": "Jhajjar",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "JNUJ"
+    ]
+  },
+  {
+    "id": "col-29824",
+    "name": "Jaipur National University Institute for Medical Sciences and Research Centre",
+    "acronym": "JNUIMSRC",
+    "state": "Rajasthan",
+    "city": "Jaipur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "JNUIMSRC"
+    ]
+  },
+  {
+    "id": "col-15697",
+    "name": "KANNUR UNIVERSITY TEACHER EDUCATION CENTER KASARAGOD",
+    "acronym": "KUTECK",
+    "state": "Kerala",
+    "city": "Kasaragod",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "KUTECK"
+    ]
+  },
+  {
+    "id": "col-23258",
+    "name": "KAVAYITRI BAHINABAI CHAUDHARI NORTH MAHARASHTRA UNIVERSITY JALGAON CONDUCTED SCIENCE AND COMMERCE COLLEGE MOLAGI",
+    "acronym": "KBCNMUJCSCCM",
+    "state": "Maharashtra",
+    "city": "Nandurbar",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "KBCNMUJCSCCM"
+    ]
+  },
+  {
+    "id": "col-15789",
+    "name": "Kerala University College Of Teacher Education Kulakkada",
+    "acronym": "KUCTEK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "Kerala University College of Teacher Education , Kulakkada, Near Govt.Hss Kulakkada., Kottarakkara",
+    "website": "www.kuctekulakkada.com",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEK"
+    ]
+  },
+  {
+    "id": "col-15290",
+    "name": "KERALA UNIVERSITY COLLEGE OF TEACHER EDUCATION KUNNAM",
+    "acronym": "KUCTEK",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "KUNNAM P O, MAVELIKKARA",
+    "website": "www.kuctekunnam.org",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEK"
+    ]
+  },
+  {
+    "id": "col-15788",
+    "name": "KERALA UNIVERSITY COLLEGE OF TEACHER EDUCATION, ANCHAL",
+    "acronym": "KUCTEA",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "Govt West HSS Campus, Anchal PO, Anchal",
+    "website": "http://www.kucteanchal.org",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEA"
+    ]
+  },
+  {
+    "id": "col-16557",
+    "name": "Kerala University College of Teacher Education, kariavattom",
+    "acronym": "KUCTEK",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "Near Govt. College, LNCPE Road, Kariavattom P O, Trivandrum",
+    "website": "kuctekariavattom.org",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEK"
+    ]
+  },
+  {
+    "id": "col-15289",
+    "name": "KERALA UNIVERSITY COLLEGE OF TEACHER EDUCATION, KAYAMKULAM",
+    "acronym": "KUCTEK",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "Govt.Boys High School Campus Kayamkulam-690502 Phone: 0479-2448160 E-mail : kymkucte@gmail.com Principal, Govt.Boys High School Campus Kayamkulam-690502 Phone: 0479-2448160 E-mail : kymkucte@gmail.com Principal, Kayamkulam",
+    "website": "www.kucte-kayamkulam.org",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEK"
+    ]
+  },
+  {
+    "id": "col-16558",
+    "name": "Kerala University College of Teacher Education, Kumarapuram, Thiruvananthapuram",
+    "acronym": "KUCTEKT",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "Kumarapuram, Medical College.P.O, Thiruvananthapuram",
+    "website": "www.kuctekumarapuram.org",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEKT"
+    ]
+  },
+  {
+    "id": "col-16559",
+    "name": "KERALA UNIVERSITY COLLEGE OF TEACHER EDUCATION, NEDUMANGAD",
+    "acronym": "KUCTEN",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "GOVERNMENT VOCCATIONAL HIGHER SECONDARY SCHOOL CAMPUS, MANCHA, NEDUMANGAD, NEDUMANGAD",
+    "website": "www.kuctenedumangad.com",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEN"
+    ]
+  },
+  {
+    "id": "col-15790",
+    "name": "KERALA UNIVERSITY COLLEGE OF TEACHER EDUCATION, THEVALLY (PO), KOLLAM -691009",
+    "acronym": "KUCTETK6",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "GOVT. MODEL BOYS H.S.S. CAMPUS, THEVALLY (PO), KOLLAM - 691009, KERALA STATE, GOVT. MODEL BOYS H.S.S CAMPUS, THEVALLY (PO), KOLLAM - 691009, KERALA STATE, KOLLAM",
+    "website": "http://www.kucte.org",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTETK6"
+    ]
+  },
+  {
+    "id": "col-15288",
+    "name": "kERALA UNIVERSITY COLLEGE OF TEACHER EDUCATION.ARYAD.ALAPPUZHA",
+    "acronym": "KUCTEAA",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "Kerala University College of Teacher Education   Aryad, Avalookunnu p o  Alappuzha, Aryad    Alappuzha",
+    "website": "www.kuctealappuzha.in",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCTEAA"
+    ]
+  },
+  {
+    "id": "col-10930",
+    "name": "KLE Universitys Homoeopathic Medical College and Hospital Belagavi",
+    "acronym": "KUHMCHB",
+    "state": "Karnataka",
+    "city": "Belagavi",
+    "address": "Yellur Road,, , Belagavi",
+    "website": "www.klehomoeo.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "KUHMCHB"
+    ]
+  },
+  {
+    "id": "col-36652",
+    "name": "KONERU LAKSHMAIAH EDUCATION FOUNDATION DEEMED TO BE UNIVERSITY OFF CAMPUS HYDERABAD",
+    "acronym": "KLEFDBUOCH",
+    "state": "Telangana",
+    "city": "Rangareddi",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "KLEFDBUOCH"
+    ]
+  },
+  {
+    "id": "col-1091",
+    "name": "KRISHNA UNIVERSITY COLLEGE OF PHARMACEUTICAL SCIENCES AND RESEARCH",
+    "acronym": "KUCPSR",
+    "state": "Andhra Pradesh",
+    "city": "Krishna",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "KUCPSR"
+    ]
+  },
+  {
+    "id": "col-1092",
+    "name": "KRISHNA UNIVERSITY Dr. MRAR PG CENTRE, NUZVID",
+    "acronym": "KUDMPCN",
+    "state": "Andhra Pradesh",
+    "city": "Krishna",
+    "address": "PATHA PET, COLLEGE ROAD, NUZVID",
+    "website": "www.kru.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "KUDMPCN"
+    ]
+  },
+  {
+    "id": "col-8356",
+    "name": "LAKULISH YOGA UNIVERSITY CONSTITUENT CENTRE, BARODA",
+    "acronym": "LYUCCB",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "LYUCCB"
+    ]
+  },
+  {
+    "id": "col-8270",
+    "name": "LAKULISH YOGA UNIVERSITY CONSTITUENT CENTRE, JAKHAN, SURENDRANAGAR",
+    "acronym": "LYUCCJS",
+    "state": "Gujarat",
+    "city": "Surendranagar",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "LYUCCJS"
+    ]
+  },
+  {
+    "id": "col-8357",
+    "name": "LAKULISH YOGA UNIVERSITY CONSTITUENT CENTRE, KAYAVAROHAN, BARODA",
+    "acronym": "LYUCCKB",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "LYUCCKB"
+    ]
+  },
+  {
+    "id": "col-7569",
+    "name": "LAKULISH YOGA UNIVERSITY CONSTITUENT CENTRE, MALAV, PANCHMAHAL",
+    "acronym": "LYUCCMP",
+    "state": "Gujarat",
+    "city": "Panch Mahals",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "LYUCCMP"
+    ]
+  },
+  {
+    "id": "col-8126",
+    "name": "LAKULISH YOGA UNIVERSITY CONSTITUENT CENTRE, SURAT",
+    "acronym": "LYUCCS",
+    "state": "Gujarat",
+    "city": "Surat",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "LYUCCS"
+    ]
+  },
+  {
+    "id": "col-33487",
+    "name": "M.K. UNIVERSITY COLLEGE, ALAGARKOIL ROAD",
+    "acronym": "MKUCAR",
+    "state": "Tamil Nadu",
+    "city": "Madurai",
+    "address": "ALAGARKOIL ROAD, MADURAI, MADURAI",
+    "website": "mkucollegemdu2.org",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUCAR"
+    ]
+  },
+  {
+    "id": "col-34222",
+    "name": "M.K. UNIVERSITY EVENING COLLEGE, GOVT. HR. SECY. SCHOOL CAMPUS",
+    "acronym": "MKUECGHSSC",
+    "state": "Tamil Nadu",
+    "city": "Theni",
+    "address": "Govt School Campus, Allinagaram, Theni",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUECGHSSC"
+    ]
+  },
+  {
+    "id": "col-32964",
+    "name": "M.K. UNIVERSITY EVENING COLLEGE, PALANI",
+    "acronym": "MKUECP",
+    "state": "Tamil Nadu",
+    "city": "Dindigul",
+    "address": "KENNEDY MATRIC  SCHOOL, PALANI, Palani",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUECP"
+    ]
+  },
+  {
+    "id": "col-34223",
+    "name": "M.K. UNIVERSITY EVENING COLLEGE, PERIYAKULAM",
+    "acronym": "MKUECP",
+    "state": "Tamil Nadu",
+    "city": "Theni",
+    "address": "VM.BOYS. HR. SEC. SCHOOL CAMPUS, THENKARAI, PERIYAKUALAM",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUECP"
+    ]
+  },
+  {
+    "id": "col-32965",
+    "name": "M.K. UNIVERSITY EVENING COLLEGE, TELC",
+    "acronym": "MKUECT",
+    "state": "Tamil Nadu",
+    "city": "Dindigul",
+    "address": "61, MENGLES ROAD, DINDIGUL",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUECT"
+    ]
+  },
+  {
+    "id": "col-34219",
+    "name": "MADURAI KAMARAJ UNIVERSITY COLLEGE, AUNDIPATTI",
+    "acronym": "MKUCA",
+    "state": "Tamil Nadu",
+    "city": "Theni",
+    "address": "MADURAI-THENI MAIN ROAD, OPPOSITE TO AUNDIPATTI TALUK OFFICE, AUNDIPATTI",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUCA"
+    ]
+  },
+  {
+    "id": "col-34972",
+    "name": "MADURAI KAMARAJ UNIVERSITY COLLEGE, SATTUR",
+    "acronym": "MKUCS",
+    "state": "Tamil Nadu",
+    "city": "Virudhunagar",
+    "address": "chinnakkamanpatti, Sattur, Virudhunagar",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MKUCS"
+    ]
+  },
+  {
+    "id": "col-8731",
+    "name": "MAHARSHI DAYANAND UNIVERSITY CENTRE FOR PROFESSIONAL AND ALLIED STUDIES GURUGRAM",
+    "acronym": "MDUCPASG",
+    "state": "Haryana",
+    "city": "Gurugram",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MDUCPASG"
+    ]
+  },
+  {
+    "id": "col-16400",
+    "name": "MAHATHAMA GANDHI UNIVERSITY INSTITUTE OF ARTS AND COMMERCE,CHUTTIPPARA,PATHANAMTHITTA",
+    "acronym": "MGUIACCP",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "Chuttippara, Pathanamthitta P.O, Pathanamthitta",
+    "website": "http://cacpta.cpas.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "MGUIACCP"
+    ]
+  },
+  {
+    "id": "col-13941",
+    "name": "MANGALORE UNIVERSITY JNANA KAVERI POST GRADUATE CENTRE CHIKKA ALUVARA KODAGU",
+    "acronym": "MUJKPGCCAK",
+    "state": "Karnataka",
+    "city": "Kodagu",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MUJKPGCCAK"
+    ]
+  },
+  {
+    "id": "col-34524",
+    "name": "Manonmaniam Sundaranar University College, Govindaperi.",
+    "acronym": "MSUCG",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "Thiruviruthan pulli post, Cheranmahadevi, Between Cheranmahadevi to Kalakad, Tirunelveli",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCG"
+    ]
+  },
+  {
+    "id": "col-34755",
+    "name": "Manonmaniam Sundaranar University College, Nagampatti,",
+    "acronym": "MSUCN",
+    "state": "Tamil Nadu",
+    "city": "Tuticorin",
+    "address": "Nagampatti, Pasuvanthanai Via, Ottapidaram Tk",
+    "website": "www.msuni.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCN"
+    ]
+  },
+  {
+    "id": "col-34525",
+    "name": "Manonmaniam Sundaranar University College, Panakudi",
+    "acronym": "MSUCP",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "Aruvi Road, , Panagudi",
+    "website": "www.msuniv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCP"
+    ]
+  },
+  {
+    "id": "col-34526",
+    "name": "Manonmaniam Sundaranar University College, Puliankudi",
+    "acronym": "MSUCP",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "H.N.U.C.HR.SEC.SCHOOL CAMPUS, T.N.PUTHUKUDI, PULIANGUDI",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCP"
+    ]
+  },
+  {
+    "id": "col-34527",
+    "name": "Manonmaniam Sundaranar University College, Sankarankovil",
+    "acronym": "MSUCS",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "Vallaramapuram Bus stop, Surandai Road, Naduvakurichi, Sankarankovil Taluk",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCS"
+    ]
+  },
+  {
+    "id": "col-34528",
+    "name": "Manonmaniam Sundaranar University College, Thisayanvillai",
+    "acronym": "MSUCT",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "MANONMANIAM SUNDARANAR UNIVERSITY COLLEGE - TISAIYANVILAI, R.C NANDHANKULAM, KURUGAPURAM POST, Tisaiyanvilai-627 657",
+    "website": "www.msuniv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCT"
+    ]
+  },
+  {
+    "id": "col-34529",
+    "name": "MANONMANIAM SUNDARANAR UNIVERSITY CONSTITUENT COLLEGE, KADAYANALLUR",
+    "acronym": "MSUCCK",
+    "state": "Tamil Nadu",
+    "city": "Tirunelveli",
+    "address": "Panpozhi Road, Kadayanallur - 627 751, Tenkasi District, Kadayanallur, kadayanallur",
+    "website": "www.msuniv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCCK"
+    ]
+  },
+  {
+    "id": "col-33282",
+    "name": "MANONMANIAM SUNDARANAR UNIVERSITY CONSTITUENT COLLEGE, KANYAKUMARI",
+    "acronym": "MSUCCK",
+    "state": "Tamil Nadu",
+    "city": "Kanniyakumari",
+    "address": "PALKULAM, VARIYOOR (PO), AGASTEESWARAM (TK), KANYAKUMARI",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCCK"
+    ]
+  },
+  {
+    "id": "col-34756",
+    "name": "Manonmaniam Sundaranar University Constituent College, Nagalapuram,",
+    "acronym": "MSUCCN",
+    "state": "Tamil Nadu",
+    "city": "Tuticorin",
+    "address": "Sattur Road (present address), Nagalapuram 628904, Vilathikulam (Taluk)  Thoothukudi (District), Thoothukudi",
+    "website": "www.msuniv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUCCN"
+    ]
+  },
+  {
+    "id": "col-27707",
+    "name": "MATA SUNDARI UNIVERSITY GIRLS COLLEGE MANSA",
+    "acronym": "MSUGCM",
+    "state": "Punjab",
+    "city": "Mansa",
+    "address": "New Court Road, 0, 0",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "MSUGCM"
+    ]
+  },
+  {
+    "id": "col-24363",
+    "name": "MGM Institutes University Department of Prosthetics and Orthotics",
+    "acronym": "MIUDPO",
+    "state": "Maharashtra",
+    "city": "Raigad",
+    "address": "plot no.1 & 2 , Sector -1, Kamothe, Navi Mumbai",
+    "website": "www.mgmudpo.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "MIUDPO"
+    ]
+  },
+  {
+    "id": "col-12992",
+    "name": "Nitte University Centre for Science Education and Research",
+    "acronym": "NUCSER",
+    "state": "Karnataka",
+    "city": "Dakshin Kannad",
+    "address": "Kotekar Beeri Road, Paneer Campus, Deralakatte, Mangalore",
+    "website": "www.nucser.nitte.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "NUCSER"
+    ]
+  },
+  {
+    "id": "col-40673",
+    "name": "NOIDA INTERNATIONAL UNIVERSITY SCHOOL OF NURSING",
+    "acronym": "NIUSN",
+    "state": "Uttar Pradesh",
+    "city": "Gautam Buddha Nagar",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "NIUSN"
+    ]
+  },
+  {
+    "id": "col-25613",
+    "name": "Pachhunga University College",
+    "acronym": "PUC",
+    "state": "Mizoram",
+    "city": "Aizawl",
+    "address": "Aizawl, Mizoram, College Veng, Aizawl",
+    "website": "www.pucollege.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUC"
+    ]
+  },
+  {
+    "id": "col-36224",
+    "name": "Palamuru University PG Centre Kollapur",
+    "acronym": "PUPCK",
+    "state": "Telangana",
+    "city": "Nagarkurnool",
+    "address": "Opposite Bharath Petrol Pump, Kollapur town",
+    "website": "palamuruuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUPCK"
+    ]
+  },
+  {
+    "id": "col-27323",
+    "name": "Panjab University Constituent College Mohkam Khan Wala Ferozepur",
+    "acronym": "PUCCMKWF",
+    "state": "Punjab",
+    "city": "Firozepur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "PUCCMKWF"
+    ]
+  },
+  {
+    "id": "col-28131",
+    "name": "Panjab University Regional Centre Muktsar",
+    "acronym": "PURCM",
+    "state": "Punjab",
+    "city": "Sri Muktsar Sahib",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "PURCM"
+    ]
+  },
+  {
+    "id": "col-27671",
+    "name": "Panjab University Regional Centre, Ludhiana",
+    "acronym": "PURCL",
+    "state": "Punjab",
+    "city": "Ludhiana",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "PURCL"
+    ]
+  },
+  {
+    "id": "col-28132",
+    "name": "Panjab University Rural Centre Kauni",
+    "acronym": "PURCK",
+    "state": "Punjab",
+    "city": "Sri Muktsar Sahib",
+    "address": "Opposite PAU School, Village Kauni",
+    "website": "purckauni.puchd.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PURCK"
+    ]
+  },
+  {
+    "id": "col-32885",
+    "name": "PERIYAR UNIVERSITY PG EXT CENTRE GOVERNMENT ARTS COLLEGE CAMPUS",
+    "acronym": "PUPECGACC",
+    "state": "Tamil Nadu",
+    "city": "Dharmapuri",
+    "address": "Adhiyaman Govt. Boys Hr. Sec. School Campus, Nethaji Byepass Road, Dharmapuri",
+    "website": "www.periyaruniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUPECGACC"
+    ]
+  },
+  {
+    "id": "col-11951",
+    "name": "PES UNIVERSITY (EC Campus)",
+    "acronym": "PU",
+    "state": "Karnataka",
+    "city": "Bengaluru Urban",
+    "address": "Hosur Road, 1 km before Electronic City, Electronic city",
+    "website": "www.pes.edu",
+    "popularityScore": 50,
+    "aliases": [
+      "PU"
+    ]
+  },
+  {
+    "id": "col-26990",
+    "name": "Pondicherry University Campus I",
+    "acronym": "PUCI",
+    "state": "Puducherry",
+    "city": "Karaikal",
+    "address": "Nehru Nagar, Behind Arignar Anna Arts College, Karaikal",
+    "website": "www.pondiuni.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUCI"
+    ]
+  },
+  {
+    "id": "col-27037",
+    "name": "Pondicherry University Community College",
+    "acronym": "PUCC",
+    "state": "Puducherry",
+    "city": "Pondicherry",
+    "address": "Lawspet, Puducherry, Puducherry",
+    "website": "www.pucc.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUCC"
+    ]
+  },
+  {
+    "id": "col-17292",
+    "name": "Pragyan Nursing College, Behind Rajeev Gandhi Eng. University Gandhi Nagar, Bhopal",
+    "acronym": "PNCBRGEUGNB",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "NEAR RGPV BYPASS ROAD, PO. GANDHI NAGAR, BHOPAL",
+    "website": "pragyancollegeofnursing.org",
+    "popularityScore": 50,
+    "aliases": [
+      "PNCBRGEUGNB"
+    ]
+  },
+  {
+    "id": "col-27957",
+    "name": "Punjabi University Akali Phulla Singh Neighbourhood Campus, Delha seian",
+    "acronym": "PUAPSNCDS",
+    "state": "Punjab",
+    "city": "Sangrur",
+    "address": "Punjabi University Akali Phulla Singh Neighbourhood Campus, Dehla seehan, PO Dehla Seehan, Tehsil Moonak",
+    "website": "http://punjabiuniversity.ac.in/Pages/Department.aspx?dsenc=116#Contact",
+    "popularityScore": 50,
+    "aliases": [
+      "PUAPSNCDS"
+    ]
+  },
+  {
+    "id": "col-27712",
+    "name": "Punjabi University Baba Dhyan Dass Neighbourhood Campus, Jhunir",
+    "acronym": "PUBDDNCJ",
+    "state": "Punjab",
+    "city": "Mansa",
+    "address": "Punjabi University Baba Dhain Dass Neighbourhood Campus Jhunir(Mansa)`, Punjabi University Baba Dhain Dass Neighbourhood Campus Jhunir(Mansa)`, Jhunir",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "PUBDDNCJ"
+    ]
+  },
+  {
+    "id": "col-27858",
+    "name": "PUNJABI UNIVERSITY COLLEGE, MEERAPUR",
+    "acronym": "PUCM",
+    "state": "Punjab",
+    "city": "Patiala",
+    "address": "Patiala-Devigarh Road, NEAR VILL. MIRANPUR, Patiala",
+    "website": "www.ucmiranpur.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUCM"
+    ]
+  },
+  {
+    "id": "col-27204",
+    "name": "Punjabi University Education Regional centre Bathinda",
+    "acronym": "PUERCB",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Opp TV Tower, Mansa Road, Bathinda",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUERCB"
+    ]
+  },
+  {
+    "id": "col-27205",
+    "name": "Punjabi University Guru Kashi Neighbourhood Campus",
+    "acronym": "PUGKNC",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "RAMAN ROAD, TALWANDI SABO",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUGKNC"
+    ]
+  },
+  {
+    "id": "col-27206",
+    "name": "Punjabi University Law Regional Centre Bathinda",
+    "acronym": "PULRCB",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Opposit T.V.Tower,, Mansa Road, Bathinda",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PULRCB"
+    ]
+  },
+  {
+    "id": "col-27249",
+    "name": "Punjabi University Neighbourhood Campus, Jaito",
+    "acronym": "PUNCJ",
+    "state": "Punjab",
+    "city": "Faridkot",
+    "address": "University College Building, Near  grain market, Bhatinda road, Jaito",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUNCJ"
+    ]
+  },
+  {
+    "id": "col-27208",
+    "name": "Punjabi University Neighbourhood Campus, Maur Mandi",
+    "acronym": "PUNCMM",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Punjabi University Neighbourhood Campus, Near BSNL Telephone Exchange, Maur Mandi",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUNCMM"
+    ]
+  },
+  {
+    "id": "col-27713",
+    "name": "Punjabi University Neighbourhood Campus, Ralla, Mansa",
+    "acronym": "PUNCRM",
+    "state": "Punjab",
+    "city": "Mansa",
+    "address": "Punjabi University Baba Jogipeer Neighbourhood Campus Ralla(Mansa0, Mansa",
+    "website": "punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUNCRM"
+    ]
+  },
+  {
+    "id": "col-27209",
+    "name": "Punjabi University Post Graduate Regional Centre Bathinda",
+    "acronym": "PUPGRCB",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Opposit T.V. Tower,, Mansa Road, Bathinda",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "PUPGRCB"
+    ]
+  },
+  {
+    "id": "col-43136",
+    "name": "R K G EDUCATIONAL COLLEGE, IN FRONT OF Dr. AMBEDAKAR UNIVERSITY, RAEBAREILY ROAD",
+    "acronym": "RKGECFDAURR",
+    "state": "Uttar Pradesh",
+    "city": "Lucknow",
+    "address": "OMAXE CITY, RAI BARELI ROAD, LUCKNOW",
+    "website": "www.rkgeducationalcollege.com",
+    "popularityScore": 50,
+    "aliases": [
+      "RKGECFDAURR"
+    ]
+  },
+  {
+    "id": "col-35108",
+    "name": "RAJIV GANDHI UNIVERSITY OF KNOWLEDGE TECHNOLOGIES, BASAR",
+    "acronym": "RGUKTB",
+    "state": "Telangana",
+    "city": "Adilabad",
+    "address": "RGUKT-BASAR(IIIT-Basar), Basar Mandal, Nirmal District",
+    "website": "www.rgukt.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "RGUKTB"
+    ]
+  },
+  {
+    "id": "col-1202",
+    "name": "RAJIV GANDHI UNIVERSITY OF KNOWLEDGE TECHNOLOGIES, NUZVID",
+    "acronym": "RGUKTN",
+    "state": "Andhra Pradesh",
+    "city": "Krishna",
+    "address": "Administrative Block I-3, , Mylavaram Road, Nuzvid,",
+    "website": "https://rguktn.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "RGUKTN"
+    ]
+  },
+  {
+    "id": "col-2557",
+    "name": "RAJIV GANDHI UNIVERSITY OF KNOWLEDGE TECHNOLOGIES, RK VALLEY",
+    "acronym": "RGUKTRV",
+    "state": "Andhra Pradesh",
+    "city": "Y.S.R.",
+    "address": "RGUKT RK Valley,, Idupulapaya,, Vempalli Mandal",
+    "website": "www.rguktrkv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "RGUKTRV"
+    ]
+  },
+  {
+    "id": "col-23007",
+    "name": "RASHTRASANT TUKADOJI MAHARAJ NAGPUR UNIVERSITYS DR BABASAHEB AMBEDKAR COLLEGE OF LAW",
+    "acronym": "RTMNUDBACL",
+    "state": "Maharashtra",
+    "city": "Nagpur",
+    "address": "Rao Bahadur D Laxminarayan Complex, Law College Sq, Amravati Road,, Nagpur",
+    "website": "https://www.rtmnubacl.org",
+    "popularityScore": 50,
+    "aliases": [
+      "RTMNUDBACL"
+    ]
+  },
+  {
+    "id": "col-7778",
+    "name": "RK University Ayurvedic College and Hospital",
+    "acronym": "RUACH",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "Rajkot-Bhavnagar Highway, Kasturbadham( Tramba), Rajkot",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "RUACH"
+    ]
+  },
+  {
+    "id": "col-22321",
+    "name": "S R T M University, Sub Centre, Latur",
+    "acronym": "SRTMUSCL",
+    "state": "Maharashtra",
+    "city": "Latur",
+    "address": "SRTMUN Sub-Campus, Latur, Post Box No:-131, Ausa road, Peth, Peth, Latur",
+    "website": "www.srtmun.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SRTMUSCL"
+    ]
+  },
+  {
+    "id": "col-27714",
+    "name": "S. Balraj Singh Bhundarh Memorial university College Sadulgarh",
+    "acronym": "SBSBMUCS",
+    "state": "Punjab",
+    "city": "Mansa",
+    "address": "sardulgarh, sardulgarh, sardulgarh",
+    "website": "https://universitycollegesardulgarh.blogspot.com",
+    "popularityScore": 50,
+    "aliases": [
+      "SBSBMUCS"
+    ]
+  },
+  {
+    "id": "col-22641",
+    "name": "S.N.D.T Womens University Law School",
+    "acronym": "SNDTWULS",
+    "state": "Maharashtra",
+    "city": "Mumbai Suburban",
+    "address": "SNDT Women's University Law School, Juhu Tara Road, Santacruz (west), Mumbai",
+    "website": "www.sndt.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SNDTWULS"
+    ]
+  },
+  {
+    "id": "col-7779",
+    "name": "School of Agriculture Science, RK University, Rajkot",
+    "acronym": "SASRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "Rajkot-Bhavnagar High way, Kasturbadham, Tramba, Rajkot, Rajkot",
+    "website": "http://www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SASRUR"
+    ]
+  },
+  {
+    "id": "col-17585",
+    "name": "SCHOOL OF ARCHITECTURE RAJIV GANDHI PROUDYOGIKI VISHWAVIDYALAYA A STATE TECHNOLOGICAL UNIVERSITY OF MADHYA PRADESH INDIA",
+    "acronym": "SARGPVASTUMPI",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": ", ,",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "SARGPVASTUMPI"
+    ]
+  },
+  {
+    "id": "col-7780",
+    "name": "School of Business Studies, RK University, Rajkot",
+    "acronym": "SBSRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "RK University Campus Kasturbadham Tramba, Bhavnagar Highway, TA- RAJKOT, Rajkot",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SBSRUR"
+    ]
+  },
+  {
+    "id": "col-7781",
+    "name": "School of Computer Science, RK University, Rajkot",
+    "acronym": "SCSRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "RAJKOT-BHAVNAGAR HIGHWAY KASTURBADHAM, TRAMBA, TA-RAJKOT, RAJKOT",
+    "website": "http://www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SCSRUR"
+    ]
+  },
+  {
+    "id": "col-7782",
+    "name": "School of Diploma Studies, RK University, Rajkot",
+    "acronym": "SDSRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "Bhavnagar Highway, Kasturbadham,, Gadhaka Rd, Tramba, Rajkot",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SDSRUR"
+    ]
+  },
+  {
+    "id": "col-16239",
+    "name": "SCHOOL OF HEALTH SCIENCES, UNIVERSITY CAMPUS",
+    "acronym": "SHSUC",
+    "state": "Kerala",
+    "city": "Malappuram",
+    "address": "Calicut University PO, Calicut University, Thenhipalam",
+    "website": "www.universityofcalicut.info",
+    "popularityScore": 50,
+    "aliases": [
+      "SHSUC"
+    ]
+  },
+  {
+    "id": "col-36182",
+    "name": "SCHOOL OF MANAGEMENT STUDIES J N T UNIVERSITY HYDERABAD",
+    "acronym": "SMSJNTUH",
+    "state": "Telangana",
+    "city": "MEDCHAL MALKAJGIRI",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "SMSJNTUH"
+    ]
+  },
+  {
+    "id": "col-7784",
+    "name": "School of Management, RK University, Rajkot",
+    "acronym": "SMRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "RK University Campus Kasturbadham Tramba, Bhavnagar Highway, Rajkot",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SMRUR"
+    ]
+  },
+  {
+    "id": "col-15917",
+    "name": "School of Medical Education,(SME),,Gandhinagar P.O., M G University,Kottayam",
+    "acronym": "SMEGPOMGUK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "School of Medical Education,Gandhinagar    P O, M.G University,Kottayam., School of Medical Education,Gandhinagar P.O, Kottayam, Kottayam",
+    "website": "www.sme.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SMEGPOMGUK"
+    ]
+  },
+  {
+    "id": "col-7785",
+    "name": "School of Pharmacy, RK University, Rajkot",
+    "acronym": "SPRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "Bhavnagar Highway, Kasturbadham, Tramba, Tal : Rajkot, Rajkot",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SPRUR"
+    ]
+  },
+  {
+    "id": "col-7786",
+    "name": "School of Physiotherapy, RK University, Rajkot",
+    "acronym": "SPRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "RK University,, Rajkot-Bhavnagar Highway, Kasturbadham,, Rajkot - 360020.",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SPRUR"
+    ]
+  },
+  {
+    "id": "col-7787",
+    "name": "School of Science, RK University, Rajkot",
+    "acronym": "SSRUR",
+    "state": "Gujarat",
+    "city": "Rajkot",
+    "address": "Bhavnagar Highway, Kasturabdham, Tramba, Ta : Rajkot, Rajkot",
+    "website": "www.rku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "SSRUR"
+    ]
+  },
+  {
+    "id": "col-32131",
+    "name": "SHRI RAM COLLEGE OF TEACHERS EDUCATION, 58-GOKUL PURA, NORTH AYAD, UNIVERSITY ROAD",
+    "acronym": "SRCTE5GPNAUR",
+    "state": "Rajasthan",
+    "city": "Udaipur",
+    "address": "58, Gokulpura, North Ayad,, Bekani Pulia, University Road Udaipur, Udaipur",
+    "website": "www.srcollege.net",
+    "popularityScore": 50,
+    "aliases": [
+      "SRCTE5GPNAUR"
+    ]
+  },
+  {
+    "id": "col-27600",
+    "name": "Sri Guru Nanak Dev Homoeopathic Medical College, Canal Road, Barewal, Near Ayali Kalan, Near Punjab Agriculture University, Ludhiana",
+    "acronym": "SGNDHMCCRBNAKNPAUL",
+    "state": "Punjab",
+    "city": "Ludhiana",
+    "address": "Canal Road Barewal, P.O. Rajguru Nagar, Ludhiana",
+    "website": "sgndhomoeopathiccollege.com",
+    "popularityScore": 50,
+    "aliases": [
+      "SGNDHMCCRBNAKNPAUL"
+    ]
+  },
+  {
+    "id": "col-10304",
+    "name": "THE BUSINESS SCHOOL,UNIVERSITY OF KASHMIR",
+    "acronym": "BSUK",
+    "state": "Jammu and Kashmir",
+    "city": "Srinagar",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "BSUK"
+    ]
+  },
+  {
+    "id": "col-34950",
+    "name": "Thiruvalluvar University PG Extension Centre ,Arignar Anna Govt.Arts College Campus",
+    "acronym": "TUPECAAGACC",
+    "state": "Tamil Nadu",
+    "city": "Villupuram",
+    "address": "Salamedu, Villupuram 605401, VILLUPURAM",
+    "website": "thiruvalluvaruniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "TUPECAAGACC"
+    ]
+  },
+  {
+    "id": "col-35127",
+    "name": "University Arts and Science College, Kakatiya University",
+    "acronym": "UASCKU",
+    "state": "Telangana",
+    "city": "HANUMAKONDA",
+    "address": "University Arts & Science College (Autonomous),Subedari, Hanamkonda , , Hanumakonda",
+    "website": "www.uascku.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UASCKU"
+    ]
+  },
+  {
+    "id": "col-30915",
+    "name": "University Ayurved Nursing Training Centre, Jodhpur",
+    "acronym": "UANTCJ",
+    "state": "Rajasthan",
+    "city": "Jodhpur",
+    "address": "Dr. Sarvepalli Radhakrishnan Rajasthan Ayurved University, Nagaur Road, Karwad, Jodhpur",
+    "website": "https://education.rajasthan.gov.in/raujodhpur",
+    "popularityScore": 50,
+    "aliases": [
+      "UANTCJ"
+    ]
+  },
+  {
+    "id": "col-46473",
+    "name": "UNIVERSITY B T AND EVENING COLLEGE, COOCHBEHAR",
+    "acronym": "UBTECC",
+    "state": "West Bengal",
+    "city": "Coochbehar",
+    "address": "Keshab Road,  Gunjabari, P.O. & Dist. Coochbehar, West Bengal, PIN - 736101, Coochbehar",
+    "website": "www.ubtec.org.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UBTECC"
+    ]
+  },
+  {
+    "id": "col-35128",
+    "name": "University College for Women Subedari",
+    "acronym": "UCWS",
+    "state": "Telangana",
+    "city": "HANUMAKONDA",
+    "address": "Near DIG Building, Opp: Rohini Hospital, Subedari, Hanamkonda, Warangal Urban, Telangana",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCWS"
+    ]
+  },
+  {
+    "id": "col-35586",
+    "name": "University College for Women, Koti",
+    "acronym": "UCWK",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "Sultan Bazar ,, KOTI, Hyderabad",
+    "website": "www.oucwkoti.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCWK"
+    ]
+  },
+  {
+    "id": "col-16426",
+    "name": "University College of Applied Sciences, Chuttippara, Pathanamthitta",
+    "acronym": "UCASCP",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "SCHOOL OF TECHNOLOGY AND APPLIED SCIENCES, Chuttippara, Pathanamthitta-689645",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCASCP"
+    ]
+  },
+  {
+    "id": "col-15517",
+    "name": "University College of Applied Sciences, Edappally, Kochi, Ernakulam",
+    "acronym": "UCASEKE",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "Edappally, Edappally P.O., Ernakulam",
+    "website": "www.staskochi.org",
+    "popularityScore": 50,
+    "aliases": [
+      "UCASEKE"
+    ]
+  },
+  {
+    "id": "col-14790",
+    "name": "University College of Arts",
+    "acronym": "UCA",
+    "state": "Karnataka",
+    "city": "Tumakuru",
+    "address": "UNIVERSITY CONSTITUENT COLLEGE, B.H. ROAD, TUMKUR, TUMKUR",
+    "website": "www.ucatut.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCA"
+    ]
+  },
+  {
+    "id": "col-607",
+    "name": "University College of Arts and Commerce",
+    "acronym": "UCAC",
+    "state": "Andhra Pradesh",
+    "city": "East Godavari",
+    "address": "Adikavi Nannaya University, Rajaraja Narendra Nagar, NH-16, Velugubanda (V), Rajanagaram (M),, Rajamahendravaram (Rajahmundry)",
+    "website": "www.nannayauniversity.info",
+    "popularityScore": 50,
+    "aliases": [
+      "UCAC"
+    ]
+  },
+  {
+    "id": "col-35587",
+    "name": "UNIVERSITY COLLEGE OF ARTS AND SOCIAL SCIENCES",
+    "acronym": "UCASS",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCASS"
+    ]
+  },
+  {
+    "id": "col-871",
+    "name": "University College of Arts, Commerce and Law",
+    "acronym": "UCACL",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "Acharya Nagarjuna University, Nagarjuna Nagar, Guntur",
+    "website": "www.anu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCACL"
+    ]
+  },
+  {
+    "id": "col-30916",
+    "name": "University College of Ayurved, Jodhpur",
+    "acronym": "UCAJ",
+    "state": "Rajasthan",
+    "city": "Jodhpur",
+    "address": "Dr. Sarvepalli Radhakrishnan Rajasthan Ayurved University, Nagaur Road, Karwad, Jodhpur",
+    "website": "https://education.rajasthan.gov.in/raujodhpur",
+    "popularityScore": 50,
+    "aliases": [
+      "UCAJ"
+    ]
+  },
+  {
+    "id": "col-35588",
+    "name": "UNIVERSITY COLLEGE OF COMMERCE BUSINESS MANAGEMENT OSMANIA UNIVERSITY",
+    "acronym": "UCCBMOU",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCCBMOU"
+    ]
+  },
+  {
+    "id": "col-35589",
+    "name": "university college of education",
+    "acronym": "UCE",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCE"
+    ]
+  },
+  {
+    "id": "col-608",
+    "name": "University College of Education",
+    "acronym": "UCE",
+    "state": "Andhra Pradesh",
+    "city": "East Godavari",
+    "address": "Adikavi Nannaya University, Rajah Rajah Narendra Nagar, Rajamahendravaram",
+    "website": "www.nannayauniversity.info",
+    "popularityScore": 50,
+    "aliases": [
+      "UCE"
+    ]
+  },
+  {
+    "id": "col-12693",
+    "name": "University College of Education, Chitravathi Campus, B.B. Road, N.H. 7, Honnenahalli, Manchanabele Post, Chickballapur-562101",
+    "acronym": "UCECCBBRNH7HMPC5",
+    "state": "Karnataka",
+    "city": "Chikballapur",
+    "address": "University College of Education,, Chitravathi, Manchanabale post, Chickballapur",
+    "website": "www.ucecbpura.org",
+    "popularityScore": 50,
+    "aliases": [
+      "UCECCBBRNH7HMPC5"
+    ]
+  },
+  {
+    "id": "col-13346",
+    "name": "University College of Fine Arts and Music, Dharwad",
+    "acronym": "UCFAMD",
+    "state": "Karnataka",
+    "city": "Dharwad",
+    "address": "Karnataka College Campus , Dharwad, Karnataka College Campus , Dharwad, Dharwad",
+    "website": "http://www.kudmusiccollege.com",
+    "popularityScore": 50,
+    "aliases": [
+      "UCFAMD"
+    ]
+  },
+  {
+    "id": "col-14337",
+    "name": "University college of Fine Arts for Women, Mysore",
+    "acronym": "UCFAWM",
+    "state": "Karnataka",
+    "city": "Mysuru",
+    "address": "University College of Fine Arts, Manasagangotri, Mysuru",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCFAWM"
+    ]
+  },
+  {
+    "id": "col-30917",
+    "name": "UNIVERSITY COLLEGE OF HOMEOPATHY JODHPUR",
+    "acronym": "UCHJ",
+    "state": "Rajasthan",
+    "city": "Jodhpur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCHJ"
+    ]
+  },
+  {
+    "id": "col-28164",
+    "name": "UNIVERSITY COLLEGE OF HOMEOPATHY KEKRI AJMER",
+    "acronym": "UCHKA",
+    "state": "Rajasthan",
+    "city": "Ajmer",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCHKA"
+    ]
+  },
+  {
+    "id": "col-15411",
+    "name": "University College of Medical Education, Manimalakunnu, Ernakulam Dist.",
+    "acronym": "UCMEMED",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "Manimalakkunnu, Oliyappuram P.O., Koothattukulam, Oliyappuram p.o  , Koothattukulam, Koothattukulam",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCMEMED"
+    ]
+  },
+  {
+    "id": "col-15412",
+    "name": "University College of Medical Education, Regional Centre, Municipal Building, Railway Station Road, Angamaly, Ernakulam",
+    "acronym": "UCMERCMBRSRAE",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "Railway station road, Angamaly, Ernakulam",
+    "website": "www.sme.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCMERCMBRSRAE"
+    ]
+  },
+  {
+    "id": "col-5451",
+    "name": "University College of Medical Science & Guru Teg Bahadur Hospital",
+    "acronym": "UCMSGTBH",
+    "state": "Delhi",
+    "city": "North East",
+    "address": "Dilshad Garden, Delhi, Delhi",
+    "website": "www.ucms.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCMSGTBH"
+    ]
+  },
+  {
+    "id": "col-30918",
+    "name": "UNIVERSITY COLLEGE OF NATUROPATHY AND YOGIC SCIENCE",
+    "acronym": "UCNYS",
+    "state": "Rajasthan",
+    "city": "Jodhpur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNYS"
+    ]
+  },
+  {
+    "id": "col-17628",
+    "name": "UNIVERSITY COLLEGE OF NURSING BHOPAL",
+    "acronym": "UCNB",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNB"
+    ]
+  },
+  {
+    "id": "col-47338",
+    "name": "UNIVERSITY COLLEGE OF NURSING COM AND JNM HOSPITAL ,WBUHS,KALYANI,NADIA",
+    "acronym": "UCNCJHWKN",
+    "state": "West Bengal",
+    "city": "Nadia",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNCJHWKN"
+    ]
+  },
+  {
+    "id": "col-15937",
+    "name": "University College of Nursing, Andoor, Marangattupally P.O., Pala, Kottayam",
+    "acronym": "UCNAMPOPK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "Institute of Nursing Education, School of Medical Education, Andoor, Marangattupally P.O, Pin: 686635, Pala",
+    "website": "www.sme.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNAMPOPK"
+    ]
+  },
+  {
+    "id": "col-16391",
+    "name": "University College of Nursing, Chuttippara, Pathanamthitta",
+    "acronym": "UCNCP",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "Institute of Nursing Education , SME,CPAS, Chuttippara, Pathanamthitta",
+    "website": "www.sme.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNCP"
+    ]
+  },
+  {
+    "id": "col-27231",
+    "name": "University College of Nursing, Faridkot",
+    "acronym": "UCNF",
+    "state": "Punjab",
+    "city": "Faridkot",
+    "address": "University College of Nursing,G.G.S Medical &Hospital, Sadiq Road, Faridkot",
+    "website": "www.bfuhs.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNF"
+    ]
+  },
+  {
+    "id": "col-15938",
+    "name": "University College of Nursing, Gandhinagar, Kottayam",
+    "acronym": "UCNGK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "Gandhinagar P O, Kottayam, Gandhinagar P O, Kottayam, kottayam",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNGK"
+    ]
+  },
+  {
+    "id": "col-15580",
+    "name": "University College of Nursing, Nedumkandam, Idukki",
+    "acronym": "UCNNI",
+    "state": "Kerala",
+    "city": "Idukki",
+    "address": "Chakkakanam, Nedumkandam, Nedumkandam",
+    "website": "cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNNI"
+    ]
+  },
+  {
+    "id": "col-15871",
+    "name": "University College of Nursing, Thalappady, Kottayam",
+    "acronym": "UCNTK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "INSTITUTE OF NURSING EDUCATION,SME, CPAS,Rubber Board P.O,Kottayam,Kerala, RUBBER BOARD . P. O., PUTHUPPALLY., Kottayam",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNTK"
+    ]
+  },
+  {
+    "id": "col-873",
+    "name": "University College of Pharmaceutical Sciences",
+    "acronym": "UCPS",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "Nagarjuna Nagar, Near Toll Gate, Guntur",
+    "website": "www.anu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPS"
+    ]
+  },
+  {
+    "id": "col-35129",
+    "name": "UNIVERSITY COLLEGE OF PHARMACEUTICAL SCIENCES KAKATIYA UNIVERSITY",
+    "acronym": "UCPSKU",
+    "state": "Telangana",
+    "city": "HANUMAKONDA",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPSKU"
+    ]
+  },
+  {
+    "id": "col-15939",
+    "name": "University College of Pharmacy, Cheruvandoor, Ettumanoor P.O., Kottayam",
+    "acronym": "UCPCEPOK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "Mahatma Gandhi University, Ettumanoor P.O., Cheruvandoor, Kottayam",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPCEPOK"
+    ]
+  },
+  {
+    "id": "col-15940",
+    "name": "University College of Pharmacy, Thalappady, Kottayam",
+    "acronym": "UCPTK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "Rubber Board P.O., Kottayam",
+    "website": "www.mgu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPTK"
+    ]
+  },
+  {
+    "id": "col-11531",
+    "name": "University College of Physical Education",
+    "acronym": "UCPE",
+    "state": "Karnataka",
+    "city": "Bengaluru Urban",
+    "address": "Jnana Bharathi Campus, Bangalore University, Bangalore",
+    "website": "www.bangaloreuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPE"
+    ]
+  },
+  {
+    "id": "col-874",
+    "name": "University College of Physical Education and Sports Sciences",
+    "acronym": "UCPESS",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "Acharya Nagarjuna University, Nagarjuna Nagar, guntur",
+    "website": "http://www.anu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPESS"
+    ]
+  },
+  {
+    "id": "col-27232",
+    "name": "University College of Physiotherapy, Faridkot",
+    "acronym": "UCPF",
+    "state": "Punjab",
+    "city": "Faridkot",
+    "address": "Guru Gobind Singh Medical Hospital Complex, Sadiq Road, Faridkot",
+    "website": "www.bfuhs.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCPF"
+    ]
+  },
+  {
+    "id": "col-14791",
+    "name": "University College of Science",
+    "acronym": "UCS",
+    "state": "Karnataka",
+    "city": "Tumakuru",
+    "address": "Tumkur University, B H Road, Tumkur",
+    "website": "www.ucst.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCS"
+    ]
+  },
+  {
+    "id": "col-35591",
+    "name": "UNIVERSITY COLLEGE OF SCIENCE OSMANIA UNIVERSITY",
+    "acronym": "UCSOU",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCSOU"
+    ]
+  },
+  {
+    "id": "col-35592",
+    "name": "University College of Science, Saifabad",
+    "acronym": "UCSS",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "address": "University College Of Science , Saifabad, Masabtank, Hyderabad",
+    "website": "www.ucssou.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCSS"
+    ]
+  },
+  {
+    "id": "col-15581",
+    "name": "University College of Teacher Education, Amaravathy P.O., Kumily 685 509, Idukki",
+    "acronym": "UCTEAPOK65I",
+    "state": "Kerala",
+    "city": "Idukki",
+    "address": "Amaravathy, Amaravathy P O,Kumily, Kumily",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEAPOK65I"
+    ]
+  },
+  {
+    "id": "col-15941",
+    "name": "University College of Teacher Education, Government Girls High School Campus, Vaikom, Kottayam",
+    "acronym": "UCTEGGHSCVK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "COLLEGE OF TEACHER EDUCATION, VAIKOM, GOVT.GIRLS HIGH SCHOOL CAMPUS, VAIKOM P.O., PIN 686141, VAIKOM",
+    "website": "http://cte.cpas.ac.in/vkm/",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGGHSCVK"
+    ]
+  },
+  {
+    "id": "col-15943",
+    "name": "University College of Teacher Education, Government High School Campus, Kudamaloor, Kottayam",
+    "acronym": "UCTEGHSCKK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "Kudamaloor, Kottayam, Kerala  PIN-686017, Kottayam",
+    "website": "www.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGHSCKK"
+    ]
+  },
+  {
+    "id": "col-15944",
+    "name": "University College of Teacher Education, Government High School Campus, Paippad, Changanacherry, Kottayam",
+    "acronym": "UCTEGHSCPCK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "Pallickachira Kavala.P.O, Paippad, Changanacherry, Changanacherry, PIN - 686537",
+    "website": "cte.cpas.ac.in/ppd/",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGHSCPCK"
+    ]
+  },
+  {
+    "id": "col-15945",
+    "name": "University College of Teacher Education, Government High School Campus, Petta, Kanjirappally, Kottayam",
+    "acronym": "UCTEGHSCPKK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "mgucte kanjirappally kottayam, mgucte kanjirappally kottayam, kanjirappally",
+    "website": "www.mgu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGHSCPKK"
+    ]
+  },
+  {
+    "id": "col-15582",
+    "name": "University College of Teacher Education, Government High School Campus, Thodupuzha, Idukki",
+    "acronym": "UCTEGHSCTI",
+    "state": "Kerala",
+    "city": "Idukki",
+    "address": "GOVT. BOYS HIGH SCHOOL CAMPUS, THODUPUZHA, THODUPUZHA EAST P.O, THODUPUZHA",
+    "website": "www.cte.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGHSCTI"
+    ]
+  },
+  {
+    "id": "col-15942",
+    "name": "University College of Teacher Education, Government Higher Secondary School, Thekkekara, Erattupetta, Kottayam",
+    "acronym": "UCTEGHSSTEK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "CPAS, COLLEGE OF TEACHER EDUCATION, ERATTUPETTA, GOCT. HSS CAMPUS, THEKKEKARA, ARUVITHURA P O, ERATTUPETTA, PIN 686122, ERATTUPETTA",
+    "website": "http://cte.cpas.ac.in/etp/",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGHSSTEK"
+    ]
+  },
+  {
+    "id": "col-15518",
+    "name": "University College of Teacher Education, Government Model High School Campus, Muvattupuzha, Ernakulam",
+    "acronym": "UCTEGMHSCME",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "COLLEGE OF TEACHER EDUCATION   MUVATTUPUZHA, GOVT MODEL H S CAMPUS MUVATTUPUZHA, ERNAKULAM",
+    "website": "cte.cpas.ac.in/mvp",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEGMHSCME"
+    ]
+  },
+  {
+    "id": "col-15519",
+    "name": "University College of Teacher Education, Near Government Boys High School Campus, Vaikom Road, Thrippunithura, Ernakulam",
+    "acronym": "UCTENGBHSCVRTE",
+    "state": "Kerala",
+    "city": "Ernakulam",
+    "address": "Vaikom Road, Tripunithura P.O., Ernakulam Dist. Kerala - 682301, Vaikom Road, Tripunithura P.O., Ernakulam Dist. Kerala - 682301, Ernakulam",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTENGBHSCVRTE"
+    ]
+  },
+  {
+    "id": "col-15583",
+    "name": "University College of Teacher Education, Panchayat U.P. School Campus, Nedumkandam, Idukki",
+    "acronym": "UCTEPUPSCNI",
+    "state": "Kerala",
+    "city": "Idukki",
+    "address": "CPAS College of Teacher Education, Panchayat U.P. School Campus, Nedumkandam, Idukki, NEDUMKANDAM, NEDUMKANDAM",
+    "website": "www.cte.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEPUPSCNI"
+    ]
+  },
+  {
+    "id": "col-15946",
+    "name": "University College of Teacher Education, Thottakkad P.O., Kottayam",
+    "acronym": "UCTETPOK",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "address": "MGUCTE, Thottakad, Champakara, Kottayam",
+    "website": "www.cte.cpas.ac.in/tkd",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTETPOK"
+    ]
+  },
+  {
+    "id": "col-16427",
+    "name": "University College of Teacher Education, Vocational Higher Secondary School Campus, Elanthoor, Pathanamthitta",
+    "acronym": "UCTEVHSSCEP",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "University College of Teacher Education, Vocational Higher Secondary School Campus, Elanthoor, Pathanamthitta, Kerala  PIN -689643, Elanthur",
+    "website": "www.cte.cpas.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTEVHSSCEP"
+    ]
+  },
+  {
+    "id": "col-31943",
+    "name": "UNIVERSITY COLLEGE OF UNANI, YUSUFPURA CHARAI",
+    "acronym": "UCUYC",
+    "state": "Rajasthan",
+    "city": "Tonk",
+    "address": "YUSUFPURA,CHARAI TONK(RAJ.), YUSUFPURA,CHARAI,TONK(RAJ.), TONK",
+    "website": "www.raujodhpur.org",
+    "popularityScore": 50,
+    "aliases": [
+      "UCUYC"
+    ]
+  },
+  {
+    "id": "col-27222",
+    "name": "UNIVERSITY COLLEGE TPD MALWA COLLEGE RAMPURA PHUL BATHINDA",
+    "acronym": "UCTMCRPB",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Punjabi University TPD Malwa College, Rampura Phul, Mehraj",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCTMCRPB"
+    ]
+  },
+  {
+    "id": "col-27722",
+    "name": "University College, Bahadarpur",
+    "acronym": "UCB",
+    "state": "Punjab",
+    "city": "Mansa",
+    "address": "VPO BAHADARPUR, TEH. BUDHLADA, BARETTA",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCB"
+    ]
+  },
+  {
+    "id": "col-28093",
+    "name": "University College, Balachaur, Nawanshehar",
+    "acronym": "UCBN",
+    "state": "Punjab",
+    "city": "Shahid Bhagat Singh Nagar",
+    "address": "Bhaddi Road, Balachaur., Balachaur",
+    "website": "http://bbpucc.org/",
+    "popularityScore": 50,
+    "aliases": [
+      "UCBN"
+    ]
+  },
+  {
+    "id": "col-12975",
+    "name": "UNIVERSITY COLLEGE, BANNADKA, MOODABIDRI",
+    "acronym": "UCBM",
+    "state": "Karnataka",
+    "city": "Dakshin Kannad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCBM"
+    ]
+  },
+  {
+    "id": "col-27159",
+    "name": "University College, Barnala Sandhu patti Road",
+    "acronym": "UCBSPR",
+    "state": "Punjab",
+    "city": "Barnala",
+    "address": "Sandhu Patti, Near Gharuan Brick Klin, Barnala",
+    "website": "punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCBSPR"
+    ]
+  },
+  {
+    "id": "col-27972",
+    "name": "University College, Benra Dhuri",
+    "acronym": "UCBD",
+    "state": "Punjab",
+    "city": "Sangrur",
+    "address": "University College Benra Dhuri, University College Benra Dhuri, Dhuri",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCBD"
+    ]
+  },
+  {
+    "id": "col-9448",
+    "name": "UNIVERSITY COLLEGE, CDLU, SIRSA",
+    "acronym": "UCCS",
+    "state": "Haryana",
+    "city": "Sirsa",
+    "address": "UNIVERSITY COLLEGE, Administrative Block, CDLU, Sirsa, UNIVERSITY COLLEGE, Administrative Block, CDLU, Sirsa, Sirsa",
+    "website": "www.cdlu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCCS"
+    ]
+  },
+  {
+    "id": "col-27279",
+    "name": "University College, Chunni Kalan",
+    "acronym": "UCCK",
+    "state": "Punjab",
+    "city": "Fatehgarh Sahib",
+    "address": "University College, Chunni Kalan,, Distt. Fatehgarh Sahib. Punjab.",
+    "website": "ucck.co.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCCK"
+    ]
+  },
+  {
+    "id": "col-27160",
+    "name": "University College, Dhilwan",
+    "acronym": "UCD",
+    "state": "Punjab",
+    "city": "Barnala",
+    "address": "V.P.O. DHILWAN, TEHSIL TAPA, BARNALA",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCD"
+    ]
+  },
+  {
+    "id": "col-27870",
+    "name": "University College, Ghanaur",
+    "acronym": "UCG",
+    "state": "Punjab",
+    "city": "Patiala",
+    "address": "Principal,university college Ghanaur, Tehsil Rajpura, Patiala",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UCG"
+    ]
+  },
+  {
+    "id": "col-27221",
+    "name": "University College, Ghudda",
+    "acronym": "UCG",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "VPO Ghudda, Bathinda",
+    "website": "http://ucghudda.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCG"
+    ]
+  },
+  {
+    "id": "col-27327",
+    "name": "University College, Guru Har Sahai, Firozpur",
+    "acronym": "UCGHSF",
+    "state": "Punjab",
+    "city": "Firozepur",
+    "address": "MOHAN KE HITHAR, POST OFFICE-PINDI, GURU HAR SAHAI",
+    "website": "puccghs.org",
+    "popularityScore": 50,
+    "aliases": [
+      "UCGHSF"
+    ]
+  },
+  {
+    "id": "col-27253",
+    "name": "University College, Jaitu",
+    "acronym": "UCJ",
+    "state": "Punjab",
+    "city": "Faridkot",
+    "address": "Behind sports stadium, gaushala road, near grain market, Jaitu, Behind sports stadium, gaushala road, near grain market, Jaitu, JAITU",
+    "website": "punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCJ"
+    ]
+  },
+  {
+    "id": "col-12976",
+    "name": "University College, Mangalore",
+    "acronym": "UCM",
+    "state": "Karnataka",
+    "city": "Dakshin Kannad",
+    "address": "UP Mallya Road, Hampankatta, Mangalore",
+    "website": "www.universitycollegemangalore.com",
+    "popularityScore": 50,
+    "aliases": [
+      "UCM"
+    ]
+  },
+  {
+    "id": "col-27973",
+    "name": "University College, Moonak",
+    "acronym": "UCM",
+    "state": "Punjab",
+    "city": "Sangrur",
+    "address": "University College Moonak, Opp Choi Wala Mandir, Moonak",
+    "website": "https://pucmoonak.blogspot.com",
+    "popularityScore": 50,
+    "aliases": [
+      "UCM"
+    ]
+  },
+  {
+    "id": "col-27771",
+    "name": "University College, Nihal Singh Wala, Moga",
+    "acronym": "UCNSWM",
+    "state": "Punjab",
+    "city": "Moga",
+    "address": "VPO-PATTO HIRA SINGH, TEH-NIHAL SINGH WALA (MOGA), NIHAL SINGH WALA",
+    "website": "puccnsw.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCNSWM"
+    ]
+  },
+  {
+    "id": "col-28135",
+    "name": "University College, Sikhwala, Muktsar",
+    "acronym": "UCSM",
+    "state": "Punjab",
+    "city": "Sri Muktsar Sahib",
+    "address": "V.P.O. SIKHWALA, TEHSIL- MALOUT, MALOUT",
+    "website": "www.puccs.puchd.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCSM"
+    ]
+  },
+  {
+    "id": "col-16609",
+    "name": "University College, Thiruvananthapuram",
+    "acronym": "UCT",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "M G Road, Palayam, Thiruvananthapuram, Thiruvananthapuram",
+    "website": "www.universitycollege.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCT"
+    ]
+  },
+  {
+    "id": "col-875",
+    "name": "University Collge of Architecture & Planning",
+    "acronym": "UCAP",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "NAGARJUNA NAGAR, NEAR TOLLGATE, GUNTUR",
+    "website": "www.anu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCAP"
+    ]
+  },
+  {
+    "id": "col-876",
+    "name": "University Collge of Sciences",
+    "acronym": "UCS",
+    "state": "Andhra Pradesh",
+    "city": "Guntur",
+    "address": "ACHARYA NAGARJUNA UNIVERSITY, NAGARJUNANAGAR, GUNTUR",
+    "website": "www.nagarjunauniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UCS"
+    ]
+  },
+  {
+    "id": "col-12977",
+    "name": "UNIVERSITY EVENING COLLEGE MANGALORE",
+    "acronym": "UECM",
+    "state": "Karnataka",
+    "city": "Dakshin Kannad",
+    "address": "U P Mallya Road, Hampankatta, Mangalore",
+    "website": "www.uecmangalore.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UECM"
+    ]
+  },
+  {
+    "id": "col-14338",
+    "name": "University Evening College, University of Mysore",
+    "acronym": "UECUM",
+    "state": "Karnataka",
+    "city": "Mysuru",
+    "address": "Maharajas College Building, Chamaraja Mohalla, Mysuru, Mysuru",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UECUM"
+    ]
+  },
+  {
+    "id": "col-12978",
+    "name": "UNIVERSITY FIRST GRADE COLLEGE MANGALAGANGOTHRI",
+    "acronym": "UFGCM",
+    "state": "Karnataka",
+    "city": "Dakshin Kannad",
+    "address": "University First Grade College Mangalagangothri, Konaje, Mangalore",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UFGCM"
+    ]
+  },
+  {
+    "id": "col-15830",
+    "name": "University Institute of Management",
+    "acronym": "UIM",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UIM"
+    ]
+  },
+  {
+    "id": "col-15317",
+    "name": "UNIVERSITY INSTITUTE OF MANAGEMENT ALAPPUZHA",
+    "acronym": "UIMA",
+    "state": "Kerala",
+    "city": "Alappuzha",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UIMA"
+    ]
+  },
+  {
+    "id": "col-15831",
+    "name": "University Institute of Management Kundara",
+    "acronym": "UIMK",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UIMK"
+    ]
+  },
+  {
+    "id": "col-16441",
+    "name": "University Institute of Management, Adoor",
+    "acronym": "UIMA",
+    "state": "Kerala",
+    "city": "Pathanamthitta",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UIMA"
+    ]
+  },
+  {
+    "id": "col-15832",
+    "name": "UNIVERSITY INSTITUTE OF MANAGEMENT, PUNALUR",
+    "acronym": "UIMP",
+    "state": "Kerala",
+    "city": "Kollam",
+    "address": "UNIVERSITY INSTITUTE OF MANAGEMENT ,PUNALUR, Second floor of primary Agricultural bank Punalur., KOLLAM",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UIMP"
+    ]
+  },
+  {
+    "id": "col-16610",
+    "name": "University Institute Of Management,Varkala",
+    "acronym": "UIMV",
+    "state": "Kerala",
+    "city": "Thiruvananthapuram",
+    "address": "University Institute of Management,Varkala, University Institute of Management, Varkala, Varkala",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UIMV"
+    ]
+  },
+  {
+    "id": "col-27281",
+    "name": "University Institute of Nursing, Jalalabad, Disst. Fazilka",
+    "acronym": "UINJDF",
+    "state": "Punjab",
+    "city": "Fazilka",
+    "address": "Opposite Sacred Heart Convent School, Ferozepur Road, Jalalabad",
+    "website": "www.bfuhs.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UINJDF"
+    ]
+  },
+  {
+    "id": "col-27233",
+    "name": "University Institute of Para Medical Sciences",
+    "acronym": "UIPMS",
+    "state": "Punjab",
+    "city": "Faridkot",
+    "address": "Sadiq Road, , Faridkot",
+    "website": "www.ggsmch.org",
+    "popularityScore": 50,
+    "aliases": [
+      "UIPMS"
+    ]
+  },
+  {
+    "id": "col-27234",
+    "name": "University Institute of Pharmaceutical Sciences & Research, Faridkot",
+    "acronym": "UIPSRF",
+    "state": "Punjab",
+    "city": "Faridkot",
+    "address": "University institute of Pharmacy, Baba Farid University of Health Sciences, Faridkot",
+    "website": "www.bfuhs.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UIPSRF"
+    ]
+  },
+  {
+    "id": "col-11532",
+    "name": "University Law College",
+    "acronym": "ULC",
+    "state": "Karnataka",
+    "city": "Bengaluru Urban",
+    "address": "Jnanabharathi Campus, Bangalore University,, Bangalore-560056, Bangalore",
+    "website": "www.ulcbangalore.com",
+    "popularityScore": 50,
+    "aliases": [
+      "ULC"
+    ]
+  },
+  {
+    "id": "col-26626",
+    "name": "University Law College",
+    "acronym": "ULC",
+    "state": "Odisha",
+    "city": "Khordha",
+    "address": "Vani Vihar, Utkal University, Bhubaneswar",
+    "website": "universitylawcollegebbsr.org.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ULC"
+    ]
+  },
+  {
+    "id": "col-10526",
+    "name": "UNIVERSITY LAW COLLEGE, HAZARIBAG",
+    "acronym": "ULCH",
+    "state": "Jharkhand",
+    "city": "Hazaribagh",
+    "address": "VBU CAMPUS,, SINDOOR, HAZARIBAG",
+    "website": "vbu.co.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ULCH"
+    ]
+  },
+  {
+    "id": "col-32395",
+    "name": "University Of Madras Constituent College - Nemmili",
+    "acronym": "UMCCN",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "address": "East Coast Road, Nemmeli, Chengalpattu",
+    "website": "uccnemmeli.unom.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UMCCN"
+    ]
+  },
+  {
+    "id": "col-32396",
+    "name": "University Of Madras Constituent College - Thiruvottiyur",
+    "acronym": "UMCCT",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "address": "NO. 36 POONTHOTTAM STREET, THIRUVOTTIYUR, CHENNAI",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UMCCT"
+    ]
+  },
+  {
+    "id": "col-35643",
+    "name": "UNIVERSITY P G CENTER GADWAL",
+    "acronym": "UPGCG",
+    "state": "Telangana",
+    "city": "JOGULAMBA GADWAL",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UPGCG"
+    ]
+  },
+  {
+    "id": "col-37068",
+    "name": "UNIVERSITY PG COLLEGE, BHUPALAPALLY",
+    "acronym": "UPCB",
+    "state": "Telangana",
+    "city": "Warangal Rural",
+    "address": "SCCL High School, Karalmaers Bhupalpally, Bhupalpally Jayashankar",
+    "website": "kakatiya.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UPCB"
+    ]
+  },
+  {
+    "id": "col-37069",
+    "name": "UNIVERSITY PG COLLEGE, MAHABUBABAD",
+    "acronym": "UPCM",
+    "state": "Telangana",
+    "city": "Warangal Rural",
+    "address": "GOVERNMENT DEGREE COLLEGE, KESAMUDRAM ROAD WARANGAL, MAHABUBABAD",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UPCM"
+    ]
+  },
+  {
+    "id": "col-17608",
+    "name": "University Polytechnic, RGPV",
+    "acronym": "UPR",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "Airport Road Gandhinagar Bhopal, Bhopal",
+    "website": "www.rgpv.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UPR"
+    ]
+  },
+  {
+    "id": "col-45262",
+    "name": "University Polytechnic, Shahjahanpur",
+    "acronym": "UPS",
+    "state": "Uttar Pradesh",
+    "city": "Shahjahanpur",
+    "address": "Sitapur Road, Village-Gurri, Shahjahanpur",
+    "website": "www.iul.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UPS"
+    ]
+  },
+  {
+    "id": "col-27223",
+    "name": "University School of Business Studies",
+    "acronym": "USBS",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "address": "Raman Road, Talwandi Sabo",
+    "website": "www.punjabiuniversity.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "USBS"
+    ]
+  },
+  {
+    "id": "col-30919",
+    "name": "University Sri Kaniram Salagram Tak Satellite Hospital & Training Centre, Magra Poonjala, Jodhpur",
+    "acronym": "USKSTSHTCMPJ",
+    "state": "Rajasthan",
+    "city": "Jodhpur",
+    "address": "Punjala, Jodhpur",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "USKSTSHTCMPJ"
+    ]
+  },
+  {
+    "id": "col-16093",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, CALICUT",
+    "acronym": "UTECC",
+    "state": "Kerala",
+    "city": "Kozhikode",
+    "address": "VK Krishna Menon road, Kallai, Calicut",
+    "website": "www.cuteccalicut.uoc.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECC"
+    ]
+  },
+  {
+    "id": "col-16094",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, CHAKKITTAPPARA",
+    "acronym": "UTECC",
+    "state": "Kerala",
+    "city": "Kozhikode",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECC"
+    ]
+  },
+  {
+    "id": "col-16791",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, KANIYAMBETTA",
+    "acronym": "UTECK",
+    "state": "Kerala",
+    "city": "Wayanad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECK"
+    ]
+  },
+  {
+    "id": "col-16754",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, KODUVAYUR",
+    "acronym": "UTECK",
+    "state": "Kerala",
+    "city": "Thrissur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECK"
+    ]
+  },
+  {
+    "id": "col-16253",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, MALAPPURAM",
+    "acronym": "UTECM",
+    "state": "Kerala",
+    "city": "Malappuram",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECM"
+    ]
+  },
+  {
+    "id": "col-16254",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, MANJERI",
+    "acronym": "UTECM",
+    "state": "Kerala",
+    "city": "Malappuram",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECM"
+    ]
+  },
+  {
+    "id": "col-16755",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, NATTIKA",
+    "acronym": "UTECN",
+    "state": "Kerala",
+    "city": "Thrissur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECN"
+    ]
+  },
+  {
+    "id": "col-16792",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, SULTHAN BATHERY",
+    "acronym": "UTECSB",
+    "state": "Kerala",
+    "city": "Wayanad",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECSB"
+    ]
+  },
+  {
+    "id": "col-16756",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, VALAPPAD",
+    "acronym": "UTECV",
+    "state": "Kerala",
+    "city": "Thrissur",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECV"
+    ]
+  },
+  {
+    "id": "col-16095",
+    "name": "UNIVERSITY TEACHER EDUCATION CENTRE, VATAKARA",
+    "acronym": "UTECV",
+    "state": "Kerala",
+    "city": "Kozhikode",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UTECV"
+    ]
+  },
+  {
+    "id": "col-9069",
+    "name": "University UG College",
+    "acronym": "UUC",
+    "state": "Haryana",
+    "city": "Kurukshetra",
+    "address": "",
+    "website": "",
+    "popularityScore": 50,
+    "aliases": [
+      "UUC"
+    ]
+  },
+  {
+    "id": "col-13831",
+    "name": "University UG Programme for B.P.Ed.",
+    "acronym": "UUPBPE",
+    "state": "Karnataka",
+    "city": "Kalaburagi",
+    "address": "Unicersity college of Physical Education, Gulbarga University, Kalaburagi, Kalaburagi",
+    "website": "www.gug.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "UUPBPE"
+    ]
+  },
+  {
+    "id": "col-19811",
+    "name": "Vedic Institute of Pharmaceutical Education and Research, University Bamhori, Tigadda, Link Road, Bahupura, Sagar - 470003",
+    "acronym": "VIPERUBTLRBS4",
+    "state": "Madhya Pradesh",
+    "city": "Sagar",
+    "address": "NEAR BAMHORI TIRAHA REHLI ROAD, BABUPURA, SIRONJA",
+    "website": "https://vedicsagar.com",
+    "popularityScore": 50,
+    "aliases": [
+      "VIPERUBTLRBS4"
+    ]
+  },
+  {
+    "id": "col-1808",
+    "name": "Vikrama Simhapuri University P.G.Center, Kavali",
+    "acronym": "VSUPGCK",
+    "state": "Andhra Pradesh",
+    "city": "Spsr Nellore",
+    "address": "Peddapavani Road, Vykuntapuram, kavali",
+    "website": "www.vsu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "VSUPGCK"
+    ]
+  },
+  {
+    "id": "col-11188",
+    "name": "Visvesvaraya Technological University, Belgaum",
+    "acronym": "VTUB",
+    "state": "Karnataka",
+    "city": "Belagavi",
+    "address": "\"JNANA SANGAMA\", VTU, BELAGAVI, BELAGAVI",
+    "website": "www.vtu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "VTUB"
+    ]
+  },
+  {
+    "id": "col-12715",
+    "name": "Visvesvaraya Technological University, VIAT, Muddenahalli",
+    "acronym": "VTUVM",
+    "state": "Karnataka",
+    "city": "Chikballapur",
+    "address": "Muddenahalli, Chickaballapur",
+    "website": "www.vtu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "VTUVM"
+    ]
+  },
+  {
+    "id": "col-13925",
+    "name": "Visvesvaraya Technological University, VTU Regional Office, Gulbarga",
+    "acronym": "VTUVROG",
+    "state": "Karnataka",
+    "city": "Kalaburagi",
+    "address": "Centre for PG Studies, VTU Regional Office Campus, Kusnoor Road, Kalaburagi (Gulbarga)",
+    "website": "http://www.vtu.ac.in/",
+    "popularityScore": 50,
+    "aliases": [
+      "VTUVROG"
+    ]
+  },
+  {
+    "id": "col-14363",
+    "name": "Visvesvaraya Technological University, VTUs Regional Office, Mysore",
+    "acronym": "VTUVROM",
+    "state": "Karnataka",
+    "city": "Mysuru",
+    "address": "Dept. of PG Studies, V.T.U Regional Centre, Hanchya Sathagalli, Outer Ring road, MYSORE",
+    "website": "www.vtu.ac.in",
+    "popularityScore": 50,
+    "aliases": [
+      "VTUVROM"
+    ]
+  },
+  {
+    "id": "col-32986",
+    "name": "Women's University College of Education,Kodaikanal",
+    "acronym": "WUCEK",
+    "state": "Tamil Nadu",
+    "city": "Dindigul",
+    "address": "Attuvampatti, Kodaikanal, Kodaikanal",
+    "website": "www.womenuniedn.com",
+    "popularityScore": 50,
+    "aliases": [
+      "WUCEK"
+    ]
+  },
+  {
+    "id": "col-10306",
+    "name": "Zakura Campus, University of Kashmir",
+    "acronym": "ZCUK",
+    "state": "Jammu and Kashmir",
+    "city": "Srinagar",
+    "address": "INSTITUTE OF TECHNOLOGY, ZAKURA CAMPUS, UNIVERSITY OF KASHMIR, SRINAGAR",
+    "website": "http://www.iot.uok.edu.in",
+    "popularityScore": 50,
+    "aliases": [
+      "ZCUK"
+    ]
+  },
+  {
+    "id": "col-17504",
+    "name": "\"All Saints College of Technology, Jaipur Jabalpur, NH-12, Gandhi Nagar, Bhopal-462031 \"",
+    "acronym": "ASCTJJN1GNB4",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "FACING INTENATIONAL AIRPORT NH 12, GANDHI NAGAR, BHOPAL",
+    "website": "www.asctbhopal.com",
+    "popularityScore": 30,
+    "aliases": [
+      "ASCTJJN1GNB4"
+    ]
+  },
+  {
+    "id": "col-18661",
+    "name": "\"B.M. College of Technology, Gokanya Khandwa Road, Indore452001\"",
+    "acronym": "BMCTGKRI",
+    "state": "Madhya Pradesh",
+    "city": "Indore",
+    "address": "VILLAGE-GOKANYA PO-KASTURBA GRAM, KHANDWA ROAD INDORE, INDORE",
+    "website": "www.bmcollege.net.in",
+    "popularityScore": 30,
+    "aliases": [
+      "BMCTGKRI"
+    ]
+  },
+  {
+    "id": "col-17507",
+    "name": "\"Bansal College of Engineering, NH-12, Mandideep, Bhopal-462046\"",
+    "acronym": "BCEN1MB4",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "NH-12, Mandideep, Bhopal, Bhopal",
+    "website": "www.bce.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "BCEN1MB4"
+    ]
+  },
+  {
+    "id": "col-18820",
+    "name": "\"Government Engineering College, Gokulpur, Ranjhi Jabalpur, Jabalpur - 482001\"",
+    "acronym": "GECGRJJ4",
+    "state": "Madhya Pradesh",
+    "city": "Jabalpur",
+    "address": "Gokulpur, Ranjhi Jabalpur, Jabalpur - 482001\", JABALPUR",
+    "website": "www.jecjabalpur.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "GECGRJJ4"
+    ]
+  },
+  {
+    "id": "col-18309",
+    "name": "\"Gwalior Engineering College, Airport Road, Maharajpura, Gwalior 4740015",
+    "acronym": "GECARMG4",
+    "state": "Madhya Pradesh",
+    "city": "Gwalior",
+    "address": "Airport Road, Maharajpura, Gwalior, Gwalior",
+    "website": "www.gecgwl.org",
+    "popularityScore": 30,
+    "aliases": [
+      "GECARMG4"
+    ]
+  },
+  {
+    "id": "col-18314",
+    "name": "\"Institute of Technology and Management, Opp Sitholi Railway Station NH 75, Jhansi Road, Gwalior 474001\"",
+    "acronym": "ITMOSRSN7JRG4",
+    "state": "Madhya Pradesh",
+    "city": "Gwalior",
+    "address": "ITM Campus, Opp. Sithouli Railway Station, NH-75, Jhansi Road,, Gwalior",
+    "website": "www.itmuniverse.in",
+    "popularityScore": 30,
+    "aliases": [
+      "ITMOSRSN7JRG4"
+    ]
+  },
+  {
+    "id": "col-17528",
+    "name": "\"Jai Narain College of Technology, New Chouksey Nagar, Berasia Road,Bhopal - 462038\"",
+    "acronym": "JNCTNCNBRB4",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "new chouksey nagar, berasia road bhopal-462038, Bhopal",
+    "website": "www.jnctbhopal.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "JNCTNCNBRB4"
+    ]
+  },
+  {
+    "id": "col-17537",
+    "name": "\"Lakshmi Narain College of Technology & Science, Kalchuri Nagar, Raisen Road, Bhopal-462021 \"",
+    "acronym": "LNCTSKNRRB4",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "Kalchuri Nagar, Raisen Road,, P.O. Kolua, Bhopal",
+    "website": "www.lnct.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "LNCTSKNRRB4"
+    ]
+  },
+  {
+    "id": "col-17536",
+    "name": "\"Lakshmi Narain College of Technology, Kalchuri Nagar, Raisen Road, Post Klua, Bhopal-462021\"",
+    "acronym": "LNCTKNRRPKB4",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "Kalchuri Nagar,Raisen Road,, Bhopal",
+    "website": "www.lnct.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "LNCTKNRRPKB4"
+    ]
+  },
+  {
+    "id": "col-18320",
+    "name": "\"Madhav Institute of Technology and Science, Gole ka Mandir, P.O. Residency, Gwalior-474005\"",
+    "acronym": "MITSGKMPORG4",
+    "state": "Madhya Pradesh",
+    "city": "Gwalior",
+    "address": "RACE COURSE ROAD, GOLE KA MANDIR, GWALIOR",
+    "website": "www.mitsgwalior.in",
+    "popularityScore": 30,
+    "aliases": [
+      "MITSGKMPORG4"
+    ]
+  },
+  {
+    "id": "col-20353",
+    "name": "\"Mahakal Institute of Technology & Management, Behind Air Strip, Dewas, Ujjain - 456446\"",
+    "acronym": "MITMBASDU4",
+    "state": "Madhya Pradesh",
+    "city": "Ujjain",
+    "address": "Behind Air Strip, Karcha,, Dewas Road, Ujjain",
+    "website": "www.mitujjain.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "MITMBASDU4"
+    ]
+  },
+  {
+    "id": "col-20352",
+    "name": "\"Mahakal Institute of Technology,Karcha Farms Village Datana, Behind Air Strip, Dewas Road, Ujjain-456006\"",
+    "acronym": "MITKFVDBASDRU4",
+    "state": "Madhya Pradesh",
+    "city": "Ujjain",
+    "address": "BEHIND AIR STRIP, KARCHA VILLAGE, DATANA, DEWAS ROAD, UJJAIN (M.P.), BEHIND AIR STRIP, KARCHA VILLAGE, DATANA, DEWAS ROAD, UJJAIN (M.P.), UJJAIN",
+    "website": "www.mitujjain.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "MITKFVDBASDRU4"
+    ]
+  },
+  {
+    "id": "col-18685",
+    "name": "\"Malwa Institute of Technology, Village Nipani, Bypass Road, Opp, D.P.S., Indore \"",
+    "acronym": "MITVNBRODPSI",
+    "state": "Madhya Pradesh",
+    "city": "Indore",
+    "address": "NIPANIA INDORE DEWAS BYPASS ROAD, IN FRONT OF BEST PRICE, INDORE",
+    "website": "www.mitindore.co.in",
+    "popularityScore": 30,
+    "aliases": [
+      "MITVNBRODPSI"
+    ]
+  },
+  {
+    "id": "col-18330",
+    "name": "\"Rustamji Institute of Technology, Border Security Force (BSF) Academy, Tekanpur, Gwalior 474005",
+    "acronym": "RITBSFATG4",
+    "state": "Madhya Pradesh",
+    "city": "Gwalior",
+    "address": "Rustamji Institute of Technology, BSF Academy, Tekanpur, Gwalior",
+    "website": "www.rjit.org",
+    "popularityScore": 30,
+    "aliases": [
+      "RITBSFATG4"
+    ]
+  },
+  {
+    "id": "col-17582",
+    "name": "\"SAM College of Engineering and Technology, Village Adampur Chawni, Raisen Road, Bhopal",
+    "acronym": "SCETVACRRB",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "GRAM ADAMPUR CHHAWNI, POST KOLUA RAISEN ROAD, BHOPAL",
+    "website": "www.saminstitutions.com",
+    "popularityScore": 30,
+    "aliases": [
+      "SCETVACRRB"
+    ]
+  },
+  {
+    "id": "col-16943",
+    "name": "\"Sardar Patel College of Technology (B.Pharmacy), Sardar Patel Campur, Gaykhuri, Balagat - 481001\"",
+    "acronym": "SPCTSPCGB4",
+    "state": "Madhya Pradesh",
+    "city": "Balaghat",
+    "address": "Sardar Patel Campus, Gaykhuri, Balaghat (MP), Balaghat",
+    "website": "www.spctgroup.in",
+    "popularityScore": 30,
+    "aliases": [
+      "SPCTSPCGB4"
+    ]
+  },
+  {
+    "id": "col-17587",
+    "name": "\"Scope College of Engineering, NH-12, Hoshangabad Road, Village Bhaironpur, Misrod Bhopal.-462026\"",
+    "acronym": "SCEN1HRVBMB4",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "address": "SCOPE CAMPUS, NH-12 Hoshangabad Road, Bhaironpur , Near Misrod, Bhopal",
+    "website": "www.scopecollege.in",
+    "popularityScore": 30,
+    "aliases": [
+      "SCEN1HRVBMB4"
+    ]
+  },
+  {
+    "id": "col-18722",
+    "name": "\"Truba College of Engineering & Technology, Indore Bypass Road, Kailod Kartal, Indore-452020\"",
+    "acronym": "TCETIBRKKI4",
+    "state": "Madhya Pradesh",
+    "city": "Indore",
+    "address": "KAILOD KARTAL BY-PASS ROAD RAU, RAU INDORE, INDORE",
+    "website": "www.trubainstitute.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "TCETIBRKKI4"
+    ]
+  },
+  {
+    "id": "col-20357",
+    "name": "\"Ujjain Engineering College, Sanwer Road, Ujjain",
+    "acronym": "UECSRU",
+    "state": "Madhya Pradesh",
+    "city": "Ujjain",
+    "address": "Sanwer Road,, Ujjain, Ujjain",
+    "website": "http://www.uecu.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "UECSRU"
+    ]
+  },
+  {
+    "id": "col-23830",
+    "name": "(A.B.M.S.) Akhil Bharatiya Maratha Shikshan Parishad's College of Engineering & Research Address: S. No. 103, Shahu College Campus, Parvati, Taluka: Pune (corporation Area) District: Pune - 411009",
+    "acronym": "ABMSPCERASN1SCCPTPDP4",
+    "state": "Maharashtra",
+    "city": "Pune",
+    "address": "S. No. 103, Shahu College Road, Parvati, Pune, Parvati, Pune - 411009, Pune",
+    "website": "www.abmspcoerpune.org",
+    "popularityScore": 30,
+    "aliases": [
+      "ABMSPCERASN1SCCPTPDP4"
+    ]
+  },
+  {
+    "id": "col-21848",
+    "name": "100007-SSBT'S COLLEGE OF ENGINEERING & TECHNOLOGY, BAMBHORI.",
+    "acronym": "1SCETB",
+    "state": "Maharashtra",
+    "city": "Jalgaon",
+    "address": "BAMBHORI,POST BOX.NO.94, JALGAON - 425001, JALGAON.",
+    "website": "www.sscoetjalgaon.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "1SCETB"
+    ]
+  },
+  {
+    "id": "col-21853",
+    "name": "100054-GOVERNMENT COLLEGE OF ENGINEERING, JALGAON.",
+    "acronym": "1GCEJ",
+    "state": "Maharashtra",
+    "city": "Jalgaon",
+    "address": "National Highway No 6, Jalgaon., Pin - 425002, Jalgaon",
+    "website": "www.gcoej.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "1GCEJ"
+    ]
+  },
+  {
+    "id": "col-21855",
+    "name": "100061-SE&CM'S SHRI GULABRAO DEOKAR COLLEGE OF ENGINEERING, JALGAON.",
+    "acronym": "1SSGDCEJ",
+    "state": "Maharashtra",
+    "city": "Jalgaon",
+    "address": "GAT NO 56, PB NO 113, SHIRSOLI ROAD, JALGAON, JALGAON",
+    "website": "www.sgdcoejalgaon.org",
+    "popularityScore": 30,
+    "aliases": [
+      "1SSGDCEJ"
+    ]
+  },
+  {
+    "id": "col-21857",
+    "name": "100063-GF'S GODAVARI COLLEGE OF ENGINEERING, JALGAON",
+    "acronym": "1GGCEJ",
+    "state": "Maharashtra",
+    "city": "Jalgaon",
+    "address": "P-51, ADDL. MIDC,, BHUSAWAL ROAD, JALGAON",
+    "website": "www.godavaricoejal.ac.in",
+    "popularityScore": 30,
+    "aliases": [
+      "1GGCEJ"
+    ]
+  },
+  {
+    "id": "col-21864",
+    "name": "100100-G.H. RAISONI INSTITUTE OF ENGINEERING & MANAGEMENT, JALGAON.",
+    "acronym": "1GHRIEMJ",
+    "state": "Maharashtra",
+    "city": "Jalgaon",
+    "address": "Gat No. 57/1, Shirsoli Road, Mohadi, Jalgaon",
+    "website": "www.raisoni.net",
+    "popularityScore": 30,
+    "aliases": [
+      "1GHRIEMJ"
+    ]
+  }
+]

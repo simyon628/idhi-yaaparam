@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useCollege } from "@/contexts/CollegeContext";
 import { Search, MapPin, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { College } from "@/lib/types";
 import { useBackgroundCollegeDetection, AutoDetectedCollege } from "@/lib/hooks/useBackgroundCollegeDetection";
+import topColleges from "@/lib/top_colleges.json";
 
 function formatDistance(m: number): string {
     if (m < 1000) return `about ${Math.round(m)} m away`;
@@ -17,23 +16,23 @@ export function InlineCollegeSelection() {
     const { setSelectedCollege } = useCollege();
     const { status: detectionStatus, decision, startDetection } = useBackgroundCollegeDetection();
 
-    // Trigger explicit location prompt strictly 1-time when user clicks the button mounting this component
     useEffect(() => {
         startDetection();
-    }, []); // Empty dependency array as explicitly requested
+    }, []);
 
-    // Manual search state
-    const [allColleges, setAllColleges] = useState<College[]>([]);
+    // Search state
     const [searchQuery, setSearchQuery] = useState("");
-    const [isFetchingList, setIsFetchingList] = useState(false);
+    const [displayedColleges, setDisplayedColleges] = useState<College[]>(topColleges as unknown as College[]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
     const [showManual, setShowManual] = useState(false);
 
-    // If still detecting, wait up to 5s then fall through to manual
     const [waitExpired, setWaitExpired] = useState(false);
     const waitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const listContainerRef = useRef<HTMLDivElement>(null);
 
-    // Start the 9-second fallback timer
     useEffect(() => {
         if (detectionStatus === "detecting") {
             waitTimer.current = setTimeout(() => setWaitExpired(true), 9_000);
@@ -43,70 +42,58 @@ export function InlineCollegeSelection() {
         };
     }, [detectionStatus]);
 
-    // Load full Firestore list for manual search (once)
-    useEffect(() => {
-        const fetchColleges = async () => {
-            if (!db) return;
-            setIsFetchingList(true);
-            try {
-                const q = query(collection(db, "colleges"), orderBy("name", "asc"));
-                const querySnapshot = await getDocs(q);
-
-                const fetchedColleges: College[] = [];
-                querySnapshot.forEach((doc) => {
-                    fetchedColleges.push({ id: doc.id, ...doc.data() } as College);
-                });
-
-                setAllColleges(fetchedColleges);
-            } catch (err) {
-                console.error("Failed to load colleges list from Firestore:", err);
-            } finally {
-                setIsFetchingList(false);
+    // Fast API search fetcher
+    const fetchSearchResults = useCallback(async (queryStr: string, pageNum: number, append: boolean = false) => {
+        setIsLoading(true);
+        try {
+            const res = await fetch(`/api/colleges/search?q=${encodeURIComponent(queryStr)}&page=${pageNum}&limit=50`);
+            if (res.ok) {
+                const data = await res.json();
+                if (append) {
+                    setDisplayedColleges(prev => [...prev, ...data.items]);
+                } else {
+                    setDisplayedColleges(data.items);
+                }
+                setHasMore(data.hasMore);
             }
-        };
+        } catch (err) {
+            console.error("Failed to search colleges:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
 
-        if (allColleges.length === 0) fetchColleges();
-    }, [allColleges.length]);
+    // Instant search trigger on typing even 1 character
+    useEffect(() => {
+        setPage(1);
+        const timer = setTimeout(() => {
+            fetchSearchResults(searchQuery, 1, false);
+        }, searchQuery ? 120 : 0);
 
-    const filteredColleges: College[] = searchQuery.trim() === ""
-        ? []
-        : allColleges
-            .filter((c: College) => {
-                const searchLower = searchQuery.toLowerCase().trim();
-                const nameLower = c.name.toLowerCase();
+        return () => clearTimeout(timer);
+    }, [searchQuery, fetchSearchResults]);
 
-                // Exact substring match
-                if (nameLower.includes(searchLower)) return true;
+    // Infinite scroll observer
+    const handleScroll = useCallback(() => {
+        if (!listContainerRef.current || isLoading || !hasMore) return;
 
-                // Exact acronym match
-                const acronym = nameLower.split(/[\s-]+/).map(word => word[0]).join('');
-                if (acronym.includes(searchLower)) return true;
-
-                // All words present anywhere
-                const searchWords = searchLower.split(/\s+/).filter(Boolean);
-                const allWordsMatch = searchWords.length > 0 && searchWords.every(word => nameLower.includes(word));
-                if (allWordsMatch) return true;
-
-                // Special Aliases for famous Indian engineering acronyms 
-                if (searchLower === 'srkr' && nameLower.includes('sagi')) return true;
-                if (searchLower === 'iit' && nameLower.includes('indian institute of technology')) return true;
-                if (searchLower === 'nit' && nameLower.includes('national institute of technology')) return true;
-                if (searchLower === 'iiit' && nameLower.includes('indian institute of information technology')) return true;
-                if (searchLower === 'bits' && nameLower.includes('birla institute of technology')) return true;
-
-                return false;
-            })
-            .slice(0, 5); // Limit max inline results
+        const { scrollTop, scrollHeight, clientHeight } = listContainerRef.current;
+        if (scrollTop + clientHeight >= scrollHeight - 150) {
+            const nextPage = page + 1;
+            setPage(nextPage);
+            fetchSearchResults(searchQuery, nextPage, true);
+        }
+    }, [isLoading, hasMore, page, searchQuery, fetchSearchResults]);
 
     const confirmAutoDetected = (detectedItem: AutoDetectedCollege) => {
         if (!detectedItem) return;
         const lower = detectedItem.name.toLowerCase();
-        const csvMatch = allColleges.find((col: College) => {
+        const match = (topColleges as unknown as College[]).find((col) => {
             const colLower = col.name.toLowerCase();
             return lower.includes(colLower) || colLower.includes(lower);
         });
 
-        const college: College = csvMatch ?? {
+        const college: College = match ?? {
             id: detectedItem.id,
             name: detectedItem.name,
             state: "",
@@ -132,23 +119,21 @@ export function InlineCollegeSelection() {
 
     const showSingleConfirmation = isReady && decision?.mode === "single";
     const showMultipleConfirmation = isReady && decision?.mode === "multiple";
-
     const showManualSearchUI = showManual || detectionStatus === "failed" || (detectionStatus === "detecting" && waitExpired) || detectionStatus === "idle" || (isReady && decision?.mode === "none");
 
     return (
         <div className="w-full text-left animate-in fade-in slide-in-from-top-4 duration-500">
-            {/* ── State 1: Still detecting in background ── */}
+            {/* State 1: Still detecting */}
             {isStillDetecting && (
                 <div className="flex flex-col items-center justify-center py-6 gap-3 bg-blue-50 border border-blue-100 rounded-2xl">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                     <p className="text-blue-800 font-bold text-center px-4">Detecting your college…</p>
                 </div>
             )}
 
-            {/* ── State 2: Single Confirmation ── */}
+            {/* State 2: Single Confirmation */}
             {showSingleConfirmation && decision?.mode === "single" && (
                 <div className="bg-white border-2 border-blue-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-blue-500/10 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
                     <div className="flex flex-col gap-3 relative z-10">
                         <div className="flex items-start gap-3">
                             <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0 border border-blue-100 shadow-inner">
@@ -180,7 +165,7 @@ export function InlineCollegeSelection() {
                 </div>
             )}
 
-            {/* ── State 3: Multiple Confirmation ── */}
+            {/* State 3: Multiple Confirmation */}
             {showMultipleConfirmation && decision?.mode === "multiple" && (
                 <div className="bg-white border-2 border-blue-100 rounded-3xl p-5 flex flex-col gap-4 shadow-xl shadow-blue-500/10 relative overflow-hidden">
                     <div className="flex flex-col gap-3 relative z-10">
@@ -202,10 +187,6 @@ export function InlineCollegeSelection() {
                             ))}
                         </div>
 
-                        <p className="text-[11px] text-slate-400 font-medium text-center mt-2 px-2 leading-relaxed">
-                            Select your exact college to see the correct marketplace feed.
-                        </p>
-
                         <button
                             onClick={openManualSearch}
                             className="w-full mt-2 py-2.5 text-slate-400 text-xs font-black uppercase tracking-widest rounded-xl hover:text-slate-600 hover:bg-slate-50 transition-all"
@@ -216,7 +197,7 @@ export function InlineCollegeSelection() {
                 </div>
             )}
 
-            {/* ── State 3: Manual search ── */}
+            {/* State 4: Manual search UI */}
             {showManualSearchUI && (
                 <div className="flex flex-col gap-3 bg-white border-2 border-slate-100 rounded-3xl p-5 shadow-xl shadow-slate-200/20">
                     {(detectionStatus === "failed" || waitExpired) && !showManual && (
@@ -230,55 +211,70 @@ export function InlineCollegeSelection() {
                     <div>
                         <label className="text-slate-700 font-black text-sm ml-1 block mb-2 uppercase tracking-wider">Search College</label>
                         <div className="relative">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
                             <input
                                 ref={searchInputRef}
                                 type="text"
-                                placeholder="e.g., SRKR Engineering College"
+                                placeholder="e.g. SRKR, SRM, IIT, or campus name…"
                                 value={searchQuery}
                                 onChange={e => setSearchQuery(e.target.value)}
-                                disabled={isFetchingList}
-                                className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all outline-none shadow-inner"
+                                className="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none shadow-inner"
                             />
                         </div>
                     </div>
 
-                    {/* Inline Search Results */}
-                    {isFetchingList ? (
-                        <div className="flex justify-center py-4">
-                            <Loader2 className="w-6 h-6 animate-spin text-blue-300" />
-                        </div>
-                    ) : searchQuery.trim() !== "" && filteredColleges.length === 0 ? (
-                        <p className="text-center text-slate-400 py-4 text-xs font-bold">
-                            No colleges found. Try a different acronym.
-                        </p>
-                    ) : (
-                        <div className="space-y-2 mt-2 max-h-64 overflow-y-auto no-scrollbar">
-                            {filteredColleges.map(college => (
-                                <button
-                                    key={college.id}
-                                    onClick={() => handleManualSelect(college)}
-                                    className="w-full text-left p-3 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-3 active:scale-[0.98] group"
-                                >
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50 text-blue-600 font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                        <span className="text-base">{college.name.charAt(0)}</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-slate-700 text-sm group-hover:text-blue-900 transition-colors line-clamp-1">{college.name}</p>
-                                        <div className="flex items-center gap-1 text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                                            <span>{college.city || "Campus"}</span>
-                                            {college.state && (
-                                                <>
-                                                    <span className="w-1 h-1 rounded-full bg-slate-200" />
-                                                    <span>{college.state}</span>
-                                                </>
-                                            )}
+                    {/* Inline Search Results with Infinite Scroll */}
+                    <div
+                        ref={listContainerRef}
+                        onScroll={handleScroll}
+                        className="space-y-2 mt-2 max-h-72 overflow-y-auto no-scrollbar"
+                    >
+                        {displayedColleges.length === 0 && !isLoading ? (
+                            <p className="text-center text-slate-400 py-4 text-xs font-bold">
+                                No colleges found matching &quot;{searchQuery}&quot;.
+                            </p>
+                        ) : (
+                            <>
+                                {displayedColleges.map((college) => (
+                                    <button
+                                        key={college.id}
+                                        onClick={() => handleManualSelect(college)}
+                                        className="w-full text-left p-3 rounded-xl border bg-white border-slate-100 shadow-sm hover:border-blue-500 transition-all flex items-center gap-3 active:scale-[0.98] group"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50 text-blue-600 font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                            <span className="text-base">{college.acronym ? college.acronym.slice(0, 3) : college.name.charAt(0)}</span>
                                         </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-bold text-slate-700 text-sm group-hover:text-blue-900 transition-colors truncate">
+                                                    {college.name}
+                                                </p>
+                                                {college.acronym && (
+                                                    <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 text-[9px] font-black rounded shrink-0">
+                                                        {college.acronym}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-1 text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5 truncate">
+                                                <span>{college.city || "Campus"}</span>
+                                                {college.state && (
+                                                    <>
+                                                        <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                                        <span>{college.state}</span>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </button>
+                                ))}
+                                {isLoading && (
+                                    <div className="flex justify-center py-3">
+                                        <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
                                     </div>
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
             )}
         </div>
